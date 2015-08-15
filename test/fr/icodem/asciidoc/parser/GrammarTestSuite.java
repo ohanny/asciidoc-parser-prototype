@@ -8,7 +8,8 @@ import org.junit.runners.Suite;
         TitlesOnlyTest.class,
         HeaderWithContentTest.class,
         HeaderAndOneSectionWithContentTest.class,
-        NoHeaderAndOneSectionWithContentTest.class
+        NoHeaderAndOneSectionWithContentTest.class,
+        SingleCommentTest.class
 })
 public class GrammarTestSuite {
 }

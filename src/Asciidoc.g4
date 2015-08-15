@@ -13,6 +13,10 @@ grammar Asciidoc;
         return _input.LA(2) == charType;
     }
 
+    private boolean isFirstCharInLine() {
+        return _input.LT(1).getCharPositionInLine() == 0;
+    }
+
     private boolean isNextLineATitle() {
         int i = 1;
         int nextChar = _input.LA(i);
@@ -29,38 +33,45 @@ grammar Asciidoc;
         }
         return false;
     }
+
+    private boolean isNextCharBeginningOfAComment() {
+        return _input.LT(1).getCharPositionInLine() == 0
+                    && _input.LA(1) == SLASH && _input.LA(2) == SLASH;
+    }
 }
 
 // Parser
 
-document        : nl* (header?|(nl|paragraph)*) section* ;
+document        : (nl|commentSingle)* (header?|(nl|commentSingle|paragraph)*) section* ;
 
 header : documentTitle preamble? ;
 documentTitle : EQ SP title? (NL|EOF) ;
 
-preamble : (nl|paragraph)+;
+preamble : (nl|commentSingle|paragraph)+;
 
-section : sectionTitle (nl|paragraph)* ;
+section : sectionTitle (nl|commentSingle|paragraph)* ;
 sectionTitle : EQ+ SP title? (NL|EOF) ;
 
 title : ~(NL|EOF)+ ;
 
 nl : CR? NL ;
 
-paragraph : {!isNextLineATitle()}? (OTHER|SP|EQ|
-
-           {!isPreviousChar(NL)}?
-           '\n')+
+paragraph : {!isNextLineATitle()}?
+            (OTHER|SP|EQ|
+            {!isNextCharBeginningOfAComment()}? SLASH|
+           {!isPreviousChar(NL)}? NL)+
             ;
+
+commentSingle : {isFirstCharInLine()}? SLASH SLASH (OTHER|SP|EQ|SLASH)* (NL|EOF) ;
 
 // Lexer
 
-EQ          : '=' ;
-SP          : ' ' ;
+EQ          : '='  ;
+SP          : ' '  ;
 CR          : '\r' ;
 NL          : '\n' ;
-SLASH       :   '/' ;
-OTHER       : . ;
+SLASH       : '/'  ;
+OTHER       : .    ;
 
 /* other chars to define
 COMMA        : ',';
