@@ -1,0 +1,102 @@
+package fr.icodem.asciidoc.parser;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+import static org.junit.runners.Parameterized.Parameters;
+
+@RunWith(Parameterized.class)
+public class NoHeaderAndOneSectionWithContentTest extends GrammarTest {
+
+    @Parameter(0)
+    public String message;
+
+    @Parameter(1)
+    public String input;
+
+    @Parameter(2)
+    public String expected;
+
+    @Test
+    public void test() throws Exception {
+        check(message, input, expected);
+    }
+
+    @Parameters
+    public static Collection<Object[]> data() {
+
+        return Arrays.asList(new Object[][]{
+            {
+                /* message */
+                "No header and a section with two paragraphs",
+
+                /* input */
+                "== First Section\n" +
+                "\n" +
+                "ZZZ\n" +
+                "\n" +
+                "YYY",
+
+                /* expected */
+                "(document (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (paragraph Z Z Z \\n) (nl \\n) (paragraph Y Y Y)))"
+            },
+            {
+                /* message */
+                "No header, a new line and a section with two paragraphs",
+
+                /* input */
+                "\n" +
+                "== First Section\n" +
+                "\n" +
+                "ZZZ\n" +
+                "\n" +
+                "YYY",
+
+                /* expected */
+                "(document (nl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (paragraph Z Z Z \\n) (nl \\n) (paragraph Y Y Y)))"
+            },
+            {
+                /* message */
+                "No header, a few new lines and a section with two paragraphs",
+
+                /* input */
+                "\n" +
+                "\n" +
+                "\n" +
+                "== First Section\n" +
+                "\n" +
+                "ZZZ\n" +
+                "\n" +
+                "YYY",
+
+                /* expected */
+                "(document (nl \\n) (nl \\n) (nl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (paragraph Z Z Z \\n) (nl \\n) (paragraph Y Y Y)))"
+            },
+            {
+                /* message */
+                "No header, a paragraph and a section with two paragraphs",
+
+                /* input */
+                "XXX\n" +
+                "\n" +
+                "== First Section\n" +
+                "\n" +
+                "ZZZ\n" +
+                "\n" +
+                "YYY",
+
+                /* expected */
+                "(document (paragraph X X X \\n) (nl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (paragraph Z Z Z \\n) (nl \\n) (paragraph Y Y Y)))"
+            }
+
+
+        });
+
+    }
+
+}

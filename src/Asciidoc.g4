@@ -1,0 +1,91 @@
+grammar Asciidoc;
+
+@parser::members {
+
+    private boolean isPreviousChar(int charType) {
+        if (_input.LT(1).getLine() == 1 &&
+            _input.LT(1).getCharPositionInLine() == 0) return false;
+
+        return _input.LA(-1) == charType;
+    }
+
+    private boolean isNextChar(int charType) {
+        return _input.LA(2) == charType;
+    }
+
+    private boolean isNextLineATitle() {
+        int i = 1;
+        int nextChar = _input.LA(i);
+
+        while (nextChar != EOF && nextChar != NL) {
+            if (nextChar == EQ) {
+                if (_input.LA(++i) == SP) {
+                    return true;
+                }
+                nextChar = _input.LA(i);
+                continue;
+            }
+            break;
+        }
+        return false;
+    }
+}
+
+// Parser
+
+document        : nl* (header?|(nl|paragraph)*) section* ;
+
+header : documentTitle preamble? ;
+documentTitle : EQ SP title? (NL|EOF) ;
+
+preamble : (nl|paragraph)+;
+
+section : sectionTitle (nl|paragraph)* ;
+sectionTitle : EQ+ SP title? (NL|EOF) ;
+
+title : ~(NL|EOF)+ ;
+
+nl : CR? NL ;
+
+paragraph : {!isNextLineATitle()}? (OTHER|SP|EQ|
+
+           {!isPreviousChar(NL)}?
+           '\n')+
+            ;
+
+// Lexer
+
+EQ          : '=' ;
+SP          : ' ' ;
+CR          : '\r' ;
+NL          : '\n' ;
+SLASH       :   '/' ;
+OTHER       : . ;
+
+/* other chars to define
+COMMA        : ',';
+SEMICOLON    : ';';
+COLON        : ':';
+
+LPAREN          : '(';
+RPAREN          : ')';
+LBRACE          : '{';
+RBRACE          : '}';
+LSBRACK      : '[';
+RSBRACK      : ']';
+LABRACK      : '<';
+RABRACK      : '>';
+
+SEMI            : ';';
+COMMA           : ',';
+DOT             : '.';
+BANG            : '!';
+TILDE           : '~';
+QUESTION        : '?';
+COLON           : ':';
+
+PLUS : '+';
+MINUS : '-';
+TIMES : '*';
+
+*/
