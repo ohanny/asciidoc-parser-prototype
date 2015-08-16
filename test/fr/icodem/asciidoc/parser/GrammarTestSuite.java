@@ -9,7 +9,9 @@ import org.junit.runners.Suite;
         HeaderWithContentTest.class,
         HeaderAndOneSectionWithContentTest.class,
         NoHeaderAndOneSectionWithContentTest.class,
-        SingleCommentTest.class
+        SingleCommentTest.class,
+        MultiCommentTest.class,
+        HeaderWithMultiCommentTest.class
 })
 public class GrammarTestSuite {
 }

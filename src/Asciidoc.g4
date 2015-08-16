@@ -13,6 +13,12 @@ grammar Asciidoc;
         return _input.LA(2) == charType;
     }
 
+/*
+    private boolean isFirstCharInLine1() {
+    System.out.println("HH => " +_input.LT(1).getText()+_input.LT(2).getText()+_input.LT(3).getText()+_input.LT(4).getText()+_input.LT(5).getText()+_input.LT(6).getText()+_input.LT(7).getText()+_input.LT(8).getText() + " ----> "+(_input.LT(1).getCharPositionInLine() == 0));
+        return _input.LT(1).getCharPositionInLine() == 0;
+    }
+*/
     private boolean isFirstCharInLine() {
         return _input.LT(1).getCharPositionInLine() == 0;
     }
@@ -42,14 +48,14 @@ grammar Asciidoc;
 
 // Parser
 
-document        : (nl|singleComment)* (header?|(nl|singleComment|paragraph)*) section* ;
+document        : (nl|multiComment|singleComment)* (header?|(nl|multiComment|singleComment|paragraph)*) section* ;
 
 header : documentTitle preamble? ;
 documentTitle : EQ SP title? (NL|EOF) ;
 
-preamble : (nl|singleComment|paragraph)+;
+preamble : (nl|multiComment|singleComment|paragraph)+;
 
-section : sectionTitle (nl|singleComment|paragraph)* ;
+section : sectionTitle (nl|multiComment|singleComment|paragraph)* ;
 sectionTitle : EQ+ SP title? (NL|EOF) ;
 
 title : ~(NL|EOF)+ ;
@@ -63,6 +69,9 @@ paragraph : {!isNextLineATitle()}?
             ;
 
 singleComment : {isFirstCharInLine()}? SLASH SLASH (OTHER|SP|EQ|SLASH)* (NL|EOF) ;
+
+multiComment : multiCommentDelimiter (OTHER|SP|EQ|SLASH|NL)*? multiCommentDelimiter ;
+multiCommentDelimiter : {isFirstCharInLine()}? SLASH SLASH SLASH SLASH (NL|EOF) ;
 
 // Lexer
 
