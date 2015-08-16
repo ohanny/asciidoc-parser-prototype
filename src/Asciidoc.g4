@@ -42,14 +42,14 @@ grammar Asciidoc;
 
 // Parser
 
-document        : (nl|commentSingle)* (header?|(nl|commentSingle|paragraph)*) section* ;
+document        : (nl|singleComment)* (header?|(nl|singleComment|paragraph)*) section* ;
 
 header : documentTitle preamble? ;
 documentTitle : EQ SP title? (NL|EOF) ;
 
-preamble : (nl|commentSingle|paragraph)+;
+preamble : (nl|singleComment|paragraph)+;
 
-section : sectionTitle (nl|commentSingle|paragraph)* ;
+section : sectionTitle (nl|singleComment|paragraph)* ;
 sectionTitle : EQ+ SP title? (NL|EOF) ;
 
 title : ~(NL|EOF)+ ;
@@ -62,7 +62,7 @@ paragraph : {!isNextLineATitle()}?
            {!isPreviousChar(NL)}? NL)+
             ;
 
-commentSingle : {isFirstCharInLine()}? SLASH SLASH (OTHER|SP|EQ|SLASH)* (NL|EOF) ;
+singleComment : {isFirstCharInLine()}? SLASH SLASH (OTHER|SP|EQ|SLASH)* (NL|EOF) ;
 
 // Lexer
 
