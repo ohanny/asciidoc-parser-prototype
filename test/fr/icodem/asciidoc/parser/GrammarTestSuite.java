@@ -10,6 +10,7 @@ import org.junit.runners.Suite;
         HeaderAndOneSectionWithContentTest.class,
         NoHeaderAndOneSectionWithContentTest.class,
         SingleCommentTest.class,
+        HeaderWithSingleCommentTest.class,
         MultiCommentTest.class,
         HeaderWithMultiCommentTest.class
 })

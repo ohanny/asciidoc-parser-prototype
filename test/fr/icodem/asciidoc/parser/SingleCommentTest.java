@@ -33,113 +33,54 @@ public class SingleCommentTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "Header with one line comment",
+                "One line comment ended by EOF",
 
                 /* input */
-                "= Hello, AsciiDoc!\n" +
                 "// this is a comment",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (singleComment / /   t h i s   i s   a   c o m m e n t <EOF>)))" +
-                ")"
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t <EOF>))"
             },
             {
                 /* message */
-                "Header with one line comment containing '//' ",
+                "One line comment ended by new line",
 
                 /* input */
-                "= Hello, AsciiDoc!\n" +
+                "// this is a comment\n",
+
+                /* expected */
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t \\n))"
+            },            {
+                /* message */
+                "One line comment without space after '//' ",
+
+                /* input */
+                "//this is a comment",
+
+                /* expected */
+                "(document (singleComment / / t h i s   i s   a   c o m m e n t <EOF>))"
+            },
+            {
+                /* message */
+                "One line comment containing '//' ",
+
+                /* input */
                 "// this is a comment // is it ok ?",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (singleComment / /   t h i s   i s   a   c o m m e n t   / /   i s   i t   o k   ? <EOF>)))" +
-                ")"
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   / /   i s   i t   o k   ? <EOF>))"
             },
             {
                 /* message */
-                "Header with a few lines comment",
+                "A few lines comment",
 
                 /* input */
-                "= Hello, AsciiDoc!\n" +
                 "// comment 1\n" +
                 "// comment 2\n" +
                 "// comment 3",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (singleComment / /   c o m m e n t   1 \\n) (singleComment / /   c o m m e n t   2 \\n) (singleComment / /   c o m m e n t   3 <EOF>)))" +
-                ")"
-            },
-            {
-                /* message */
-                "A comment before header title",
-
-                /* input */
-                "// This is a comment \n" +
-                "= Hello, AsciiDoc!\n",
-
-                /* expected */
-                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)))"
-            },
-            {
-                /* message */
-                "A comment before header title, header containing a paragraph",
-
-                /* input */
-                "// This is a comment \n" +
-                "= Hello, AsciiDoc!\n" +
-                "\n" +
-                "Some text...",
-
-                /* expected */
-                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (paragraph S o m e   t e x t . . .))))"
-            },
-            {
-                /* message */
-                "A comment between two paragraphs inside header",
-
-                /* input */
-                "= Hello, AsciiDoc!\n" +
-                "\n" +
-                "Some text...\n" +
-                "\n" +
-                "// This is a comment\n" +
-                "\n" +
-                "Some other text...",
-
-                /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (paragraph S o m e   t e x t . . . \\n) (nl \\n) (singleComment / /   T h i s   i s   a   c o m m e n t \\n) (nl \\n) (paragraph S o m e   o t h e r   t e x t . . .))))"
-            },
-            {
-                /* message */
-                "A comment between two paragraphs inside header, but no blank line before comment",
-
-                /* input */
-                "= Hello, AsciiDoc!\n" +
-                "\n" +
-                "Some text...\n" +
-                "// This is a comment\n" +
-                "\n" +
-                "Some other text...",
-
-                /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (paragraph S o m e   t e x t . . . \\n) (singleComment / /   T h i s   i s   a   c o m m e n t \\n) (nl \\n) (paragraph S o m e   o t h e r   t e x t . . .))))"
-            },
-            {
-                /* message */
-                "A comment between two paragraphs inside header, but no blank line before and after comment",
-
-                /* input */
-                "= Hello, AsciiDoc!\n" +
-                "\n" +
-                "Some text...\n" +
-                "// This is a comment\n" +
-                "Some other text...",
-
-                /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (paragraph S o m e   t e x t . . . \\n) (singleComment / /   T h i s   i s   a   c o m m e n t \\n) (paragraph S o m e   o t h e r   t e x t . . .))))"
+                "(document (singleComment / /   c o m m e n t   1 \\n) (singleComment / /   c o m m e n t   2 \\n) (singleComment / /   c o m m e n t   3 <EOF>))"
             }
 
         });
