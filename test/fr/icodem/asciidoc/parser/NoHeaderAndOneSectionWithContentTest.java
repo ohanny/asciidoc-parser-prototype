@@ -43,7 +43,7 @@ public class NoHeaderAndOneSectionWithContentTest extends GrammarTest {
                 "YYY",
 
                 /* expected */
-                "(document (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (paragraph Z Z Z \\n) (nl \\n) (paragraph Y Y Y)))"
+                "(document (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z \\n)) (nl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -58,7 +58,7 @@ public class NoHeaderAndOneSectionWithContentTest extends GrammarTest {
                 "YYY",
 
                 /* expected */
-                "(document (nl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (paragraph Z Z Z \\n) (nl \\n) (paragraph Y Y Y)))"
+                "(document (nl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z \\n)) (nl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -75,7 +75,7 @@ public class NoHeaderAndOneSectionWithContentTest extends GrammarTest {
                 "YYY",
 
                 /* expected */
-                "(document (nl \\n) (nl \\n) (nl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (paragraph Z Z Z \\n) (nl \\n) (paragraph Y Y Y)))"
+                "(document (nl \\n) (nl \\n) (nl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z \\n)) (nl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -91,7 +91,7 @@ public class NoHeaderAndOneSectionWithContentTest extends GrammarTest {
                 "YYY",
 
                 /* expected */
-                "(document (paragraph X X X \\n) (nl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (paragraph Z Z Z \\n) (nl \\n) (paragraph Y Y Y)))"
+                "(document (block (paragraph X X X \\n)) (nl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z \\n)) (nl \\n) (block (paragraph Y Y Y))))"
             }
 
 

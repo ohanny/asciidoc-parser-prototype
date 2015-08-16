@@ -41,7 +41,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (singleComment / /   t h i s   i s   a   c o m m e n t <EOF>)))" +
+                "(preamble (block (singleComment / /   t h i s   i s   a   c o m m e n t <EOF>))))" +
                 ")"
             },
             {
@@ -54,7 +54,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (singleComment / /   t h i s   i s   a   c o m m e n t   / /   i s   i t   o k   ? <EOF>)))" +
+                "(preamble (block (singleComment / /   t h i s   i s   a   c o m m e n t   / /   i s   i t   o k   ? <EOF>))))" +
                 ")"
             },
             {
@@ -69,7 +69,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (singleComment / /   c o m m e n t   1 \\n) (singleComment / /   c o m m e n t   2 \\n) (singleComment / /   c o m m e n t   3 <EOF>)))" +
+                "(preamble (block (singleComment / /   c o m m e n t   1 \\n)) (block (singleComment / /   c o m m e n t   2 \\n)) (block (singleComment / /   c o m m e n t   3 <EOF>))))" +
                 ")"
             },
             {
@@ -94,7 +94,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 "Some text...",
 
                 /* expected */
-                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (paragraph S o m e   t e x t . . .))))"
+                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (block (paragraph S o m e   t e x t . . .)))))"
             },
             {
                 /* message */
@@ -110,7 +110,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 "Some other text...",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (paragraph S o m e   t e x t . . . \\n) (nl \\n) (singleComment / /   T h i s   i s   a   c o m m e n t \\n) (nl \\n) (paragraph S o m e   o t h e r   t e x t . . .))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (block (paragraph S o m e   t e x t . . . \\n)) (nl \\n) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (nl \\n) (block (paragraph S o m e   o t h e r   t e x t . . .)))))"
             },
             {
                 /* message */
@@ -125,7 +125,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 "Some other text...",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (paragraph S o m e   t e x t . . . \\n) (singleComment / /   T h i s   i s   a   c o m m e n t \\n) (nl \\n) (paragraph S o m e   o t h e r   t e x t . . .))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (block (paragraph S o m e   t e x t . . . \\n)) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (nl \\n) (block (paragraph S o m e   o t h e r   t e x t . . .)))))"
             },
             {
                 /* message */
@@ -139,7 +139,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 "Some other text...",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (paragraph S o m e   t e x t . . . \\n) (singleComment / /   T h i s   i s   a   c o m m e n t \\n) (paragraph S o m e   o t h e r   t e x t . . .))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (block (paragraph S o m e   t e x t . . . \\n)) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (block (paragraph S o m e   o t h e r   t e x t . . .)))))"
             }
 
         });

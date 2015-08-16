@@ -48,15 +48,19 @@ grammar Asciidoc;
 
 // Parser
 
-document        : (nl|multiComment|singleComment)* (header?|(nl|multiComment|singleComment|paragraph)*) section* ;
+document        : (nl|multiComment|singleComment)* (header?|(nl|block)*) section* ;
 
 header : documentTitle preamble? ;
 documentTitle : EQ SP title? (NL|EOF) ;
 
-preamble : (nl|multiComment|singleComment|paragraph)+;
+//preamble : (nl|multiComment|singleComment|paragraph)+;
+preamble : (nl|block)+;
 
-section : sectionTitle (nl|multiComment|singleComment|paragraph)* ;
+//section : sectionTitle (nl|multiComment|singleComment|paragraph)* ;
+section : sectionTitle (nl|block)* ;
 sectionTitle : EQ+ SP title? (NL|EOF) ;
+
+block : (multiComment|singleComment|paragraph);
 
 title : ~(NL|EOF)+ ;
 
@@ -72,6 +76,7 @@ singleComment : {isFirstCharInLine()}? SLASH SLASH (OTHER|SP|EQ|SLASH)* (NL|EOF)
 
 multiComment : multiCommentDelimiter (OTHER|SP|EQ|SLASH|NL)*? multiCommentDelimiter ;
 multiCommentDelimiter : {isFirstCharInLine()}? SLASH SLASH SLASH SLASH (NL|EOF) ;
+
 
 // Lexer
 

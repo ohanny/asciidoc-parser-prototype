@@ -41,7 +41,7 @@ public class HeaderWithContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (nl \\n) (paragraph X X X \\n)))" +
+                "(preamble (nl \\n) (block (paragraph X X X \\n))))" +
                 ")"
             },
             {
@@ -54,7 +54,7 @@ public class HeaderWithContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (paragraph X X X \\n)))" +
+                "(preamble (block (paragraph X X X \\n))))" +
                 ")"
             },
             {
@@ -67,7 +67,7 @@ public class HeaderWithContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (paragraph X X X)))" +
+                "(preamble (block (paragraph X X X))))" +
                 ")"
             },
             {
@@ -81,7 +81,7 @@ public class HeaderWithContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (nl \\n) (paragraph X X X \\n = =   F i r s t   S e c t i o n \\n)))" +
+                "(preamble (nl \\n) (block (paragraph X X X \\n = =   F i r s t   S e c t i o n \\n))))" +
                 ")"
             },
             {
@@ -95,7 +95,7 @@ public class HeaderWithContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (paragraph X X X \\n = =   F i r s t   S e c t i o n \\n)))" +
+                "(preamble (block (paragraph X X X \\n = =   F i r s t   S e c t i o n \\n))))" +
                 ")"
             },
             {
@@ -110,7 +110,7 @@ public class HeaderWithContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (paragraph X X X \\n = =   F i r s t   S e c t i o n \\n Y Y Y)))" +
+                "(preamble (block (paragraph X X X \\n = =   F i r s t   S e c t i o n \\n Y Y Y))))" +
                 ")"
             }
 
