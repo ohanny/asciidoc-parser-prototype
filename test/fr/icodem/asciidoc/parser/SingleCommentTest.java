@@ -62,6 +62,18 @@ public class SingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
+                "A few lines comment",
+
+                /* input */
+                "// comment 1\n" +
+                "// comment 2\n" +
+                "// comment 3",
+
+                /* expected */
+                "(document (singleComment / /   c o m m e n t   1 \\n) (singleComment / /   c o m m e n t   2 \\n) (singleComment / /   c o m m e n t   3 <EOF>))"
+            },
+            {
+                /* message */
                 "One line comment containing '//' ",
 
                 /* input */
@@ -72,15 +84,43 @@ public class SingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "A few lines comment",
+                "One line comment containing '[' and '[[' ",
 
                 /* input */
-                "// comment 1\n" +
-                "// comment 2\n" +
-                "// comment 3",
+                "// this is a comment with [ and [[ is it ok ?",
 
                 /* expected */
-                "(document (singleComment / /   c o m m e n t   1 \\n) (singleComment / /   c o m m e n t   2 \\n) (singleComment / /   c o m m e n t   3 <EOF>))"
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   [   a n d   [ [   i s   i t   o k   ? <EOF>))"
+            },
+            {
+                /* message */
+                "One line comment containing ']' and ']]' ",
+
+                /* input */
+                "// this is a comment with ] and ]] is it ok ?",
+
+                /* expected */
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   ]   a n d   ] ]   i s   i t   o k   ? <EOF>))"
+            },
+            {
+                /* message */
+                "One line comment containing '[hello]'",
+
+                /* input */
+                "// this is a comment with [hello] is it ok ?",
+
+                /* expected */
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   [ h e l l o ]   i s   i t   o k   ? <EOF>))"
+            },
+            {
+                /* message */
+                "One line comment containing '[[hello]]'",
+
+                /* input */
+                "// this is a comment with [[hello]] is it ok ?",
+
+                /* expected */
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   [ [ h e l l o ] ]   i s   i t   o k   ? <EOF>))"
             }
 
         });

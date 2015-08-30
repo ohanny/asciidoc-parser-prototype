@@ -44,6 +44,10 @@ grammar Asciidoc;
         return _input.LT(1).getCharPositionInLine() == 0
                     && _input.LA(1) == SLASH && _input.LA(2) == SLASH;
     }
+
+    private boolean isNewLinePartOfParagraph() {
+        return !isPreviousChar(NL) && !isNextCharBeginningOfAComment();
+    }
 }
 
 // Parser
@@ -60,21 +64,28 @@ preamble : (nl|block)+;
 section : sectionTitle (nl|block)* ;
 sectionTitle : EQ+ SP title? (NL|EOF) ;
 
-block : (multiComment|singleComment|paragraph);
+// A block should have only one anchor, but this is checked
+// in the listener. The grammar is tolerant if multiple
+// consecutive anchors are defined
+block : anchor* (multiComment|singleComment|paragraph);
+
+anchor : {isFirstCharInLine()}? LSBRACK LSBRACK anchorId (COMMA anchorLabel)? RSBRACK RSBRACK NL?;
+anchorId : (OTHER)+ ;
+anchorLabel : (OTHER|SP|EQ|SLASH|COMMA)+ ;
 
 title : ~(NL|EOF)+ ;
 
 nl : CR? NL ;
 
 paragraph : {!isNextLineATitle()}?
-            (OTHER|SP|EQ|
+            (OTHER|SP|EQ|LSBRACK|RSBRACK|
             {!isNextCharBeginningOfAComment()}? SLASH|
-           {!isPreviousChar(NL)}? NL)+
+           {isNewLinePartOfParagraph()}? NL)+
             ;
 
-singleComment : {isFirstCharInLine()}? SLASH SLASH (OTHER|SP|EQ|SLASH)* (NL|EOF) ;
+singleComment : {isFirstCharInLine()}? SLASH SLASH (OTHER|SP|EQ|SLASH|LSBRACK|RSBRACK)* (NL|EOF) ;
 
-multiComment : multiCommentDelimiter (OTHER|SP|EQ|SLASH|NL)*? multiCommentDelimiter ;
+multiComment : multiCommentDelimiter (OTHER|SP|EQ|SLASH|LSBRACK|RSBRACK|NL)*? multiCommentDelimiter ;
 multiCommentDelimiter : {isFirstCharInLine()}? SLASH SLASH SLASH SLASH (NL|EOF) ;
 
 
@@ -85,10 +96,13 @@ SP          : ' '  ;
 CR          : '\r' ;
 NL          : '\n' ;
 SLASH       : '/'  ;
+LSBRACK     : '['  ;
+RSBRACK     : ']'  ;
+COMMA       : ','  ;
 OTHER       : .    ;
 
 /* other chars to define
-COMMA        : ',';
+
 SEMICOLON    : ';';
 COLON        : ':';
 
@@ -96,8 +110,6 @@ LPAREN          : '(';
 RPAREN          : ')';
 LBRACE          : '{';
 RBRACE          : '}';
-LSBRACK      : '[';
-RSBRACK      : ']';
 LABRACK      : '<';
 RABRACK      : '>';
 

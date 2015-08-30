@@ -84,6 +84,21 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
+                "Two contiguous comment blocks",
+
+                /* input */
+                "////\n" +
+                "comment 1\n" +
+                "////\n" +
+                "////\n" +
+                "comment 2\n" +
+                "////",
+
+                /* expected */
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   1 \\n (multiCommentDelimiter / / / / \\n)) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   2 \\n (multiCommentDelimiter / / / / <EOF>)))"
+            },
+            {
+                /* message */
                 "One comment block containing multiple '/'",
 
                 /* input */
@@ -95,7 +110,7 @@ public class MultiCommentTest extends GrammarTest {
                 /* expected */
                 "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   / /   a n d   / / /   . . . \\n a n d   / / /   a n d   / / / /   a n d   t h a t ' s   a l l \\n (multiCommentDelimiter / / / / \\n)))"
             },
-                {
+            {
                 /* message */
                 "One comment block containing multiple '/' at the beginning of lines",
 
@@ -112,18 +127,51 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "Two contiguous comment blocks",
+                "One comment block containing '[' and '[['",
 
                 /* input */
                 "////\n" +
-                "comment 1\n" +
-                "////\n" +
-                "////\n" +
-                "comment 2\n" +
-                "////",
+                "This is a comment with [ and [[ ...\n" +
+                "////\n",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   1 \\n (multiCommentDelimiter / / / / \\n)) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   2 \\n (multiCommentDelimiter / / / / <EOF>)))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   [   a n d   [ [   . . . \\n (multiCommentDelimiter / / / / \\n)))"
+            },
+            {
+                /* message */
+                "One comment block containing ']' and ']]'",
+
+                /* input */
+                "////\n" +
+                "This is a comment with ] and ]] ...\n" +
+                "////\n",
+
+                /* expected */
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   ]   a n d   ] ]   . . . \\n (multiCommentDelimiter / / / / \\n)))"
+            },
+            {
+                /* message */
+                "One comment block containing '[hello]'",
+
+                /* input */
+                "////\n" +
+                "This is a comment with [hello] ...\n" +
+                "////\n",
+
+                /* expected */
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   [ h e l l o ]   . . . \\n (multiCommentDelimiter / / / / \\n)))"
+            },
+            {
+                /* message */
+                "One comment block containing '[[hello]]'",
+
+                /* input */
+                "////\n" +
+                "This is a comment with [[hello]] ...\n" +
+                "////\n",
+
+                /* expected */
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   [ [ h e l l o ] ]   . . . \\n (multiCommentDelimiter / / / / \\n)))"
             }
         });
 

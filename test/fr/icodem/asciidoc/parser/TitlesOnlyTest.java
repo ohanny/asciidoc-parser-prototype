@@ -89,7 +89,7 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header title and a level 0 section title",
+                "A header title and a few section titles",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -102,6 +102,86 @@ public class TitlesOnlyTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 1) \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 2) \\n)) (section (sectionTitle = =   (title S e c o n d   S e c t i o n) \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 1) \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 2) \\n)))"
+            },
+            {
+                /* message */
+                "A header title with '='",
+
+                /* input */
+                "= Title with = is it ok ?\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title T i t l e   w i t h   =   i s   i t   o k   ?) \\n)))"
+            },
+            {
+                /* message */
+                "A header title with '===='",
+
+                /* input */
+                "= Title with ==== is it ok ?\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title T i t l e   w i t h   = = = =   i s   i t   o k   ?) \\n)))"
+            },
+            {
+                /* message */
+                "A header title with '/'",
+
+                /* input */
+                "= Title with / is it ok ?\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title T i t l e   w i t h   /   i s   i t   o k   ?) \\n)))"
+            },
+            {
+                /* message */
+                "A header title with '//'",
+
+                /* input */
+                "= Title with // is it ok ?\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title T i t l e   w i t h   / /   i s   i t   o k   ?) \\n)))"
+            },
+            {
+                /* message */
+                "A header title with '[' and '[['",
+
+                /* input */
+                "= Title with [ and [[ is it ok ?\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title T i t l e   w i t h   [   a n d   [ [   i s   i t   o k   ?) \\n)))"
+            },
+            {
+                /* message */
+                "A header title with ']' and ']]'",
+
+                /* input */
+                "= Title with ] and ]] is it ok ?\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title T i t l e   w i t h   ]   a n d   ] ]   i s   i t   o k   ?) \\n)))"
+            },
+            {
+                /* message */
+                "A header title with '[hello]'",
+
+                /* input */
+                "= Title with [hello] is it ok ?\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title T i t l e   w i t h   [ h e l l o ]   i s   i t   o k   ?) \\n)))"
+            },
+            {
+                /* message */
+                "A header title with '[[hello]]'",
+
+                /* input */
+                "= Title with [[hello]] is it ok ?\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title T i t l e   w i t h   [ [ h e l l o ] ]   i s   i t   o k   ?) \\n)))"
             }
 
         });
