@@ -2,24 +2,26 @@ grammar Asciidoc;
 
 @parser::members {
 
+/*
     private boolean isPreviousChar(int charType) {
         if (_input.LT(1).getLine() == 1 &&
             _input.LT(1).getCharPositionInLine() == 0) return false;
 
         return _input.LA(-1) == charType;
     }
-
+*/
+/*
     private boolean isNextChar(int charType) {
         return _input.LA(2) == charType;
     }
-
+*/
 /*
     private boolean isFirstCharInLine1() {
     System.out.println("HH => " +_input.LT(1).getText()+_input.LT(2).getText()+_input.LT(3).getText()+_input.LT(4).getText()+_input.LT(5).getText()+_input.LT(6).getText()+_input.LT(7).getText()+_input.LT(8).getText() + " ----> "+(_input.LT(1).getCharPositionInLine() == 0));
         return _input.LT(1).getCharPositionInLine() == 0;
     }
 */
-    private boolean isFirstCharInLine() {
+    private boolean isCurrentCharFirstCharInLine() {
         return _input.LT(1).getCharPositionInLine() == 0;
     }
 
@@ -40,13 +42,19 @@ grammar Asciidoc;
         return false;
     }
 
-    private boolean isNextCharBeginningOfAComment() {
+
+    private boolean isCurrentCharBeginningOfAComment() {
         return _input.LT(1).getCharPositionInLine() == 0
                     && _input.LA(1) == SLASH && _input.LA(2) == SLASH;
     }
 
+
     private boolean isNewLinePartOfParagraph() {
-        return !isPreviousChar(NL) && !isNextCharBeginningOfAComment();
+        boolean nextCharIsNL = (_input.LA(2) == NL);
+        boolean nextCharIsEOF = (_input.LA(2) == EOF);
+        boolean nextCharIsBeginningOfAComment = (_input.LA(2) == SLASH) && (_input.LA(3) == SLASH);
+
+        return !nextCharIsNL && !nextCharIsEOF && !nextCharIsBeginningOfAComment;
     }
 }
 
@@ -69,7 +77,7 @@ sectionTitle : EQ+ SP title? (NL|EOF) ;
 // consecutive anchors are defined
 block : anchor* (multiComment|singleComment|paragraph);
 
-anchor : {isFirstCharInLine()}? LSBRACK LSBRACK anchorId (COMMA anchorLabel)? RSBRACK RSBRACK NL?;
+anchor : {isCurrentCharFirstCharInLine()}? LSBRACK LSBRACK anchorId (COMMA anchorLabel)? RSBRACK RSBRACK NL?;
 anchorId : (OTHER)+ ;
 anchorLabel : (OTHER|SP|EQ|SLASH|COMMA)+ ;
 
@@ -79,14 +87,14 @@ nl : CR? NL ;
 
 paragraph : {!isNextLineATitle()}?
             (OTHER|SP|EQ|LSBRACK|RSBRACK|
-            {!isNextCharBeginningOfAComment()}? SLASH|
+            {!isCurrentCharBeginningOfAComment()}? SLASH|
            {isNewLinePartOfParagraph()}? NL)+
             ;
 
-singleComment : {isFirstCharInLine()}? SLASH SLASH (OTHER|SP|EQ|SLASH|LSBRACK|RSBRACK)* (NL|EOF) ;
+singleComment : {isCurrentCharFirstCharInLine()}? SLASH SLASH (OTHER|SP|EQ|SLASH|LSBRACK|RSBRACK)* (NL|EOF) ;
 
 multiComment : multiCommentDelimiter (OTHER|SP|EQ|SLASH|LSBRACK|RSBRACK|NL)*? multiCommentDelimiter ;
-multiCommentDelimiter : {isFirstCharInLine()}? SLASH SLASH SLASH SLASH (NL|EOF) ;
+multiCommentDelimiter : {isCurrentCharFirstCharInLine()}? SLASH SLASH SLASH SLASH (NL|EOF) ;
 
 
 // Lexer

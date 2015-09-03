@@ -120,7 +120,7 @@ public class HeaderWithMultiCommentTest extends GrammarTest {
                 "////",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (block (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   1 \\n (multiCommentDelimiter / / / / \\n))) (block (paragraph A   p a r a g r a p h \\n)) (block (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   2 \\n (multiCommentDelimiter / / / / <EOF>))))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (block (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   1 \\n (multiCommentDelimiter / / / / \\n))) (block (paragraph A   p a r a g r a p h)) (nl \\n) (block (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   2 \\n (multiCommentDelimiter / / / / <EOF>))))))"
             },
             {
                 /* message */

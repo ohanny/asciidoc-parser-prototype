@@ -49,7 +49,7 @@ public class ParagraphTest extends GrammarTest {
                 "This is some content \n",
 
                 /* expected */
-                "(document (block (paragraph T h i s   i s   s o m e   c o n t e n t   \\n)))"
+                "(document (block (paragraph T h i s   i s   s o m e   c o n t e n t  )) (nl \\n))"
             },
             {
                 /* message */
