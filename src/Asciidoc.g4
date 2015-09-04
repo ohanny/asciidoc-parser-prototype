@@ -85,16 +85,44 @@ title : ~(NL|EOF)+ ;
 
 nl : CR? NL ;
 
-paragraph : {!isNextLineATitle()}?
-            (OTHER|SP|EQ|LSBRACK|RSBRACK|
-            {!isCurrentCharBeginningOfAComment()}? SLASH|
-           {isNewLinePartOfParagraph()}? NL)+
-            ;
+paragraph
+    : {!isNextLineATitle()}? (OTHER
+                             |SP
+                             |EQ
+                             |LSBRACK
+                             |RSBRACK
+                             |{!isCurrentCharBeginningOfAComment()}? SLASH
+                             |{isNewLinePartOfParagraph()}? NL
+                             )+
+    ;
 
-singleComment : {isCurrentCharFirstCharInLine()}? SLASH SLASH (OTHER|SP|EQ|SLASH|LSBRACK|RSBRACK)* (NL|EOF) ;
+singleComment
+    : {isCurrentCharFirstCharInLine()}? SLASH SLASH
+      (OTHER
+      |SP
+      |EQ
+      |SLASH
+      |LSBRACK
+      |RSBRACK
+      )*
+      (NL|EOF)
+    ;
 
-multiComment : multiCommentDelimiter (OTHER|SP|EQ|SLASH|LSBRACK|RSBRACK|NL)*? multiCommentDelimiter ;
-multiCommentDelimiter : {isCurrentCharFirstCharInLine()}? SLASH SLASH SLASH SLASH (NL|EOF) ;
+multiComment
+    : multiCommentDelimiter
+      (OTHER
+      |SP
+      |EQ
+      |SLASH
+      |LSBRACK
+      |RSBRACK
+      |NL
+      )*?
+      multiCommentDelimiter
+    ;
+multiCommentDelimiter
+    : {isCurrentCharFirstCharInLine()}? SLASH SLASH SLASH SLASH (NL|EOF)
+    ;
 
 
 // Lexer
