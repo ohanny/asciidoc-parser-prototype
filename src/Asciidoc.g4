@@ -60,44 +60,74 @@ grammar Asciidoc;
 
 // Parser
 
-document        : (nl|multiComment|singleComment)* (header?|(nl|block)*) section* ;
+document
+    : (nl
+      |multiComment
+      |singleComment
+      )*
+      (header?|(nl|block)*)
+      section*
+    ;
 
 header : documentTitle preamble? ;
+
 documentTitle : EQ SP title? (NL|EOF) ;
 
-//preamble : (nl|multiComment|singleComment|paragraph)+;
 preamble : (nl|block)+;
 
-//section : sectionTitle (nl|multiComment|singleComment|paragraph)* ;
 section : sectionTitle (nl|block)* ;
+
 sectionTitle : EQ+ SP title? (NL|EOF) ;
 
 // A block should have only one anchor, but this is checked
 // in the listener. The grammar is tolerant if multiple
 // consecutive anchors are defined
-block : anchor* (multiComment|singleComment|paragraph);
+block
+    : anchor*
+      (multiComment
+      |singleComment
+      |sourceBlock
+      |paragraph
+      )
+    ;
 
-anchor : {isCurrentCharFirstCharInLine()}? LSBRACK LSBRACK anchorId (COMMA anchorLabel)? RSBRACK RSBRACK NL?;
+anchor
+    : {isCurrentCharFirstCharInLine()}?
+      LSBRACK LSBRACK anchorId
+      (COMMA anchorLabel)?
+      RSBRACK RSBRACK NL?
+    ;
+
 anchorId : (OTHER)+ ;
-anchorLabel : (OTHER|SP|EQ|SLASH|COMMA)+ ;
+
+anchorLabel
+    : (OTHER
+      |SP
+      |EQ
+      |SLASH
+      |COMMA
+      )+
+    ;
 
 title : ~(NL|EOF)+ ;
 
 nl : CR? NL ;
 
 paragraph
-    : {!isNextLineATitle()}? (OTHER
-                             |SP
-                             |EQ
-                             |LSBRACK
-                             |RSBRACK
-                             |{!isCurrentCharBeginningOfAComment()}? SLASH
-                             |{isNewLinePartOfParagraph()}? NL
-                             )+
+    : {!isNextLineATitle()}?
+      (OTHER
+      |SP
+      |EQ
+      |LSBRACK
+      |RSBRACK
+      |{!isCurrentCharBeginningOfAComment()}? SLASH
+      |{isNewLinePartOfParagraph()}? NL
+      )+
     ;
 
 singleComment
-    : {isCurrentCharFirstCharInLine()}? SLASH SLASH
+    : {isCurrentCharFirstCharInLine()}?
+      SLASH SLASH
       (OTHER
       |SP
       |EQ
@@ -120,8 +150,29 @@ multiComment
       )*?
       multiCommentDelimiter
     ;
+
 multiCommentDelimiter
-    : {isCurrentCharFirstCharInLine()}? SLASH SLASH SLASH SLASH (NL|EOF)
+    : {isCurrentCharFirstCharInLine()}?
+      SLASH SLASH SLASH SLASH (NL|EOF)
+    ;
+
+sourceBlock
+    : sourceBlockDelimiter
+      (OTHER
+      |SP
+      |EQ
+      |SLASH
+      |LSBRACK
+      |RSBRACK
+      |MINUS
+      |NL
+      )*?
+      sourceBlockDelimiter
+    ;
+
+sourceBlockDelimiter
+    : {isCurrentCharFirstCharInLine()}?
+      MINUS MINUS MINUS MINUS (NL|EOF)
     ;
 
 
@@ -135,6 +186,7 @@ SLASH       : '/'  ;
 LSBRACK     : '['  ;
 RSBRACK     : ']'  ;
 COMMA       : ','  ;
+MINUS       : '-'  ;
 OTHER       : .    ;
 
 /* other chars to define
@@ -158,7 +210,6 @@ QUESTION        : '?';
 COLON           : ':';
 
 PLUS : '+';
-MINUS : '-';
 TIMES : '*';
 
 */
