@@ -54,6 +54,18 @@ public class SourceBlockTest extends GrammarTest {
 
                 /* expected */
                 "(document (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (sourceBlockDelimiter - - - - \\n))))"
+            },
+            {
+                /* message */
+                "A source block containing minus sign",
+
+                /* input */
+                "----\n" +
+                "int a = -10;\n" +
+                "----",
+
+                /* expected */
+                "(document (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   - 1 0 ; \\n (sourceBlockDelimiter - - - - <EOF>))))"
             }
         });
 

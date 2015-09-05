@@ -120,6 +120,9 @@ paragraph
       |EQ
       |LSBRACK
       |RSBRACK
+      |MINUS
+      |PLUS
+      |DOT
       |{!isCurrentCharBeginningOfAComment()}? SLASH
       |{isNewLinePartOfParagraph()}? NL
       )+
@@ -134,6 +137,9 @@ singleComment
       |SLASH
       |LSBRACK
       |RSBRACK
+      |MINUS
+      |PLUS
+      |DOT
       )*
       (NL|EOF)
     ;
@@ -146,6 +152,9 @@ multiComment
       |SLASH
       |LSBRACK
       |RSBRACK
+      |MINUS
+      |PLUS
+      |DOT
       |NL
       )*?
       multiCommentDelimiter
@@ -165,6 +174,8 @@ sourceBlock
       |LSBRACK
       |RSBRACK
       |MINUS
+      |PLUS
+      |DOT
       |NL
       )*?
       sourceBlockDelimiter
@@ -174,7 +185,6 @@ sourceBlockDelimiter
     : {isCurrentCharFirstCharInLine()}?
       MINUS MINUS MINUS MINUS (NL|EOF)
     ;
-
 
 // Lexer
 
@@ -187,6 +197,9 @@ LSBRACK     : '['  ;
 RSBRACK     : ']'  ;
 COMMA       : ','  ;
 MINUS       : '-'  ;
+PLUS        : '+'  ;
+TIMES       : '*'  ;
+DOT         : '.'  ;
 OTHER       : .    ;
 
 /* other chars to define
@@ -203,13 +216,11 @@ RABRACK      : '>';
 
 SEMI            : ';';
 COMMA           : ',';
-DOT             : '.';
+
 BANG            : '!';
 TILDE           : '~';
 QUESTION        : '?';
 COLON           : ':';
 
-PLUS : '+';
-TIMES : '*';
 
 */
