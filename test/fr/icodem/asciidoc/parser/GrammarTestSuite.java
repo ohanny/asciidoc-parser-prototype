@@ -15,6 +15,7 @@ import org.junit.runners.Suite;
     HeaderWithMultiCommentTest.class,
     ParagraphTest.class,
     SourceBlockTest.class,
+    LiteralBlockTest.class,
     BlockIdTest.class
 })
 public class GrammarTestSuite {

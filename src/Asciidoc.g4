@@ -87,6 +87,7 @@ block
       (multiComment
       |singleComment
       |sourceBlock
+      |literalBlock
       |paragraph
       )
     ;
@@ -118,12 +119,13 @@ paragraph
       (OTHER
       |SP
       |EQ
+      |{!isCurrentCharBeginningOfAComment()}? SLASH
+      |COMMA
       |LSBRACK
       |RSBRACK
       |MINUS
       |PLUS
       |DOT
-      |{!isCurrentCharBeginningOfAComment()}? SLASH
       |{isNewLinePartOfParagraph()}? NL
       )+
     ;
@@ -135,6 +137,7 @@ singleComment
       |SP
       |EQ
       |SLASH
+      |COMMA
       |LSBRACK
       |RSBRACK
       |MINUS
@@ -150,6 +153,7 @@ multiComment
       |SP
       |EQ
       |SLASH
+      |COMMA
       |LSBRACK
       |RSBRACK
       |MINUS
@@ -171,6 +175,7 @@ sourceBlock
       |SP
       |EQ
       |SLASH
+      |COMMA
       |LSBRACK
       |RSBRACK
       |MINUS
@@ -185,6 +190,29 @@ sourceBlockDelimiter
     : {isCurrentCharFirstCharInLine()}?
       MINUS MINUS MINUS MINUS (NL|EOF)
     ;
+
+literalBlock
+    : literalBlockDelimiter
+      (OTHER
+      |SP
+      |EQ
+      |SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |MINUS
+      |PLUS
+      |DOT
+      |NL
+      )*?
+      literalBlockDelimiter
+    ;
+
+literalBlockDelimiter
+    : {isCurrentCharFirstCharInLine()}?
+      DOT DOT DOT DOT (NL|EOF)
+    ;
+
 
 // Lexer
 
