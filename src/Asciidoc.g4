@@ -69,9 +69,38 @@ document
       section*
     ;
 
-header : documentTitle preamble? ;
+header
+    : documentTitle
+      (multiComment|singleComment)*
+      authors?
+      (multiComment|singleComment)*
+      (nl+ preamble)?
+    ;
 
-documentTitle : EQ SP title? (NL|EOF) ;
+documentTitle
+    : EQ SP title? (NL|EOF)
+    ;
+
+authors
+    : authorName (LABRACK authorAddress RABRACK)?
+      (SEMICOLON authorName (LABRACK authorAddress RABRACK)?)*
+      (nl|EOF)
+    ;
+
+authorName
+    : (OTHER
+      |SP
+      |MINUS
+      )+
+    ;
+
+authorAddress
+    : (OTHER
+      |MINUS
+      |SLASH
+      |DOT
+      )+
+    ;
 
 preamble : (nl|block)+;
 
@@ -123,9 +152,12 @@ paragraph
       |COMMA
       |LSBRACK
       |RSBRACK
+      |LABRACK
+      |RABRACK
       |MINUS
       |PLUS
       |DOT
+      |SEMICOLON
       |{isNewLinePartOfParagraph()}? NL
       )+
     ;
@@ -140,9 +172,12 @@ singleComment
       |COMMA
       |LSBRACK
       |RSBRACK
+      |LABRACK
+      |RABRACK
       |MINUS
       |PLUS
       |DOT
+      |SEMICOLON
       )*
       (NL|EOF)
     ;
@@ -156,9 +191,12 @@ multiComment
       |COMMA
       |LSBRACK
       |RSBRACK
+      |LABRACK
+      |RABRACK
       |MINUS
       |PLUS
       |DOT
+      |SEMICOLON
       |NL
       )*?
       multiCommentDelimiter
@@ -178,9 +216,12 @@ sourceBlock
       |COMMA
       |LSBRACK
       |RSBRACK
+      |LABRACK
+      |RABRACK
       |MINUS
       |PLUS
       |DOT
+      |SEMICOLON
       |NL
       )*?
       sourceBlockDelimiter
@@ -200,9 +241,12 @@ literalBlock
       |COMMA
       |LSBRACK
       |RSBRACK
+      |LABRACK
+      |RABRACK
       |MINUS
       |PLUS
       |DOT
+      |SEMICOLON
       |NL
       )*?
       literalBlockDelimiter
@@ -223,24 +267,25 @@ NL          : '\n' ;
 SLASH       : '/'  ;
 LSBRACK     : '['  ;
 RSBRACK     : ']'  ;
+LABRACK     : '<'  ;
+RABRACK     : '>'  ;
 COMMA       : ','  ;
 MINUS       : '-'  ;
 PLUS        : '+'  ;
 TIMES       : '*'  ;
 DOT         : '.'  ;
+SEMICOLON   : ';'  ;
 OTHER       : .    ;
 
 /* other chars to define
 
-SEMICOLON    : ';';
+
 COLON        : ':';
 
 LPAREN          : '(';
 RPAREN          : ')';
 LBRACE          : '{';
 RBRACE          : '}';
-LABRACK      : '<';
-RABRACK      : '>';
 
 SEMI            : ';';
 COMMA           : ',';

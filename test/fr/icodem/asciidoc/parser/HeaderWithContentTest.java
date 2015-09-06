@@ -33,42 +33,80 @@ public class HeaderWithContentTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "A paragraph preceded by new line in the header",
+                "A header with simple preamble",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
                 "\nXXX\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (nl \\n) (block (paragraph X X X)) (nl \\n)))" +
-                ")"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n))))"
             },
             {
                 /* message */
-                "A paragraph ended with new line directly after title in the header",
+                "A header with one author name",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
-                "XXX\n",
+                "John Doe\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (block (paragraph X X X)) (nl \\n)))" +
-                ")"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n))))"
             },
             {
                 /* message */
-                "A paragraph ended with end of file directly after title in the header",
+                "A header with one author name ended by EOF",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
-                "XXX",
+                "John Doe",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (block (paragraph X X X))))" +
-                ")"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) <EOF>)))"
+            },
+            {
+                /* message */
+                "A header with one author name and author address",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe <jd@mail.com>\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e  ) < (authorAddress j d @ m a i l . c o m) > (nl \\n))))"
+            },
+            {
+                /* message */
+                "A header with one author name and author address ended by EOF",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe <jd@mail.com>",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e  ) < (authorAddress j d @ m a i l . c o m) > <EOF>)))"
+            },
+            {
+                /* message */
+                "A header with two authors name",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe; Jane Dole\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) ; (authorName   J a n e   D o l e) (nl \\n))))"
+            },
+            {
+                /* message */
+                "A header with two authors name and address",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe <jd@mail.com>; Jane Dole <janed@mail.com>\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e  ) < (authorAddress j d @ m a i l . c o m) > ; (authorName   J a n e   D o l e  ) < (authorAddress j a n e d @ m a i l . c o m) > (nl \\n))))"
             },
             {
                 /* message */
@@ -80,38 +118,7 @@ public class HeaderWithContentTest extends GrammarTest {
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (nl \\n) (block (paragraph X X X \\n = =   F i r s t   S e c t i o n)) (nl \\n)))" +
-                ")"
-            },
-            {
-                /* message */
-                "A paragraph directly after title in the header, and ended a with '== ' line that should not be a section title",
-
-                /* input */
-                "= Hello, AsciiDoc!\n" +
-                "XXX\n" +
-                "== First Section\n",
-
-                /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (block (paragraph X X X \\n = =   F i r s t   S e c t i o n)) (nl \\n)))" +
-                ")"
-            },
-            {
-                /* message */
-                "A paragraph directly after title in the header, containing a '== ' line that should not be a section title",
-
-                /* input */
-                "= Hello, AsciiDoc!\n" +
-                "XXX\n" +
-                "== First Section\n" +
-                "YYY",
-
-                /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) " +
-                "(preamble (block (paragraph X X X \\n = =   F i r s t   S e c t i o n \\n Y Y Y))))" +
-                ")"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X \\n = =   F i r s t   S e c t i o n)) (nl \\n))))"
             }
 
         });

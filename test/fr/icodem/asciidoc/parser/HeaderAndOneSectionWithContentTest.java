@@ -1,5 +1,10 @@
 package fr.icodem.asciidoc.parser;
 
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -8,6 +13,7 @@ import org.junit.runners.Parameterized.Parameter;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
@@ -27,13 +33,14 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
         check(message, input, expected);
     }
 
+
     @Parameters
     public static Collection<Object[]> data() {
 
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "A header with content followed by a level 1 section with no content",
+                "A header with preamble followed by a level 1 section with no content",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -42,20 +49,20 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)))"
             },
             {
                 /* message */
-                "A paragraph directly after title in the header, followed by a level 1 section with no content",
+                "A header with author name, followed by a level 1 section with no content",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
-                "XXX\n" +
+                "John Doe\n" +
                 "\n" +
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (nl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)))"
             },
             {
                 /* message */
@@ -81,7 +88,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Y Y Y))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -95,7 +102,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Y Y Y)) (nl \\n)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Y Y Y)) (nl \\n)))"
             },
             {
                 /* message */
@@ -110,7 +117,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nZZZ",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (block (paragraph X X X)) (nl \\n) (nl \\n) (block (paragraph Y Y Y)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n) (block (paragraph Y Y Y)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z))))"
             },
             {
                 /* message */
@@ -125,7 +132,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -141,15 +148,15 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (nl \\n) (block (paragraph X X X)) (nl \\n) (nl \\n) (block (paragraph W W W)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n) (block (paragraph W W W)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
-                "A header with two paragraphs and a section with two paragraphs where paragraphs begin directly after titles (no new line before paragraphs)",
+                "A header with author name + preamble and a section with two paragraphs where paragraphs begin directly after titles (no new line before paragraphs)",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
-                "XXX\n" +
+                "John Doe\n" +
                 "\nWWW\n" +
                 "\n" +
                 "== First Section\n" +
@@ -157,7 +164,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n) (block (paragraph W W W)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (nl \\n) (preamble (block (paragraph W W W)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
             }
 
         });
