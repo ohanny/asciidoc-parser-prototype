@@ -49,7 +49,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)))"
             },
             {
                 /* message */
@@ -62,7 +62,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (nl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n))) (nl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)))"
             },
             {
                 /* message */
@@ -88,7 +88,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Y Y Y))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -102,7 +102,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Y Y Y)) (nl \\n)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Y Y Y)) (nl \\n)))"
             },
             {
                 /* message */
@@ -117,7 +117,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nZZZ",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n) (block (paragraph Y Y Y)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n) (block (paragraph Y Y Y)) (nl \\n) (nl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z))))"
             },
             {
                 /* message */
@@ -132,7 +132,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -148,7 +148,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n) (block (paragraph W W W)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (nl \\n) (preamble (block (paragraph X X X)) (nl \\n) (nl \\n) (block (paragraph W W W)) (nl \\n) (nl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (nl \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -164,7 +164,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (nl \\n) (preamble (block (paragraph W W W)) (nl \\n) (nl \\n))) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n))) (nl \\n) (preamble (block (paragraph W W W)) (nl \\n) (nl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
             }
 
         });

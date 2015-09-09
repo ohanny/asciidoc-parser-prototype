@@ -60,6 +60,7 @@ grammar Asciidoc;
 
 // Parser
 
+/*
 document
     : (nl
       |multiComment
@@ -68,13 +69,28 @@ document
       (header?|(nl|block)*)
       section*
     ;
+*/
+
+document
+    : (nl
+      |multiComment
+      |singleComment
+      )*
+      (header nl* preamble?)?
+//      nl* preamble?
+      (nl
+      |block
+      |section
+      )*
+    ;
 
 header
     : documentTitle
       (multiComment|singleComment)*
       authors?
       (multiComment|singleComment)*
-      (nl+ preamble)?
+      //(nl+ preamble)?
+      //nl* preamble?
     ;
 
 documentTitle
