@@ -119,6 +119,18 @@ public class HeaderWithContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (nl \\n) (preamble (block (paragraph X X X \\n = =   F i r s t   S e c t i o n)) (nl \\n)))"
+            },
+            {
+                /* message */
+                "No line between authors and preamble",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe\n" +
+                "A paragraph\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n))) (preamble (block (paragraph A   p a r a g r a p h)) (nl \\n)))"
             }
 
         });
