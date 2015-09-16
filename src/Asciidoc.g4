@@ -82,6 +82,7 @@ document
       )*
       (header (nl|multiComment|singleComment)* preamble?)?
       (nl
+      |attributeEntry
       |block
       |section
       )*
@@ -93,6 +94,7 @@ header
       authors?
       (multiComment|singleComment)*
       revisionInfo?
+      attributeEntry*
     ;
 
 documentTitle
@@ -135,17 +137,36 @@ revisionInfo
       |MINUS
       |PLUS
       |DOT
+      |COLON
       |SEMICOLON
+      |BANG
       |{isNewLineInRevisionInfo()}? NL
       )+
     ;
 
+attributeEntry
+    : COLON attributeName COLON SP* attributeValue (NL|EOF)
+    ;
 
-preamble : (nl|block)+;
+attributeName
+    : OTHER+
+    ;
 
-section : sectionTitle (nl|block)* ;
+attributeValue
+    : OTHER+
+    ;
 
-sectionTitle : EQ+ SP title? (NL|EOF) ;
+preamble
+    : (nl|block)+
+    ;
+
+section
+    : sectionTitle (nl|block)*
+    ;
+
+sectionTitle :
+    EQ+ SP title? (NL|EOF)
+    ;
 
 // A block should have only one anchor, but this is checked
 // in the listener. The grammar is tolerant if multiple
@@ -167,7 +188,9 @@ anchor
       RSBRACK RSBRACK NL?
     ;
 
-anchorId : (OTHER)+ ;
+anchorId
+    : (OTHER)+
+    ;
 
 anchorLabel
     : (OTHER
@@ -178,9 +201,13 @@ anchorLabel
       )+
     ;
 
-title : ~(NL|EOF)+ ;
+title
+    : ~(NL|EOF)+
+    ;
 
-nl : CR? NL ;
+nl
+    : CR? NL
+    ;
 
 paragraph
     : {isStartOfParagraph()}?
@@ -196,7 +223,9 @@ paragraph
       |MINUS
       |PLUS
       |DOT
+      |COLON
       |SEMICOLON
+      |BANG
       |{isNewLineInParagraph()}? NL
       )+
     ;
@@ -216,7 +245,9 @@ singleComment
       |MINUS
       |PLUS
       |DOT
+      |COLON
       |SEMICOLON
+      |BANG
       )*
       (NL|EOF)
     ;
@@ -235,7 +266,9 @@ multiComment
       |MINUS
       |PLUS
       |DOT
+      |COLON
       |SEMICOLON
+      |BANG
       |NL
       )*?
       multiCommentDelimiter
@@ -260,7 +293,9 @@ sourceBlock
       |MINUS
       |PLUS
       |DOT
+      |COLON
       |SEMICOLON
+      |BANG
       |NL
       )*?
       sourceBlockDelimiter
@@ -285,7 +320,9 @@ literalBlock
       |MINUS
       |PLUS
       |DOT
+      |COLON
       |SEMICOLON
+      |BANG
       |NL
       )*?
       literalBlockDelimiter
@@ -313,13 +350,14 @@ MINUS       : '-'  ;
 PLUS        : '+'  ;
 TIMES       : '*'  ;
 DOT         : '.'  ;
+COLON       : ':'  ;
 SEMICOLON   : ';'  ;
-OTHER       : .    ;
+BANG        : '!'  ;
+OTHER       :  .   ;
 
 /* other chars to define
 
 
-COLON        : ':';
 
 LPAREN          : '(';
 RPAREN          : ')';
@@ -329,10 +367,8 @@ RBRACE          : '}';
 SEMI            : ';';
 COMMA           : ',';
 
-BANG            : '!';
 TILDE           : '~';
 QUESTION        : '?';
-COLON           : ':';
 
 
 */

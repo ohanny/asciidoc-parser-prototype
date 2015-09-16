@@ -17,7 +17,8 @@ import org.junit.runners.Suite;
     SourceBlockTest.class,
     LiteralBlockTest.class,
     BlockIdTest.class,
-    RevisionInfoTest.class
+    RevisionInfoTest.class,
+    AttributeEntryTest.class
 })
 public class GrammarTestSuite {
 }
