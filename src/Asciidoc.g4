@@ -56,6 +56,29 @@ grammar Asciidoc;
 
         return !nextCharIsNL && !nextCharIsEOF && !nextCharIsBeginningOfAComment;
     }
+
+    private boolean isIndexStartOfATitle(int index) {
+        int i = index;
+        int nextChar = _input.LA(i);
+
+        while (nextChar != EOF && nextChar != NL) {
+            if (nextChar == EQ) {
+                if (_input.LA(++i) == SP) {
+                    return true;
+                }
+                nextChar = _input.LA(i);
+                continue;
+            }
+            break;
+        }
+        return false;
+    }
+
+    private boolean isStartRevisionInfoOK() {
+        boolean currentCharIsNL = (_input.LA(1) == NL);
+
+        return !currentCharIsNL && !isIndexStartOfATitle(1);
+    }
 }
 
 // Parser
@@ -89,6 +112,7 @@ header
       (multiComment|singleComment)*
       authors?
       (multiComment|singleComment)*
+      revisionInfo?
       //(nl+ preamble)?
       //nl* preamble?
     ;
@@ -107,6 +131,7 @@ authorName
     : (OTHER
       |SP
       |MINUS
+      |DOT
       )+
     ;
 
@@ -117,6 +142,33 @@ authorAddress
       |DOT
       )+
     ;
+
+/*
+revisionInfo
+    : ~NL .*? (nl nl|nl EOF|EOF)
+    ;
+*/
+
+revisionInfo
+    : {isStartRevisionInfoOK()}?
+      //{!isNextLineATitle()}?
+      (OTHER
+      |SP
+      |EQ
+      |{!isCurrentCharBeginningOfAComment()}? SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |LABRACK
+      |RABRACK
+      |MINUS
+      |PLUS
+      |DOT
+      |SEMICOLON
+      |{isNewLinePartOfParagraph()}? NL
+      )+
+    ;
+
 
 preamble : (nl|block)+;
 

@@ -66,6 +66,17 @@ public class HeaderWithContentTest extends GrammarTest {
             },
             {
                 /* message */
+                "A header with one author name containing dot character",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John .Doe",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   . D o e) <EOF>)))"
+            },
+            {
+                /* message */
                 "A header with one author name and author address",
 
                 /* input */
@@ -122,15 +133,15 @@ public class HeaderWithContentTest extends GrammarTest {
             },
             {
                 /* message */
-                "No line between authors and preamble",
+                "Header with author and revision lines",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
                 "John Doe\n" +
-                "A paragraph\n",
+                "v1.0\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n))) (preamble (block (paragraph A   p a r a g r a p h)) (nl \\n)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (revisionInfo v 1 . 0)) (nl \\n))"
             }
 
         });
