@@ -133,6 +133,45 @@ public class HeaderWithContentTest extends GrammarTest {
             },
             {
                 /* message */
+                "A single comment before author line",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "// a single comment\n" +
+                "John Doe",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (singleComment / /   a   s i n g l e   c o m m e n t \\n) (authors (authorName J o h n   D o e) <EOF>)))"
+            },
+            {
+                /* message */
+                "Two single comments before author line",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "// a single comment\n" +
+                "// another comment\n" +
+                "John Doe",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (singleComment / /   a   s i n g l e   c o m m e n t \\n) (singleComment / /   a n o t h e r   c o m m e n t \\n) (authors (authorName J o h n   D o e) <EOF>)))"
+            },
+            {
+                /* message */
+                "A multiline comment before author line",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "////\n" +
+                "a comment\n" +
+                "////\n" +
+                "John Doe",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (multiComment (multiCommentDelimiter / / / / \\n) a   c o m m e n t \\n (multiCommentDelimiter / / / / \\n)) (authors (authorName J o h n   D o e) <EOF>)))"
+            },
+            {
+                /* message */
                 "Header with author and revision lines",
 
                 /* input */
