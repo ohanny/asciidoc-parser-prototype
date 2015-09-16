@@ -10,46 +10,16 @@ grammar Asciidoc;
         return _input.LA(-1) == charType;
     }
 */
-/*
-    private boolean isNextChar(int charType) {
-        return _input.LA(2) == charType;
-    }
-*/
-/*
-    private boolean isFirstCharInLine1() {
-    System.out.println("HH => " +_input.LT(1).getText()+_input.LT(2).getText()+_input.LT(3).getText()+_input.LT(4).getText()+_input.LT(5).getText()+_input.LT(6).getText()+_input.LT(7).getText()+_input.LT(8).getText() + " ----> "+(_input.LT(1).getCharPositionInLine() == 0));
-        return _input.LT(1).getCharPositionInLine() == 0;
-    }
-*/
-    private boolean isCurrentCharFirstCharInLine() {
+
+    private boolean isFirstCharInLine() {
         return _input.LT(1).getCharPositionInLine() == 0;
     }
 
-    private boolean isNextLineATitle() {
-        int i = 1;
-        int nextChar = _input.LA(i);
+    // ---------------------------------------------------------------
+    // 'isCharacterIn' element methods
+    // ---------------------------------------------------------------
 
-        while (nextChar != EOF && nextChar != NL) {
-            if (nextChar == EQ) {
-                if (_input.LA(++i) == SP) {
-                    return true;
-                }
-                nextChar = _input.LA(i);
-                continue;
-            }
-            break;
-        }
-        return false;
-    }
-
-
-    private boolean isCurrentCharBeginningOfAComment() {
-        return _input.LT(1).getCharPositionInLine() == 0
-                    && _input.LA(1) == SLASH && _input.LA(2) == SLASH;
-    }
-
-
-    private boolean isNewLinePartOfParagraph() {
+    private boolean isNewLineInRevisionInfo() {
         boolean nextCharIsNL = (_input.LA(2) == NL);
         boolean nextCharIsEOF = (_input.LA(2) == EOF);
         boolean nextCharIsBeginningOfAComment = (_input.LA(2) == SLASH) && (_input.LA(3) == SLASH);
@@ -57,16 +27,28 @@ grammar Asciidoc;
         return !nextCharIsNL && !nextCharIsEOF && !nextCharIsBeginningOfAComment;
     }
 
-    private boolean isIndexStartOfATitle(int index) {
-        int i = index;
+    private boolean isNewLineInParagraph() {
+        boolean nextCharIsNL = (_input.LA(2) == NL);
+        boolean nextCharIsEOF = (_input.LA(2) == EOF);
+        boolean nextCharIsBeginningOfAComment = (_input.LA(2) == SLASH) && (_input.LA(3) == SLASH);
+
+        return !nextCharIsNL && !nextCharIsEOF && !nextCharIsBeginningOfAComment;
+    }
+
+    // ---------------------------------------------------------------
+    // 'isStartOf' element methods
+    // ---------------------------------------------------------------
+
+    private boolean isStartOfTitle() {
+        int i = 1;
         int nextChar = _input.LA(i);
 
         while (nextChar != EOF && nextChar != NL) {
             if (nextChar == EQ) {
-                if (_input.LA(++i) == SP) {
+                nextChar = _input.LA(++i);
+                if (nextChar == SP) {
                     return true;
                 }
-                nextChar = _input.LA(i);
                 continue;
             }
             break;
@@ -74,33 +56,31 @@ grammar Asciidoc;
         return false;
     }
 
-    private boolean isStartRevisionInfoOK() {
+    private boolean isStartOfComment() {
+        return _input.LT(1).getCharPositionInLine() == 0
+                    && _input.LA(1) == SLASH && _input.LA(2) == SLASH;
+    }
+
+    private boolean isStartOfRevisionInfo() {
         boolean currentCharIsNL = (_input.LA(1) == NL);
 
-        return !currentCharIsNL && !isIndexStartOfATitle(1);
+        return !currentCharIsNL && !isStartOfTitle();
     }
+
+    private boolean isStartOfParagraph() {
+        return !isStartOfTitle();
+    }
+
 }
 
 // Parser
 
-/*
 document
     : (nl
       |multiComment
       |singleComment
       )*
-      (header?|(nl|block)*)
-      section*
-    ;
-*/
-
-document
-    : (nl
-      |multiComment
-      |singleComment
-      )*
-      (header nl* preamble?)?
-//      nl* preamble?
+      (header (nl|multiComment|singleComment)* preamble?)?
       (nl
       |block
       |section
@@ -113,8 +93,6 @@ header
       authors?
       (multiComment|singleComment)*
       revisionInfo?
-      //(nl+ preamble)?
-      //nl* preamble?
     ;
 
 documentTitle
@@ -143,19 +121,12 @@ authorAddress
       )+
     ;
 
-/*
 revisionInfo
-    : ~NL .*? (nl nl|nl EOF|EOF)
-    ;
-*/
-
-revisionInfo
-    : {isStartRevisionInfoOK()}?
-      //{!isNextLineATitle()}?
+    : {isStartOfRevisionInfo()}?
       (OTHER
       |SP
       |EQ
-      |{!isCurrentCharBeginningOfAComment()}? SLASH
+      |{!isStartOfComment()}? SLASH
       |COMMA
       |LSBRACK
       |RSBRACK
@@ -165,7 +136,7 @@ revisionInfo
       |PLUS
       |DOT
       |SEMICOLON
-      |{isNewLinePartOfParagraph()}? NL
+      |{isNewLineInRevisionInfo()}? NL
       )+
     ;
 
@@ -190,7 +161,7 @@ block
     ;
 
 anchor
-    : {isCurrentCharFirstCharInLine()}?
+    : {isFirstCharInLine()}?
       LSBRACK LSBRACK anchorId
       (COMMA anchorLabel)?
       RSBRACK RSBRACK NL?
@@ -212,11 +183,11 @@ title : ~(NL|EOF)+ ;
 nl : CR? NL ;
 
 paragraph
-    : {!isNextLineATitle()}?
+    : {isStartOfParagraph()}?
       (OTHER
       |SP
       |EQ
-      |{!isCurrentCharBeginningOfAComment()}? SLASH
+      |{!isStartOfComment()}? SLASH
       |COMMA
       |LSBRACK
       |RSBRACK
@@ -226,12 +197,12 @@ paragraph
       |PLUS
       |DOT
       |SEMICOLON
-      |{isNewLinePartOfParagraph()}? NL
+      |{isNewLineInParagraph()}? NL
       )+
     ;
 
 singleComment
-    : {isCurrentCharFirstCharInLine()}?
+    : {isFirstCharInLine()}?
       SLASH SLASH
       (OTHER
       |SP
@@ -271,7 +242,7 @@ multiComment
     ;
 
 multiCommentDelimiter
-    : {isCurrentCharFirstCharInLine()}?
+    : {isFirstCharInLine()}?
       SLASH SLASH SLASH SLASH (NL|EOF)
     ;
 
@@ -296,7 +267,7 @@ sourceBlock
     ;
 
 sourceBlockDelimiter
-    : {isCurrentCharFirstCharInLine()}?
+    : {isFirstCharInLine()}?
       MINUS MINUS MINUS MINUS (NL|EOF)
     ;
 
@@ -321,7 +292,7 @@ literalBlock
     ;
 
 literalBlockDelimiter
-    : {isCurrentCharFirstCharInLine()}?
+    : {isFirstCharInLine()}?
       DOT DOT DOT DOT (NL|EOF)
     ;
 

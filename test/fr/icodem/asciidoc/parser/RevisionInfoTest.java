@@ -92,6 +92,48 @@ public class RevisionInfoTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (singleComment / /   a   c o m m e n t \\n) (revisionInfo v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3)) (nl \\n))"
+            },
+            {
+                /* message */
+                "Two single comments before revision info",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe\n" +
+                "// a comment\n" +
+                "// another comment\n" +
+                "v1.0, October 2, 2013\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (singleComment / /   a   c o m m e n t \\n) (singleComment / /   a n o t h e r   c o m m e n t \\n) (revisionInfo v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3)) (nl \\n))"
+            },
+            {
+                /* message */
+                "A multi-line comment before revision info",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe\n" +
+                "////\n" +
+                "a comment\n" +
+                "////\n" +
+                "v1.0, October 2, 2013\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (multiComment (multiCommentDelimiter / / / / \\n) a   c o m m e n t \\n (multiCommentDelimiter / / / / \\n)) (revisionInfo v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3)) (nl \\n))"
+            },
+            {
+                /* message */
+                "A single comment after revision info",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe\n" +
+                "v1.0\n" +
+                "// a comment",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (revisionInfo v 1 . 0)) (nl \\n) (singleComment / /   a   c o m m e n t <EOF>))"
             }
         });
 
