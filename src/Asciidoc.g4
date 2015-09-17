@@ -71,6 +71,11 @@ grammar Asciidoc;
         return !isStartOfTitle();
     }
 
+    // ---------------------------------------------------------------
+    // 'isStartOfAtIndex' element methods
+    // ---------------------------------------------------------------
+
+
 }
 
 // Parser
