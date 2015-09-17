@@ -181,6 +181,18 @@ public class HeaderWithContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (revisionInfo v 1 . 0)) (nl \\n))"
+            },
+            {
+                /* message */
+                "Header with author and attribute entry",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe\n" +
+                ":fruit: kiwi",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) <EOF>)))"
             }
 
         });
