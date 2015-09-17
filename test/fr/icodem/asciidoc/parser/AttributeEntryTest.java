@@ -93,6 +93,26 @@ public class AttributeEntryTest extends GrammarTest {
 
                 /* expected */
                 "(document (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i) + \\n       (attributeValuePart f r u i t)) <EOF>))"
+            },
+            {
+                /* message */
+                "Unset attribute with leading bang",
+
+                /* input */
+                ":!fruit:",
+
+                /* expected */
+                "(document (attributeEntry : ! (attributeName f r u i t) : <EOF>))"
+            },
+            {
+                /* message */
+                "Unset attribute with trailing bang",
+
+                /* input */
+                ":fruit!:",
+
+                /* expected */
+                "(document (attributeEntry : (attributeName f r u i t) ! : <EOF>))"
             }
         });
 

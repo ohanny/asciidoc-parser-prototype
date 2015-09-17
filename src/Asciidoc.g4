@@ -150,7 +150,7 @@ revisionInfo
     ;
 
 attributeEntry
-    : COLON attributeName COLON SP* attributeValue? (NL|EOF)
+    : COLON BANG? attributeName BANG? COLON SP* attributeValue? (NL|EOF)
     ;
 
 attributeName
