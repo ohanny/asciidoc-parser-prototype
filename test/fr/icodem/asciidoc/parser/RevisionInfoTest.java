@@ -147,7 +147,7 @@ public class RevisionInfoTest extends GrammarTest {
                 ":fruit: kiwi",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (revisionInfo v 1 . 0 \\n v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n) (attributeEntry : (attributeName f r u i t) :   (attributeValue k i w i) <EOF>)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (revisionInfo v 1 . 0 \\n v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n) (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) <EOF>)))"
             }
         });
 

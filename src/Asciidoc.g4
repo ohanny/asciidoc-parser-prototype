@@ -150,7 +150,7 @@ revisionInfo
     ;
 
 attributeEntry
-    : COLON attributeName COLON SP* attributeValue (NL|EOF)
+    : COLON attributeName COLON SP* attributeValue? (NL|EOF)
     ;
 
 attributeName
@@ -158,6 +158,10 @@ attributeName
     ;
 
 attributeValue
+    : attributeValuePart (PLUS NL SP* attributeValuePart)*
+    ;
+
+attributeValuePart
     : OTHER+
     ;
 

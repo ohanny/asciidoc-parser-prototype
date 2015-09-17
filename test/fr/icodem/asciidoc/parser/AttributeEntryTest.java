@@ -39,7 +39,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":fruit: kiwi",
 
                 /* expected */
-                "(document (attributeEntry : (attributeName f r u i t) :   (attributeValue k i w i) <EOF>))"
+                "(document (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) <EOF>))"
             },
             {
                 /* message */
@@ -49,7 +49,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":fruit: kiwi\n",
 
                 /* expected */
-                "(document (attributeEntry : (attributeName f r u i t) :   (attributeValue k i w i) \\n))"
+                "(document (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) \\n))"
             },
             {
                 /* message */
@@ -60,7 +60,39 @@ public class AttributeEntryTest extends GrammarTest {
                 ":vegetable: cabbage",
 
                 /* expected */
-                "(document (attributeEntry : (attributeName f r u i t) :   (attributeValue k i w i) \\n) (attributeEntry : (attributeName v e g e t a b l e) :   (attributeValue c a b b a g e) <EOF>))"
+                "(document (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) \\n) (attributeEntry : (attributeName v e g e t a b l e) :   (attributeValue (attributeValuePart c a b b a g e)) <EOF>))"
+            },
+            {
+                /* message */
+                "Attribute entry with no value",
+
+                /* input */
+                ":fruit:",
+
+                /* expected */
+                "(document (attributeEntry : (attributeName f r u i t) : <EOF>))"
+            },
+            {
+                /* message */
+                "Attribute value continued on next line",
+
+                /* input */
+                ":fruit: kiwi+\n" +
+                "fruit",
+
+                /* expected */
+                "(document (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i) + \\n (attributeValuePart f r u i t)) <EOF>))"
+            },
+            {
+                /* message */
+                "Attribute value continued on next line with leading spaces",
+
+                /* input */
+                ":fruit: kiwi+\n" +
+                "   fruit",
+
+                /* expected */
+                "(document (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i) + \\n       (attributeValuePart f r u i t)) <EOF>))"
             }
         });
 
