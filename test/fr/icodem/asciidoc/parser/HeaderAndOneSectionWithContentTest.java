@@ -165,6 +165,22 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n))) (nl \\n) (preamble (block (paragraph W W W)) (nl \\n) (nl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (block (paragraph Z Z Z)) (nl \\n) (nl \\n) (block (paragraph Y Y Y))))"
+            },
+            {
+                /* message */
+                "Header, one section and unordered list",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe\n" +
+                "\n" +
+                "== First Section\n" +
+                "* Lemon\n" +
+                "* Cherry\n" +
+                "* Mandarine",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n))) (nl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) <EOF>)))))"
             }
 
         });

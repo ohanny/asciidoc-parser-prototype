@@ -184,6 +184,7 @@ block
     : anchor*
       (multiComment
       |singleComment
+      |unorderedList
       |sourceBlock
       |literalBlock
       |paragraph
@@ -342,6 +343,32 @@ literalBlockDelimiter
       DOT DOT DOT DOT (NL|EOF)
     ;
 
+unorderedList
+    : listItem+
+    ;
+
+listItem
+    : TIMES SP listItemValue (NL|EOF)
+    ;
+
+listItemValue
+    : (OTHER
+      |SP
+      |EQ
+      |SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |LABRACK
+      |RABRACK
+      |MINUS
+      |PLUS
+      |DOT
+      |COLON
+      |SEMICOLON
+      |BANG
+      )*?
+    ;
 
 // Lexer
 
@@ -374,8 +401,6 @@ LBRACE          : '{';
 RBRACE          : '}';
 
 SEMI            : ';';
-COMMA           : ',';
-
 TILDE           : '~';
 QUESTION        : '?';
 
