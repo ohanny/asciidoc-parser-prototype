@@ -33,7 +33,7 @@ public class UnorderedListTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "List with three items",
+                "list with three items",
 
                 /* input */
                 "* Lemon\n" +
@@ -45,7 +45,7 @@ public class UnorderedListTest extends GrammarTest {
             },
             {
                 /* message */
-                "List with three items, ended with new line",
+                "list with three items, ended with new line",
 
                 /* input */
                 "* Lemon\n" +
@@ -54,6 +54,32 @@ public class UnorderedListTest extends GrammarTest {
 
                 /* expected */
                 "(document (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n))))"
+            },
+            {
+                /* message */
+                "list separarated by a blank line",
+
+                /* input */
+                "* Lemon\n" +
+                "\n" +
+                "* Cherry\n" +
+                "* Mandarine\n",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (bl \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n))))"
+            },
+            {
+                /* message */
+                "list separarated by a blank line with spaces and tabs",
+
+                /* input */
+                "* Lemon\n" +
+                "  \t \t \n" +
+                "* Cherry\n" +
+                "* Mandarine\n",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (bl     \\t   \\t   \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n))))"
             }
         });
 

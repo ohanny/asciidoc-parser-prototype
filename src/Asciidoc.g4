@@ -93,6 +93,14 @@ document
       )*
     ;
 
+nl
+    : CR? NL
+    ;
+
+bl
+    : {isFirstCharInLine()}? (SP|TAB)* CR? NL
+    ;
+
 header
     : documentTitle
       (multiComment|singleComment)*
@@ -213,10 +221,6 @@ anchorLabel
 
 title
     : ~(NL|EOF)+
-    ;
-
-nl
-    : CR? NL
     ;
 
 paragraph
@@ -344,7 +348,7 @@ literalBlockDelimiter
     ;
 
 unorderedList
-    : listItem+
+    : listItem ((listItem|bl)* listItem)?
     ;
 
 listItem
@@ -374,6 +378,7 @@ listItemValue
 
 EQ          : '='  ;
 SP          : ' '  ;
+TAB         : '\t' ;
 CR          : '\r' ;
 NL          : '\n' ;
 SLASH       : '/'  ;
