@@ -105,6 +105,34 @@ public class UnorderedListTest extends GrammarTest {
 
                 /* expected */
                 "(document (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n))) (nl \\n) (block (singleComment / / ^ \\n)) (nl \\n) (block (unorderedList (listItem *   (listItemValue A l m o n d) \\n) (listItem *   (listItemValue W a l n u t) <EOF>))))"
+            },
+            {
+                /* message */
+                "simple nested list",
+
+                /* input */
+                "* Fruits\n" +
+                "** Cherry",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue F r u i t s) \\n) (listItem * *   (listItemValue C h e r r y) <EOF>))))"
+            },
+            {
+                /* message */
+                "nested list",
+
+                /* input */
+                "* Fruits\n" +
+                "** Cherry\n" +
+                "** Kiwi\n" +
+                "* Vegetables\n" +
+                "** Cabbage\n" +
+                "** Salad\n" +
+                "*** Green salad\n" +
+                "*** Red salad",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue F r u i t s) \\n) (listItem * *   (listItemValue C h e r r y) \\n) (listItem * *   (listItemValue K i w i) \\n) (listItem *   (listItemValue V e g e t a b l e s) \\n) (listItem * *   (listItemValue C a b b a g e) \\n) (listItem * *   (listItemValue S a l a d) \\n) (listItem * * *   (listItemValue G r e e n   s a l a d) \\n) (listItem * * *   (listItemValue R e d   s a l a d) <EOF>))))"
             }
         });
 

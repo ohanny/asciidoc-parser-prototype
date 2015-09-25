@@ -352,7 +352,7 @@ unorderedList
     ;
 
 listItem
-    : TIMES SP listItemValue (NL|EOF)
+    : TIMES+ SP listItemValue (NL|EOF)
     ;
 
 listItemValue
@@ -367,6 +367,7 @@ listItemValue
       |RABRACK
       |MINUS
       |PLUS
+      |TIMES
       |DOT
       |COLON
       |SEMICOLON
