@@ -33,6 +33,15 @@ public class UnorderedListTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
+                "list with one item",
+
+                /* input */
+                "* Orange",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue O r a n g e) <EOF>))))"
+            },{
+                /* message */
                 "list with three items",
 
                 /* input */
@@ -57,7 +66,7 @@ public class UnorderedListTest extends GrammarTest {
             },
             {
                 /* message */
-                "list separarated by a blank line",
+                "list items separated with a blank line",
 
                 /* input */
                 "* Lemon\n" +
@@ -70,7 +79,7 @@ public class UnorderedListTest extends GrammarTest {
             },
             {
                 /* message */
-                "list separarated by a blank line with spaces and tabs",
+                "list items separated by a blank line with spaces and tabs",
 
                 /* input */
                 "* Lemon\n" +
@@ -80,6 +89,22 @@ public class UnorderedListTest extends GrammarTest {
 
                 /* expected */
                 "(document (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (bl     \\t   \\t   \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n))))"
+            },
+            {
+                /* message */
+                "two lists separated by a comment",
+
+                /* input */
+                "* Lemon\n" +
+                "* Cherry\n" +
+                "\n" +
+                "//^\n" +
+                "\n" +
+                "* Almond\n" +
+                "* Walnut",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n))) (nl \\n) (block (singleComment / / ^ \\n)) (nl \\n) (block (unorderedList (listItem *   (listItemValue A l m o n d) \\n) (listItem *   (listItemValue W a l n u t) <EOF>))))"
             }
         });
 
