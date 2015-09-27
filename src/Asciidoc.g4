@@ -28,11 +28,13 @@ grammar Asciidoc;
     }
 
     private boolean isNewLineInParagraph() {
-        boolean nextCharIsNL = (_input.LA(2) == NL);
-        boolean nextCharIsEOF = (_input.LA(2) == EOF);
+        boolean nextCharIsBL = isStartOfBlankLineAtIndex(2);
+        //boolean nextCharIsNL = (_input.LA(2) == NL);
+        //boolean nextCharIsEOF = (_input.LA(2) == EOF);
         boolean nextCharIsBeginningOfAComment = (_input.LA(2) == SLASH) && (_input.LA(3) == SLASH);
 
-        return !nextCharIsNL && !nextCharIsEOF && !nextCharIsBeginningOfAComment;
+        return !nextCharIsBL && !nextCharIsBeginningOfAComment;
+//        return !nextCharIsNL && !nextCharIsEOF && !nextCharIsBeginningOfAComment;
     }
 
     private boolean isNewLineInListItemValue() {
@@ -87,19 +89,31 @@ grammar Asciidoc;
     // ---------------------------------------------------------------
     // 'isStartOfAtIndex' element methods
     // ---------------------------------------------------------------
+    private boolean isStartOfBlankLineAtIndex(int index) {
+        int i = index;
+        int nextChar = _input.LA(i);
+        while (nextChar != EOF && nextChar != NL) {
+            if (nextChar != SP && nextChar != TAB) {
+                return false;
+            }
+            nextChar = _input.LA(++i);
+        }
 
+        return true;
+    }
 
 }
 
 // Parser
 
 document
-    : (nl
+    : (bl
       |multiComment
       |singleComment
       )*
-      (header (nl|multiComment|singleComment)* preamble?)?
-      (nl
+      (header (bl|nl|multiComment|singleComment)* preamble?)?
+      (bl
+      |nl
       |attributeEntry
       |block
       |section
@@ -191,11 +205,11 @@ attributeValuePart
     ;
 
 preamble
-    : (nl|block)+
+    : (bl|nl|block)+
     ;
 
 section
-    : sectionTitle (nl|block)*
+    : sectionTitle (bl|nl|block)*
     ;
 
 sectionTitle :

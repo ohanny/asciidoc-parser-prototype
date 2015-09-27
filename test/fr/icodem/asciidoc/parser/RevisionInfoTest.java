@@ -41,7 +41,7 @@ public class RevisionInfoTest extends GrammarTest {
                 "v1.0\n\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (revisionInfo v 1 . 0)) (nl \\n) (nl \\n))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n)) (revisionInfo v 1 . 0)) (nl \\n) (bl \\n))"
             },
             {
                 /* message */

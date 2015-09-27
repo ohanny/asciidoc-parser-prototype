@@ -149,7 +149,7 @@ public class HeaderWithMultiCommentTest extends GrammarTest {
                 "= Hello, AsciiDoc!\n",
 
                 /* expected */
-                "(document (nl \\n) (nl \\n) (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   \\n (multiCommentDelimiter / / / / \\n)) (nl \\n) (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)))"
+                "(document (bl \\n) (bl \\n) (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   \\n (multiCommentDelimiter / / / / \\n)) (bl \\n) (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)))"
             }
         });
 
