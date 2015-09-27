@@ -49,7 +49,7 @@ public class ParagraphTest extends GrammarTest {
                 "This is some content \n",
 
                 /* expected */
-                "(document (block (paragraph T h i s   i s   s o m e   c o n t e n t  )) (nl \\n))"
+                "(document (block (paragraph T h i s   i s   s o m e   c o n t e n t  ) (nl \\n)))"
             },
             {
                 /* message */
@@ -112,7 +112,7 @@ public class ParagraphTest extends GrammarTest {
                 "This is a second paragraph",
 
                 /* expected */
-                "(document (block (paragraph T h i s   i s   a   f i r s t   p a r a g r a p h)) (nl \\n) (block (singleComment / /   c o m m e n t \\n)) (block (paragraph T h i s   i s   a   s e c o n d   p a r a g r a p h)))"
+                "(document (block (paragraph T h i s   i s   a   f i r s t   p a r a g r a p h) (nl \\n)) (block (singleComment / /   c o m m e n t \\n)) (block (paragraph T h i s   i s   a   s e c o n d   p a r a g r a p h)))"
             },
             {
                 /* message */
@@ -126,7 +126,7 @@ public class ParagraphTest extends GrammarTest {
                 "This is a second paragraph",
 
                 /* expected */
-                "(document (block (paragraph T h i s   i s   a   f i r s t   p a r a g r a p h)) (nl \\n) (block (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t \\n (multiCommentDelimiter / / / / \\n))) (block (paragraph T h i s   i s   a   s e c o n d   p a r a g r a p h)))"
+                "(document (block (paragraph T h i s   i s   a   f i r s t   p a r a g r a p h) (nl \\n)) (block (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t \\n (multiCommentDelimiter / / / / \\n))) (block (paragraph T h i s   i s   a   s e c o n d   p a r a g r a p h)))"
             }
         });
 

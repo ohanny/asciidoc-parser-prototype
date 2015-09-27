@@ -113,7 +113,6 @@ document
       )*
       (header (bl|nl|multiComment|singleComment)* preamble?)?
       (bl
-      |nl
       |attributeEntry
       |block
       |section
@@ -227,7 +226,7 @@ block
           |unorderedList
           |sourceBlock
           |literalBlock
-          |paragraph
+          |paragraph nl?
           )
       )
     ;

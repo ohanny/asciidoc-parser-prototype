@@ -43,7 +43,7 @@ public class NoHeaderAndOneSectionWithContentTest extends GrammarTest {
                 "YYY",
 
                 /* expected */
-                "(document (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z)) (nl \\n) (bl \\n) (block (paragraph Y Y Y))))"
+                "(document (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -58,7 +58,7 @@ public class NoHeaderAndOneSectionWithContentTest extends GrammarTest {
                 "YYY",
 
                 /* expected */
-                "(document (bl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z)) (nl \\n) (bl \\n) (block (paragraph Y Y Y))))"
+                "(document (bl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -75,7 +75,7 @@ public class NoHeaderAndOneSectionWithContentTest extends GrammarTest {
                 "YYY",
 
                 /* expected */
-                "(document (bl \\n) (bl \\n) (bl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z)) (nl \\n) (bl \\n) (block (paragraph Y Y Y))))"
+                "(document (bl \\n) (bl \\n) (bl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -91,7 +91,7 @@ public class NoHeaderAndOneSectionWithContentTest extends GrammarTest {
                 "YYY",
 
                 /* expected */
-                "(document (block (paragraph X X X)) (nl \\n) (bl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z)) (nl \\n) (bl \\n) (block (paragraph Y Y Y))))"
+                "(document (block (paragraph X X X) (nl \\n)) (bl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y))))"
             }
 
 
