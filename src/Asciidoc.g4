@@ -52,7 +52,7 @@ grammar Asciidoc;
     // 'isStartOf' element methods
     // ---------------------------------------------------------------
 
-    private boolean isStartOfTitle() {
+    private boolean isStartOfSection() {
         int i = 1;
         int nextChar = _input.LA(i);
 
@@ -77,11 +77,11 @@ grammar Asciidoc;
     private boolean isStartOfRevisionInfo() {
         boolean currentCharIsNL = (_input.LA(1) == NL);
 
-        return !currentCharIsNL && !isStartOfTitle();
+        return !currentCharIsNL && !isStartOfSection();
     }
 
     private boolean isStartOfParagraph() {
-        return !isStartOfTitle();
+        return !isStartOfSection();
     }
 
     // ---------------------------------------------------------------
@@ -112,6 +112,10 @@ nl
 
 bl
     : {isFirstCharInLine()}? (SP|TAB)* CR? NL
+    ;
+
+title
+    : ~(SP|TAB) ~(NL|EOF)+
     ;
 
 header
@@ -195,21 +199,27 @@ section
     ;
 
 sectionTitle :
-    EQ+ SP title? (NL|EOF)
+    EQ+ (SP|TAB)* title? (NL|EOF)
     ;
 
 // A block should have only one anchor, but this is checked
 // in the listener. The grammar is tolerant if multiple
-// consecutive anchors are defined
+// consecutive anchors are defined. Same for block title.
 block
-    : anchor*
-      (multiComment
-      |singleComment
-      |unorderedList
-      |sourceBlock
-      |literalBlock
-      |paragraph
+    : (anchor* literalBlock | // literal block must be detected before block title
+          (anchor|blockTitle)*
+          (multiComment
+          |singleComment
+          |unorderedList
+          |sourceBlock
+          |literalBlock
+          |paragraph
+          )
       )
+    ;
+
+blockTitle
+    : DOT title? (NL|EOF)
     ;
 
 anchor
@@ -230,10 +240,6 @@ anchorLabel
       |SLASH
       |COMMA
       )+
-    ;
-
-title
-    : ~(NL|EOF)+
     ;
 
 paragraph
@@ -363,7 +369,6 @@ literalBlockDelimiter
     ;
 
 unorderedList
-//    : listItem ((listItem|bl)* listItem)?
     : listItem (listItem|bl listItem)*
     ;
 

@@ -67,6 +67,19 @@ public class UnorderedListTest extends GrammarTest {
             },
             {
                 /* message */
+                "list with a title",
+
+                /* input */
+                ".Some fruits\n" +
+                "* Lemon\n" +
+                "* Cherry\n" +
+                "* Mandarine\n",
+
+                /* expected */
+                "(document (block (blockTitle . (title S o m e   f r u i t s) \\n) Adde(unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n))))"
+            },
+            {
+                /* message */
                 "list items separated with a blank line",
 
                 /* input */
