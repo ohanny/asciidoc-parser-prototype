@@ -40,7 +40,8 @@ public class UnorderedListTest extends GrammarTest {
 
                 /* expected */
                 "(document (block (unorderedList (listItem *   (listItemValue O r a n g e) <EOF>))))"
-            },{
+            },
+            {
                 /* message */
                 "list with three items",
 

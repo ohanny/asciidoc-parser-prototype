@@ -35,6 +35,19 @@ grammar Asciidoc;
         return !nextCharIsNL && !nextCharIsEOF && !nextCharIsBeginningOfAComment;
     }
 
+    private boolean isNewLineInListItemValue() {
+        // if next line is a blank line, then new line is not part of list item value
+        int i = 2;
+        int nextChar = _input.LA(i);
+        while (nextChar == SP || nextChar == TAB || nextChar == CR
+                || nextChar == NL || nextChar == EOF) {
+            if (nextChar == NL || nextChar == EOF) return false;
+            nextChar = _input.LA(++i);
+        }
+
+        return true;
+    }
+
     // ---------------------------------------------------------------
     // 'isStartOf' element methods
     // ---------------------------------------------------------------
@@ -306,6 +319,7 @@ sourceBlock
       |RABRACK
       |MINUS
       |PLUS
+      |TIMES
       |DOT
       |COLON
       |SEMICOLON
@@ -333,6 +347,7 @@ literalBlock
       |RABRACK
       |MINUS
       |PLUS
+      |TIMES
       |DOT
       |COLON
       |SEMICOLON
@@ -348,7 +363,8 @@ literalBlockDelimiter
     ;
 
 unorderedList
-    : listItem ((listItem|bl)* listItem)?
+//    : listItem ((listItem|bl)* listItem)?
+    : listItem (listItem|bl listItem)*
     ;
 
 listItem
@@ -372,6 +388,7 @@ listItemValue
       |COLON
       |SEMICOLON
       |BANG
+      | {isNewLineInListItemValue()}? (CR? NL)
       )*?
     ;
 

@@ -19,7 +19,8 @@ import org.junit.runners.Suite;
     BlockIdTest.class,
     RevisionInfoTest.class,
     AttributeEntryTest.class,
-    UnorderedListTest.class
+    UnorderedListTest.class,
+    UnorderedListWithComplexContentTest.class
 })
 public class GrammarTestSuite {
 }
