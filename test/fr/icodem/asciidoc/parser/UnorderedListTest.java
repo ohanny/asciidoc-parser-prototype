@@ -43,6 +43,16 @@ public class UnorderedListTest extends GrammarTest {
             },
             {
                 /* message */
+                "list with one item ended by new line",
+
+                /* input */
+                "* Orange\n",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue O r a n g e) \\n))))"
+            },
+            {
+                /* message */
                 "list with three items",
 
                 /* input */
