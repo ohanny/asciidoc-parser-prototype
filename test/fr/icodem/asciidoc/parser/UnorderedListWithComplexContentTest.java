@@ -33,7 +33,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "list with two lines",
+                "one list item with two lines",
 
                 /* input */
                 "* The earth, the sea\n" +
@@ -41,6 +41,23 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (block (unorderedList (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n   a n d   t h e   s u n) <EOF>))))"
+            },
+            {
+                /* message */
+                "three list items with two lines",
+
+                /* input */
+                "* The earth, the sea\n" +
+                " and the sun\n" +
+                "\n" +
+                "* Kiwi, kaki\n" +
+                " and kiwai\n" +
+                "\n" +
+                "* Cabbage, leek\n" +
+                " and carrot",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n   a n d   t h e   s u n) \\n) (bl \\n) (listItem *   (listItemValue K i w i ,   k a k i \\n   a n d   k i w a i) \\n) (bl \\n) (listItem *   (listItemValue C a b b a g e ,   l e e k \\n   a n d   c a r r o t) <EOF>))))"
             }
         });
 

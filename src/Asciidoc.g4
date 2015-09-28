@@ -29,25 +29,16 @@ grammar Asciidoc;
 
     private boolean isNewLineInParagraph() {
         boolean nextCharIsBL = isStartOfBlankLineAtIndex(2);
-        //boolean nextCharIsNL = (_input.LA(2) == NL);
-        //boolean nextCharIsEOF = (_input.LA(2) == EOF);
         boolean nextCharIsBeginningOfAComment = (_input.LA(2) == SLASH) && (_input.LA(3) == SLASH);
 
         return !nextCharIsBL && !nextCharIsBeginningOfAComment;
-//        return !nextCharIsNL && !nextCharIsEOF && !nextCharIsBeginningOfAComment;
     }
 
     private boolean isNewLineInListItemValue() {
-        // if next line is a blank line, then new line is not part of list item value
-        int i = 2;
-        int nextChar = _input.LA(i);
-        while (nextChar == SP || nextChar == TAB || nextChar == CR
-                || nextChar == NL || nextChar == EOF) {
-            if (nextChar == NL || nextChar == EOF) return false;
-            nextChar = _input.LA(++i);
-        }
+        boolean nextCharIsBL = isStartOfBlankLineAtIndex(2);
+        boolean nextCharIsListItem = isStartOfListItemAtIndex(2);
 
-        return true;
+        return !nextCharIsBL && !nextCharIsListItem;
     }
 
     // ---------------------------------------------------------------
@@ -100,6 +91,16 @@ grammar Asciidoc;
         }
 
         return true;
+    }
+
+    private boolean isStartOfListItemAtIndex(int index) {
+        int i = index;
+        int nextChar = _input.LA(i);
+        if (nextChar == TIMES) {
+            while ((nextChar = _input.LA(++i)) == TIMES) {}
+            if (nextChar == SP) return true;
+        }
+        return false;
     }
 
 }
@@ -407,7 +408,7 @@ listItemValue
       |SEMICOLON
       |BANG
       | {isNewLineInListItemValue()}? (CR? NL)
-      )*?
+      )*
     ;
 
 // Lexer
