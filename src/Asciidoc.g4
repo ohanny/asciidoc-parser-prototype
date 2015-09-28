@@ -2,15 +2,6 @@ grammar Asciidoc;
 
 @parser::members {
 
-/*
-    private boolean isPreviousChar(int charType) {
-        if (_input.LT(1).getLine() == 1 &&
-            _input.LT(1).getCharPositionInLine() == 0) return false;
-
-        return _input.LA(-1) == charType;
-    }
-*/
-
     private boolean isFirstCharInLine() {
         return _input.LT(1).getCharPositionInLine() == 0;
     }
@@ -27,18 +18,25 @@ grammar Asciidoc;
         return !nextCharIsNL && !nextCharIsEOF && !nextCharIsBeginningOfAComment;
     }
 
-    private boolean isNewLineInParagraph() {
+    private boolean isNewLineInParagraph(boolean fromList) {
         boolean nextCharIsBL = isStartOfBlankLineAtIndex(2);
         boolean nextCharIsBeginningOfAComment = (_input.LA(2) == SLASH) && (_input.LA(3) == SLASH);
+        boolean ok = !nextCharIsBL && !nextCharIsBeginningOfAComment;
 
-        return !nextCharIsBL && !nextCharIsBeginningOfAComment;
+        if (fromList) {
+            boolean nextCharIsListContinuation = isStartOfListContinuationAtIndex(2);
+            ok = ok && !nextCharIsListContinuation;
+        }
+
+        return ok;
     }
 
     private boolean isNewLineInListItemValue() {
         boolean nextCharIsBL = isStartOfBlankLineAtIndex(2);
         boolean nextCharIsListItem = isStartOfListItemAtIndex(2);
+        boolean nextCharIsListContinuation = isStartOfListContinuationAtIndex(2);
 
-        return !nextCharIsBL && !nextCharIsListItem;
+        return !nextCharIsBL && !nextCharIsListItem && !nextCharIsListContinuation;
     }
 
     // ---------------------------------------------------------------
@@ -103,6 +101,14 @@ grammar Asciidoc;
         return false;
     }
 
+    private boolean isStartOfListContinuationAtIndex(int index) {
+        int i = index;
+        if (_input.LA(i) == PLUS && isStartOfBlankLineAtIndex(i + 1)) {
+            return true;
+        }
+        return false;
+    }
+
 }
 
 // Parser
@@ -115,7 +121,7 @@ document
       (header (bl|nl|multiComment|singleComment)* preamble?)?
       (bl
       |attributeEntry
-      |block
+      |block[false]
       |section
       )*
     ;
@@ -205,11 +211,11 @@ attributeValuePart
     ;
 
 preamble
-    : (bl|nl|block)+
+    : (bl|nl|block[false])+
     ;
 
 section
-    : sectionTitle (bl|nl|block)*
+    : sectionTitle (bl|nl|block[false])*
     ;
 
 sectionTitle :
@@ -219,7 +225,7 @@ sectionTitle :
 // A block should have only one anchor, but this is checked
 // in the listener. The grammar is tolerant if multiple
 // consecutive anchors are defined. Same for block title.
-block
+block[boolean fromList]       // argument 'fromList' indicates that block is attached to a list item
     : (anchor* literalBlock | // literal block must be detected before block title
           (anchor|blockTitle)*
           (multiComment
@@ -227,7 +233,7 @@ block
           |unorderedList
           |sourceBlock
           |literalBlock
-          |paragraph nl?
+          |paragraph[$fromList] nl?
           )
       )
     ;
@@ -256,7 +262,7 @@ anchorLabel
       )+
     ;
 
-paragraph
+paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
     : {isStartOfParagraph()}?
       (OTHER
       |SP
@@ -273,7 +279,7 @@ paragraph
       |COLON
       |SEMICOLON
       |BANG
-      |{isNewLineInParagraph()}? NL
+      |{isNewLineInParagraph($fromList)}? NL
       )+
     ;
 
@@ -387,7 +393,8 @@ unorderedList
     ;
 
 listItem
-    : TIMES+ SP listItemValue (NL|EOF)
+    //: TIMES+ SP listItemValue ((CR? NL listContinuation)+|(NL|EOF))
+    : TIMES+ SP listItemValue (CR? NL listContinuation*|EOF)
     ;
 
 listItemValue
@@ -407,8 +414,12 @@ listItemValue
       |COLON
       |SEMICOLON
       |BANG
-      | {isNewLineInListItemValue()}? (CR? NL)
+      |{isNewLineInListItemValue()}? (CR? NL)
       )*
+    ;
+
+listContinuation
+    : PLUS (SP|TAB)* CR? NL block[true]
     ;
 
 // Lexer

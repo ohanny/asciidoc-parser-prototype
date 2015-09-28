@@ -69,6 +69,48 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (block (unorderedList (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n   a n d   t h e   s u n) \\n) (bl \\n) (listItem *   (listItemValue K i w i ,   k a k i \\n   a n d   k i w a i) \\n) (bl \\n) (listItem *   (listItemValue C a b b a g e ,   l e e k \\n   a n d   c a r r o t) <EOF>))))"
+            },
+            {
+                /* message */
+                "a list item continued by a paragraph",
+
+                /* input */
+                "* The sun is shining...\n" +
+                "+\n" +
+                "Yes !\n",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !) (nl \\n)))))))"
+            },
+            {
+                /* message */
+                "a list item continued by a source block",
+
+                /* input */
+                "* The sun is shining...\n" +
+                "+\n" +
+                "----\n" +
+                "println('Yes !')\n" +
+                "----",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - <EOF>))))))))"
+            },
+            {
+                /* message */
+                "a list item continued by a paragraph and a source block",
+
+                /* input */
+                "* The sun is shining...\n" +
+                "+\n" +
+                "Yes !\n" +
+                "+\n" +
+                "----\n" +
+                "println('Yes !')\n" +
+                "----",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !) (nl \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - <EOF>))))))))"
             }
         });
 
