@@ -111,6 +111,38 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !) (nl \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - <EOF>))))))))"
+            },
+            {
+                /* message */
+                "a list item continued by two paragraphs",
+
+                /* input */
+                "* The sun is shining...\n" +
+                "+\n" +
+                "Yes !\n" +
+                "+\n" +
+                "Great !",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !) (nl \\n))) (listContinuation + \\n (block (paragraph G r e a t   !)))))))"
+            },
+            {
+                /* message */
+                "a list item continued by source block interspersed in two paragraphs",
+
+                /* input */
+                "* The sun is shining...\n" +
+                "+\n" +
+                "Yes !\n" +
+                "+\n" +
+                "----\n" +
+                "println('Yes !')\n" +
+                "----\n" +
+                "+\n" +
+                "Great !",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !) (nl \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - \\n)))) (listContinuation + \\n (block (paragraph G r e a t   !)))))))"
             }
         });
 
