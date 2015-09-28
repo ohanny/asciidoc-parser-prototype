@@ -233,7 +233,7 @@ block[boolean fromList]       // argument 'fromList' indicates that block is att
           |unorderedList
           |sourceBlock
           |literalBlock
-          |paragraph[$fromList] nl?
+          |paragraph[$fromList]
           )
       )
     ;
@@ -280,7 +280,7 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
       |SEMICOLON
       |BANG
       |{isNewLineInParagraph($fromList)}? NL
-      )+
+      )+ nl?
     ;
 
 singleComment
@@ -393,7 +393,6 @@ unorderedList
     ;
 
 listItem
-    //: TIMES+ SP listItemValue ((CR? NL listContinuation)+|(NL|EOF))
     : TIMES+ SP listItemValue (CR? NL listContinuation*|EOF)
     ;
 

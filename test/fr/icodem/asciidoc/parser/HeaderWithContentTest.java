@@ -40,7 +40,7 @@ public class HeaderWithContentTest extends GrammarTest {
                 "\nXXX\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (preamble (block (paragraph X X X) (nl \\n))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (preamble (block (paragraph X X X (nl \\n)))))"
             },
             {
                 /* message */
@@ -129,7 +129,7 @@ public class HeaderWithContentTest extends GrammarTest {
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (preamble (block (paragraph X X X \\n = =   F i r s t   S e c t i o n) (nl \\n))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (preamble (block (paragraph X X X \\n = =   F i r s t   S e c t i o n (nl \\n)))))"
             },
             {
                 /* message */
