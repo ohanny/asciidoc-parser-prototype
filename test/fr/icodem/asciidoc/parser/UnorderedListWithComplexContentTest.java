@@ -44,6 +44,17 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
             },
             {
                 /* message */
+                "second line of list item is not a comment",
+
+                /* input */
+                "* The earth, the sea\n" +
+                "// and the sun",
+
+                /* expected */
+                "(document (block (unorderedList (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n / /   a n d   t h e   s u n) <EOF>))))"
+            },
+            {
+                /* message */
                 "three list items with two lines",
 
                 /* input */
