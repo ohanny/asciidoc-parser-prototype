@@ -3,7 +3,12 @@ grammar Asciidoc;
 @parser::members {
 
     private boolean isFirstCharInLine() {
+        //System.out.println(_input.LT(1) + " => " + (_input.LT(1).getCharPositionInLine() == 0));
         return _input.LT(1).getCharPositionInLine() == 0;
+    }
+
+    private boolean isNextCharEOF() {
+        return _input.LA(2) == EOF;
     }
 
     // ---------------------------------------------------------------
@@ -121,8 +126,22 @@ document
       (header (bl|nl|multiComment|singleComment)* preamble?)?
       (bl
       |attributeEntry
-      |block[false]
+      |attributeList   // TODO
       |section
+      |block[false]
+      )*
+    ;
+
+document1
+    : (bl
+      |multiComment
+      |singleComment
+      )*
+      (header (bl|nl|multiComment|singleComment)* preamble?)?
+      (bl
+      |attributeEntry
+      |section
+      |block[false]
       )*
     ;
 
@@ -131,7 +150,8 @@ nl
     ;
 
 bl
-    : {isFirstCharInLine()}? (SP|TAB)* CR? NL
+    : {isFirstCharInLine()}? (SP|TAB)* {!isNextCharEOF()}?(CR? NL) // TODO
+    //: {isFirstCharInLine()}? (SP|TAB)* {_input.LA(2) != EOF}?(CR? NL|EOF) // TODO
     ;
 
 title
@@ -141,7 +161,7 @@ title
 header
     : documentTitle
       (multiComment|singleComment)*
-      authors?
+      authors? //TODO
       (multiComment|singleComment)*
       revisionInfo?
       attributeEntry*
@@ -194,12 +214,12 @@ revisionInfo
       )+
     ;
 
-attributeEntry
-    : COLON BANG? attributeName BANG? COLON SP* attributeValue? (NL|EOF)
-    ;
-
 attributeName
     : OTHER+
+    ;
+
+attributeEntry
+    : COLON BANG? attributeName BANG? COLON SP* attributeValue? (NL|EOF)
     ;
 
 attributeValue
@@ -210,8 +230,30 @@ attributeValuePart
     : OTHER+
     ;
 
+attributeList
+    : LSBRACK
+      OTHER*
+      RSBRACK ((CR? NL)|EOF) //{!isNextCharEOF()}?(CR? NL) TODO
+    ;
+
+attributeList1
+    : LSBRACK
+      ((positionalAttribute|namedAttribute) (SP|TAB)*
+            (COMMA (positionalAttribute|namedAttribute) (SP|TAB)*)*
+      |)
+      RSBRACK (CR? NL)?
+    ;
+
+positionalAttribute
+    : attributeName
+    ;
+
+namedAttribute
+    : attributeName EQ attributeValuePart?
+    ;
+
 preamble
-    : (bl|nl|block[false])+
+    : block[false] (bl|nl|block[false])*
     ;
 
 section
@@ -225,9 +267,31 @@ sectionTitle :
 // A block should have only one anchor, but this is checked
 // in the listener. The grammar is tolerant if multiple
 // consecutive anchors are defined. Same for block title.
+block1[boolean fromList]       // argument 'fromList' indicates that block is attached to a list item
+    : ((anchor|attributeList)* literalBlock | // literal block must be detected before block title
+          (anchor|attributeList|blockTitle)+
+          (multiComment
+          |singleComment
+          |unorderedList
+          |sourceBlock
+          |literalBlock
+          |paragraph[$fromList]
+          )?
+          |
+          (anchor|attributeList|blockTitle)*
+          (multiComment
+          |singleComment
+          |unorderedList
+          |sourceBlock
+          |literalBlock
+          |paragraph[$fromList]
+          )
+      )
+    ;
+
 block[boolean fromList]       // argument 'fromList' indicates that block is attached to a list item
-    : (anchor* literalBlock | // literal block must be detected before block title
-          (anchor|blockTitle)*
+    : ((anchor|attributeList)* literalBlock | // literal block must be detected before block title
+          (anchor|attributeList|blockTitle)*
           (multiComment
           |singleComment
           |unorderedList
@@ -280,7 +344,7 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
       |SEMICOLON
       |BANG
       |{isNewLineInParagraph($fromList)}? NL
-      )+ nl?
+      )+ (nl)? // TODO (nl|EOF)?
     ;
 
 singleComment

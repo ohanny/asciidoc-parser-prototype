@@ -20,7 +20,8 @@ import org.junit.runners.Suite;
     RevisionInfoTest.class,
     AttributeEntryTest.class,
     UnorderedListTest.class,
-    UnorderedListWithComplexContentTest.class
+    UnorderedListWithComplexContentTest.class,
+    AttributeListTest.class
 })
 public class GrammarTestSuite {
 }
