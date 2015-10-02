@@ -344,7 +344,7 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
       |SEMICOLON
       |BANG
       |{isNewLineInParagraph($fromList)}? NL
-      )+ (nl)? // TODO (nl|EOF)?
+      )+ nl? // TODO (nl|EOF)?
     ;
 
 singleComment
