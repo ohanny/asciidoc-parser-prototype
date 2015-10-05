@@ -86,7 +86,7 @@ public class UnorderedListTest extends GrammarTest {
                 "* Mandarine\n",
 
                 /* expected */
-                "(document (block (blockTitle . (title S o m e   f r u i t s) \\n) (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n))))"
+                "(document (blockTitle . (title S o m e   f r u i t s) \\n) (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n))))"
             },
             {
                 /* message */

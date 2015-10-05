@@ -39,7 +39,7 @@ public class AttributeListTest extends GrammarTest {
                 "[quote]",
 
                 /* expected */
-                "(document (attributeList [ q u o t e ] <EOF>))"
+                "(document (attributeList [ (positionalAttribute (attributeName q u o t e)) ] <EOF>))"
             }
         });
 

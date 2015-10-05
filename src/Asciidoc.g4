@@ -7,6 +7,10 @@ grammar Asciidoc;
         return _input.LT(1).getCharPositionInLine() == 0;
     }
 
+    private boolean isCurrentCharEOF() {// TODO suppress ?
+        return _input.LA(1) == EOF;
+    }
+
     private boolean isNextCharEOF() {
         return _input.LA(2) == EOF;
     }
@@ -114,6 +118,24 @@ grammar Asciidoc;
         return false;
     }
 
+
+
+
+
+    ///// *************
+    private boolean isSlashInParagraph() {
+        boolean curCharIsBeginningOfAComment = isFirstCharInLine() && (_input.LA(1) == SLASH) && (_input.LA(2) == SLASH);
+        return curCharIsBeginningOfAComment;
+    }
+
+    private boolean isBlankInParagraph() {
+        boolean curCharIsBL = isStartOfBlankLineAtIndex(1);
+        boolean ok = !curCharIsBL;
+
+        return ok;
+    }
+
+
 }
 
 // Parser
@@ -127,19 +149,8 @@ document
       (bl
       |attributeEntry
       |attributeList   // TODO
-      |section
-      |block[false]
-      )*
-    ;
-
-document1
-    : (bl
-      |multiComment
-      |singleComment
-      )*
-      (header (bl|nl|multiComment|singleComment)* preamble?)?
-      (bl
-      |attributeEntry
+      |anchor
+      |blockTitle
       |section
       |block[false]
       )*
@@ -168,13 +179,15 @@ header
     ;
 
 documentTitle
-    : EQ SP title? (NL|EOF)
+    : EQ SP title? (SP|TAB)* (CR? NL|EOF)
     ;
 
 authors
     : authorName (LABRACK authorAddress RABRACK)?
       (SEMICOLON authorName (LABRACK authorAddress RABRACK)?)*
-      (nl|EOF)
+      //(nl|EOF)
+      //({!isCurrentCharEOF()}? CR? NL|)
+      (SP|TAB)* (CR? NL|EOF)
     ;
 
 authorName
@@ -219,7 +232,7 @@ attributeName
     ;
 
 attributeEntry
-    : COLON BANG? attributeName BANG? COLON SP* attributeValue? (NL|EOF)
+    : COLON BANG? attributeName BANG? COLON SP* attributeValue? (SP|TAB)* (CR? NL|EOF)
     ;
 
 attributeValue
@@ -230,18 +243,19 @@ attributeValuePart
     : OTHER+
     ;
 
-attributeList
-    : LSBRACK
-      OTHER*
-      RSBRACK ((CR? NL)|EOF) //{!isNextCharEOF()}?(CR? NL) TODO
-    ;
+//attributeList
+//    : LSBRACK
+//      OTHER*
+//      RSBRACK (SP|TAB)* (CR? NL|EOF) //{!isNextCharEOF()}?(CR? NL) TODO
+//      //RSBRACK ((CR? NL)|EOF) //{!isNextCharEOF()}?(CR? NL) TODO
+//    ;
 
-attributeList1
+attributeList
     : LSBRACK
       ((positionalAttribute|namedAttribute) (SP|TAB)*
             (COMMA (positionalAttribute|namedAttribute) (SP|TAB)*)*
       |)
-      RSBRACK (CR? NL)?
+      RSBRACK (SP|TAB)* (CR? NL|EOF)
     ;
 
 positionalAttribute
@@ -253,7 +267,13 @@ namedAttribute
     ;
 
 preamble
-    : block[false] (bl|nl|block[false])*
+    :       //(attributeList   // TODO
+            //|anchor
+            //|blockTitle
+            //)
+
+      block[false]
+      (bl|nl|block[false])*
     ;
 
 section
@@ -261,7 +281,7 @@ section
     ;
 
 sectionTitle :
-    EQ+ (SP|TAB)* title? (NL|EOF)
+    EQ+ (SP|TAB)* title? (SP|TAB)* (CR? NL|EOF)
     ;
 
 // A block should have only one anchor, but this is checked
@@ -290,8 +310,8 @@ block1[boolean fromList]       // argument 'fromList' indicates that block is at
     ;
 
 block[boolean fromList]       // argument 'fromList' indicates that block is attached to a list item
-    : ((anchor|attributeList)* literalBlock | // literal block must be detected before block title
-          (anchor|attributeList|blockTitle)*
+    : //(literalBlock | // literal block must be detected before block title
+          //(blockTitle)*
           (multiComment
           |singleComment
           |unorderedList
@@ -299,11 +319,13 @@ block[boolean fromList]       // argument 'fromList' indicates that block is att
           |literalBlock
           |paragraph[$fromList]
           )
-      )
+      //)
     ;
 
 blockTitle
-    : DOT title? (NL|EOF)
+    : DOT title? (SP|TAB)* (CR? NL|EOF)
+    //: DOT title? ({!isCurrentCharEOF()}? CR? NL|)
+    //: DOT title? {!isNextCharEOF()}? NL
     ;
 
 anchor
@@ -330,8 +352,9 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
     : {isStartOfParagraph()}?
       (OTHER
       |SP
+      |TAB
       |EQ
-      |{!isStartOfComment()}? SLASH
+      |SLASH
       |COMMA
       |LSBRACK
       |RSBRACK
@@ -345,6 +368,30 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
       |BANG
       |{isNewLineInParagraph($fromList)}? NL
       )+ nl? // TODO (nl|EOF)?
+    ;
+
+paragraph1 [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
+    : {isStartOfParagraph()}?
+      (OTHER
+      |{isBlankInParagraph()}? SP
+      |{isBlankInParagraph()}? TAB
+      |EQ
+      |{!isStartOfComment()}? SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |LABRACK
+      |RABRACK
+      |MINUS
+      |PLUS
+      |DOT
+      |COLON
+      |SEMICOLON
+      |BANG
+      //|{isNewLineInParagraph($fromList)}? NL
+      |{isBlankInParagraph()}? NL
+      )+ (CR? NL|EOF)
+      //)+ nl? // TODO (nl|EOF)?
     ;
 
 singleComment
@@ -366,7 +413,9 @@ singleComment
       |SEMICOLON
       |BANG
       )*
-      (NL|EOF)
+      //{!isNextCharEOF()}? NL
+      //(CR? NL| {isCurrentCharEOF()}?)
+      (CR? NL|EOF)
     ;
 
 multiComment
@@ -393,7 +442,9 @@ multiComment
 
 multiCommentDelimiter
     : {isFirstCharInLine()}?
-      SLASH SLASH SLASH SLASH (NL|EOF)
+      SLASH SLASH SLASH SLASH (SP|TAB)* (CR? NL|EOF)
+      //SLASH SLASH SLASH SLASH (SP|TAB)*
+      //(CR? NL| {isCurrentCharEOF()}?)
     ;
 
 sourceBlock
@@ -421,7 +472,10 @@ sourceBlock
 
 sourceBlockDelimiter
     : {isFirstCharInLine()}?
-      MINUS MINUS MINUS MINUS (NL|EOF)
+      MINUS MINUS MINUS MINUS (SP|TAB)* (CR? NL|EOF)
+//      MINUS MINUS MINUS MINUS
+      //({!isCurrentCharEOF()}? CR? NL|)
+//      (CR? NL| {isCurrentCharEOF()}?)
     ;
 
 literalBlock
@@ -449,7 +503,10 @@ literalBlock
 
 literalBlockDelimiter
     : {isFirstCharInLine()}?
-      DOT DOT DOT DOT (NL|EOF)
+      DOT DOT DOT DOT (SP|TAB)* (CR? NL|EOF)
+//      DOT DOT DOT DOT
+//      ({!isCurrentCharEOF()}? CR? NL|)
+//      (CR? NL| {isCurrentCharEOF()}?)
     ;
 
 unorderedList

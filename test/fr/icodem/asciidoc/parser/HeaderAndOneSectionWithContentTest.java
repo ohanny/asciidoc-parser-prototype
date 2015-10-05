@@ -62,7 +62,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n))) (bl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) \\n)) (bl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)))"
             },
             {
                 /* message */
@@ -164,7 +164,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n))) (bl \\n) (preamble (block (paragraph W W W (nl \\n))) (bl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (block (paragraph Z Z Z (nl \\n))) (bl \\n) (block (paragraph Y Y Y))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) \\n)) (bl \\n) (preamble (block (paragraph W W W (nl \\n))) (bl \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (block (paragraph Z Z Z (nl \\n))) (bl \\n) (block (paragraph Y Y Y))))"
             },
             {
                 /* message */
@@ -180,7 +180,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "* Mandarine",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) (nl \\n))) (bl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) <EOF>)))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) \\n)) (bl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) <EOF>)))))"
             }
 
         });

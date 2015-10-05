@@ -11,7 +11,7 @@ import static org.junit.runners.Parameterized.Parameter;
 import static org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class BlockIdTest extends GrammarTest {
+public class BlockTitleTest extends GrammarTest {
 
     @Parameter(0)
     public String message;
@@ -33,37 +33,34 @@ public class BlockIdTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "A block ID above a paragraph",
+                "A block  title ended by EOF",
 
                 /* input */
-                "[[TheID]]\n" +
-                "This is some content",
+                ".A title",
 
                 /* expected */
-                "(document (anchor [ [ (anchorId T h e I D) ] ] \\n) (block (paragraph T h i s   i s   s o m e   c o n t e n t)))"
+                "(document (blockTitle . (title A   t i t l e) <EOF>))"
             },
             {
                 /* message */
-                "A block ID with a label above a paragraph",
+                "A block  title ended by new line",
 
                 /* input */
-                "[[TheID, The label]]\n" +
-                "This is some content",
+                ".A title\n",
 
                 /* expected */
-                "(document (anchor [ [ (anchorId T h e I D) , (anchorLabel   T h e   l a b e l) ] ] \\n) (block (paragraph T h i s   i s   s o m e   c o n t e n t)))"
+                "(document (blockTitle . (title A   t i t l e) \\n))"
             },
             {
                 /* message */
-                "Two block IDs above a paragraph",
+                "A block  above a paragraph",
 
                 /* input */
-                "[[TheID, The label]]\n" +
-                "[[TheID2, The label]]\n" +
-                "This is some content",
+                ".Fruits\n" +
+                "Strawberry and banana",
 
                 /* expected */
-                "(document (anchor [ [ (anchorId T h e I D) , (anchorLabel   T h e   l a b e l) ] ] \\n) (anchor [ [ (anchorId T h e I D 2) , (anchorLabel   T h e   l a b e l) ] ] \\n) (block (paragraph T h i s   i s   s o m e   c o n t e n t)))"
+                "(document (blockTitle . (title F r u i t s) \\n) (block (paragraph S t r a w b e r r y   a n d   b a n a n a)))"
             }
         });
 
