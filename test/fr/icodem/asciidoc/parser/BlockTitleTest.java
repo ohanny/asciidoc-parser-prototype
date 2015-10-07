@@ -39,7 +39,7 @@ public class BlockTitleTest extends GrammarTest {
                 ".A title",
 
                 /* expected */
-                "(document (blockTitle . (title A   t i t l e) <EOF>))"
+                "(document (blockTitle . (title A   t i t l e)))"
             },
             {
                 /* message */

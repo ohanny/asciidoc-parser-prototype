@@ -28,7 +28,7 @@ grammar Asciidoc;
     }
 
     private boolean isNewLineInParagraph(boolean fromList) {
-        boolean nextCharIsBL = isStartOfBlankLineAtIndex(2);
+        boolean nextCharIsBL = isStartOfBlankLineAtIndex(2, false);
         boolean nextCharIsBeginningOfAComment = (_input.LA(2) == SLASH) && (_input.LA(3) == SLASH);
         boolean ok = !nextCharIsBL && !nextCharIsBeginningOfAComment;
 
@@ -41,7 +41,7 @@ grammar Asciidoc;
     }
 
     private boolean isNewLineInListItemValue() {
-        boolean nextCharIsBL = isStartOfBlankLineAtIndex(2);
+        boolean nextCharIsBL = isStartOfBlankLineAtIndex(2, false);
         boolean nextCharIsListItem = isStartOfListItemAtIndex(2);
         boolean nextCharIsListContinuation = isStartOfListContinuationAtIndex(2);
 
@@ -84,10 +84,37 @@ grammar Asciidoc;
         return !isStartOfSection();
     }
 
+    private boolean isStartOfBlockTitle() {
+        boolean ok = isFirstCharInLine() && !isStartOfLiteralBlock();
+        return ok;
+    }
+
     // ---------------------------------------------------------------
     // 'isStartOfAtIndex' element methods
     // ---------------------------------------------------------------
-    private boolean isStartOfBlankLineAtIndex(int index) {
+    private boolean isStartOfLiteralBlock() {
+        if (!isFirstCharInLine()) return false;
+
+        int i = 1;
+        int nextChar = _input.LA(i);
+        while (nextChar == DOT) {
+            nextChar = _input.LA(++i);
+        }
+        if (i < 4) return false;
+
+        // check trailings blanks
+        while (nextChar == SP || nextChar == TAB || nextChar == CR || nextChar == NL || nextChar == EOF) {
+            if (nextChar == NL || nextChar == EOF) {
+                return true;
+            }
+            nextChar = _input.LA(++i);
+        }
+
+        return false;
+    }
+
+    private boolean isStartOfBlankLineAtIndex(int index, boolean checkFirstCharInLine) {
+        if (checkFirstCharInLine && !isFirstCharInLine()) return false;
         int i = index;
         int nextChar = _input.LA(i);
         while (nextChar != EOF && nextChar != NL) {
@@ -99,6 +126,7 @@ grammar Asciidoc;
 
         return true;
     }
+
 
     private boolean isStartOfListItemAtIndex(int index) {
         int i = index;
@@ -112,7 +140,7 @@ grammar Asciidoc;
 
     private boolean isStartOfListContinuationAtIndex(int index) {
         int i = index;
-        if (_input.LA(i) == PLUS && isStartOfBlankLineAtIndex(i + 1)) {
+        if (_input.LA(i) == PLUS && isStartOfBlankLineAtIndex(i + 1, false)) {
             return true;
         }
         return false;
@@ -128,12 +156,36 @@ grammar Asciidoc;
         return curCharIsBeginningOfAComment;
     }
 
-    private boolean isBlankInParagraph() {
-        boolean curCharIsBL = isStartOfBlankLineAtIndex(1);
-        boolean ok = !curCharIsBL;
+//    private boolean isBlankInParagraph() {
+//        boolean curCharIsBL = isStartOfBlankLineAtIndex(1);
+//        boolean ok = !curCharIsBL;
+//
+//        return ok;
+//    }
 
+    private boolean isBlankInParagraph() {
+        int curChar = _input.LA(1);
+        if (curChar == SP || curChar == TAB
+                || curChar == NL || curChar == CR) {
+            boolean curCharIsBL = isStartOfBlankLineAtIndex(1, true);
+            boolean ok = !curCharIsBL;
+            return ok;
+        }
+        return true;
+    }
+
+    private boolean isStartOfListContinuation() {
+        boolean ok = isFirstCharInLine() && isStartOfListContinuationAtIndex(1);
         return ok;
     }
+
+    private boolean isPlusInParagraph(boolean fromList) {
+        if (fromList) {
+            return !isStartOfListContinuation();
+        }
+        return true;
+    }
+
 
 
 }
@@ -166,7 +218,7 @@ bl
     ;
 
 title
-    : ~(SP|TAB) ~(NL|EOF)+
+    : ~(SP|TAB|NL|EOF) ~(NL|EOF)*
     ;
 
 header
@@ -323,7 +375,9 @@ block[boolean fromList]       // argument 'fromList' indicates that block is att
     ;
 
 blockTitle
-    : DOT title? (SP|TAB)* (CR? NL|EOF)
+    : {isStartOfBlockTitle()}? DOT title (CR? NL)?
+    //: {isFirstCharInLine()}? DOT title (CR? NL)?
+    //: DOT title? (SP|TAB)* (CR? NL|EOF)
     //: DOT title? ({!isCurrentCharEOF()}? CR? NL|)
     //: DOT title? {!isNextCharEOF()}? NL
     ;
@@ -348,7 +402,7 @@ anchorLabel
       )+
     ;
 
-paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
+paragraphold [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
     : {isStartOfParagraph()}?
       (OTHER
       |SP
@@ -370,7 +424,7 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
       )+ nl? // TODO (nl|EOF)?
     ;
 
-paragraph1 [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
+paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
     : {isStartOfParagraph()}?
       (OTHER
       |{isBlankInParagraph()}? SP
@@ -383,14 +437,14 @@ paragraph1 [boolean fromList] // argument 'fromList' indicates that paragraph is
       |LABRACK
       |RABRACK
       |MINUS
-      |PLUS
+      |{isPlusInParagraph($fromList)}? PLUS
       |DOT
       |COLON
       |SEMICOLON
       |BANG
       //|{isNewLineInParagraph($fromList)}? NL
       |{isBlankInParagraph()}? NL
-      )+ (CR? NL|EOF)
+      )+ //(nl|EOF)
       //)+ nl? // TODO (nl|EOF)?
     ;
 
