@@ -22,7 +22,8 @@ import org.junit.runners.Suite;
     UnorderedListTest.class,
     UnorderedListWithComplexContentTest.class,
     AttributeListTest.class,
-    BlockTitleTest.class
+    BlockTitleTest.class,
+    BlockMacroTest.class
 })
 public class GrammarTestSuite {
 }

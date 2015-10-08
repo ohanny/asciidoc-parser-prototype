@@ -171,6 +171,7 @@ document
       |attributeList   // TODO
       |anchor
       |blockTitle
+      |blockMacro
       |section
       |block[false]
       )*
@@ -276,10 +277,23 @@ namedAttribute
     : attributeName EQ attributeValuePart?
     ;
 
+blockMacro
+    : macroName COLON COLON macroTarget? attributeList
+    ;
+
+macroName
+    : OTHER+
+    ;
+
+macroTarget
+    : (OTHER|DOT)+
+    ;
+
 preamble
     :       //(attributeList   // TODO
             //|anchor
             //|blockTitle
+            //|blockMacro
             //)
 
       block[false]
