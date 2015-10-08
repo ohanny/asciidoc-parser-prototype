@@ -7,10 +7,6 @@ grammar Asciidoc;
         return _input.LT(1).getCharPositionInLine() == 0;
     }
 
-    private boolean isCurrentCharEOF() {// TODO suppress ?
-        return _input.LA(1) == EOF;
-    }
-
     private boolean isNextCharEOF() {
         return _input.LA(2) == EOF;
     }
@@ -27,19 +23,6 @@ grammar Asciidoc;
         return !nextCharIsNL && !nextCharIsEOF && !nextCharIsBeginningOfAComment;
     }
 
-    private boolean isNewLineInParagraph(boolean fromList) {
-        boolean nextCharIsBL = isStartOfBlankLineAtIndex(2, false);
-        boolean nextCharIsBeginningOfAComment = (_input.LA(2) == SLASH) && (_input.LA(3) == SLASH);
-        boolean ok = !nextCharIsBL && !nextCharIsBeginningOfAComment;
-
-        if (fromList) {
-            boolean nextCharIsListContinuation = isStartOfListContinuationAtIndex(2);
-            ok = ok && !nextCharIsListContinuation;
-        }
-
-        return ok;
-    }
-
     private boolean isNewLineInListItemValue() {
         boolean nextCharIsBL = isStartOfBlankLineAtIndex(2, false);
         boolean nextCharIsListItem = isStartOfListItemAtIndex(2);
@@ -47,6 +30,25 @@ grammar Asciidoc;
 
         return !nextCharIsBL && !nextCharIsListItem && !nextCharIsListContinuation;
     }
+
+    private boolean isBlankInParagraph() {
+        int curChar = _input.LA(1);
+        if (curChar == SP || curChar == TAB
+                || curChar == NL || curChar == CR) {
+            boolean curCharIsBL = isStartOfBlankLineAtIndex(1, true);
+            boolean ok = !curCharIsBL;
+            return ok;
+        }
+        return true;
+    }
+
+    private boolean isPlusInParagraph(boolean fromList) {
+        if (fromList) {
+            return !isStartOfListContinuation();
+        }
+        return true;
+    }
+
 
     // ---------------------------------------------------------------
     // 'isStartOf' element methods
@@ -89,9 +91,6 @@ grammar Asciidoc;
         return ok;
     }
 
-    // ---------------------------------------------------------------
-    // 'isStartOfAtIndex' element methods
-    // ---------------------------------------------------------------
     private boolean isStartOfLiteralBlock() {
         if (!isFirstCharInLine()) return false;
 
@@ -112,6 +111,17 @@ grammar Asciidoc;
 
         return false;
     }
+
+    private boolean isStartOfListContinuation() {
+        boolean ok = isFirstCharInLine() && isStartOfListContinuationAtIndex(1);
+        return ok;
+    }
+
+
+
+    // ---------------------------------------------------------------
+    // 'isStartOfAtIndex' element methods
+    // ---------------------------------------------------------------
 
     private boolean isStartOfBlankLineAtIndex(int index, boolean checkFirstCharInLine) {
         if (checkFirstCharInLine && !isFirstCharInLine()) return false;
@@ -146,48 +156,6 @@ grammar Asciidoc;
         return false;
     }
 
-
-
-
-
-    ///// *************
-    private boolean isSlashInParagraph() {
-        boolean curCharIsBeginningOfAComment = isFirstCharInLine() && (_input.LA(1) == SLASH) && (_input.LA(2) == SLASH);
-        return curCharIsBeginningOfAComment;
-    }
-
-//    private boolean isBlankInParagraph() {
-//        boolean curCharIsBL = isStartOfBlankLineAtIndex(1);
-//        boolean ok = !curCharIsBL;
-//
-//        return ok;
-//    }
-
-    private boolean isBlankInParagraph() {
-        int curChar = _input.LA(1);
-        if (curChar == SP || curChar == TAB
-                || curChar == NL || curChar == CR) {
-            boolean curCharIsBL = isStartOfBlankLineAtIndex(1, true);
-            boolean ok = !curCharIsBL;
-            return ok;
-        }
-        return true;
-    }
-
-    private boolean isStartOfListContinuation() {
-        boolean ok = isFirstCharInLine() && isStartOfListContinuationAtIndex(1);
-        return ok;
-    }
-
-    private boolean isPlusInParagraph(boolean fromList) {
-        if (fromList) {
-            return !isStartOfListContinuation();
-        }
-        return true;
-    }
-
-
-
 }
 
 // Parser
@@ -214,7 +182,6 @@ nl
 
 bl
     : {isFirstCharInLine()}? (SP|TAB)* {!isNextCharEOF()}?(CR? NL) // TODO
-    //: {isFirstCharInLine()}? (SP|TAB)* {_input.LA(2) != EOF}?(CR? NL|EOF) // TODO
     ;
 
 title
@@ -237,8 +204,6 @@ documentTitle
 authors
     : authorName (LABRACK authorAddress RABRACK)?
       (SEMICOLON authorName (LABRACK authorAddress RABRACK)?)*
-      //(nl|EOF)
-      //({!isCurrentCharEOF()}? CR? NL|)
       (SP|TAB)* (CR? NL|EOF)
     ;
 
@@ -295,13 +260,6 @@ attributeValuePart
     : OTHER+
     ;
 
-//attributeList
-//    : LSBRACK
-//      OTHER*
-//      RSBRACK (SP|TAB)* (CR? NL|EOF) //{!isNextCharEOF()}?(CR? NL) TODO
-//      //RSBRACK ((CR? NL)|EOF) //{!isNextCharEOF()}?(CR? NL) TODO
-//    ;
-
 attributeList
     : LSBRACK
       ((positionalAttribute|namedAttribute) (SP|TAB)*
@@ -336,50 +294,18 @@ sectionTitle :
     EQ+ (SP|TAB)* title? (SP|TAB)* (CR? NL|EOF)
     ;
 
-// A block should have only one anchor, but this is checked
-// in the listener. The grammar is tolerant if multiple
-// consecutive anchors are defined. Same for block title.
-block1[boolean fromList]       // argument 'fromList' indicates that block is attached to a list item
-    : ((anchor|attributeList)* literalBlock | // literal block must be detected before block title
-          (anchor|attributeList|blockTitle)+
-          (multiComment
-          |singleComment
-          |unorderedList
-          |sourceBlock
-          |literalBlock
-          |paragraph[$fromList]
-          )?
-          |
-          (anchor|attributeList|blockTitle)*
-          (multiComment
-          |singleComment
-          |unorderedList
-          |sourceBlock
-          |literalBlock
-          |paragraph[$fromList]
-          )
-      )
-    ;
-
 block[boolean fromList]       // argument 'fromList' indicates that block is attached to a list item
-    : //(literalBlock | // literal block must be detected before block title
-          //(blockTitle)*
-          (multiComment
-          |singleComment
-          |unorderedList
-          |sourceBlock
-          |literalBlock
-          |paragraph[$fromList]
-          )
-      //)
+    : (multiComment
+      |singleComment
+      |unorderedList
+      |sourceBlock
+      |literalBlock
+      |paragraph[$fromList]
+      )
     ;
 
 blockTitle
     : {isStartOfBlockTitle()}? DOT title (CR? NL)?
-    //: {isFirstCharInLine()}? DOT title (CR? NL)?
-    //: DOT title? (SP|TAB)* (CR? NL|EOF)
-    //: DOT title? ({!isCurrentCharEOF()}? CR? NL|)
-    //: DOT title? {!isNextCharEOF()}? NL
     ;
 
 anchor
@@ -402,28 +328,6 @@ anchorLabel
       )+
     ;
 
-paragraphold [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
-    : {isStartOfParagraph()}?
-      (OTHER
-      |SP
-      |TAB
-      |EQ
-      |SLASH
-      |COMMA
-      |LSBRACK
-      |RSBRACK
-      |LABRACK
-      |RABRACK
-      |MINUS
-      |PLUS
-      |DOT
-      |COLON
-      |SEMICOLON
-      |BANG
-      |{isNewLineInParagraph($fromList)}? NL
-      )+ nl? // TODO (nl|EOF)?
-    ;
-
 paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
     : {isStartOfParagraph()}?
       (OTHER
@@ -442,10 +346,8 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
       |COLON
       |SEMICOLON
       |BANG
-      //|{isNewLineInParagraph($fromList)}? NL
       |{isBlankInParagraph()}? NL
-      )+ //(nl|EOF)
-      //)+ nl? // TODO (nl|EOF)?
+      )+
     ;
 
 singleComment
@@ -467,8 +369,6 @@ singleComment
       |SEMICOLON
       |BANG
       )*
-      //{!isNextCharEOF()}? NL
-      //(CR? NL| {isCurrentCharEOF()}?)
       (CR? NL|EOF)
     ;
 
@@ -497,8 +397,6 @@ multiComment
 multiCommentDelimiter
     : {isFirstCharInLine()}?
       SLASH SLASH SLASH SLASH (SP|TAB)* (CR? NL|EOF)
-      //SLASH SLASH SLASH SLASH (SP|TAB)*
-      //(CR? NL| {isCurrentCharEOF()}?)
     ;
 
 sourceBlock
@@ -527,9 +425,6 @@ sourceBlock
 sourceBlockDelimiter
     : {isFirstCharInLine()}?
       MINUS MINUS MINUS MINUS (SP|TAB)* (CR? NL|EOF)
-//      MINUS MINUS MINUS MINUS
-      //({!isCurrentCharEOF()}? CR? NL|)
-//      (CR? NL| {isCurrentCharEOF()}?)
     ;
 
 literalBlock
@@ -558,9 +453,6 @@ literalBlock
 literalBlockDelimiter
     : {isFirstCharInLine()}?
       DOT DOT DOT DOT (SP|TAB)* (CR? NL|EOF)
-//      DOT DOT DOT DOT
-//      ({!isCurrentCharEOF()}? CR? NL|)
-//      (CR? NL| {isCurrentCharEOF()}?)
     ;
 
 unorderedList
