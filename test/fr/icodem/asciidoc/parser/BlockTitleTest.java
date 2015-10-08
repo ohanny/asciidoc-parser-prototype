@@ -33,7 +33,7 @@ public class BlockTitleTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "A block  title ended by EOF",
+                "block  title ended by EOF",
 
                 /* input */
                 ".A title",
@@ -43,7 +43,7 @@ public class BlockTitleTest extends GrammarTest {
             },
             {
                 /* message */
-                "A block  title ended by new line",
+                "block  title ended by new line",
 
                 /* input */
                 ".A title\n",
@@ -53,7 +53,7 @@ public class BlockTitleTest extends GrammarTest {
             },
             {
                 /* message */
-                "A block  above a paragraph",
+                "title attached to a paragraph",
 
                 /* input */
                 ".Fruits\n" +
@@ -61,6 +61,59 @@ public class BlockTitleTest extends GrammarTest {
 
                 /* expected */
                 "(document (blockTitle . (title F r u i t s) \\n) (block (paragraph S t r a w b e r r y   a n d   b a n a n a)))"
+            },
+            {
+                /* message */
+                "single letter title",
+
+                /* input */
+                ".a",
+
+                /* expected */
+                "(document (blockTitle . (title a)))"
+            },
+            {
+                /* message */
+                "single letter title ended by new line",
+
+                /* input */
+                ".a\n",
+
+                /* expected */
+                "(document (blockTitle . (title a) \\n))"
+            },
+            {
+                /* message */
+                "single letter title attached to single letter paragraph",
+
+                /* input */
+                ".a\n" +
+                "b",
+
+                /* expected */
+                "(document (blockTitle . (title a) \\n) (block (paragraph b)))"
+            },
+            {
+                /* message */
+                "single letter title attached to single letter paragraph ended by new line",
+
+                /* input */
+                ".a\n" +
+                "b\n",
+
+                /* expected */
+                "(document (blockTitle . (title a) \\n) (block (paragraph b \\n)))"
+            },
+            {
+                /* message */
+                "block title ended by dot characters",
+
+                /* input */
+                ".Fruits...\n" +
+                "Kiwi and apple\n",
+
+                /* expected */
+                "(document (blockTitle . (title F r u i t s . . .) \\n) (block (paragraph K i w i   a n d   a p p l e \\n)))"
             }
         });
 
