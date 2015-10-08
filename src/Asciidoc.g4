@@ -167,6 +167,7 @@ document
       )*
       (header (bl|nl|multiComment|singleComment)* preamble?)?
       (bl
+      |horizontalRule
       |attributeEntry
       |attributeList   // TODO
       |anchor
@@ -187,6 +188,10 @@ bl
 
 title
     : ~(SP|TAB|NL|EOF) ~(NL|EOF)*
+    ;
+
+horizontalRule
+    : QUOTE QUOTE QUOTE (SP|TAB)* (CR? NL|EOF)
     ;
 
 header
@@ -403,6 +408,7 @@ multiComment
       |COLON
       |SEMICOLON
       |BANG
+      |QUOTE
       |NL
       )*?
       multiCommentDelimiter
@@ -431,6 +437,7 @@ sourceBlock
       |COLON
       |SEMICOLON
       |BANG
+      |QUOTE
       |NL
       )*?
       sourceBlockDelimiter
@@ -522,6 +529,7 @@ DOT         : '.'  ;
 COLON       : ':'  ;
 SEMICOLON   : ';'  ;
 BANG        : '!'  ;
+QUOTE       : '\'' ;
 OTHER       :  .   ;
 
 /* other chars to define

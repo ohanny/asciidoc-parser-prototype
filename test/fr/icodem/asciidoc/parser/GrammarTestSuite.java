@@ -23,7 +23,8 @@ import org.junit.runners.Suite;
     UnorderedListWithComplexContentTest.class,
     AttributeListTest.class,
     BlockTitleTest.class,
-    BlockMacroTest.class
+    BlockMacroTest.class,
+    HorizontalRuleTest.class
 })
 public class GrammarTestSuite {
 }
