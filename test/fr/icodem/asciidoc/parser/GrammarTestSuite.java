@@ -24,7 +24,8 @@ import org.junit.runners.Suite;
     AttributeListTest.class,
     BlockTitleTest.class,
     BlockMacroTest.class,
-    HorizontalRuleTest.class
+    HorizontalRuleTest.class,
+    SimpleTableTest.class
 })
 public class GrammarTestSuite {
 }

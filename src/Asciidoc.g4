@@ -319,6 +319,7 @@ block[boolean fromList]       // argument 'fromList' indicates that block is att
       |unorderedList
       |sourceBlock
       |literalBlock
+      |table
       |paragraph[$fromList]
       )
     ;
@@ -509,6 +510,23 @@ listContinuation
     : PLUS (SP|TAB)* CR? NL block[true]
     ;
 
+table
+    : tableDelimiter (tableCell|bl)* tableDelimiter
+    ;
+
+tableCell
+    : PIPE tableCellContent
+    ;
+
+tableCellContent
+    : (OTHER|SP)* nl?
+    ;
+
+tableDelimiter
+    : {isFirstCharInLine()}?
+      PIPE EQ EQ EQ (SP|TAB)* (CR? NL|EOF)
+    ;
+
 // Lexer
 
 EQ          : '='  ;
@@ -530,6 +548,7 @@ COLON       : ':'  ;
 SEMICOLON   : ';'  ;
 BANG        : '!'  ;
 QUOTE       : '\'' ;
+PIPE        : '|'  ;
 OTHER       :  .   ;
 
 /* other chars to define
