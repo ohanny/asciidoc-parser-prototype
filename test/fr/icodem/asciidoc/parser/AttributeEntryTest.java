@@ -33,7 +33,7 @@ public class AttributeEntryTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "An attribute entry",
+                "an attribute entry",
 
                 /* input */
                 ":fruit: kiwi",
@@ -43,7 +43,7 @@ public class AttributeEntryTest extends GrammarTest {
             },
             {
                 /* message */
-                "An attribute entry ended by new line",
+                "an attribute entry ended by new line",
 
                 /* input */
                 ":fruit: kiwi\n",
@@ -53,7 +53,7 @@ public class AttributeEntryTest extends GrammarTest {
             },
             {
                 /* message */
-                "Two attribute entries",
+                "two attribute entries",
 
                 /* input */
                 ":fruit: kiwi\n" +
@@ -64,7 +64,7 @@ public class AttributeEntryTest extends GrammarTest {
             },
             {
                 /* message */
-                "Attribute entry with no value",
+                "attribute entry with no value",
 
                 /* input */
                 ":fruit:",
@@ -74,7 +74,7 @@ public class AttributeEntryTest extends GrammarTest {
             },
             {
                 /* message */
-                "Attribute value continued on next line",
+                "attribute value continued on next line",
 
                 /* input */
                 ":fruit: kiwi+\n" +
@@ -85,7 +85,7 @@ public class AttributeEntryTest extends GrammarTest {
             },
             {
                 /* message */
-                "Attribute value continued on next line with leading spaces",
+                "attribute value continued on next line with leading spaces",
 
                 /* input */
                 ":fruit: kiwi+\n" +
@@ -96,7 +96,7 @@ public class AttributeEntryTest extends GrammarTest {
             },
             {
                 /* message */
-                "Unset attribute with leading bang",
+                "unset attribute with leading bang",
 
                 /* input */
                 ":!fruit:",
@@ -106,7 +106,7 @@ public class AttributeEntryTest extends GrammarTest {
             },
             {
                 /* message */
-                "Unset attribute with trailing bang",
+                "unset attribute with trailing bang",
 
                 /* input */
                 ":fruit!:",
