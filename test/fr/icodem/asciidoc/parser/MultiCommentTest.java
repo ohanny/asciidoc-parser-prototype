@@ -33,7 +33,7 @@ public class MultiCommentTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "One comment block with one line. The block ends with new line.",
+                "a comment block with one line, the block ends with new line",
 
                 /* input */
                 "////\n" +
@@ -45,7 +45,7 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One comment block with one line. The block ends with EOF.",
+                "a comment block with one line, the block ends with EOF",
 
                 /* input */
                 "////\n" +
@@ -57,7 +57,7 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One comment block with a few lines. The block ends with new line.",
+                "a comment block with a few lines, the block ends with new line.",
 
                 /* input */
                 "////\n" +
@@ -71,7 +71,7 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One comment block with two lines that ends with EOF",
+                "a comment block with two lines, the block ends with EOF",
 
                 /* input */
                 "////\n" +
@@ -84,7 +84,7 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "Two contiguous comment blocks",
+                "two contiguous comment blocks",
 
                 /* input */
                 "////\n" +
@@ -99,7 +99,7 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One comment block containing multiple '/'",
+                "a comment block containing multiple '/'",
 
                 /* input */
                 "////\n" +
@@ -112,7 +112,7 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One comment block containing multiple '/' at the beginning of lines",
+                "a comment block containing multiple '/' at the beginning of lines",
 
                 /* input */
                 "////\n" +
@@ -127,7 +127,7 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One comment block containing '[' and '[['",
+                "a comment block containing '[' and '[['",
 
                 /* input */
                 "////\n" +
@@ -139,7 +139,7 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One comment block containing ']' and ']]'",
+                "a comment block containing ']' and ']]'",
 
                 /* input */
                 "////\n" +
@@ -151,7 +151,7 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One comment block containing '[hello]'",
+                "a comment block containing '[hello]'",
 
                 /* input */
                 "////\n" +
@@ -163,7 +163,7 @@ public class MultiCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One comment block containing '[[hello]]'",
+                "a comment block containing '[[hello]]'",
 
                 /* input */
                 "////\n" +

@@ -33,7 +33,7 @@ public class LiteralBlockTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "A simple literal block",
+                "a simple literal block",
 
                 /* input */
                 "....\n" +
@@ -45,7 +45,7 @@ public class LiteralBlockTest extends GrammarTest {
             },
             {
                 /* message */
-                "A simple literal block ending with new line",
+                "a simple literal block ending with new line",
 
                 /* input */
                 "....\n" +

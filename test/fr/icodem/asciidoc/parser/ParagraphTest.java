@@ -33,7 +33,7 @@ public class ParagraphTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "A simple paragraph",
+                "a simple paragraph",
 
                 /* input */
                 "This is some content",
@@ -43,7 +43,7 @@ public class ParagraphTest extends GrammarTest {
             },
             {
                 /* message */
-                "A paragraph ending with new line",
+                "a paragraph ending with new line",
 
                 /* input */
                 "This is some content \n",
@@ -53,7 +53,7 @@ public class ParagraphTest extends GrammarTest {
             },
             {
                 /* message */
-                "A paragraph containing a new line",
+                "a paragraph containing a new line",
 
                 /* input */
                 "This is some content \n" +
@@ -64,7 +64,7 @@ public class ParagraphTest extends GrammarTest {
             },
             {
                 /* message */
-                "A paragraph containing '/' and '//'",
+                "a paragraph containing '/' and '//'",
 
                 /* input */
                 "This is some content with / and // is it ok ?",
@@ -74,7 +74,7 @@ public class ParagraphTest extends GrammarTest {
             },
             {
                 /* message */
-                "A paragraph containing '////'",
+                "a paragraph containing '////'",
 
                 /* input */
                 "This is some content with //// is it ok ?",
@@ -84,7 +84,7 @@ public class ParagraphTest extends GrammarTest {
             },
             {
                 /* message */
-                "A paragraph containing '[' and '[['",
+                "a paragraph containing '[' and '[['",
 
                 /* input */
                 "This is some content with [ and [[ is it ok ?",
@@ -94,7 +94,7 @@ public class ParagraphTest extends GrammarTest {
             },
             {
                 /* message */
-                "A paragraph containing ']' and ']]'",
+                "a paragraph containing ']' and ']]'",
 
                 /* input */
                 "This is some content with ] and ]] is it ok ?",
@@ -104,7 +104,7 @@ public class ParagraphTest extends GrammarTest {
             },
             {
                 /* message */
-                "Two paragraphs separated by a single line comment",
+                "two paragraphs separated by a single line comment",
 
                 /* input */
                 "This is a first paragraph\n" +
@@ -116,7 +116,7 @@ public class ParagraphTest extends GrammarTest {
             },
             {
                 /* message */
-                "Two paragraphs separated by a multi line comment",
+                "two paragraphs separated by a multi line comment",
 
                 /* input */
                 "This is a first paragraph\n" +
