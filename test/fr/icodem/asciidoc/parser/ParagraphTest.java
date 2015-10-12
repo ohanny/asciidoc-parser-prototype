@@ -53,7 +53,7 @@ public class ParagraphTest extends GrammarTest {
             },
             {
                 /* message */
-                "a paragraph containing a new line",
+                "two lines paragraph ended by EOF",
 
                 /* input */
                 "This is some content \n" +
@@ -61,6 +61,17 @@ public class ParagraphTest extends GrammarTest {
 
                 /* expected */
                 "(document (block (paragraph T h i s   i s   s o m e   c o n t e n t   \\n o n   t w o   l i n e s)))"
+            },
+            {
+                /* message */
+                "two lines paragraph ended by new line",
+
+                /* input */
+                "This is some content \n" +
+                "on two lines\n",
+
+                /* expected */
+                "(document (block (paragraph T h i s   i s   s o m e   c o n t e n t   \\n o n   t w o   l i n e s \\n)))"
             },
             {
                 /* message */
