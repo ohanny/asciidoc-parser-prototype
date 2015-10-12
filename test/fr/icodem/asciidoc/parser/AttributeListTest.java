@@ -100,6 +100,16 @@ public class AttributeListTest extends GrammarTest {
 
                 /* expected */
                 "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>))"
+            },
+            {
+                /* message */
+                "attribute list ended by new line",
+
+                /* input */
+                "[att1,att2=value2]\n",
+
+                /* expected */
+                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] \\n))"
             }
         });
 
