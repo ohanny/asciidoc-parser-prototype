@@ -40,6 +40,16 @@ public class HorizontalRuleTest extends GrammarTest {
 
                 /* expected */
                 "(document (horizontalRule ' ' ' <EOF>))"
+            },
+            {
+                /* message */
+                "horizontal rule ended by new line",
+
+                /* input */
+                "'''\n",
+
+                /* expected */
+                "(document (horizontalRule ' ' ' \\n))"
             }
         });
 

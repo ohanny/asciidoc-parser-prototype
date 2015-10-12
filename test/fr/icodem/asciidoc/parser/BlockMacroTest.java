@@ -60,7 +60,7 @@ public class BlockMacroTest extends GrammarTest {
 
                 /* expected */
                 "(document (blockMacro (macroName i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeName S u n s e t)) ] <EOF>)))"
-            },
+            }
         });
 
     }
