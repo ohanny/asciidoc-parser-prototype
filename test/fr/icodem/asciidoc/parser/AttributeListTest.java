@@ -36,10 +36,70 @@ public class AttributeListTest extends GrammarTest {
                 "a single positional attribute",
 
                 /* input */
-                "[quote]",
+                "[att1]",
 
                 /* expected */
-                "(document (attributeList [ (positionalAttribute (attributeName q u o t e)) ] <EOF>))"
+                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) ] <EOF>))"
+            },
+            {
+                /* message */
+                "two positional attributes",
+
+                /* input */
+                "[att1,att2]",
+
+                /* expected */
+                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) , (positionalAttribute (attributeName a t t 2)) ] <EOF>))"
+            },
+            {
+                /* message */
+                "two positional attributes, space after comma",
+
+                /* input */
+                "[att1, att2]",
+
+                /* expected */
+                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) ,   (positionalAttribute (attributeName a t t 2)) ] <EOF>))"
+            },
+            {
+                /* message */
+                "a single named attribute",
+
+                /* input */
+                "[att1=value]",
+
+                /* expected */
+                "(document (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e)) ] <EOF>))"
+            },
+            {
+                /* message */
+                "two named attributes",
+
+                /* input */
+                "[att1=value1,att2=value2]",
+
+                /* expected */
+                "(document (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>))"
+            },
+            {
+                /* message */
+                "two named attributes, space after comma",
+
+                /* input */
+                "[att1=value1, att2=value2]",
+
+                /* expected */
+                "(document (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e 1)) ,   (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>))"
+            },
+            {
+                /* message */
+                "positional and named attribute",
+
+                /* input */
+                "[att1,att2=value2]",
+
+                /* expected */
+                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>))"
             }
         });
 
