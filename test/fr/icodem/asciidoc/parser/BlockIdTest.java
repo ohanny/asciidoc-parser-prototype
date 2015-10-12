@@ -33,7 +33,7 @@ public class BlockIdTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "A block ID above a paragraph",
+                "a block ID above a paragraph",
 
                 /* input */
                 "[[TheID]]\n" +
@@ -44,7 +44,7 @@ public class BlockIdTest extends GrammarTest {
             },
             {
                 /* message */
-                "A block ID with a label above a paragraph",
+                "a block ID with a label above a paragraph",
 
                 /* input */
                 "[[TheID, The label]]\n" +
@@ -55,7 +55,7 @@ public class BlockIdTest extends GrammarTest {
             },
             {
                 /* message */
-                "Two block IDs above a paragraph",
+                "two block IDs above a paragraph",
 
                 /* input */
                 "[[TheID, The label]]\n" +
