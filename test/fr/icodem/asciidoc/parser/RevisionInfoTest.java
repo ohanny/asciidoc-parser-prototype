@@ -33,7 +33,7 @@ public class RevisionInfoTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "A header with revision info ended by two new lines",
+                "a header with revision info ended by two new lines",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -45,7 +45,7 @@ public class RevisionInfoTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header with revision info ended by one new line",
+                "a header with revision info ended by one new line",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -57,7 +57,7 @@ public class RevisionInfoTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header with revision info ended by EOF",
+                "a header with revision info ended by EOF",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -69,7 +69,7 @@ public class RevisionInfoTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header with revision info on two lines",
+                "a header with revision info on two lines",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -82,7 +82,7 @@ public class RevisionInfoTest extends GrammarTest {
             },
             {
                 /* message */
-                "A single comment before revision info",
+                "a single comment before revision info",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -95,7 +95,7 @@ public class RevisionInfoTest extends GrammarTest {
             },
             {
                 /* message */
-                "Two single comments before revision info",
+                "two single comments before revision info",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -109,7 +109,7 @@ public class RevisionInfoTest extends GrammarTest {
             },
             {
                 /* message */
-                "A multi-line comment before revision info",
+                "a multi-line comment before revision info",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -124,7 +124,7 @@ public class RevisionInfoTest extends GrammarTest {
             },
             {
                 /* message */
-                "A single comment after revision info",
+                "a single comment after revision info",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -137,7 +137,7 @@ public class RevisionInfoTest extends GrammarTest {
             },
             {
                 /* message */
-                "An attribute entry after revision info",
+                "an attribute entry after revision info",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +

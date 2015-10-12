@@ -33,7 +33,7 @@ public class SingleCommentTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "One line comment ended by EOF",
+                "a line comment ended by EOF",
 
                 /* input */
                 "// this is a comment",
@@ -43,7 +43,7 @@ public class SingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One line comment ended by new line",
+                "a line comment ended by new line",
 
                 /* input */
                 "// this is a comment\n",
@@ -52,7 +52,7 @@ public class SingleCommentTest extends GrammarTest {
                 "(document (singleComment / /   t h i s   i s   a   c o m m e n t \\n))"
             },            {
                 /* message */
-                "One line comment without space after '//' ",
+                "a line comment without space after '//' ",
 
                 /* input */
                 "//this is a comment",
@@ -62,7 +62,7 @@ public class SingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "A few lines comment",
+                "a few lines comment",
 
                 /* input */
                 "// comment 1\n" +
@@ -74,7 +74,7 @@ public class SingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One line comment containing '//' ",
+                "a line comment containing '//' ",
 
                 /* input */
                 "// this is a comment // is it ok ?",
@@ -84,7 +84,7 @@ public class SingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One line comment containing '[' and '[[' ",
+                "a line comment containing '[' and '[[' ",
 
                 /* input */
                 "// this is a comment with [ and [[ is it ok ?",
@@ -94,7 +94,7 @@ public class SingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One line comment containing ']' and ']]' ",
+                "a line comment containing ']' and ']]' ",
 
                 /* input */
                 "// this is a comment with ] and ]] is it ok ?",
@@ -104,7 +104,7 @@ public class SingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One line comment containing '[hello]'",
+                "a line comment containing '[hello]'",
 
                 /* input */
                 "// this is a comment with [hello] is it ok ?",
@@ -114,7 +114,7 @@ public class SingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "One line comment containing '[[hello]]'",
+                "a line comment containing '[[hello]]'",
 
                 /* input */
                 "// this is a comment with [[hello]] is it ok ?",

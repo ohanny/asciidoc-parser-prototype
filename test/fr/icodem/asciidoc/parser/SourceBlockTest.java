@@ -33,7 +33,7 @@ public class SourceBlockTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "A simple source block",
+                "a simple source block",
 
                 /* input */
                 "----\n" +
@@ -45,7 +45,7 @@ public class SourceBlockTest extends GrammarTest {
             },
             {
                 /* message */
-                "A simple source block ending with new line",
+                "a simple source block ending with new line",
 
                 /* input */
                 "----\n" +
@@ -57,7 +57,7 @@ public class SourceBlockTest extends GrammarTest {
             },
             {
                 /* message */
-                "A source block containing minus sign",
+                "a source block containing minus sign",
 
                 /* input */
                 "----\n" +
