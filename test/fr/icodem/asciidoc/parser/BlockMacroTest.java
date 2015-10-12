@@ -33,6 +33,26 @@ public class BlockMacroTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
+                "block macro with no target nor attribute",
+
+                /* input */
+                "toc::[]",
+
+                /* expected */
+                "(document (blockMacro (macroName t o c) : : (attributeList [ ] <EOF>)))"
+            },
+            {
+                /* message */
+                "block macro with target and no attribute",
+
+                /* input */
+                "image::sunset.jpg[]",
+
+                /* expected */
+                "(document (blockMacro (macroName i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ ] <EOF>)))"
+            },
+            {
+                /* message */
                 "block macro with target and one attribute",
 
                 /* input */
@@ -40,7 +60,7 @@ public class BlockMacroTest extends GrammarTest {
 
                 /* expected */
                 "(document (blockMacro (macroName i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeName S u n s e t)) ] <EOF>)))"
-            }
+            },
         });
 
     }
