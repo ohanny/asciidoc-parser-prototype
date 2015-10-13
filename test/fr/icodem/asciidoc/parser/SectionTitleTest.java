@@ -11,7 +11,7 @@ import static org.junit.runners.Parameterized.Parameter;
 import static org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class TitlesOnlyTest extends GrammarTest {
+public class SectionTitleTest extends GrammarTest {
 
     @Parameter(0)
     public String message;
@@ -33,7 +33,7 @@ public class TitlesOnlyTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "A document title ended with end of file",
+                "a document title ended with end of file",
 
                 /* input */
                 "= Hello, AsciiDoc!",
@@ -43,7 +43,7 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A document title ended with new line",
+                "a document title ended with new line",
 
                 /* input */
                 "= Hello, AsciiDoc!\n",
@@ -53,33 +53,41 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A section title ended without new line",
+                "a document title followed by a level 1 section title",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "\n" +
+                "= First Section",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (section (sectionTitle =   (title F i r s t   S e c t i o n) <EOF>)))"
+            },
+            {
+                /* message */
+                "a document title followed by a level 1 section title - no blank line between titles",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
                 "== First Section",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) " +
-                "(section (sectionTitle = =   (title F i r s t   S e c t i o n) <EOF>))" +
-                ")"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) <EOF>)))"
             },
             {
                 /* message */
-                "A section title ended with new line",
+                "a document title followed by a level 1 section title - new line at the end",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) " +
-                "(section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n))" +
-                ")"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)))"
             },
             {
                 /* message */
-                "A header title and a level 0 section title",
+                "a document title followed by a a level 0 section title",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -90,7 +98,7 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header title and a few section titles",
+                "a document title and a few section titles - no blank line between titles",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -106,7 +114,29 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header title with '='",
+                "a document title and a few section titles - blank lines between titles",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "\n" +
+                "== First Section\n" +
+                "  \n" +
+                "=== Section 1.1\n" +
+                "\t\n" +
+                "=== Section 1.2\n" +
+                "\n" +
+                "== Second Section\n" +
+                "\n" +
+                "=== Section 2.1\n" +
+                "\n" +
+                "=== Section 2.2",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (bl     \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 1) \\n) (bl \\t \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 2) \\n) (bl \\n)) (section (sectionTitle = =   (title S e c o n d   S e c t i o n) \\n) (bl \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 1) \\n) (bl \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 2) <EOF>)))"
+            },
+            {
+                /* message */
+                "a title containing '='",
 
                 /* input */
                 "= Title with = is it ok ?\n",
@@ -116,7 +146,7 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header title with '===='",
+                "a title containing '===='",
 
                 /* input */
                 "= Title with ==== is it ok ?\n",
@@ -126,7 +156,7 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header title with '/'",
+                "a title containing '/'",
 
                 /* input */
                 "= Title with / is it ok ?\n",
@@ -136,7 +166,7 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header title with '//'",
+                "a title containing '//'",
 
                 /* input */
                 "= Title with // is it ok ?\n",
@@ -146,7 +176,7 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header title with '[' and '[['",
+                "a title containing '[' and '[['",
 
                 /* input */
                 "= Title with [ and [[ is it ok ?\n",
@@ -156,7 +186,7 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header title with ']' and ']]'",
+                "a title containing ']' and ']]'",
 
                 /* input */
                 "= Title with ] and ]] is it ok ?\n",
@@ -166,7 +196,7 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header title with '[hello]'",
+                "a title with '[hello]'",
 
                 /* input */
                 "= Title with [hello] is it ok ?\n",
@@ -176,7 +206,7 @@ public class TitlesOnlyTest extends GrammarTest {
             },
             {
                 /* message */
-                "A header title with '[[hello]]'",
+                "a title with '[[hello]]'",
 
                 /* input */
                 "= Title with [[hello]] is it ok ?\n",

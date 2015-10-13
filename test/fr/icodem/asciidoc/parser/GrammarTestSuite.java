@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    TitlesOnlyTest.class,
+    SectionTitleTest.class,
     HeaderWithContentTest.class,
     HeaderAndOneSectionWithContentTest.class,
     NoHeaderAndOneSectionWithContentTest.class,

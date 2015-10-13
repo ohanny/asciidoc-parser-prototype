@@ -183,7 +183,7 @@ nl
     ;
 
 bl
-    : {isFirstCharInLine()}? (SP|TAB)* {!isNextCharEOF()}?(CR? NL) // TODO
+    : {isFirstCharInLine()}? (SP|TAB)* {!isNextCharEOF()}?(CR? NL)
     ;
 
 title
