@@ -33,15 +33,15 @@ public class RevisionInfoTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "a header with revision info ended by two new lines",
+                "a header with revision info ended by EOF",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
                 "John Doe\n" +
-                "v1.0\n\n",
+                "v1.0",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) \\n) (revisionInfo v 1 . 0)) (nl \\n) (nl \\n))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) \\n) (revisionInfo v 1 . 0)))"
             },
             {
                 /* message */
@@ -57,15 +57,15 @@ public class RevisionInfoTest extends GrammarTest {
             },
             {
                 /* message */
-                "a header with revision info ended by EOF",
+                "a header with revision info ended by two new lines",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
                 "John Doe\n" +
-                "v1.0",
+                "v1.0\n\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) \\n) (revisionInfo v 1 . 0)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) \\n) (revisionInfo v 1 . 0)) (nl \\n) (nl \\n))"
             },
             {
                 /* message */

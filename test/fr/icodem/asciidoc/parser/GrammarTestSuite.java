@@ -6,7 +6,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     SectionTitleTest.class,
-    HeaderWithContentTest.class,
+    HeaderTest.class,
     HeaderAndOneSectionWithContentTest.class,
     NoHeaderAndOneSectionWithContentTest.class,
     SingleCommentTest.class,
@@ -25,7 +25,9 @@ import org.junit.runners.Suite;
     BlockTitleTest.class,
     BlockMacroTest.class,
     HorizontalRuleTest.class,
-    SimpleTableTest.class
+    SimpleTableTest.class,
+    AuthorLineTest.class,
+    PreambleTest.class
 })
 public class GrammarTestSuite {
 }

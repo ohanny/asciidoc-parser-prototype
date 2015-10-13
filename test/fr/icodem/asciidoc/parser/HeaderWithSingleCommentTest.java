@@ -33,7 +33,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "Header with one line comment",
+                "header followed by a single line comment",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -44,7 +44,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "Header with one line comment containing '//' ",
+                "header followed by a single line comment containing '//' ",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -55,7 +55,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "Header with a few lines comment",
+                "header followed by a few single lines comment",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -68,7 +68,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "A comment before header title",
+                "a comment before document title",
 
                 /* input */
                 "// This is a comment \n" +
@@ -79,7 +79,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
             },
             {
                 /* message */
-                "A comment before header title, header containing a paragraph",
+                "a comment before document title, header containing a paragraph",
 
                 /* input */
                 "// This is a comment \n" +
@@ -90,51 +90,6 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 /* expected */
                 "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . .))))"
             },
-            {
-                /* message */
-                "A comment between two paragraphs inside header",
-
-                /* input */
-                "= Hello, AsciiDoc!\n" +
-                "\n" +
-                "Some text...\n" +
-                "\n" +
-                "// This is a comment\n" +
-                "\n" +
-                "Some other text...",
-
-                /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . . \\n)) (bl \\n) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (bl \\n) (block (paragraph S o m e   o t h e r   t e x t . . .))))"
-            },
-            {
-                /* message */
-                "A comment between two paragraphs inside header, but no blank line before comment",
-
-                /* input */
-                "= Hello, AsciiDoc!\n" +
-                "\n" +
-                "Some text...\n" +
-                "// This is a comment\n" +
-                "\n" +
-                "Some other text...",
-
-                /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . . \\n)) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (bl \\n) (block (paragraph S o m e   o t h e r   t e x t . . .))))"
-            },
-            {
-                /* message */
-                "A comment between two paragraphs inside header, but no blank line before and after comment",
-
-                /* input */
-                "= Hello, AsciiDoc!\n" +
-                "\n" +
-                "Some text...\n" +
-                "// This is a comment\n" +
-                "Some other text...",
-
-                /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . . \\n)) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (block (paragraph S o m e   o t h e r   t e x t . . .))))"
-            }
 
         });
 
