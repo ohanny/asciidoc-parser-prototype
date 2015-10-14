@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser;
 
+import fr.icodem.asciidoc.parser.antlr.AsciidocLexer;
+import fr.icodem.asciidoc.parser.antlr.AsciidocParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
