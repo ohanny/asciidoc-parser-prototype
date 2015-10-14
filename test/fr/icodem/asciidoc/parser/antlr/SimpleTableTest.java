@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser;
+package fr.icodem.asciidoc.parser.antlr;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

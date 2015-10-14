@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser;
+package fr.icodem.asciidoc.parser.antlr;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +11,7 @@ import static org.junit.runners.Parameterized.Parameter;
 import static org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class LiteralBlockTest extends GrammarTest {
+public class BlockMacroTest extends GrammarTest {
 
     @Parameter(0)
     public String message;
@@ -33,27 +33,33 @@ public class LiteralBlockTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "a simple literal block",
+                "block macro with no target nor attribute",
 
                 /* input */
-                "....\n" +
-                "Some text\n" +
-                "....",
+                "toc::[]",
 
                 /* expected */
-                "(document (block (literalBlock (literalBlockDelimiter . . . . \\n) S o m e   t e x t \\n (literalBlockDelimiter . . . . <EOF>))))"
+                "(document (blockMacro (macroName t o c) : : (attributeList [ ] <EOF>)))"
             },
             {
                 /* message */
-                "a simple literal block ending with new line",
+                "block macro with target and no attribute",
 
                 /* input */
-                "....\n" +
-                "Some text\n" +
-                "....\n",
+                "image::sunset.jpg[]",
 
                 /* expected */
-                "(document (block (literalBlock (literalBlockDelimiter . . . . \\n) S o m e   t e x t \\n (literalBlockDelimiter . . . . \\n))))"
+                "(document (blockMacro (macroName i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ ] <EOF>)))"
+            },
+            {
+                /* message */
+                "block macro with target and one attribute",
+
+                /* input */
+                "image::sunset.jpg[Sunset]",
+
+                /* expected */
+                "(document (blockMacro (macroName i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeName S u n s e t)) ] <EOF>)))"
             }
         });
 

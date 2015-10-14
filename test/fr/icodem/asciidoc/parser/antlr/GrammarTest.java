@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser;
+package fr.icodem.asciidoc.parser.antlr;
 
 import fr.icodem.asciidoc.parser.antlr.AsciidocLexer;
 import fr.icodem.asciidoc.parser.antlr.AsciidocParser;
