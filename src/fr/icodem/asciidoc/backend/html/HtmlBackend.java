@@ -1,71 +1,16 @@
 package fr.icodem.asciidoc.backend.html;
 
-import fr.icodem.asciidoc.parser.AsciidocParserBaseHandler;
 import fr.icodem.asciidoc.parser.elements.*;
 
-import java.io.IOException;
 import java.io.Writer;
 
 import static fr.icodem.asciidoc.parser.HtmlTag.H1;
 import static fr.icodem.asciidoc.parser.HtmlTag.getTitleHeader;
 
-public class HtmlBackend extends AsciidocParserBaseHandler {
-
-    private final static String NL = "\r\n";
-    private final static String INDENT = "  ";
-
-    private int indentLevel = 0;
-
-    private Writer writer;
+public class HtmlBackend extends HtmlBaseBackend {
 
     public HtmlBackend(Writer writer) {
-        this.writer = writer;
-    }
-
-    private void closeWriter() {
-        try {
-            if (writer != null) {
-                writer.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private HtmlBackend append(String str) {
-        try {
-            writer.write(str);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return this;
-    }
-
-    private HtmlBackend nl() {
-        append(NL);
-        return this;
-    }
-
-    private HtmlBackend indent() {
-        return indent(indentLevel);
-    }
-
-    private HtmlBackend indent(int times) {
-        for (int i = 0; i < times; i++) {
-            append(INDENT);
-        }
-        return this;
-    }
-
-    private HtmlBackend incrementIndentLevel() {
-        indentLevel++;
-        return this;
-    }
-
-    private HtmlBackend decrementIndentLevel() {
-        indentLevel--;
-        return this;
+        super(writer);
     }
 
     @Override
