@@ -1,6 +1,9 @@
-package fr.icodem.asciidoc.parser;
+package fr.icodem.asciidoc.backend.html;
 
 public enum HtmlTag {
+    DOCTYPE, META_CHARSET,
+    HTML, BODY, HEAD,
+    SECTION, P,
     H1, H2, H3, H4, H5, H6;
 
     public static HtmlTag getTitleHeader(int level) {
@@ -15,8 +18,21 @@ public enum HtmlTag {
         }
     }
 
+    public String tag() {
+        switch (this) {
+            case DOCTYPE: return "<!DOCTYPE html>";
+            case META_CHARSET: return "<meta charset=\"UTF-8\">";
+            default: return null;
+        }
+    }
+
     public String start() {
         switch (this) {
+            case HTML: return "<html>";
+            case BODY: return "<body>";
+            case HEAD: return "<head>";
+            case SECTION: return "<section>";
+            case P: return "<p>";
             case H1: return "<h1>";
             case H2: return "<h2>";
             case H3: return "<h3>";
@@ -29,6 +45,11 @@ public enum HtmlTag {
 
     public String end() {
         switch (this) {
+            case HTML: return "</html>";
+            case BODY: return "</body>";
+            case HEAD: return "</head>";
+            case SECTION: return "</section>";
+            case P: return "</p>";
             case H1: return "</h1>";
             case H2: return "</h2>";
             case H3: return "</h3>";

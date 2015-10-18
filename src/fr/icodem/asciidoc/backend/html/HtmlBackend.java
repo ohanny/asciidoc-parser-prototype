@@ -4,8 +4,7 @@ import fr.icodem.asciidoc.parser.elements.*;
 
 import java.io.Writer;
 
-import static fr.icodem.asciidoc.parser.HtmlTag.H1;
-import static fr.icodem.asciidoc.parser.HtmlTag.getTitleHeader;
+import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 
 public class HtmlBackend extends HtmlBaseBackend {
 
@@ -15,15 +14,12 @@ public class HtmlBackend extends HtmlBaseBackend {
 
     @Override
     public void startDocument(Document doc) {
-        append("<!DOCTYPE html>").nl()
-                .append("<html>").nl()
-                .append("<head>").nl().incrementIndentLevel()
-                .indent().append("<meta charset=\"UTF-8\">").nl()
-                .append("</head>").nl().decrementIndentLevel()
-                .append("<body>").nl().incrementIndentLevel();
-
-        //System.out.println(ctx.getChildCount());
-        //System.out.println(ctx.getText());
+        append(DOCTYPE.tag()).nl()
+                .append(HTML.start()).nl()
+                .append(HEAD.start()).nl().incrementIndentLevel()
+                .indent().append(META_CHARSET.tag()).nl()
+                .append(HEAD.end()).nl().decrementIndentLevel()
+                .append(BODY.start()).nl().incrementIndentLevel();
 
         /*
         class Feature {
@@ -54,8 +50,9 @@ public class HtmlBackend extends HtmlBaseBackend {
 
     @Override
     public void endDocument(Document doc) {
-        append("</body>").nl().decrementIndentLevel()
-                .append("</html>");
+        append(BODY.end())
+                .nl().decrementIndentLevel()
+                .append(HTML.end());
 
         closeWriter();
     }
@@ -77,17 +74,20 @@ public class HtmlBackend extends HtmlBaseBackend {
 
     @Override
     public void startParagraph(Paragraph p) {
-        indent().append("<p>").append(p.getText()).append("</p>").nl();
+        indent().append(P.start())
+                .append(p.getText())
+                .append(P.end())
+                .nl();
     }
 
     @Override
     public void startSection(Section section) {
-        indent().append("<section>").nl().incrementIndentLevel();
+        indent().append(SECTION.start()).nl().incrementIndentLevel();
     }
 
     @Override
     public void endSection(Section section) {
-        decrementIndentLevel().indent().append("</section>").nl();
+        decrementIndentLevel().indent().append(SECTION.end()).nl();
     }
 
     @Override
