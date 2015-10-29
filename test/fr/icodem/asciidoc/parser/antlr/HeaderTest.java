@@ -33,7 +33,7 @@ public class HeaderTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "header with author and attribute entry",
+                "header with author and attribute entry ended by EOF",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -45,7 +45,19 @@ public class HeaderTest extends GrammarTest {
             },
             {
                 /* message */
-                "header with attribute entry",
+                "header with author and attribute entry ended by new line",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe\n" +
+                ":fruit: kiwi\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) \\n) (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) \\n)) (bl <EOF>))"
+            },
+            {
+                /* message */
+                "header with attribute entry ended by EOF",
 
                 /* input */
                 "= Hello, AsciiDoc!\n" +
@@ -53,6 +65,17 @@ public class HeaderTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) <EOF>)))"
+            },
+            {
+                /* message */
+                "header with attribute entry ended by new line",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                ":fruit: kiwi\n",
+
+                /* expected */
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) \\n)) (bl <EOF>))"
             }
         });
 

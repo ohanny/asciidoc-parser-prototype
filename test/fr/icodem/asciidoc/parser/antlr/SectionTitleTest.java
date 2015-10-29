@@ -49,7 +49,7 @@ public class SectionTitleTest extends GrammarTest {
                 "= Hello, AsciiDoc!\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -142,7 +142,7 @@ public class SectionTitleTest extends GrammarTest {
                 "= Title with = is it ok ?\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title T i t l e   w i t h   =   i s   i t   o k   ?) \\n)))"
+                "(document (header (documentTitle =   (title T i t l e   w i t h   =   i s   i t   o k   ?) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -152,7 +152,7 @@ public class SectionTitleTest extends GrammarTest {
                 "= Title with ==== is it ok ?\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title T i t l e   w i t h   = = = =   i s   i t   o k   ?) \\n)))"
+                "(document (header (documentTitle =   (title T i t l e   w i t h   = = = =   i s   i t   o k   ?) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -162,7 +162,7 @@ public class SectionTitleTest extends GrammarTest {
                 "= Title with / is it ok ?\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title T i t l e   w i t h   /   i s   i t   o k   ?) \\n)))"
+                "(document (header (documentTitle =   (title T i t l e   w i t h   /   i s   i t   o k   ?) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -172,7 +172,7 @@ public class SectionTitleTest extends GrammarTest {
                 "= Title with // is it ok ?\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title T i t l e   w i t h   / /   i s   i t   o k   ?) \\n)))"
+                "(document (header (documentTitle =   (title T i t l e   w i t h   / /   i s   i t   o k   ?) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -182,7 +182,7 @@ public class SectionTitleTest extends GrammarTest {
                 "= Title with [ and [[ is it ok ?\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title T i t l e   w i t h   [   a n d   [ [   i s   i t   o k   ?) \\n)))"
+                "(document (header (documentTitle =   (title T i t l e   w i t h   [   a n d   [ [   i s   i t   o k   ?) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -192,7 +192,7 @@ public class SectionTitleTest extends GrammarTest {
                 "= Title with ] and ]] is it ok ?\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title T i t l e   w i t h   ]   a n d   ] ]   i s   i t   o k   ?) \\n)))"
+                "(document (header (documentTitle =   (title T i t l e   w i t h   ]   a n d   ] ]   i s   i t   o k   ?) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -202,7 +202,7 @@ public class SectionTitleTest extends GrammarTest {
                 "= Title with [hello] is it ok ?\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title T i t l e   w i t h   [ h e l l o ]   i s   i t   o k   ?) \\n)))"
+                "(document (header (documentTitle =   (title T i t l e   w i t h   [ h e l l o ]   i s   i t   o k   ?) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -212,7 +212,7 @@ public class SectionTitleTest extends GrammarTest {
                 "= Title with [[hello]] is it ok ?\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title T i t l e   w i t h   [ [ h e l l o ] ]   i s   i t   o k   ?) \\n)))"
+                "(document (header (documentTitle =   (title T i t l e   w i t h   [ [ h e l l o ] ]   i s   i t   o k   ?) \\n)) (bl <EOF>))"
             }
 
         });

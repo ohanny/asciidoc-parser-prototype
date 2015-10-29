@@ -11,6 +11,10 @@ grammar Asciidoc;
         return _input.LA(2) == EOF;
     }
 
+    private boolean isCurrentCharEOF() {
+        return _input.LA(1) == EOF;
+    }
+
     // ---------------------------------------------------------------
     // 'isCharacterIn' element methods
     // ---------------------------------------------------------------
@@ -19,8 +23,10 @@ grammar Asciidoc;
         boolean nextCharIsNL = (_input.LA(2) == NL);
         boolean nextCharIsEOF = (_input.LA(2) == EOF);
         boolean nextCharIsBeginningOfAComment = (_input.LA(2) == SLASH) && (_input.LA(3) == SLASH);
+        boolean nextCharIsBeginningOfAttributeEntry = isStartOfAttributeEntryAtIndex(2);
 
-        return !nextCharIsNL && !nextCharIsEOF && !nextCharIsBeginningOfAComment;
+        return !nextCharIsNL && !nextCharIsEOF &&
+            !nextCharIsBeginningOfAComment && ! nextCharIsBeginningOfAttributeEntry;
     }
 
     private boolean isNewLineInListItemValue() {
@@ -156,17 +162,48 @@ grammar Asciidoc;
         return false;
     }
 
+    private boolean isStartOfAttributeEntryAtIndex(int index) {
+        int i = index;
+        int nextChar = _input.LA(i);
+
+        // check start with ':'
+        if (nextChar != COLON) return false;
+        nextChar = _input.LA(++i);
+
+        // check attribute name starts with 'other' char
+        if (nextChar == BANG) {
+            nextChar = _input.LA(++i);
+            if (nextChar != OTHER) return false;
+        }
+        if (nextChar != OTHER) return false;
+        nextChar = _input.LA(++i);
+
+        while (nextChar != EOF && nextChar != NL) {
+
+            if (nextChar == COLON) {
+                nextChar = _input.LA(++i);
+                if (nextChar == SP | nextChar == TAB) {
+                    return true;
+                }
+            }
+
+            nextChar = _input.LA(++i);
+        }
+
+        return false;
+    }
+
 }
 
 // Parser
 
 document
-    : (bl
+    : ({!isCurrentCharEOF()}? bl[false]
       |multiComment
       |singleComment
       )*
-      (header (bl|nl|multiComment|singleComment)* preamble?)?
-      (bl
+      (header ({!isCurrentCharEOF()}? bl[false]|nl|multiComment|singleComment)* bl[true]? preamble?)?
+      ({!isCurrentCharEOF()}? bl[false]
       |horizontalRule
       |attributeEntry
       |attributeList   // TODO
@@ -182,9 +219,14 @@ nl
     : CR? NL
     ;
 
-bl
-    : {isFirstCharInLine()}? (SP|TAB)* {!isNextCharEOF()}?(CR? NL)
+//bl
+//    : {isFirstCharInLine()}? (SP|TAB)* {!isNextCharEOF()}?(CR? NL)
+//    ;
+
+bl [boolean withEOF]
+    : {isFirstCharInLine()}? (SP|TAB)* (CR? NL|{$withEOF}? EOF)
     ;
+
 
 title
     : ~(SP|TAB|NL|EOF) ~(NL|EOF)*
@@ -197,9 +239,10 @@ horizontalRule
 header
     : documentTitle
       (multiComment|singleComment)*
-      authors? //TODO
-      (multiComment|singleComment)*
-      revisionInfo?
+      (authors
+        (multiComment|singleComment)*
+        (attributeEntry|revisionInfo)?
+      )?
       attributeEntry*
     ;
 
@@ -247,7 +290,7 @@ revisionInfo
       |SEMICOLON
       |BANG
       |{isNewLineInRevisionInfo()}? NL
-      )+
+      )+ (CR? NL|EOF)
     ;
 
 attributeName
@@ -302,11 +345,11 @@ preamble
             //)
 
       block[false]
-      (bl|nl|block[false])*
+      ({!isCurrentCharEOF()}? bl[false]|nl|block[false])*
     ;
 
 section
-    : sectionTitle (bl|nl|block[false])*
+    : sectionTitle ({!isCurrentCharEOF()}? bl[false]|nl|block[false])*
     ;
 
 sectionTitle :
@@ -478,7 +521,7 @@ literalBlockDelimiter
     ;
 
 unorderedList
-    : listItem (listItem|bl listItem)*
+    : listItem (listItem|{!isCurrentCharEOF()}? bl[false] listItem)*
     ;
 
 listItem
@@ -511,7 +554,7 @@ listContinuation
     ;
 
 table
-    : tableDelimiter (tableCell|bl)* tableDelimiter
+    : tableDelimiter (tableCell|{!isCurrentCharEOF()}? bl[false])* tableDelimiter
     ;
 
 tableCell

@@ -30,6 +30,8 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         ParseTreeWalker walker = new ParseTreeWalker();
         walker.walk(this, tree);
 
+        System.out.println(tree.toStringTree(parser));//TODO
+
     }
 
     @Override
@@ -84,6 +86,21 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     public void exitSectionTitle(AsciidocParser.SectionTitleContext ctx) {
         int level = min(ctx.EQ().size(), 6);
         handler.endSectionTitle(ef.sectionTitle(level));
+    }
+
+    @Override
+    public void enterAuthors(AsciidocParser.AuthorsContext ctx) {
+        System.out.println(ctx.getText());
+    }
+
+    @Override
+    public void enterAttributeEntry(AsciidocParser.AttributeEntryContext ctx) {
+        System.out.println("XX"+ctx.getText());
+    }
+
+    @Override
+    public void exitAttributeEntry(AsciidocParser.AttributeEntryContext ctx) {
+
     }
 
     @Override

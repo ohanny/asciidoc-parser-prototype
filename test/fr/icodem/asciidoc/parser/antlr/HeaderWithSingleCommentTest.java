@@ -75,7 +75,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 "= Hello, AsciiDoc!\n",
 
                 /* expected */
-                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)))"
+                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
