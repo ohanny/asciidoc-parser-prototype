@@ -109,7 +109,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]\n",
 
                 /* expected */
-                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] \\n))"
+                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] \\n) (bl <EOF>))"
             }
         });
 

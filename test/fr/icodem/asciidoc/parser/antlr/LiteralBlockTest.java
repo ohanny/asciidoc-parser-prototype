@@ -53,7 +53,7 @@ public class LiteralBlockTest extends GrammarTest {
                 "....\n",
 
                 /* expected */
-                "(document (block (literalBlock (literalBlockDelimiter . . . . \\n) S o m e   t e x t \\n (literalBlockDelimiter . . . . \\n))))"
+                "(document (block (literalBlock (literalBlockDelimiter . . . . \\n) S o m e   t e x t \\n (literalBlockDelimiter . . . . \\n))) (bl <EOF>))"
             }
         });
 

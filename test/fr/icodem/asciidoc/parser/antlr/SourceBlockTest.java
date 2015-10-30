@@ -53,7 +53,7 @@ public class SourceBlockTest extends GrammarTest {
                 "----\n",
 
                 /* expected */
-                "(document (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (sourceBlockDelimiter - - - - \\n))))"
+                "(document (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (sourceBlockDelimiter - - - - \\n))) (bl <EOF>))"
             },
             {
                 /* message */

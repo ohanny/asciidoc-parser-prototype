@@ -43,6 +43,10 @@ grammar Asciidoc;
                 || curChar == NL || curChar == CR) {
             boolean curCharIsBL = isStartOfBlankLineAtIndex(1, true);
             boolean ok = !curCharIsBL;
+            if (ok && curChar == NL) {// check that next char is not start of blank line
+                boolean nextCharIsBL = isStartOfBlankLineAtIndex(2, false);
+                ok = !nextCharIsBL;
+            }
             return ok;
         }
         return true;
@@ -202,7 +206,7 @@ document
       |multiComment
       |singleComment
       )*
-      (header ({!isCurrentCharEOF()}? bl[false]|nl|multiComment|singleComment)* bl[true]? preamble?)?
+      (header ({!isCurrentCharEOF()}? bl[false]|nl|multiComment|singleComment)* preamble?)? //bl[true]?
       ({!isCurrentCharEOF()}? bl[false]
       |horizontalRule
       |attributeEntry
@@ -212,7 +216,8 @@ document
       |blockMacro
       |section
       |block[false]
-      )*
+      |nl
+      )* bl[true]?
     ;
 
 nl
@@ -368,7 +373,7 @@ block[boolean fromList]       // argument 'fromList' indicates that block is att
     ;
 
 blockTitle
-    : {isStartOfBlockTitle()}? DOT title (CR? NL)?
+    : {isStartOfBlockTitle()}? DOT title (CR? NL|EOF)
     ;
 
 anchor
@@ -410,7 +415,7 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
       |SEMICOLON
       |BANG
       |{isBlankInParagraph()}? NL
-      )+
+      )+ EOF?
     ;
 
 singleComment

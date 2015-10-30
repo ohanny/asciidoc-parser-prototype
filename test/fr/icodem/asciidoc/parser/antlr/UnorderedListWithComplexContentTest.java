@@ -80,7 +80,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "Yes !\n",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n)))))))"
+                "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !)))))) (nl \\n) (bl <EOF>))"
             },
             {
                 /* message */
@@ -124,7 +124,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "Great !",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (paragraph G r e a t   !)))))))"
+                "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOF>)))))))"
             },
             {
                 /* message */
@@ -142,7 +142,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "Great !",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - \\n)))) (listContinuation + \\n (block (paragraph G r e a t   !)))))))"
+                "(document (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - \\n)))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOF>)))))))"
             }
         });
 

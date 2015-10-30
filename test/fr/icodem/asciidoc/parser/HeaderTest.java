@@ -10,7 +10,7 @@ public class HeaderTest {
     @Test
     public void test() throws Exception {
 
-        String textl = "= Hello\n" +
+        String text = "= Hello\n" +
                       "John Doe\n" +
                       ":fruit: kiwi\n" +
                       "\n" +
@@ -19,9 +19,6 @@ public class HeaderTest {
                       "== About fruits\n" +
                       "I love fruits\n";
 
-        String text = "= Hello\n" +
-                      "John Doe\n" +
-                      ":fruit: kiwi\n";
 
         StringWriter writer = new StringWriter();
         new AsciidocAntlrProcessor(new HtmlBackend(writer)).parse(text);

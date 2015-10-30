@@ -49,7 +49,7 @@ public class SingleCommentTest extends GrammarTest {
                 "// this is a comment\n",
 
                 /* expected */
-                "(document (singleComment / /   t h i s   i s   a   c o m m e n t \\n))"
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t \\n) (bl <EOF>))"
             },            {
                 /* message */
                 "a line comment without space after '//' ",

@@ -49,7 +49,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":fruit: kiwi\n",
 
                 /* expected */
-                "(document (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) \\n))"
+                "(document (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) \\n) (bl <EOF>))"
             },
             {
                 /* message */

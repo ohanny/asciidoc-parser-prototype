@@ -49,7 +49,7 @@ public class HorizontalRuleTest extends GrammarTest {
                 "'''\n",
 
                 /* expected */
-                "(document (horizontalRule ' ' ' \\n))"
+                "(document (horizontalRule ' ' ' \\n) (bl <EOF>))"
             }
         });
 
