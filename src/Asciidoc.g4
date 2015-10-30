@@ -224,10 +224,6 @@ nl
     : CR? NL
     ;
 
-//bl
-//    : {isFirstCharInLine()}? (SP|TAB)* {!isNextCharEOF()}?(CR? NL)
-//    ;
-
 bl [boolean withEOF]
     : {isFirstCharInLine()}? (SP|TAB)* (CR? NL|{$withEOF}? EOF)
     ;
