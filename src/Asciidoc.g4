@@ -206,11 +206,11 @@ document
       |multiComment
       |singleComment
       )*
-      (header ({!isCurrentCharEOF()}? bl[false]|nl|multiComment|singleComment)* preamble?)? //bl[true]?
+      (header ({!isCurrentCharEOF()}? bl[false]|nl|multiComment|singleComment)* preamble?)?
       ({!isCurrentCharEOF()}? bl[false]
       |horizontalRule
       |attributeEntry
-      |attributeList   // TODO
+      |attributeList
       |anchor
       |blockTitle
       |blockMacro
