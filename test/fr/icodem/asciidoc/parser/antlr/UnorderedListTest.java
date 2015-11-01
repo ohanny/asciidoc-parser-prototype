@@ -39,7 +39,7 @@ public class UnorderedListTest extends GrammarTest {
                 "* Orange",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue O r a n g e) <EOF>))))"
+                "(document (body (block (unorderedList (listItem *   (listItemValue O r a n g e) <EOF>)))))"
             },
             {
                 /* message */
@@ -49,7 +49,7 @@ public class UnorderedListTest extends GrammarTest {
                 "* Orange\n",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue O r a n g e) \\n))) (bl <EOF>))"
+                "(document (body (block (unorderedList (listItem *   (listItemValue O r a n g e) \\n)))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -61,7 +61,7 @@ public class UnorderedListTest extends GrammarTest {
                 "* Mandarine",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) <EOF>))))"
+                "(document (body (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) <EOF>)))))"
             },
             {
                 /* message */
@@ -73,7 +73,7 @@ public class UnorderedListTest extends GrammarTest {
                 "* Mandarine\n",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n))) (bl <EOF>))"
+                "(document (body (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n)))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -86,7 +86,7 @@ public class UnorderedListTest extends GrammarTest {
                 "* Mandarine\n",
 
                 /* expected */
-                "(document (blockTitle . (title S o m e   f r u i t s) \\n) (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n))) (bl <EOF>))"
+                "(document (body (blockTitle . (title S o m e   f r u i t s) \\n) (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n)))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -99,7 +99,7 @@ public class UnorderedListTest extends GrammarTest {
                 "* Mandarine\n",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (bl \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n))) (bl <EOF>))"
+                "(document (body (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (bl \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n)))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -112,7 +112,7 @@ public class UnorderedListTest extends GrammarTest {
                 "* Mandarine\n",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (bl     \\t   \\t   \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n))) (bl <EOF>))"
+                "(document (body (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (bl     \\t   \\t   \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) \\n)))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -128,7 +128,7 @@ public class UnorderedListTest extends GrammarTest {
                 "* Walnut",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n))) (bl \\n) (block (singleComment / / ^ \\n)) (bl \\n) (block (unorderedList (listItem *   (listItemValue A l m o n d) \\n) (listItem *   (listItemValue W a l n u t) <EOF>))))"
+                "(document (body (block (unorderedList (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n))) (bl \\n) (block (singleComment / / ^ \\n)) (bl \\n) (block (unorderedList (listItem *   (listItemValue A l m o n d) \\n) (listItem *   (listItemValue W a l n u t) <EOF>)))))"
             },
             {
                 /* message */
@@ -139,7 +139,7 @@ public class UnorderedListTest extends GrammarTest {
                 "** Cherry",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue F r u i t s) \\n) (listItem * *   (listItemValue C h e r r y) <EOF>))))"
+                "(document (body (block (unorderedList (listItem *   (listItemValue F r u i t s) \\n) (listItem * *   (listItemValue C h e r r y) <EOF>)))))"
             },
             {
                 /* message */
@@ -156,7 +156,7 @@ public class UnorderedListTest extends GrammarTest {
                 "*** Red salad",
 
                 /* expected */
-                "(document (block (unorderedList (listItem *   (listItemValue F r u i t s) \\n) (listItem * *   (listItemValue C h e r r y) \\n) (listItem * *   (listItemValue K i w i) \\n) (listItem *   (listItemValue V e g e t a b l e s) \\n) (listItem * *   (listItemValue C a b b a g e) \\n) (listItem * *   (listItemValue S a l a d) \\n) (listItem * * *   (listItemValue G r e e n   s a l a d) \\n) (listItem * * *   (listItemValue R e d   s a l a d) <EOF>))))"
+                "(document (body (block (unorderedList (listItem *   (listItemValue F r u i t s) \\n) (listItem * *   (listItemValue C h e r r y) \\n) (listItem * *   (listItemValue K i w i) \\n) (listItem *   (listItemValue V e g e t a b l e s) \\n) (listItem * *   (listItemValue C a b b a g e) \\n) (listItem * *   (listItemValue S a l a d) \\n) (listItem * * *   (listItemValue G r e e n   s a l a d) \\n) (listItem * * *   (listItemValue R e d   s a l a d) <EOF>)))))"
             }
         });
 

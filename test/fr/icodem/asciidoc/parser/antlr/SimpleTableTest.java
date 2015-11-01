@@ -45,7 +45,7 @@ public class SimpleTableTest extends GrammarTest {
                 "|===",
 
                 /* expected */
-                "(document (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableCell | (tableCellContent   C e l l   1  )) (tableCell | (tableCellContent   C e l l   2 (nl \\n))) (bl \\n) (tableCell | (tableCellContent   C e l l   3  )) (tableCell | (tableCellContent   C e l l   4 (nl \\n))) (bl \\n) (tableDelimiter | = = = <EOF>))))"
+                "(document (body (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableCell | (tableCellContent   C e l l   1  )) (tableCell | (tableCellContent   C e l l   2 (nl \\n))) (bl \\n) (tableCell | (tableCellContent   C e l l   3  )) (tableCell | (tableCellContent   C e l l   4 (nl \\n))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
             }
         });
 

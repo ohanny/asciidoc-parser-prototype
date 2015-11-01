@@ -39,7 +39,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1]",
 
                 /* expected */
-                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) ] <EOF>))"
+                "(document (body (attributeList [ (positionalAttribute (attributeName a t t 1)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -49,7 +49,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2]",
 
                 /* expected */
-                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) , (positionalAttribute (attributeName a t t 2)) ] <EOF>))"
+                "(document (body (attributeList [ (positionalAttribute (attributeName a t t 1)) , (positionalAttribute (attributeName a t t 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -59,7 +59,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1, att2]",
 
                 /* expected */
-                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) ,   (positionalAttribute (attributeName a t t 2)) ] <EOF>))"
+                "(document (body (attributeList [ (positionalAttribute (attributeName a t t 1)) ,   (positionalAttribute (attributeName a t t 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -69,7 +69,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1=value]",
 
                 /* expected */
-                "(document (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e)) ] <EOF>))"
+                "(document (body (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -79,7 +79,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1=value1,att2=value2]",
 
                 /* expected */
-                "(document (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>))"
+                "(document (body (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -89,7 +89,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1=value1, att2=value2]",
 
                 /* expected */
-                "(document (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e 1)) ,   (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>))"
+                "(document (body (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e 1)) ,   (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -99,7 +99,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]",
 
                 /* expected */
-                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>))"
+                "(document (body (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -109,7 +109,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]\n",
 
                 /* expected */
-                "(document (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] \\n) (bl <EOF>))"
+                "(document (body (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] \\n)) (bl <EOF>))"
             }
         });
 

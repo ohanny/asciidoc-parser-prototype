@@ -41,7 +41,7 @@ public class SourceBlockTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (sourceBlockDelimiter - - - - <EOF>))))"
+                "(document (body (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (sourceBlockDelimiter - - - - <EOF>)))))"
             },
             {
                 /* message */
@@ -53,7 +53,7 @@ public class SourceBlockTest extends GrammarTest {
                 "----\n",
 
                 /* expected */
-                "(document (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (sourceBlockDelimiter - - - - \\n))) (bl <EOF>))"
+                "(document (body (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (sourceBlockDelimiter - - - - \\n)))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -65,7 +65,7 @@ public class SourceBlockTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   - 1 0 ; \\n (sourceBlockDelimiter - - - - <EOF>))))"
+                "(document (body (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   - 1 0 ; \\n (sourceBlockDelimiter - - - - <EOF>)))))"
             }
         });
 
