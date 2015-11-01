@@ -251,10 +251,20 @@ documentTitle
     : EQ SP title? (SP|TAB)* (CR? NL|EOF)
     ;
 
+//authors
+//    : authorName (LABRACK authorAddress RABRACK)?
+//      (SEMICOLON authorName (LABRACK authorAddress RABRACK)?)*
+//      (SP|TAB)* (CR? NL|EOF)
+//    ;
+
 authors
-    : authorName (LABRACK authorAddress RABRACK)?
-      (SEMICOLON authorName (LABRACK authorAddress RABRACK)?)*
+    : author
+      (SEMICOLON author)*
       (SP|TAB)* (CR? NL|EOF)
+    ;
+
+author
+    : authorName (LABRACK authorAddress RABRACK)?
     ;
 
 authorName

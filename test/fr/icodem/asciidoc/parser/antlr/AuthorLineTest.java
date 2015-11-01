@@ -40,7 +40,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) \\n)) (bl <EOF>))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (author (authorName J o h n   D o e)) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -51,7 +51,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) <EOF>)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (author (authorName J o h n   D o e)) <EOF>)))"
             },
             {
                 /* message */
@@ -62,7 +62,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John .Doe",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   . D o e) <EOF>)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (author (authorName J o h n   . D o e)) <EOF>)))"
             },
             {
                 /* message */
@@ -73,7 +73,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe <jd@mail.com>\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e  ) < (authorAddress j d @ m a i l . c o m) > \\n)) (bl <EOF>))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (author (authorName J o h n   D o e  ) < (authorAddress j d @ m a i l . c o m) >) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -84,7 +84,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe <jd@mail.com>",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e  ) < (authorAddress j d @ m a i l . c o m) > <EOF>)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (author (authorName J o h n   D o e  ) < (authorAddress j d @ m a i l . c o m) >) <EOF>)))"
             },
             {
                 /* message */
@@ -95,7 +95,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe; Janie Roe\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e) ; (authorName   J a n i e   R o e) \\n)) (bl <EOF>))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (author (authorName J o h n   D o e)) ; (author (authorName   J a n i e   R o e)) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -106,7 +106,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe <jd@mail.com>; Janie Roe <janie@mail.com>\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (authorName J o h n   D o e  ) < (authorAddress j d @ m a i l . c o m) > ; (authorName   J a n i e   R o e  ) < (authorAddress j a n i e @ m a i l . c o m) > \\n)) (bl <EOF>))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (authors (author (authorName J o h n   D o e  ) < (authorAddress j d @ m a i l . c o m) >) ; (author (authorName   J a n i e   R o e  ) < (authorAddress j a n i e @ m a i l . c o m) >) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -118,7 +118,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (singleComment / /   a   s i n g l e   c o m m e n t \\n) (authors (authorName J o h n   D o e) <EOF>)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (singleComment / /   a   s i n g l e   c o m m e n t \\n) (authors (author (authorName J o h n   D o e)) <EOF>)))"
             },
             {
                 /* message */
@@ -131,7 +131,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (singleComment / /   a   s i n g l e   c o m m e n t \\n) (singleComment / /   a n o t h e r   c o m m e n t \\n) (authors (authorName J o h n   D o e) <EOF>)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (singleComment / /   a   s i n g l e   c o m m e n t \\n) (singleComment / /   a n o t h e r   c o m m e n t \\n) (authors (author (authorName J o h n   D o e)) <EOF>)))"
             },
             {
                 /* message */
@@ -145,7 +145,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (multiComment (multiCommentDelimiter / / / / \\n) a   c o m m e n t \\n (multiCommentDelimiter / / / / \\n)) (authors (authorName J o h n   D o e) <EOF>)))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (multiComment (multiCommentDelimiter / / / / \\n) a   c o m m e n t \\n (multiCommentDelimiter / / / / \\n)) (authors (author (authorName J o h n   D o e)) <EOF>)))"
             }
 
         });
