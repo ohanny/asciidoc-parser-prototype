@@ -2,12 +2,20 @@ package fr.icodem.asciidoc.parser;
 
 import fr.icodem.asciidoc.parser.elements.*;
 
+import java.util.List;
+
 public class AsciidocParserBaseHandler implements AsciidocParserHandler {
     @Override
     public void startDocument(Document document) {}
 
     @Override
     public void endDocument(Document document) {}
+
+    @Override
+    public void startBody() {}
+
+    @Override
+    public void endBody() {}
 
     @Override
     public void startDocumentTitle(DocumentTitle docTitle) {}
@@ -38,4 +46,8 @@ public class AsciidocParserBaseHandler implements AsciidocParserHandler {
 
     @Override
     public void endSectionTitle(SectionTitle sectionTitle) {}
+
+    @Override
+    public void startAttributeEntry(AttributeEntry att) {}
+
 }

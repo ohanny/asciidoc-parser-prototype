@@ -201,29 +201,6 @@ grammar Asciidoc;
 
 // Parser
 
-document1
-    : ({!isCurrentCharEOF()}? bl[false]
-      |multiComment
-      |singleComment
-      )*
-      (header ({!isCurrentCharEOF()}? bl[false]
-               |nl
-               |multiComment
-               |singleComment
-              )* preamble?)?
-      ({!isCurrentCharEOF()}? bl[false]
-      |horizontalRule
-      |attributeEntry
-      |attributeList
-      |anchor
-      |blockTitle
-      |blockMacro
-      |section
-      |block[false]
-      |nl
-      )* bl[true]?
-    ;
-
 document
     : ({!isCurrentCharEOF()}? bl[false]
       |multiComment
