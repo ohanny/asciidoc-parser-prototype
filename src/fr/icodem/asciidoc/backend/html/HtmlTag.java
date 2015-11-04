@@ -1,10 +1,16 @@
 package fr.icodem.asciidoc.backend.html;
 
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public enum HtmlTag {
-    DOCTYPE, META_CHARSET,
+    DOCTYPE,
     HTML, BODY, HEAD,
-    SECTION, P,
-    H1, H2, H3, H4, H5, H6;
+    META, TITLE,
+    DIV, SECTION, P,
+    H1, H2, H3, H4, H5, H6,
+    BR,
+    A, SPAN;
 
     public static HtmlTag getTitleHeader(int level) {
         switch (level) {
@@ -18,19 +24,54 @@ public enum HtmlTag {
         }
     }
 
-    public String tag() {
+    private String buildAttributes(String... attributes) {
+        String atts = null;
+        if (attributes != null) {
+            atts = IntStream.range(0, attributes.length)
+                    .filter(i -> i % 2 == 0)
+                    .mapToObj(i -> {
+                        String str = attributes[i];
+                        if (i + 1 < attributes.length && attributes[i + 1] != null) {
+                            str += "=\"" + attributes[i + 1] + "\"";
+                        }
+                        return str;
+                    })
+                    .collect(Collectors.joining(" "));
+        }
+        return atts;
+    }
+
+    private String buildStartTag(String name, String... attributes) {
+        StringBuilder tag = new StringBuilder();
+        tag.append("<").append(name);
+        String atts = buildAttributes(attributes);
+        if (atts != null) {
+            tag.append(" ").append(atts);
+        }
+        tag.append(">");
+
+        return tag.toString();
+    }
+
+    public String tag(String... attributes) {
+
         switch (this) {
             case DOCTYPE: return "<!DOCTYPE html>";
-            case META_CHARSET: return "<meta charset=\"UTF-8\">";
+            case META: {
+                return buildStartTag("meta", attributes);
+            }
+            case BR: return "<br>";
             default: return null;
         }
     }
 
-    public String start() {
+    public String start(String... attributes) {
         switch (this) {
             case HTML: return "<html>";
-            case BODY: return "<body>";
+            case BODY: return buildStartTag("body", attributes);
             case HEAD: return "<head>";
+            case TITLE: return "<title>";
+            case DIV: return buildStartTag("div", attributes);
             case SECTION: return "<section>";
             case P: return "<p>";
             case H1: return "<h1>";
@@ -39,6 +80,8 @@ public enum HtmlTag {
             case H4: return "<h4>";
             case H5: return "<h5>";
             case H6: return "<h6>";
+            case A: return buildStartTag("a", attributes);
+            case SPAN: return buildStartTag("span", attributes);
             default: return null;
         }
     }
@@ -48,6 +91,8 @@ public enum HtmlTag {
             case HTML: return "</html>";
             case BODY: return "</body>";
             case HEAD: return "</head>";
+            case TITLE: return "</title>";
+            case DIV: return "</div>";
             case SECTION: return "</section>";
             case P: return "</p>";
             case H1: return "</h1>";
@@ -56,6 +101,8 @@ public enum HtmlTag {
             case H4: return "</h4>";
             case H5: return "</h5>";
             case H6: return "</h6>";
+            case SPAN: return "</span>";
+            case A: return "</a>";
             default: return null;
         }
     }

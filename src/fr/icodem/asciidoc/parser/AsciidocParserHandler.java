@@ -5,10 +5,16 @@ import fr.icodem.asciidoc.parser.elements.*;
 import java.util.List;
 
 public interface AsciidocParserHandler {
+    /**
+     * The document includes header info if header is present in the document
+     * @param document the document with header
+     */
     void startDocument(Document document);
     void endDocument(Document document);
-    void startBody();
-    void endBody();
+    void startPreamble();
+    void endPreamble();
+    void startContent();
+    void endContent();
     void startDocumentTitle(DocumentTitle docTitle);
     void endDocumentTitle(DocumentTitle docTitle);
     void startTitle(Title title);

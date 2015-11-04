@@ -4,6 +4,8 @@ import fr.icodem.asciidoc.parser.AsciidocParserBaseHandler;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class HtmlBaseBackend extends AsciidocParserBaseHandler {
     private final static String NL = "\r\n";
@@ -61,4 +63,20 @@ public class HtmlBaseBackend extends AsciidocParserBaseHandler {
         indentLevel--;
         return this;
     }
+
+    protected HtmlBaseBackend runIf(boolean condition, Runnable runnable) {
+        if (condition) runnable.run();
+        return this;
+    }
+
+    protected <T> HtmlBaseBackend forEach(List<T> elements, Consumer<T> c) {
+        elements.forEach(c);
+        return this;
+    }
+//    protected <T> HtmlBaseBackend forEach(List<T> elements, IndexedConsumer<T> c) {
+//        for (int i = 0; i < elements.size(); i++) {
+//            c.accept(elements.get(i), i);
+//        }
+//        return this;
+//    }
 }

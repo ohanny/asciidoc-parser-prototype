@@ -4,6 +4,7 @@ public class Paragraph extends Element {
     private String text;
 
     public Paragraph(String text) {
+        super(null);
         this.text = text;
     }
 

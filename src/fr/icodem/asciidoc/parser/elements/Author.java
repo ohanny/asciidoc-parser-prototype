@@ -1,12 +1,15 @@
 package fr.icodem.asciidoc.parser.elements;
 
-public class Author {
+public class Author extends Element {
     private String name;
     private String address;
+    private int position;
 
-    public Author(String name, String address) {
+    public Author(String id, String name, String address, int position) {
+        super(id);
         this.name = name;
         this.address = address;
+        this.position = position;
     }
 
     public String getName() {
@@ -15,5 +18,9 @@ public class Author {
 
     public String getAddress() {
         return address;
+    }
+
+    public int getPosition() {
+        return position;
     }
 }

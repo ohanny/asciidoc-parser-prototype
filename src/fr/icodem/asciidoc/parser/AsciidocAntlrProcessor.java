@@ -21,16 +21,22 @@ import static java.lang.Math.min;
 public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     private class ModifiableDocument {
-        private DocumentTitle title;
-        private List<Author> authors;
-        private Map<String, AttributeEntry> nameToAttribute = new HashMap<>();
+        DocumentTitle title;
+        List<Author> authors;
+        Map<String, AttributeEntry> nameToAttributeMap;
+        boolean headerPresent;
+
+        ModifiableDocument() {
+            nameToAttributeMap = AttributeDefaults.Instance.getAttributes();
+
+        }
 
         void setTitle(DocumentTitle title) {
             this.title = title;
         }
 
         void addAttribute(AttributeEntry att) {
-            this.nameToAttribute.put(att.getName(), att);
+            this.nameToAttributeMap.put(att.getName(), att);
         }
 
         void addAuthor(Author author) {
@@ -38,10 +44,20 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
             this.authors.add(author);
         }
 
+        int getNextAuthorPosition() {
+            int position = (authors == null)?1:authors.size() + 1;
+            return position;
+        }
+
+        void setHeaderPresent(boolean headerPresent) {
+            this.headerPresent = headerPresent;
+        }
+
         Document getDocument() {
             return ef.document(title,
                                Collections.unmodifiableList(authors),
-                               Collections.unmodifiableMap(nameToAttribute));
+                               Collections.unmodifiableMap(nameToAttributeMap),
+                               headerPresent);
         }
 
     }
@@ -98,7 +114,7 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         //handler.endDocumentTitle(ef.documentTitle());
     }
 
-    private void notifyDocumentifNotDone() {
+    private void notifyDocumentIfNotDone() {
         if (!documentNotified) {
             handler.startDocument(document.getDocument());
             documentNotified = true;
@@ -107,23 +123,29 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     @Override
     public void exitHeader(AsciidocParser.HeaderContext ctx) {
-        notifyDocumentifNotDone();
+        document.setHeaderPresent(true);
+        notifyDocumentIfNotDone();
     }
 
     @Override
     public void enterPreamble(AsciidocParser.PreambleContext ctx) {
-
+        handler.startPreamble();
     }
 
     @Override
-    public void enterBody(AsciidocParser.BodyContext ctx) {
-        notifyDocumentifNotDone();
-        handler.startBody();
+    public void exitPreamble(AsciidocParser.PreambleContext ctx) {
+        handler.endPreamble();
     }
 
     @Override
-    public void exitBody(AsciidocParser.BodyContext ctx) {
-        handler.endBody();
+    public void enterContent(AsciidocParser.ContentContext ctx) {
+        notifyDocumentIfNotDone();
+        handler.startContent();
+    }
+
+    @Override
+    public void exitContent(AsciidocParser.ContentContext ctx) {
+        handler.endContent();
     }
 
     @Override
@@ -170,7 +192,8 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     public void enterAuthor(AsciidocParser.AuthorContext ctx) {
         final String address = (ctx.authorAddress() == null)?
                 null:ctx.authorAddress().getText();
-        Author author = ef.author(ctx.authorName().getText().trim(), address);
+        Author author = ef.author(null, ctx.authorName().getText().trim(),
+                address, document.getNextAuthorPosition());
         document.addAuthor(author);
     }
 

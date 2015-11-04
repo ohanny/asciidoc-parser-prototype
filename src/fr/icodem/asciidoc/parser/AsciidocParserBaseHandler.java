@@ -12,10 +12,16 @@ public class AsciidocParserBaseHandler implements AsciidocParserHandler {
     public void endDocument(Document document) {}
 
     @Override
-    public void startBody() {}
+    public void startPreamble() {}
 
     @Override
-    public void endBody() {}
+    public void endPreamble() {}
+
+    @Override
+    public void startContent() {}
+
+    @Override
+    public void endContent() {}
 
     @Override
     public void startDocumentTitle(DocumentTitle docTitle) {}

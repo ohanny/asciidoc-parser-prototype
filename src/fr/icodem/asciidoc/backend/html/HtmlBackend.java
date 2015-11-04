@@ -3,6 +3,8 @@ package fr.icodem.asciidoc.backend.html;
 import fr.icodem.asciidoc.parser.elements.*;
 
 import java.io.Writer;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 
@@ -17,42 +19,74 @@ public class HtmlBackend extends HtmlBaseBackend {
         append(DOCTYPE.tag()).nl()
                 .append(HTML.start()).nl()
                 .append(HEAD.start()).nl().incrementIndentLevel()
-                .indent().append(META_CHARSET.tag()).nl()
+                .indent().append(META.tag("charset", "UTF-8")).nl()
+                .indent().append(META.tag("name", "viewport", "content", "width=device-width, initial-scale=1.0")).nl()
+                .indent().append(META.tag("name", "generator", "content", "xxx")).nl()
+                .runIf(doc.getAuthors().size() > 0,
+                        () -> indent().append(META.tag("name", "author", "content",
+                                doc.getAuthors()
+                                        .stream()
+                                        .map(a -> a.getName())
+                                        .collect(Collectors.joining(", "))))
+                        .nl())
+                .indent().append(TITLE.start()).append(doc.getTitle().getText()).append(TITLE.end()).nl()
                 .append(HEAD.end()).nl().decrementIndentLevel()
-                .append(BODY.start()).nl().incrementIndentLevel();
+                .append(BODY.start("class", doc.getAttributeValue("doctype"))).nl().incrementIndentLevel()
+                .runIf(doc.isHeaderPresent(), () -> {
+                    indent().append(DIV.start("id", "header")).nl().incrementIndentLevel()
+                        .indent().append(H1.start()).append(doc.getTitle().getText()).append(H1.end()).nl()
+                        .runIf(doc.isAuthorsPresent(), () -> {
+                            indent().append(DIV.start("class", "details")).nl().incrementIndentLevel()
+                                    .forEach(doc.getAuthors(), a -> {
+                                        String index = "" + ((a.getPosition() == 1)?"":"" + a.getPosition());
+                                        indent().append(SPAN.start("id", "author" + index, "class", "author"))
+                                            .append(a.getName()).append(SPAN.end()).append(BR.tag()).nl()
+                                            .runIf(a.getAddress() != null, () -> {
+                                                indent().append(SPAN.start("id", "email" + index, "class", "email"))
+                                                        .append(A.start("href", "mailto:" + a.getAddress()))
+                                                        .append(a.getAddress()).append(A.end())
+                                                        .append(SPAN.end()).append(BR.tag()).nl();
+                                            });
+                                    })
+                                    .decrementIndentLevel().indent().append(DIV.end()).nl();
+                        })
+                        .decrementIndentLevel().indent().append(DIV.end()).nl();
+                });
+
+
+
+
 
         /*
-        class Feature {
-            String description;
 
-            public Feature(String description) {
-                this.description = description;
-            }
-        }
+         */
+    }
 
-        try {
-            Map<String, Object> scopes = new HashMap<>();
-            scopes.put("name", "Mustache");
-            scopes.put("feature", new Feature("Perfect !"));
 
-            Writer writer = new OutputStreamWriter(System.out);
-            MustacheFactory mf = new DefaultMustacheFactory();
-            Mustache mustache = mf.compile(new StringReader("{{name}}, {{feature.description}}"), "example");
-            mustache.execute(writer, scopes);
-            writer.flush();
+    @Override
+    public void startPreamble() {
+        indent().append(DIV.start("id", "preamble")).incrementIndentLevel().nl();
+    }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
+    @Override
+    public void endPreamble() {
+        decrementIndentLevel().indent().append(DIV.end()).nl();
+    }
+
+    @Override
+    public void startContent() {
+
+    }
+
+    @Override
+    public void endContent() {
 
     }
 
     @Override
     public void endDocument(Document doc) {
-        append(BODY.end())
-                .nl().decrementIndentLevel()
-                .append(HTML.end());
+        append(BODY.end()).nl()
+                .decrementIndentLevel().append(HTML.end());
 
         closeWriter();
     }
@@ -100,6 +134,14 @@ public class HtmlBackend extends HtmlBaseBackend {
         append(getTitleHeader(sectionTitle.getLevel()).end()).nl();
     }
 
+    @Override
+    public void startAttributeEntry(AttributeEntry att) {
+        //append(att.getName() + " - " + att.getValue());
+    }
 
-
+//    @Override
+//    public void startAuthors(List<Author> authors) {
+//        //append(authors.toString());
+//    }
 }
+

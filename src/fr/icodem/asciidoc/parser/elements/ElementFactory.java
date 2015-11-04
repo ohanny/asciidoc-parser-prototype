@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ElementFactory {
-    public Document document(DocumentTitle title, List<Author> authors, Map<String, AttributeEntry> nameToAttributeMap) {
-        return new Document(title, authors, nameToAttributeMap);
+    public Document document(DocumentTitle title, List<Author> authors,
+                             Map<String, AttributeEntry> nameToAttributeMap, boolean headerPresent) {
+        return new Document(title, authors, nameToAttributeMap, headerPresent);
     }
 
     public DocumentTitle documentTitle(String text) {
@@ -32,7 +33,7 @@ public class ElementFactory {
         return new AttributeEntry(name, value);
     }
 
-    public Author author(String name, String address) {
-        return new Author(name, address);
+    public Author author(String id, String name, String address, int position) {
+        return new Author(id, name, address, position);
     }
 }
