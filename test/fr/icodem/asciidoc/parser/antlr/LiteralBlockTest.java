@@ -41,7 +41,7 @@ public class LiteralBlockTest extends GrammarTest {
                 "....",
 
                 /* expected */
-                "(document (body (block (literalBlock (literalBlockDelimiter . . . . \\n) S o m e   t e x t \\n (literalBlockDelimiter . . . . <EOF>)))))"
+                "(document (content (block (literalBlock (literalBlockDelimiter . . . . \\n) S o m e   t e x t \\n (literalBlockDelimiter . . . . <EOF>)))))"
             },
             {
                 /* message */
@@ -53,7 +53,7 @@ public class LiteralBlockTest extends GrammarTest {
                 "....\n",
 
                 /* expected */
-                "(document (body (block (literalBlock (literalBlockDelimiter . . . . \\n) S o m e   t e x t \\n (literalBlockDelimiter . . . . \\n)))) (bl <EOF>))"
+                "(document (content (block (literalBlock (literalBlockDelimiter . . . . \\n) S o m e   t e x t \\n (literalBlockDelimiter . . . . \\n)))) (bl <EOF>))"
             }
         });
 

@@ -40,7 +40,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 " and the sun",
 
                 /* expected */
-                "(document (body (block (unorderedList (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n   a n d   t h e   s u n) <EOF>)))))"
+                "(document (content (block (unorderedList (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n   a n d   t h e   s u n) <EOF>)))))"
             },
             {
                 /* message */
@@ -51,7 +51,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "// and the sun",
 
                 /* expected */
-                "(document (body (block (unorderedList (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n / /   a n d   t h e   s u n) <EOF>)))))"
+                "(document (content (block (unorderedList (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n / /   a n d   t h e   s u n) <EOF>)))))"
             },
             {
                 /* message */
@@ -68,7 +68,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 " and carrot",
 
                 /* expected */
-                "(document (body (block (unorderedList (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n   a n d   t h e   s u n) \\n) (bl \\n) (listItem *   (listItemValue K i w i ,   k a k i \\n   a n d   k i w a i) \\n) (bl \\n) (listItem *   (listItemValue C a b b a g e ,   l e e k \\n   a n d   c a r r o t) <EOF>)))))"
+                "(document (content (block (unorderedList (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n   a n d   t h e   s u n) \\n) (bl \\n) (listItem *   (listItemValue K i w i ,   k a k i \\n   a n d   k i w a i) \\n) (bl \\n) (listItem *   (listItemValue C a b b a g e ,   l e e k \\n   a n d   c a r r o t) <EOF>)))))"
             },
             {
                 /* message */
@@ -80,7 +80,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "Yes !\n",
 
                 /* expected */
-                "(document (body (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !)))))) (nl \\n)) (bl <EOF>))"
+                "(document (content (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !)))))) (nl \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -94,7 +94,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (body (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - <EOF>)))))))))"
+                "(document (content (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - <EOF>)))))))))"
             },
             {
                 /* message */
@@ -110,7 +110,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (body (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - <EOF>)))))))))"
+                "(document (content (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - <EOF>)))))))))"
             },
             {
                 /* message */
@@ -124,7 +124,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "Great !",
 
                 /* expected */
-                "(document (body (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOF>))))))))"
+                "(document (content (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOF>))))))))"
             },
             {
                 /* message */
@@ -142,7 +142,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "Great !",
 
                 /* expected */
-                "(document (body (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - \\n)))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOF>))))))))"
+                "(document (content (block (unorderedList (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - \\n)))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOF>))))))))"
             }
         });
 

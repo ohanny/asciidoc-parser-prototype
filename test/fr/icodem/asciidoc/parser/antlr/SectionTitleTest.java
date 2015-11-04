@@ -61,7 +61,7 @@ public class SectionTitleTest extends GrammarTest {
                 "= First Section",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (body (section (sectionTitle =   (title F i r s t   S e c t i o n) <EOF>))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (content (section (sectionTitle =   (title F i r s t   S e c t i o n) <EOF>))))"
             },
             {
                 /* message */
@@ -72,7 +72,7 @@ public class SectionTitleTest extends GrammarTest {
                 "== First Section",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (body (section (sectionTitle = =   (title F i r s t   S e c t i o n) <EOF>))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (content (section (sectionTitle = =   (title F i r s t   S e c t i o n) <EOF>))))"
             },
             {
                 /* message */
@@ -83,7 +83,7 @@ public class SectionTitleTest extends GrammarTest {
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (body (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n))) (bl <EOF>))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (content (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -94,7 +94,7 @@ public class SectionTitleTest extends GrammarTest {
                 "= First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (body (section (sectionTitle =   (title F i r s t   S e c t i o n) \\n))) (bl <EOF>))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (content (section (sectionTitle =   (title F i r s t   S e c t i o n) \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -110,7 +110,7 @@ public class SectionTitleTest extends GrammarTest {
                 "=== Section 2.2\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (body (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 1) \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 2) \\n)) (section (sectionTitle = =   (title S e c o n d   S e c t i o n) \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 1) \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 2) \\n))) (bl <EOF>))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (content (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 1) \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 2) \\n)) (section (sectionTitle = =   (title S e c o n d   S e c t i o n) \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 1) \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 2) \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -132,7 +132,7 @@ public class SectionTitleTest extends GrammarTest {
                 "=== Section 2.2",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (body (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (bl     \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 1) \\n) (bl \\t \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 2) \\n) (bl \\n)) (section (sectionTitle = =   (title S e c o n d   S e c t i o n) \\n) (bl \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 1) \\n) (bl \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 2) <EOF>))))"
+                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl \\n) (content (section (sectionTitle = =   (title F i r s t   S e c t i o n) \\n) (bl     \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 1) \\n) (bl \\t \\n)) (section (sectionTitle = = =   (title S e c t i o n   1 . 2) \\n) (bl \\n)) (section (sectionTitle = =   (title S e c o n d   S e c t i o n) \\n) (bl \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 1) \\n) (bl \\n)) (section (sectionTitle = = =   (title S e c t i o n   2 . 2) <EOF>))))"
             },
             {
                 /* message */

@@ -211,10 +211,10 @@ document
                |multiComment
                |singleComment
               )* preamble?)?
-      body? bl[true]?
+      content? bl[true]?
     ;
 
-body
+content
     : ({!isCurrentCharEOF()}? bl[false]
       |horizontalRule
       |attributeEntry
