@@ -27,8 +27,8 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         boolean headerPresent;
 
         ModifiableDocument() {
+            authors = new ArrayList<>();
             nameToAttributeMap = AttributeDefaults.Instance.getAttributes();
-
         }
 
         void setTitle(DocumentTitle title) {
@@ -40,7 +40,6 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         }
 
         void addAuthor(Author author) {
-            if (this.authors == null) this.authors = new ArrayList<>();
             this.authors.add(author);
         }
 
@@ -64,7 +63,6 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     private ModifiableDocument document;
     private boolean documentNotified;
-
 
     private String currentTitle;
 
@@ -90,19 +88,16 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     @Override
     public void enterDocument(AsciidocParser.DocumentContext ctx) {
         document = new ModifiableDocument();
-        //handler.startDocument(ef.document());
     }
 
     @Override
     public void exitDocument(AsciidocParser.DocumentContext ctx) {
-        //handler.endDocument(ef.document());
         handler.endDocument(document.getDocument());
     }
 
     @Override
     public void enterDocumentTitle(AsciidocParser.DocumentTitleContext ctx) {
         currentTitle = null;
-        //handler.startDocumentTitle(ef.documentTitle());
     }
 
     @Override
@@ -111,7 +106,6 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
             document.setTitle(ef.documentTitle(currentTitle));
             currentTitle = null;
         }
-        //handler.endDocumentTitle(ef.documentTitle());
     }
 
     private void notifyDocumentIfNotDone() {
@@ -150,8 +144,6 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     @Override
     public void enterTitle(AsciidocParser.TitleContext ctx) {
-        //final String text = ctx.getText();
-        //handler.startTitle(ef.title(text));
         currentTitle = ctx.getText();
     }
 
@@ -183,11 +175,6 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         handler.endSectionTitle(ef.sectionTitle(level));
     }
 
-//    @Override
-//    public void enterAuthors(AsciidocParser.AuthorsContext ctx) {
-//        authors = new ArrayList<>();
-//    }
-
     @Override
     public void enterAuthor(AsciidocParser.AuthorContext ctx) {
         final String address = (ctx.authorAddress() == null)?
@@ -197,25 +184,12 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         document.addAuthor(author);
     }
 
-//    @Override
-//    public void exitAuthors(AsciidocParser.AuthorsContext ctx) {
-//        handler.startAuthors(authors);
-//        authors = null;
-//    }
-
     @Override
     public void enterAttributeEntry(AsciidocParser.AttributeEntryContext ctx) {
         if (!documentNotified) {
             AttributeEntry att = ef.attributeEntry(ctx.attributeName().getText(), ctx.attributeValue().getText());
             document.addAttribute(att);
         }
-        //handler.startAttributeEntry(ef.attributeEntry(ctx.attributeName().getText(), ctx.attributeValue().getText()));
-    }
-
-    @Override
-    public void visitTerminal(TerminalNode node) {
-        //System.out.println(node.getSymbol());
-        //System.out.println(node.getText());
     }
 
 }

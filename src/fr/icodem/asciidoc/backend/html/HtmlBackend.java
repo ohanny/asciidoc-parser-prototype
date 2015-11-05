@@ -1,76 +1,92 @@
 package fr.icodem.asciidoc.backend.html;
 
+import fr.icodem.asciidoc.parser.AsciidocParserBaseHandler;
 import fr.icodem.asciidoc.parser.elements.*;
 
 import java.io.Writer;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
+import static fr.icodem.asciidoc.backend.html.ActionRequest.ActionRequestType.*;
 
-public class HtmlBackend extends HtmlBaseBackend {
+public class HtmlBackend extends AsciidocParserBaseHandler {
+
+    private BlockingQueue<ActionRequest> tasks = new ArrayBlockingQueue<>(1024);
+    private Semaphore semaphore = new Semaphore(0);
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private AtomicBoolean parsingFinished = new AtomicBoolean();
+    private CyclicBarrier barrier = new CyclicBarrier(2);
+
+    private HtmlBackendDelegate delegate;
+
+    private boolean documentTitleUndefined = true;
 
     public HtmlBackend(Writer writer) {
-        super(writer);
+
+        delegate = new HtmlBackendDelegate(writer);
+
+        Runnable actionTask = () -> {
+            try {
+                // process ready tasks
+                while (!parsingFinished.get()) {
+                    semaphore.acquire();
+                    processReadyRequests();
+                }
+
+                // parsing is finished, do a last check
+                processReadyRequests();
+
+                // notify arrival to barrier
+                barrier.await();
+            } catch (BrokenBarrierException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        };
+        executorService.execute(actionTask);
+
+    }
+
+    private void processReadyRequests() throws InterruptedException {
+        ActionRequest ar = tasks.peek();
+        while (ar != null && ar.isReady()) {
+            tasks.take().getAction().run();
+            ar = tasks.peek();
+        }
+    }
+
+    private void addActionRequest(ActionRequest.ActionRequestType type,
+                                  Runnable runnable, boolean ready) {
+        try {
+            ActionRequest req = new ActionRequest(type, runnable, ready);
+            tasks.put(req);
+            // unlock outputter thread if locked
+            if (semaphore.getQueueLength() == 1) {
+                ActionRequest ar = tasks.peek();
+                if (ar != null && ar.isReady()) {
+                    semaphore.release();
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void startDocument(Document doc) {
-        append(DOCTYPE.tag()).nl()
-                .append(HTML.start()).nl()
-                .append(HEAD.start()).nl().incrementIndentLevel()
-                .indent().append(META.tag("charset", "UTF-8")).nl()
-                .indent().append(META.tag("name", "viewport", "content", "width=device-width, initial-scale=1.0")).nl()
-                .indent().append(META.tag("name", "generator", "content", "xxx")).nl()
-                .runIf(doc.getAuthors().size() > 0,
-                        () -> indent().append(META.tag("name", "author", "content",
-                                doc.getAuthors()
-                                        .stream()
-                                        .map(a -> a.getName())
-                                        .collect(Collectors.joining(", "))))
-                        .nl())
-                .indent().append(TITLE.start()).append(doc.getTitle().getText()).append(TITLE.end()).nl()
-                .append(HEAD.end()).nl().decrementIndentLevel()
-                .append(BODY.start("class", doc.getAttributeValue("doctype"))).nl().incrementIndentLevel()
-                .runIf(doc.isHeaderPresent(), () -> {
-                    indent().append(DIV.start("id", "header")).nl().incrementIndentLevel()
-                        .indent().append(H1.start()).append(doc.getTitle().getText()).append(H1.end()).nl()
-                        .runIf(doc.isAuthorsPresent(), () -> {
-                            indent().append(DIV.start("class", "details")).nl().incrementIndentLevel()
-                                    .forEach(doc.getAuthors(), a -> {
-                                        String index = "" + ((a.getPosition() == 1)?"":"" + a.getPosition());
-                                        indent().append(SPAN.start("id", "author" + index, "class", "author"))
-                                            .append(a.getName()).append(SPAN.end()).append(BR.tag()).nl()
-                                            .runIf(a.getAddress() != null, () -> {
-                                                indent().append(SPAN.start("id", "email" + index, "class", "email"))
-                                                        .append(A.start("href", "mailto:" + a.getAddress()))
-                                                        .append(a.getAddress()).append(A.end())
-                                                        .append(SPAN.end()).append(BR.tag()).nl();
-                                            });
-                                    })
-                                    .decrementIndentLevel().indent().append(DIV.end()).nl();
-                        })
-                        .decrementIndentLevel().indent().append(DIV.end()).nl();
-                });
-
-
-
-
-
-        /*
-
-         */
+        boolean ready = doc.getTitle() != null;
+        addActionRequest(StartDocument, () -> delegate.startDocument(doc), ready);
     }
 
 
     @Override
     public void startPreamble() {
-        indent().append(DIV.start("id", "preamble")).incrementIndentLevel().nl();
+        addActionRequest(StartPreamble, () -> delegate.startPreamble(), true);
     }
 
     @Override
     public void endPreamble() {
-        decrementIndentLevel().indent().append(DIV.end()).nl();
+        addActionRequest(EndPreamble, () -> delegate.startPreamble(), true);
     }
 
     @Override
@@ -80,68 +96,89 @@ public class HtmlBackend extends HtmlBaseBackend {
 
     @Override
     public void endContent() {
-
     }
 
     @Override
     public void endDocument(Document doc) {
-        append(BODY.end()).nl()
-                .decrementIndentLevel().append(HTML.end());
+        addActionRequest(EndDocument, () -> delegate.endDocument(doc), true);
 
-        closeWriter();
+        // mark end of parsing
+        parsingFinished.set(true);
+
+        // unlock outputter thread if locked
+        if (semaphore.getQueueLength() == 1) {
+            ActionRequest ar = tasks.peek();
+            if (ar != null && ar.isReady()) {
+                semaphore.release();
+            }
+        }
+
+
+        // notify arrival to barrier (wait for writer thread to finish)
+        try {
+            barrier.await();
+        } catch (BrokenBarrierException  | InterruptedException e) {
+            e.printStackTrace();
+        }
+        executorService.shutdown();
     }
 
     @Override
     public void startDocumentTitle(DocumentTitle docTitle) {
-        indent().append(H1.start());
+        addActionRequest(StartDocumentTitle, () -> delegate.startDocumentTitle(docTitle), true);
     }
 
     @Override
     public void endDocumentTitle(DocumentTitle docTitle) {
-        append(H1.end()).nl();
+        addActionRequest(EndDocumentTitle, () -> delegate.endDocumentTitle(docTitle), true);
     }
 
     @Override
     public void startTitle(Title title) {
-        append(title.getText());
+        addActionRequest(StartTitle, () -> delegate.startTitle(title), true);
     }
 
     @Override
     public void startParagraph(Paragraph p) {
-        indent().append(P.start())
-                .append(p.getText())
-                .append(P.end())
-                .nl();
+        addActionRequest(StartParagraph, () -> delegate.startParagraph(p), true);
     }
 
     @Override
     public void startSection(Section section) {
-        indent().append(SECTION.start()).nl().incrementIndentLevel();
+        addActionRequest(StartSection, () -> delegate.startSection(section), true);
     }
 
     @Override
     public void endSection(Section section) {
-        decrementIndentLevel().indent().append(SECTION.end()).nl();
+        addActionRequest(StartSection, () -> delegate.endSection(section), true);
     }
 
     @Override
     public void startSectionTitle(SectionTitle sectionTitle) {
-        indent().append(getTitleHeader(sectionTitle.getLevel()).start());
+        addActionRequest(StartSectionTitle, () -> delegate.startSectionTitle(sectionTitle), true);
     }
 
     @Override
     public void endSectionTitle(SectionTitle sectionTitle) {
-        append(getTitleHeader(sectionTitle.getLevel()).end()).nl();
+        if (documentTitleUndefined) {
+            delegate.fallbackDocumentTitle = "First Section title";
+            documentTitleUndefined = false;
+            tasks.stream().filter(ar -> ar.getType().equals(StartDocument)).findFirst().ifPresent(ar -> ar.ready());
+            // unlock outputter thread if locked
+            if (semaphore.getQueueLength() == 1) {
+                ActionRequest ar = tasks.peek();
+                if (ar != null && ar.isReady()) {
+                    semaphore.release();
+                }
+            }
+
+        }
+        addActionRequest(EndSectionTitle, () -> delegate.endSectionTitle(sectionTitle), true);
     }
 
     @Override
     public void startAttributeEntry(AttributeEntry att) {
-        //append(att.getName() + " - " + att.getValue());
     }
 
-//    @Override
-//    public void startAuthors(List<Author> authors) {
-//        //append(authors.toString());
-//    }
 }
 
