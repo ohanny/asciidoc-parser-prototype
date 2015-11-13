@@ -138,6 +138,26 @@ public class ParagraphTest extends GrammarTest {
 
                 /* expected */
                 "(document (content (block (paragraph T h i s   i s   a   f i r s t   p a r a g r a p h \\n)) (block (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t \\n (multiCommentDelimiter / / / / \\n))) (block (paragraph T h i s   i s   a   s e c o n d   p a r a g r a p h <EOF>))))"
+            },
+            {
+                /* message */
+                "should not be a first level title",
+
+                /* input */
+                "=Banana\n",
+
+                /* expected */
+                "(document (content (block (paragraph = B a n a n a)) (nl \\n)) (bl <EOF>))"
+            },
+            {
+                /* message */
+                "should not be a second level title",
+
+                /* input */
+                "==Banana\n",
+
+                /* expected */
+                "(document (content (block (paragraph = = B a n a n a)) (nl \\n)) (bl <EOF>))"
             }
         });
 

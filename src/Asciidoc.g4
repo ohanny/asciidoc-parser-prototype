@@ -366,7 +366,7 @@ section
     ;
 
 sectionTitle :
-    EQ+ (SP|TAB)* title? (SP|TAB)* (CR? NL|EOF)
+    EQ+ (SP|TAB)+ title (SP|TAB)* (CR? NL|EOF)
     ;
 
 block[boolean fromList]       // argument 'fromList' indicates that block is attached to a list item
