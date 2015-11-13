@@ -155,6 +155,10 @@ grammar Asciidoc;
             while ((nextChar = _input.LA(++i)) == TIMES) {}
             if (nextChar == SP) return true;
         }
+        if (nextChar == DOT) {
+            while ((nextChar = _input.LA(++i)) == DOT) {}
+            if (nextChar == SP) return true;
+        }
         return false;
     }
 
@@ -538,7 +542,7 @@ unorderedList
     ;
 
 listItem
-    : TIMES+ SP listItemValue (CR? NL listContinuation*|EOF)
+    : (TIMES+|DOT+) SP listItemValue (CR? NL listContinuation*|EOF)
     ;
 
 listItemValue

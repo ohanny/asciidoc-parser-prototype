@@ -20,6 +20,7 @@ import org.junit.runners.Suite;
     RevisionInfoTest.class,
     AttributeEntryTest.class,
     UnorderedListTest.class,
+    OrderedListTest.class,
     UnorderedListWithComplexContentTest.class,
     AttributeListTest.class,
     BlockTitleTest.class,
