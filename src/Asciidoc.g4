@@ -376,7 +376,7 @@ sectionTitle :
 block[boolean fromList]       // argument 'fromList' indicates that block is attached to a list item
     : (multiComment
       |singleComment
-      |unorderedList
+      |list
       |sourceBlock
       |literalBlock
       |table
@@ -537,7 +537,7 @@ literalBlockDelimiter
       DOT DOT DOT DOT (SP|TAB)* (CR? NL|EOF)
     ;
 
-unorderedList
+list
     : listItem (listItem|{!isCurrentCharEOF()}? bl[false] listItem)*
     ;
 
