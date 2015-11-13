@@ -21,8 +21,8 @@ public class ElementFactory {
         return new Section();
     }
 
-    public SectionTitle sectionTitle(int level) {
-        return new SectionTitle(level);
+    public SectionTitle sectionTitle(int level, String text) {
+        return new SectionTitle(level, text);
     }
 
     public Title title(String text) {

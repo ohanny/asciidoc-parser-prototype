@@ -21,7 +21,7 @@ public class HeaderTest {
                       "\n" +
                       "The sun, the earth and the sea.\n" +
                       "\n" +
-                      "== About fruits\n" +
+                      "== About fruits\n\n" +
                       "I love fruits\n";
 
         List<AttributeEntry> attributes = new ArrayList<>();

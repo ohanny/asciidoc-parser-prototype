@@ -1,14 +1,11 @@
 package fr.icodem.asciidoc.parser.antlr;
 
-import fr.icodem.asciidoc.parser.antlr.AsciidocLexer;
-import fr.icodem.asciidoc.parser.antlr.AsciidocParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public abstract class GrammarTest {
 

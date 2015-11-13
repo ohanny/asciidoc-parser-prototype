@@ -86,16 +86,7 @@ public class HtmlBackend extends AsciidocParserBaseHandler {
 
     @Override
     public void endPreamble() {
-        addActionRequest(EndPreamble, () -> delegate.startPreamble(), true);
-    }
-
-    @Override
-    public void startContent() {
-
-    }
-
-    @Override
-    public void endContent() {
+        addActionRequest(EndPreamble, () -> delegate.endPreamble(), true);
     }
 
     @Override
@@ -105,12 +96,12 @@ public class HtmlBackend extends AsciidocParserBaseHandler {
         // mark end of parsing
         parsingFinished.set(true);
 
+        // end of parsing, mark every action ready
+        tasks.stream().filter(ar -> !ar.isReady()).forEach(ar -> ar.ready());
+
         // unlock outputter thread if locked
         if (semaphore.getQueueLength() == 1) {
-            ActionRequest ar = tasks.peek();
-            if (ar != null && ar.isReady()) {
-                semaphore.release();
-            }
+            semaphore.release();
         }
 
 
@@ -121,21 +112,6 @@ public class HtmlBackend extends AsciidocParserBaseHandler {
             e.printStackTrace();
         }
         executorService.shutdown();
-    }
-
-    @Override
-    public void startDocumentTitle(DocumentTitle docTitle) {
-        addActionRequest(StartDocumentTitle, () -> delegate.startDocumentTitle(docTitle), true);
-    }
-
-    @Override
-    public void endDocumentTitle(DocumentTitle docTitle) {
-        addActionRequest(EndDocumentTitle, () -> delegate.endDocumentTitle(docTitle), true);
-    }
-
-    @Override
-    public void startTitle(Title title) {
-        addActionRequest(StartTitle, () -> delegate.startTitle(title), true);
     }
 
     @Override
@@ -155,13 +131,8 @@ public class HtmlBackend extends AsciidocParserBaseHandler {
 
     @Override
     public void startSectionTitle(SectionTitle sectionTitle) {
-        addActionRequest(StartSectionTitle, () -> delegate.startSectionTitle(sectionTitle), true);
-    }
-
-    @Override
-    public void endSectionTitle(SectionTitle sectionTitle) {
         if (documentTitleUndefined) {
-            delegate.fallbackDocumentTitle = "First Section title";
+            delegate.fallbackDocumentTitle = sectionTitle.getText();
             documentTitleUndefined = false;
             tasks.stream().filter(ar -> ar.getType().equals(StartDocument)).findFirst().ifPresent(ar -> ar.ready());
             // unlock outputter thread if locked
@@ -173,7 +144,7 @@ public class HtmlBackend extends AsciidocParserBaseHandler {
             }
 
         }
-        addActionRequest(EndSectionTitle, () -> delegate.endSectionTitle(sectionTitle), true);
+        addActionRequest(StartSectionTitle, () -> delegate.startSectionTitle(sectionTitle), true);
     }
 
     @Override

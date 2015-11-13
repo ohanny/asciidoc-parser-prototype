@@ -2,10 +2,7 @@ package fr.icodem.asciidoc.parser;
 
 import fr.icodem.asciidoc.parser.antlr.AsciidocLexer;
 import fr.icodem.asciidoc.parser.antlr.AsciidocParser;
-import fr.icodem.asciidoc.parser.elements.AttributeEntry;
-import fr.icodem.asciidoc.parser.elements.Author;
-import fr.icodem.asciidoc.parser.elements.Document;
-import fr.icodem.asciidoc.parser.elements.DocumentTitle;
+import fr.icodem.asciidoc.parser.elements.*;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -134,12 +131,6 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     @Override
     public void enterContent(AsciidocParser.ContentContext ctx) {
         notifyDocumentIfNotDone();
-        handler.startContent();
-    }
-
-    @Override
-    public void exitContent(AsciidocParser.ContentContext ctx) {
-        handler.endContent();
     }
 
     @Override
@@ -165,14 +156,15 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     @Override
     public void enterSectionTitle(AsciidocParser.SectionTitleContext ctx) {
-        int level = max(min(ctx.EQ().size(), 6), 1);
-        handler.startSectionTitle(ef.sectionTitle(level));
+        currentTitle = null;
     }
 
     @Override
     public void exitSectionTitle(AsciidocParser.SectionTitleContext ctx) {
         int level = min(ctx.EQ().size(), 6);
-        handler.endSectionTitle(ef.sectionTitle(level));
+        handler.startSectionTitle(ef.sectionTitle(level, currentTitle));
+        currentTitle = null;
+
     }
 
     @Override

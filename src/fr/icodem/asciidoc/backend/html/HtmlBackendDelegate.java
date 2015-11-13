@@ -72,15 +72,6 @@ public class HtmlBackendDelegate extends HtmlBaseBackend {
     }
 
     @Override
-    public void startContent() {
-
-    }
-
-    @Override
-    public void endContent() {
-    }
-
-    @Override
     public void endDocument(Document doc) {
         decrementIndentLevel().indent().append(DIV.end()).nl() // content end
             .append(BODY.end()).nl()
@@ -90,25 +81,14 @@ public class HtmlBackendDelegate extends HtmlBaseBackend {
     }
 
     @Override
-    public void startDocumentTitle(DocumentTitle docTitle) {
-        indent().append(H1.start());
-    }
-
-    @Override
-    public void endDocumentTitle(DocumentTitle docTitle) {
-        append(H1.end()).nl();
-    }
-
-    @Override
-    public void startTitle(Title title) {
-        append(title.getText());
-    }
-
-    @Override
     public void startParagraph(Paragraph p) {
-        indent().append(P.start())
+        indent().append(DIV.start("class", "paragraph")).nl()
+                .incrementIndentLevel()
+                .indent().append(P.start())
                 .append(p.getText())
-                .append(P.end())
+                .append(P.end()).nl()
+                .decrementIndentLevel()
+                .indent().append(DIV.end())
                 .nl();
     }
 
@@ -124,12 +104,9 @@ public class HtmlBackendDelegate extends HtmlBaseBackend {
 
     @Override
     public void startSectionTitle(SectionTitle sectionTitle) {
-        indent().append(getTitleHeader(sectionTitle.getLevel()).start());
-    }
-
-    @Override
-    public void endSectionTitle(SectionTitle sectionTitle) {
-        append(getTitleHeader(sectionTitle.getLevel()).end()).nl();
+        indent().append(getTitleHeader(sectionTitle.getLevel()).start())
+                .append(sectionTitle.getText())
+                .append(getTitleHeader(sectionTitle.getLevel()).end()).nl();
     }
 
     @Override

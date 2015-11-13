@@ -18,28 +18,7 @@ public class AsciidocParserBaseHandler implements AsciidocParserHandler {
     public void endPreamble() {}
 
     @Override
-    public void startContent() {}
-
-    @Override
-    public void endContent() {}
-
-    @Override
-    public void startDocumentTitle(DocumentTitle docTitle) {}
-
-    @Override
-    public void endDocumentTitle(DocumentTitle docTitle) {}
-
-    @Override
-    public void startTitle(Title title) {}
-
-    @Override
-    public void endTitle(Title title) {}
-
-    @Override
     public void startParagraph(Paragraph paragraph) {}
-
-    @Override
-    public void endParagraph(Paragraph paragraph) {}
 
     @Override
     public void startSection(Section section) {}
@@ -49,9 +28,6 @@ public class AsciidocParserBaseHandler implements AsciidocParserHandler {
 
     @Override
     public void startSectionTitle(SectionTitle sectionTitle) {}
-
-    @Override
-    public void endSectionTitle(SectionTitle sectionTitle) {}
 
     @Override
     public void startAttributeEntry(AttributeEntry att) {}

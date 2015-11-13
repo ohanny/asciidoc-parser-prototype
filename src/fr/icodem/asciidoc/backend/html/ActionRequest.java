@@ -16,7 +16,7 @@ public class ActionRequest {
         StartSection,
         EndSection,
         StartSectionTitle,
-        EndSectionTitle
+        //EndSectionTitle
     }
 
     private int id;
@@ -50,5 +50,14 @@ public class ActionRequest {
 
     public boolean isReady() {
         return ready;
+    }
+
+    @Override
+    public String toString() {
+        return "ActionRequest{" +
+                "id=" + id +
+                ", type=" + type +
+                ", ready=" + ready +
+                '}';
     }
 }
