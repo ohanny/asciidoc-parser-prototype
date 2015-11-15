@@ -19,7 +19,7 @@ public enum AttributeDefaults {
 
     private void addEntry(String name, String value) {
         ElementFactory ef = new ElementFactory();
-        nameToAttributeMap.put("doctype", ef.attributeEntry("doctype", "article"));
+        nameToAttributeMap.put("doctype", ef.attributeEntry("doctype", "article", true));
     }
 
     public Map<String, AttributeEntry> getAttributes() {

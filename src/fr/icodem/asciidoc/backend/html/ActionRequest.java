@@ -17,6 +17,7 @@ public class ActionRequest {
         EndSection,
         StartSectionTitle,
         //EndSectionTitle
+        StartAttributeEntry
     }
 
     private int id;

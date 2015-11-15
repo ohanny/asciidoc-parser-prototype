@@ -366,7 +366,7 @@ preamble
     ;
 
 section
-    : sectionTitle ({!isCurrentCharEOF()}? bl[false]|nl|block[false])*
+    : sectionTitle ({!isCurrentCharEOF()}? bl[false]|nl|attributeEntry|block[false])*
     ;
 
 sectionTitle :

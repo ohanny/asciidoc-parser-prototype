@@ -29,8 +29,8 @@ public class ElementFactory {
         return new Title(text);
     }
 
-    public AttributeEntry attributeEntry(String name, String value) {
-        return new AttributeEntry(name, value);
+    public AttributeEntry attributeEntry(String name, String value, boolean enabled) {
+        return new AttributeEntry(name, value, enabled);
     }
 
     public Author author(String id, String name, String address, int position) {

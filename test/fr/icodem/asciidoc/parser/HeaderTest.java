@@ -18,10 +18,17 @@ public class HeaderTest {
         String text = "= Hello\n" +
                       "John Doe; Roger Rabbit <roger@mail.com>\n" +
                       ":fruit: kiwi\n" +
+                      ":fruit2!:\n" +
+                      ":!fruit3:\n" +
                       "\n" +
                       "The sun, the earth and the sea.\n" +
                       "\n" +
                       "== About fruits\n" +
+                      "\n" +
+                      ":fruit: banana\n" +
+                      ":fruit2!:\n" +
+                      ":!fruit3:\n" +
+                      "\n" +
                       "I love fruits\n";
 
         List<AttributeEntry> attributes = new ArrayList<>();

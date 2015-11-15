@@ -111,6 +111,7 @@ public class HtmlBackendDelegate extends HtmlBaseBackend {
 
     @Override
     public void startAttributeEntry(AttributeEntry att) {
+
     }
 
 }

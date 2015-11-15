@@ -178,9 +178,19 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     @Override
     public void enterAttributeEntry(AsciidocParser.AttributeEntryContext ctx) {
+        String value = null;
+        if (ctx.attributeValue() != null) {
+            value = ctx.attributeValue().getText();
+        }
+
+        boolean enabled = ctx.BANG().size() > 0;
+
+        AttributeEntry att = ef.attributeEntry(ctx.attributeName().getText(), value, enabled);
+
         if (!documentNotified) {
-            AttributeEntry att = ef.attributeEntry(ctx.attributeName().getText(), ctx.attributeValue().getText());
             document.addAttribute(att);
+        } else {
+            handler.startAttributeEntry(att);
         }
     }
 
