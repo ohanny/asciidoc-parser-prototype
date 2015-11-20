@@ -209,18 +209,18 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     @Override
     public void enterPositionalAttribute(AsciidocParser.PositionalAttributeContext ctx) {
-        String attName = ctx.attributeName().getText();
+        String value = ctx.attributeValue().getText();
         if (currentAttributeList != null) {
-            currentAttributeList.add(ef.attribute(attName, null));
+            currentAttributeList.add(ef.attribute(value, null));
         }
     }
 
     @Override
     public void enterNamedAttribute(AsciidocParser.NamedAttributeContext ctx) {
-        String attName = ctx.attributeName().getText();
-        String attValue = ctx.attributeValuePart().getText();
+        String name = ctx.attributeName().getText();
+        String value = ctx.attributeValue().getText();
         if (currentAttributeList != null) {
-            currentAttributeList.add(ef.attribute(attName, attValue));
+            currentAttributeList.add(ef.attribute(name, value));
         }
     }
 }

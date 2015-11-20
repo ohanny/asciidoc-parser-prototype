@@ -326,6 +326,10 @@ attributeValuePart
     : OTHER+
     ;
 
+attributeValue
+    : (OTHER|SP)+
+    ;
+
 attributeList
     : LSBRACK
       ((positionalAttribute|namedAttribute) (SP|TAB)*
@@ -335,11 +339,11 @@ attributeList
     ;
 
 positionalAttribute
-    : attributeName
+    : attributeValue
     ;
 
 namedAttribute
-    : attributeName EQ attributeValuePart?
+    : attributeName EQ attributeValue?
     ;
 
 blockMacro

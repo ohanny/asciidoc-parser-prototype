@@ -59,7 +59,7 @@ public class BlockMacroTest extends GrammarTest {
                 "image::sunset.jpg[Sunset]",
 
                 /* expected */
-                "(document (content (blockMacro (macroName i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeName S u n s e t)) ] <EOF>))))"
+                "(document (content (blockMacro (macroName i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeValue S u n s e t)) ] <EOF>))))"
             }
         });
 

@@ -39,7 +39,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeName a t t 1)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -49,7 +49,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeName a t t 1)) , (positionalAttribute (attributeName a t t 2)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (positionalAttribute (attributeValue a t t 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -59,7 +59,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1, att2]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeName a t t 1)) ,   (positionalAttribute (attributeName a t t 2)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) ,   (positionalAttribute (attributeValue a t t 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -69,7 +69,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1=value]",
 
                 /* expected */
-                "(document (content (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e)) ] <EOF>)))"
+                "(document (content (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValue v a l u e)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -79,7 +79,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1=value1,att2=value2]",
 
                 /* expected */
-                "(document (content (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>)))"
+                "(document (content (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValue v a l u e 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -89,7 +89,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1=value1, att2=value2]",
 
                 /* expected */
-                "(document (content (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValuePart v a l u e 1)) ,   (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>)))"
+                "(document (content (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValue v a l u e 1)) ,   (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -99,7 +99,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -109,7 +109,17 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]\n",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] \\n)) (bl <EOF>))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] \\n)) (bl <EOF>))"
+            },
+            {
+                /* message */
+                "positional attribute with blank",
+
+                /* input */
+                "[Kiwi Orange]",
+
+                /* expected */
+                "(document (content (attributeList [ (positionalAttribute (attributeValue K i w i   O r a n g e)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -120,7 +130,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]\n",
 
                 /* expected */
-                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] \\n))) (bl <EOF>))"
+                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -131,7 +141,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]",
 
                 /* expected */
-                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>))))"
+                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] <EOF>))))"
             },
             {
                 /* message */
@@ -144,7 +154,7 @@ public class AttributeListTest extends GrammarTest {
                 "A paragraph",
 
                 /* expected */
-                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (bl \\n) (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] \\n) (block (paragraph A   p a r a g r a p h <EOF>)))))"
+                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (bl \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] \\n) (block (paragraph A   p a r a g r a p h <EOF>)))))"
             }
         });
 
