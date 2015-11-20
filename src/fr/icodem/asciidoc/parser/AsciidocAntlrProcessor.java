@@ -63,6 +63,8 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     private String currentTitle;
 
+    private List<Attribute> currentAttributeList;
+
     public AsciidocAntlrProcessor(AsciidocParserHandler handler, List<AttributeEntry> attributes) {
         super(handler, attributes);
     }
@@ -194,4 +196,31 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         }
     }
 
+    @Override
+    public void enterAttributeList(AsciidocParser.AttributeListContext ctx) {
+        currentAttributeList = new ArrayList<>();
+    }
+
+    @Override
+    public void exitAttributeList(AsciidocParser.AttributeListContext ctx) {
+        handler.attributeList(ef.attributeList(currentAttributeList));
+        currentAttributeList = null;
+    }
+
+    @Override
+    public void enterPositionalAttribute(AsciidocParser.PositionalAttributeContext ctx) {
+        String attName = ctx.attributeName().getText();
+        if (currentAttributeList != null) {
+            currentAttributeList.add(ef.attribute(attName, null));
+        }
+    }
+
+    @Override
+    public void enterNamedAttribute(AsciidocParser.NamedAttributeContext ctx) {
+        String attName = ctx.attributeName().getText();
+        String attValue = ctx.attributeValuePart().getText();
+        if (currentAttributeList != null) {
+            currentAttributeList.add(ef.attribute(attName, attValue));
+        }
+    }
 }

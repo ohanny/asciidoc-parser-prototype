@@ -152,5 +152,9 @@ public class HtmlBackend extends AsciidocParserBaseHandler {
         addActionRequest(StartAttributeEntry, () -> delegate.startAttributeEntry(att), true);
     }
 
+    @Override
+    public void attributeList(AttributeList attributeList) {
+        addActionRequest(AttributeList, () -> delegate.attributeList(attributeList), true);
+    }
 }
 

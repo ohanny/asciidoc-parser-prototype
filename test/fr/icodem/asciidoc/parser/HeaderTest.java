@@ -29,7 +29,13 @@ public class HeaderTest {
                       ":fruit2!:\n" +
                       ":!fruit3:\n" +
                       "\n" +
-                      "I love fruits\n";
+                      "[quote#think, DonaldTrump]\n" +
+                      "I love fruits\n" +
+                      "\n" +
+                      "\n" +
+                      "* Apple\n" +
+                      "* Kiwi\n" +
+                      "* Banana\n";
 
         List<AttributeEntry> attributes = new ArrayList<>();
 
