@@ -315,10 +315,10 @@ attributeName
     ;
 
 attributeEntry
-    : COLON BANG? attributeName BANG? COLON SP* attributeValue? (SP|TAB)* (CR? NL|EOF)
+    : COLON BANG? attributeName BANG? COLON SP* attributeValueParts? (SP|TAB)* (CR? NL|EOF)
     ;
 
-attributeValue
+attributeValueParts
     : attributeValuePart (PLUS NL SP* attributeValuePart)*
     ;
 

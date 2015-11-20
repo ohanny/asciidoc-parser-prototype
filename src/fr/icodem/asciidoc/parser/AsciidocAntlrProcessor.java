@@ -181,8 +181,8 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     @Override
     public void enterAttributeEntry(AsciidocParser.AttributeEntryContext ctx) {
         String value = null;
-        if (ctx.attributeValue() != null) {
-            value = ctx.attributeValue().getText();
+        if (ctx.attributeValueParts() != null) {
+            value = ctx.attributeValueParts().getText();
         }
 
         boolean enabled = ctx.BANG().size() > 0;

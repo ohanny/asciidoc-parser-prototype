@@ -132,6 +132,19 @@ public class AttributeListTest extends GrammarTest {
 
                 /* expected */
                 "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] <EOF>))))"
+            },
+            {
+                /* message */
+                "attribute list before a paragraph",
+
+                /* input */
+                "== Section\n" +
+                "\n" +
+                "[att1,att2=value2]\n" +
+                "A paragraph",
+
+                /* expected */
+                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (bl \\n) (attributeList [ (positionalAttribute (attributeName a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValuePart v a l u e 2)) ] \\n) (block (paragraph A   p a r a g r a p h <EOF>)))))"
             }
         });
 
