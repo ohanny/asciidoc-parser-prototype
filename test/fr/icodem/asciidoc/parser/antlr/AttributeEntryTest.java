@@ -113,6 +113,28 @@ public class AttributeEntryTest extends GrammarTest {
 
                 /* expected */
                 "(document (content (attributeEntry : (attributeName f r u i t) ! : <EOF>)))"
+            },
+            {
+                /* message */
+                "attribute entry in section ended by EOF",
+
+                /* input */
+                "== Section\n" +
+                ":fruit: kiwi",
+
+                /* expected */
+                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) <EOF>))))"
+            },
+            {
+                /* message */
+                "attribute entry in section ended by new line",
+
+                /* input */
+                "== Section\n" +
+                ":fruit: kiwi\n",
+
+                /* expected */
+                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeEntry : (attributeName f r u i t) :   (attributeValue (attributeValuePart k i w i)) \\n))) (bl <EOF>))"
             }
         });
 
