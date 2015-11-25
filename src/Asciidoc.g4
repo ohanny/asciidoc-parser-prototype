@@ -330,7 +330,7 @@ attributeValue
     : (OTHER|SP)+
     ;
 
-attributeList
+attributeListOLD
     : LSBRACK
       ((positionalAttribute|namedAttribute) (SP|TAB)*
             (COMMA (SP|TAB)* (positionalAttribute|namedAttribute) (SP|TAB)*)*
@@ -338,8 +338,43 @@ attributeList
       RSBRACK (SP|TAB)* (CR? NL|EOF)
     ;
 
+attributeList
+    : LSBRACK
+      ((positionalAttribute idAttribute? (roleAttribute|optionAttribute)*
+       |idAttribute (roleAttribute|optionAttribute)*
+       |(roleAttribute|optionAttribute)+
+       |namedAttribute) (SP|TAB)*
+            (COMMA (SP|TAB)* (positionalAttribute|namedAttribute) (SP|TAB)*)*
+      |)
+      RSBRACK (SP|TAB)* (CR? NL|EOF)
+    ;
+
 positionalAttribute
     : attributeValue
+    ;
+
+idAttribute
+    : POUND idName
+    ;
+
+idName
+    : OTHER+
+    ;
+
+roleAttribute
+    : DOT roleName
+    ;
+
+roleName
+    : OTHER+
+    ;
+
+optionAttribute
+    : PERCENT optionName
+    ;
+
+optionName
+    : OTHER+
     ;
 
 namedAttribute
@@ -617,10 +652,11 @@ SEMICOLON   : ';'  ;
 BANG        : '!'  ;
 QUOTE       : '\'' ;
 PIPE        : '|'  ;
+POUND       : '#'  ;
+PERCENT     : '%'  ;
 OTHER       :  .   ;
 
 /* other chars to define
-
 
 
 LPAREN          : '(';
