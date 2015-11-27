@@ -4,22 +4,26 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class Document extends Element {
-    private DocumentTitle title;
+public class DocumentHeader {
+    private Title title;
     private List<Author> authors;
     private Map<String, AttributeEntry> nameToAttributeMap;
+
     private boolean headerPresent;
 
-    public Document(DocumentTitle title, List<Author> authors,
+    public DocumentHeader(Title title, List<Author> authors,
                     Map<String, AttributeEntry> nameToAttributeMap, boolean headerPresent) {
-        super(null);
         this.title = title;
         this.authors = authors;
         this.nameToAttributeMap = nameToAttributeMap;
         this.headerPresent = headerPresent;
+
+        if (this.title == null) {
+            this.title = new Title(getAttributeValue("doctitle"));
+        }
     }
 
-    public DocumentTitle getTitle() {
+    public Title getTitle() {
         return title;
     }
 
@@ -42,4 +46,5 @@ public class Document extends Element {
     public boolean isAuthorsPresent() {
         return authors.size() > 0;
     }
+
 }

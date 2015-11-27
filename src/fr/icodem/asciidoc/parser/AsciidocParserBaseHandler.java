@@ -6,10 +6,13 @@ import java.util.List;
 
 public class AsciidocParserBaseHandler implements AsciidocParserHandler {
     @Override
-    public void startDocument(Document document) {}
+    public void startDocument() {}
 
     @Override
-    public void endDocument(Document document) {}
+    public void endDocument() {}
+
+    @Override
+    public void documentHeader(DocumentHeader header) {}
 
     @Override
     public void startPreamble() {}

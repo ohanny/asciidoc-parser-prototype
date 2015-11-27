@@ -73,11 +73,15 @@ public class HtmlBackend extends AsciidocParserBaseHandler {
     }
 
     @Override
-    public void startDocument(Document doc) {
-        boolean ready = doc.getTitle() != null;
-        addActionRequest(StartDocument, () -> delegate.startDocument(doc), ready);
+    public void startDocument() {
+        addActionRequest(StartDocument, () -> delegate.startDocument(), true);
     }
 
+    @Override
+    public void documentHeader(DocumentHeader header) {
+        boolean ready = header.getTitle() != null;
+        addActionRequest(StartDocument, () -> delegate.documentHeader(header), ready);
+    }
 
     @Override
     public void startPreamble() {
@@ -90,8 +94,8 @@ public class HtmlBackend extends AsciidocParserBaseHandler {
     }
 
     @Override
-    public void endDocument(Document doc) {
-        addActionRequest(EndDocument, () -> delegate.endDocument(doc), true);
+    public void endDocument() {
+        addActionRequest(EndDocument, () -> delegate.endDocument(), true);
 
         // mark end of parsing
         parsingFinished.set(true);
@@ -132,7 +136,7 @@ public class HtmlBackend extends AsciidocParserBaseHandler {
     @Override
     public void startSectionTitle(SectionTitle sectionTitle) {
         if (documentTitleUndefined) {
-            delegate.fallbackDocumentTitle = sectionTitle.getText();
+            //delegate.fallbackDocumentTitle = sectionTitle.getText();
             documentTitleUndefined = false;
             tasks.stream().filter(ar -> ar.getType().equals(StartDocument)).findFirst().ifPresent(ar -> ar.ready());
             // unlock outputter thread if locked

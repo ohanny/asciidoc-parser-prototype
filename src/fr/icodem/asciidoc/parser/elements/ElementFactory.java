@@ -4,13 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ElementFactory {
-    public Document document(DocumentTitle title, List<Author> authors,
-                             Map<String, AttributeEntry> nameToAttributeMap, boolean headerPresent) {
-        return new Document(title, authors, nameToAttributeMap, headerPresent);
-    }
 
-    public DocumentTitle documentTitle(String text) {
-        return new DocumentTitle(text);
+    public DocumentHeader documentHeader(Title title, List<Author> authors,
+                             Map<String, AttributeEntry> nameToAttributeMap, boolean headerPresent) {
+        return new DocumentHeader(title, authors, nameToAttributeMap, headerPresent);
     }
 
     public Paragraph paragraph(AttributeList attList, String text) {

@@ -7,6 +7,7 @@ public class ActionRequest {
     public enum ActionRequestType {
         StartDocument,
         EndDocument,
+        DocumentHeader,
         StartDocumentTitle,
         EndDocumentTitle,
         StartPreamble,

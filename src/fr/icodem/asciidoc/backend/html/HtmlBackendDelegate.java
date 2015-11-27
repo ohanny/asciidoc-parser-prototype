@@ -11,38 +11,42 @@ public class HtmlBackendDelegate extends HtmlBaseBackend {
 
     // If document title is not present, the first detected section title is used.
     // If no section is present in document, then title is equal to "Untitled"
-    String fallbackDocumentTitle = "Untitled";
+    //String fallbackDocumentTitle = "Untitled";
 
     public HtmlBackendDelegate(Writer writer) {
         super(writer);
     }
 
     @Override
-    public void startDocument(Document doc) {
-        String title = (doc.getTitle() != null)?doc.getTitle().getText():fallbackDocumentTitle;
-
+    public void startDocument() {
         append(DOCTYPE.tag()).nl()
                 .append(HTML.start()).nl()
                 .append(HEAD.start()).nl().incrementIndentLevel()
                 .indent().append(META.tag("charset", "UTF-8")).nl()
                 .indent().append(META.tag("name", "viewport", "content", "width=device-width, initial-scale=1.0")).nl()
-                .indent().append(META.tag("name", "generator", "content", "xxx")).nl()
-                .runIf(doc.getAuthors().size() > 0,
-                        () -> indent().append(META.tag("name", "author", "content",
-                                doc.getAuthors()
-                                        .stream()
-                                        .map(a -> a.getName())
-                                        .collect(Collectors.joining(", "))))
-                                .nl())
-                .indent().append(TITLE.start()).append(title).append(TITLE.end()).nl()
+                .indent().append(META.tag("name", "generator", "content", "xxx")).nl();
+    }
+
+    @Override
+    public void documentHeader(DocumentHeader header) {
+        //String title = (header.getTitle() != null)?header.getTitle().getText():fallbackDocumentTitle;
+
+        runIf(header.isAuthorsPresent(),
+                () -> indent().append(META.tag("name", "author", "content",
+                        header.getAuthors()
+                                .stream()
+                                .map(a -> a.getName())
+                                .collect(Collectors.joining(", "))))
+                        .nl())
+                .indent().append(TITLE.start()).append(header.getTitle().getText()).append(TITLE.end()).nl()
                 .append(HEAD.end()).nl().decrementIndentLevel()
-                .append(BODY.start("class", doc.getAttributeValue("doctype"))).nl().incrementIndentLevel()
-                .runIf(doc.isHeaderPresent(), () -> {
+                .append(BODY.start("class", header.getAttributeValue("doctype"))).nl().incrementIndentLevel()
+                .runIf(header.isHeaderPresent(), () -> {
                     indent().append(DIV.start("id", "header")).nl().incrementIndentLevel()
-                            .indent().append(H1.start()).append(doc.getTitle().getText()).append(H1.end()).nl()
-                            .runIf(doc.isAuthorsPresent(), () -> {
+                            .indent().append(H1.start()).append(header.getTitle().getText()).append(H1.end()).nl()
+                            .runIf(header.isAuthorsPresent(), () -> {
                                 indent().append(DIV.start("class", "details")).nl().incrementIndentLevel()
-                                        .forEach(doc.getAuthors(), a -> {
+                                        .forEach(header.getAuthors(), a -> {
                                             String index = "" + ((a.getPosition() == 1) ? "" : "" + a.getPosition());
                                             indent().append(SPAN.start("id", "author" + index, "class", "author"))
                                                     .append(a.getName()).append(SPAN.end()).append(BR.tag()).nl()
@@ -60,7 +64,6 @@ public class HtmlBackendDelegate extends HtmlBaseBackend {
                 .indent().append(DIV.start("id", "content")).incrementIndentLevel().nl();
     }
 
-
     @Override
     public void startPreamble() {
         indent().append(DIV.start("id", "preamble")).incrementIndentLevel().nl();
@@ -72,7 +75,7 @@ public class HtmlBackendDelegate extends HtmlBaseBackend {
     }
 
     @Override
-    public void endDocument(Document doc) {
+    public void endDocument() {
         decrementIndentLevel().indent().append(DIV.end()).nl() // content end
             .append(BODY.end()).nl()
                     .decrementIndentLevel().append(HTML.end());

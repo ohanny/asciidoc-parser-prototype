@@ -15,7 +15,7 @@ public class HeaderTest {
     @Test
     public void test() throws Exception {
 
-        String text = "= Hello\n" +
+        String text = "//= Hello\n" +
                       "John Doe; Roger Rabbit <roger@mail.com>\n" +
                       ":fruit: kiwi\n" +
                       ":fruit2!:\n" +
@@ -29,10 +29,10 @@ public class HeaderTest {
                       ":fruit2!:\n" +
                       ":!fruit3:\n" +
                       "\n" +
-                      "[quote#think, DonaldTrump]\n" +
+                      "[quote#think, Donald Trump]\n" +
                       "I love fruits\n" +
                       "\n" +
-                      "\n" +
+                      "[.summary.incremental%header%footer,xxx=yyy,xxx=zzz]\n" +
                       "* Apple\n" +
                       "* Kiwi\n" +
                       "* Banana\n";

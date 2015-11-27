@@ -16,7 +16,7 @@ import static java.lang.Math.min;
 public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     private class ModifiableDocument {
-        DocumentTitle title;
+        Title title;
         List<Author> authors;
         Map<String, AttributeEntry> nameToAttributeMap;
         boolean headerPresent;
@@ -26,7 +26,7 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
             nameToAttributeMap = AttributeDefaults.Instance.getAttributes();
         }
 
-        void setTitle(DocumentTitle title) {
+        void setTitle(Title title) {
             this.title = title;
         }
 
@@ -47,8 +47,10 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
             this.headerPresent = headerPresent;
         }
 
-        Document getDocument() {
-            return ef.document(title,
+        DocumentHeader getHeader() {
+            Title title = (this.title == null)?null:ef.title(this.title.getText());
+
+            return ef.documentHeader(title,
                                Collections.unmodifiableList(authors),
                                Collections.unmodifiableMap(nameToAttributeMap),
                                headerPresent);
@@ -92,11 +94,12 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     @Override
     public void enterDocument(AsciidocParser.DocumentContext ctx) {
         document = new ModifiableDocument();
+        handler.startDocument();
     }
 
     @Override
     public void exitDocument(AsciidocParser.DocumentContext ctx) {
-        handler.endDocument(document.getDocument());
+        handler.endDocument();
     }
 
     @Override
@@ -107,14 +110,14 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     @Override
     public void exitDocumentTitle(AsciidocParser.DocumentTitleContext ctx) {
         if (currentTitle != null) {
-            document.setTitle(ef.documentTitle(currentTitle));
+            document.setTitle(ef.title(currentTitle));
             currentTitle = null;
         }
     }
 
     private void notifyDocumentIfNotDone() {
         if (!documentNotified) {
-            handler.startDocument(document.getDocument());
+            handler.documentHeader(document.getHeader());
             documentNotified = true;
         }
     }
