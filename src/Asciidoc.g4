@@ -330,14 +330,6 @@ attributeValue
     : (OTHER|SP)+
     ;
 
-attributeListOLD
-    : LSBRACK
-      ((positionalAttribute|namedAttribute) (SP|TAB)*
-            (COMMA (SP|TAB)* (positionalAttribute|namedAttribute) (SP|TAB)*)*
-      |)
-      RSBRACK (SP|TAB)* (CR? NL|EOF)
-    ;
-
 attributeList
     : LSBRACK
       ((positionalAttribute idAttribute? (roleAttribute|optionAttribute)*

@@ -1,8 +1,8 @@
 package fr.icodem.asciidoc.parser.elements;
 
 public class Attribute {
-    private String name;
-    private String value;
+    protected String name;
+    protected Object value;
 
     public Attribute(String name, String value) {
         this.name = name;
@@ -13,7 +13,7 @@ public class Attribute {
         return name;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 

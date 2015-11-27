@@ -32,9 +32,4 @@ public class AsciidocParserBaseHandler implements AsciidocParserHandler {
     @Override
     public void startAttributeEntry(AttributeEntry att) {}
 
-    @Override
-    public void attributeList(AttributeList attributeList) {
-
-    }
-
 }

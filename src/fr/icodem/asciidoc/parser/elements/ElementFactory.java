@@ -13,8 +13,8 @@ public class ElementFactory {
         return new DocumentTitle(text);
     }
 
-    public Paragraph paragraph(String text) {
-        return new Paragraph(text);
+    public Paragraph paragraph(AttributeList attList, String text) {
+        return new Paragraph(attList, text);
     }
 
     public Section section() {

@@ -7,8 +7,6 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.xml.sax.ContentHandler;
 
 import java.util.*;
 
@@ -63,10 +61,17 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     private String currentTitle;
 
-    private List<Attribute> currentAttributeList;
+    private List<Attribute> rawAttList;
 
     public AsciidocAntlrProcessor(AsciidocParserHandler handler, List<AttributeEntry> attributes) {
         super(handler, attributes);
+    }
+
+    private AttributeList consumeAttList() {
+        AttributeList attList = ef.attributeList(rawAttList);
+        rawAttList = null;// consumed
+
+        return attList;
     }
 
     @Override
@@ -140,10 +145,11 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         currentTitle = ctx.getText();
     }
 
+
     @Override
     public void enterParagraph(AsciidocParser.ParagraphContext ctx) {
         String text = ctx.getText().trim();
-        handler.startParagraph(ef.paragraph(text));
+        handler.startParagraph(ef.paragraph(consumeAttList(), text));
     }
 
     @Override
@@ -198,29 +204,36 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     @Override
     public void enterAttributeList(AsciidocParser.AttributeListContext ctx) {
-        currentAttributeList = new ArrayList<>();
-    }
-
-    @Override
-    public void exitAttributeList(AsciidocParser.AttributeListContext ctx) {
-        handler.attributeList(ef.attributeList(currentAttributeList));
-        currentAttributeList = null;
+        if (rawAttList == null) {
+            rawAttList = new ArrayList<>();
+        }
     }
 
     @Override
     public void enterPositionalAttribute(AsciidocParser.PositionalAttributeContext ctx) {
         String value = ctx.attributeValue().getText();
-        if (currentAttributeList != null) {
-            currentAttributeList.add(ef.attribute(value, null));
-        }
+        rawAttList.add(ef.attribute(null, value));
+    }
+
+    @Override
+    public void enterIdName(AsciidocParser.IdNameContext ctx) {
+        rawAttList.add(ef.attribute("id", ctx.getText()));
+    }
+
+    @Override
+    public void enterRoleName(AsciidocParser.RoleNameContext ctx) {
+        rawAttList.add(ef.attribute("role", ctx.getText()));
+    }
+
+    @Override
+    public void enterOptionName(AsciidocParser.OptionNameContext ctx) {
+        rawAttList.add(ef.attribute("options", ctx.getText()));
     }
 
     @Override
     public void enterNamedAttribute(AsciidocParser.NamedAttributeContext ctx) {
         String name = ctx.attributeName().getText();
         String value = ctx.attributeValue().getText();
-        if (currentAttributeList != null) {
-            currentAttributeList.add(ef.attribute(name, value));
-        }
+        rawAttList.add(ef.attribute(name, value));
     }
 }

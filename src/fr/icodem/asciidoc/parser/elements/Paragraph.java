@@ -1,10 +1,10 @@
 package fr.icodem.asciidoc.parser.elements;
 
-public class Paragraph extends Element {
+public class Paragraph extends Block {
     private String text;
 
-    public Paragraph(String text) {
-        super(null);
+    public Paragraph(AttributeList attList, String text) {
+        super(attList);
         this.text = text;
     }
 

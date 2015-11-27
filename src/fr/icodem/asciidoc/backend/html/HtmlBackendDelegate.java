@@ -114,9 +114,5 @@ public class HtmlBackendDelegate extends HtmlBaseBackend {
         System.out.println(att);
     }
 
-    @Override
-    public void attributeList(AttributeList attributeList) {
-        System.out.println(attributeList);
-    }
 }
 

@@ -73,10 +73,5 @@ public class HtmlBaseBackend extends AsciidocParserBaseHandler {
         elements.forEach(c);
         return this;
     }
-//    protected <T> HtmlBaseBackend forEach(List<T> elements, IndexedConsumer<T> c) {
-//        for (int i = 0; i < elements.size(); i++) {
-//            c.accept(elements.get(i), i);
-//        }
-//        return this;
-//    }
+
 }
