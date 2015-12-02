@@ -1,27 +1,19 @@
 package fr.icodem.asciidoc.parser;
 
-public class ActionRequest {//TODO change package
-
-    private static int lastId;// TODO to be removed
+public class ActionRequest {
 
     public enum ActionRequestType {
         StartDocument,
         EndDocument,
         DocumentHeader,
-        StartDocumentTitle,
-        EndDocumentTitle,
         StartPreamble,
         EndPreamble,
-        StartTitle,
         StartParagraph,
         StartSection,
-        EndSection,
         StartSectionTitle,
-        //EndSectionTitle
         StartAttributeEntry
     }
 
-    private int id;
     private ActionRequestType type;
     private Runnable action;
     private boolean ready;
@@ -30,8 +22,6 @@ public class ActionRequest {//TODO change package
         this.type = type;
         this.action = action;
         this.ready = ready;
-
-        this.id = ++lastId;
     }
 
     public void ready() {// TODO to be removed ?
@@ -42,10 +32,6 @@ public class ActionRequest {//TODO change package
         this.action = action;
         ready = true;
     }
-
-    public int getId() {
-        return id;
-    }// TODO not used : to be removed ?
 
     public ActionRequestType getType() {
         return type;
@@ -62,7 +48,6 @@ public class ActionRequest {//TODO change package
     @Override
     public String toString() {
         return "ActionRequest{" +
-                "id=" + id +
                 ", type=" + type +
                 ", ready=" + ready +
                 '}';
