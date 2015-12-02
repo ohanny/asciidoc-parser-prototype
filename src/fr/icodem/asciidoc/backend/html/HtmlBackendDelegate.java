@@ -9,10 +9,6 @@ import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 
 public class HtmlBackendDelegate extends HtmlBaseBackend {
 
-    // If document title is not present, the first detected section title is used.
-    // If no section is present in document, then title is equal to "Untitled"
-    //String fallbackDocumentTitle = "Untitled";
-
     public HtmlBackendDelegate(Writer writer) {
         super(writer);
     }
@@ -78,7 +74,7 @@ public class HtmlBackendDelegate extends HtmlBaseBackend {
     public void endDocument() {
         decrementIndentLevel().indent().append(DIV.end()).nl() // content end
             .append(BODY.end()).nl()
-                    .decrementIndentLevel().append(HTML.end());
+            .decrementIndentLevel().append(HTML.end());
 
         closeWriter();
     }

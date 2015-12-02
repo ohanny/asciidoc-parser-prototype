@@ -1,8 +1,8 @@
-package fr.icodem.asciidoc.backend.html;
+package fr.icodem.asciidoc.parser;
 
-public class ActionRequest {
+public class ActionRequest {//TODO change package
 
-    private static int lastId;
+    private static int lastId;// TODO to be removed
 
     public enum ActionRequestType {
         StartDocument,
@@ -34,13 +34,18 @@ public class ActionRequest {
         this.id = ++lastId;
     }
 
-    public void ready() {
+    public void ready() {// TODO to be removed ?
+        ready = true;
+    }
+
+    public void ready(Runnable action) {
+        this.action = action;
         ready = true;
     }
 
     public int getId() {
         return id;
-    }
+    }// TODO not used : to be removed ?
 
     public ActionRequestType getType() {
         return type;

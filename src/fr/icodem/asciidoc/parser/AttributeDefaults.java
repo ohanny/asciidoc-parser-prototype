@@ -13,14 +13,18 @@ public enum AttributeDefaults {
     private Map<String, AttributeEntry> nameToAttributeMap = new HashMap<>();
 
     AttributeDefaults() {
-        addEntry("backend", "html", false);
-        addEntry("doctype", "article", false);
-        addEntry("doctitle", "Untitled", false);
+        addEntry("backend", "html");
+        addEntry("doctype", "article");
+        addEntry("doctitle", "Untitled");
+    }
+
+    private void addEntry(String name, String value) {
+        ElementFactory ef = new ElementFactory();
+        nameToAttributeMap.put(name, ef.attributeEntry(name, value, false));
     }
 
     private void addEntry(String name, String value, boolean disabled) {
         ElementFactory ef = new ElementFactory();
-        //nameToAttributeMap.put("doctype", ef.attributeEntry("doctype", "article", true));
         nameToAttributeMap.put(name, ef.attributeEntry(name, value, disabled));
     }
 

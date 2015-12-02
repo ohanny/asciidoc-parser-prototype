@@ -1,21 +1,19 @@
 package fr.icodem.asciidoc.parser;
 
-import fr.icodem.asciidoc.backend.html.HtmlBackend;
+import fr.icodem.asciidoc.backend.html.HtmlBackendDelegate;
 import fr.icodem.asciidoc.parser.elements.AttributeEntry;
 import org.junit.Test;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 public class HeaderTest {
 
     @Test
     public void test() throws Exception {
 
-        String text = "//= Hello\n" +
+        String text = "= Hello\n" +
                       "John Doe; Roger Rabbit <roger@mail.com>\n" +
                       ":fruit: kiwi\n" +
                       ":fruit2!:\n" +
@@ -40,7 +38,8 @@ public class HeaderTest {
         List<AttributeEntry> attributes = new ArrayList<>();
 
         StringWriter writer = new StringWriter();
-        new AsciidocAntlrProcessor(new HtmlBackend(writer), attributes).parse(text);
+        //new AsciidocAntlrProcessor(new HtmlBackend(writer), attributes).parse(text);
+        new AsciidocAntlrProcessor(new HtmlBackendDelegate(writer), attributes).parse(text);
 
         System.out.println(writer);
 
