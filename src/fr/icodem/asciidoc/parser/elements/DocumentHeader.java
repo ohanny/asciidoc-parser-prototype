@@ -14,7 +14,7 @@ public class DocumentHeader {
     public DocumentHeader(Title title, List<Author> authors,
                     Map<String, AttributeEntry> nameToAttributeMap, boolean headerPresent) {
         this.title = title;
-        this.authors = authors;
+        this.authors = Collections.unmodifiableList(authors);
         this.nameToAttributeMap = nameToAttributeMap;
         this.headerPresent = headerPresent;
 
@@ -28,7 +28,7 @@ public class DocumentHeader {
     }
 
     public List<Author> getAuthors() {
-        return Collections.unmodifiableList(authors);
+        return authors;
     }
 
     public String getAttributeValue(String name) {
