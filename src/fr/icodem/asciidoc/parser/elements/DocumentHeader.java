@@ -1,6 +1,5 @@
 package fr.icodem.asciidoc.parser.elements;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +13,7 @@ public class DocumentHeader {
     public DocumentHeader(Title title, List<Author> authors,
                     Map<String, AttributeEntry> nameToAttributeMap, boolean headerPresent) {
         this.title = title;
-        this.authors = Collections.unmodifiableList(authors);
+        this.authors = authors;
         this.nameToAttributeMap = nameToAttributeMap;
         this.headerPresent = headerPresent;
 
