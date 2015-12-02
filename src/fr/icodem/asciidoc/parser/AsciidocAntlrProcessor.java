@@ -65,62 +65,12 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     private String currentTitle;
     private List<Attribute> rawAttList;
 
-    // threading purpose
-    private BlockingQueue<ActionRequest> tasks = new ArrayBlockingQueue<>(1024);
-    private Semaphore semaphore = new Semaphore(0);
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private AtomicBoolean parsingComplete = new AtomicBoolean();
-    private CyclicBarrier barrier = new CyclicBarrier(2);
-
-
+    private HandlerNotificationsEmitter emitter;
 
     public AsciidocAntlrProcessor(AsciidocParserHandler handler, List<AttributeEntry> attributes) {
         super(handler, attributes);
 
-        Runnable actionTask = () -> {
-            try {
-                // process ready tasks
-                while (!parsingComplete.get()) {
-                    semaphore.acquire();
-                    processReadyRequests();
-                }
-
-                // parsing is finished, do a last check
-                processReadyRequests();
-
-                // notify arrival to barrier
-                barrier.await();
-            } catch (BrokenBarrierException | InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        };
-        executorService.execute(actionTask);
-    }
-
-    private void processReadyRequests() throws InterruptedException {
-        ActionRequest ar = tasks.peek();
-        while (ar != null && ar.isReady()) {
-            tasks.take().getAction().run();
-            ar = tasks.peek();
-        }
-    }
-
-    private void addActionRequest(ActionRequest.ActionRequestType type,
-                                  Runnable runnable, boolean ready) {
-        try {
-            ActionRequest req = new ActionRequest(type, runnable, ready);
-            tasks.put(req);
-            // unlock outputter thread if locked
-            if (semaphore.getQueueLength() == 1) {
-                ActionRequest ar = tasks.peek();
-                if (ar != null && ar.isReady()) {
-                    semaphore.release();
-                }
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        emitter = new HandlerNotificationsEmitter();
     }
 
     private AttributeList consumeAttList() {
@@ -148,34 +98,13 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     @Override
     public void enterDocument(AsciidocParser.DocumentContext ctx) {
         headerInfo = new HeaderInfoHolder();
-        addActionRequest(StartDocument, () -> handler.startDocument(), true);
+        emitter.addActionRequest(StartDocument, () -> handler.startDocument(), true);
     }
 
     @Override
     public void exitDocument(AsciidocParser.DocumentContext ctx) {
-
-        addActionRequest(EndDocument, () -> handler.endDocument(), true);
-
-        // mark end of parsing
-        parsingComplete.set(true);
-
-        // end of parsing, mark every action ready
-        tasks.stream().filter(ar -> !ar.isReady()).forEach(ar -> ar.ready());
-
-        // unlock outputter thread if locked
-        if (semaphore.getQueueLength() == 1) {
-            semaphore.release();
-        }
-
-
-        // notify arrival to barrier (wait for writer thread to finish)
-        try {
-            barrier.await();
-        } catch (BrokenBarrierException  | InterruptedException e) {
-            e.printStackTrace();
-        }
-        executorService.shutdown();
-
+        emitter.addActionRequest(EndDocument, () -> handler.endDocument(), true);
+        emitter.parsingComplete();
     }
 
     @Override
@@ -196,7 +125,7 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
             DocumentHeader header = headerInfo.getHeader();
             boolean ready = headerInfo.headerPresent;
 
-            addActionRequest(DocumentHeader, () -> handler.documentHeader(header), ready);
+            emitter.addActionRequest(DocumentHeader, () -> handler.documentHeader(header), ready);
             headerInfo.documentHeaderNotified = true;
         }
     }
@@ -209,12 +138,12 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     @Override
     public void enterPreamble(AsciidocParser.PreambleContext ctx) {
-        addActionRequest(StartPreamble, () -> handler.startPreamble(), true);
+        emitter.addActionRequest(StartPreamble, () -> handler.startPreamble(), true);
     }
 
     @Override
     public void exitPreamble(AsciidocParser.PreambleContext ctx) {
-        addActionRequest(EndPreamble, () -> handler.endPreamble(), true);
+        emitter.addActionRequest(EndPreamble, () -> handler.endPreamble(), true);
     }
 
     @Override
@@ -232,19 +161,19 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     public void enterParagraph(AsciidocParser.ParagraphContext ctx) {
         String text = ctx.getText().trim();
         Paragraph p = ef.paragraph(consumeAttList(), text);
-        addActionRequest(StartParagraph, () -> handler.startParagraph(p), true);
+        emitter.addActionRequest(StartParagraph, () -> handler.startParagraph(p), true);
     }
 
     @Override
     public void enterSection(AsciidocParser.SectionContext ctx) {
         Section section = ef.section();
-        addActionRequest(StartSection, () -> handler.startSection(section), true);
+        emitter.addActionRequest(StartSection, () -> handler.startSection(section), true);
     }
 
     @Override
     public void exitSection(AsciidocParser.SectionContext ctx) {
         Section section = ef.section();
-        addActionRequest(StartSection, () -> handler.endSection(section), true);
+        emitter.addActionRequest(StartSection, () -> handler.endSection(section), true);
     }
 
     @Override
@@ -262,21 +191,11 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
             headerInfo.setTitle(ef.title(currentTitle));
 
             DocumentHeader header = headerInfo.getHeader();
-            tasks.stream()
-                 .filter(ar -> ar.getType().equals(DocumentHeader))
-                 .findFirst()
-                 .ifPresent(ar -> ar.ready(() -> handler.documentHeader(header)));
-
-            // unlock outputter thread if locked
-            if (semaphore.getQueueLength() == 1) {
-                ActionRequest ar = tasks.peek();
-                if (ar != null && ar.isReady()) {
-                    semaphore.release();
-                }
-            }
+            emitter.markFirstReady(DocumentHeader, () -> handler.documentHeader(header));
+            emitter.releaseBackend();
 
         }
-        addActionRequest(StartSectionTitle, () -> handler.startSectionTitle(sectionTitle), true);
+        emitter.addActionRequest(StartSectionTitle, () -> handler.startSectionTitle(sectionTitle), true);
 
         currentTitle = null;
 
@@ -305,7 +224,7 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         if (!headerInfo.documentHeaderNotified) {
             headerInfo.addAttribute(att);
         } else {
-            addActionRequest(StartAttributeEntry, () -> handler.startAttributeEntry(att), true);
+            emitter.addActionRequest(StartAttributeEntry, () -> handler.startAttributeEntry(att), true);
         }
     }
 
