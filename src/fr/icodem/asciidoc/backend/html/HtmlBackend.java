@@ -25,7 +25,6 @@ public class HtmlBackend extends HtmlBaseBackend {
 
     @Override
     public void documentHeader(DocumentHeader header) {
-        //String title = (header.getTitle() != null)?header.getTitle().getText():fallbackDocumentTitle;
 
         runIf(header.isAuthorsPresent(),
                 () -> indent().append(META.tag("name", "author", "content",
