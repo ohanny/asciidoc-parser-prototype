@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser;
 
-public class ActionRequest {
+class ActionRequest {
 
     public enum ActionRequestType {
         StartDocument,

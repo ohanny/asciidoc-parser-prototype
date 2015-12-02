@@ -13,18 +13,19 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static fr.icodem.asciidoc.parser.ActionRequest.ActionRequestType.*;
-import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
-    private class ModifiableDocument {
+    private class HeaderInfoHolder {
         Title title;
         List<Author> authors;
         Map<String, AttributeEntry> nameToAttributeMap;
         boolean headerPresent;
+        boolean documentTitleUndefined = true;
+        boolean documentHeaderNotified;
 
-        ModifiableDocument() {
+        HeaderInfoHolder() {
             authors = new ArrayList<>();
             nameToAttributeMap = AttributeDefaults.Instance.getAttributes();
         }
@@ -42,8 +43,7 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         }
 
         int getNextAuthorPosition() {
-            int position = (authors == null)?1:authors.size() + 1;
-            return position;
+            return (authors == null)?1:authors.size() + 1;
         }
 
         void setHeaderPresent(boolean headerPresent) {
@@ -61,21 +61,26 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     }
 
-    private ModifiableDocument document;
-    private boolean documentNotified;
-
+    private HeaderInfoHolder headerInfo;
     private String currentTitle;
-
     private List<Attribute> rawAttList;
+
+    // threading purpose
+    private BlockingQueue<ActionRequest> tasks = new ArrayBlockingQueue<>(1024);
+    private Semaphore semaphore = new Semaphore(0);
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private AtomicBoolean parsingComplete = new AtomicBoolean();
+    private CyclicBarrier barrier = new CyclicBarrier(2);
+
+
 
     public AsciidocAntlrProcessor(AsciidocParserHandler handler, List<AttributeEntry> attributes) {
         super(handler, attributes);
 
-        ///// REFACTORING
         Runnable actionTask = () -> {
             try {
                 // process ready tasks
-                while (!parsingFinished.get()) {
+                while (!parsingComplete.get()) {
                     semaphore.acquire();
                     processReadyRequests();
                 }
@@ -91,18 +96,7 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
         };
         executorService.execute(actionTask);
-        /////
     }
-
-    ///// REFACTORING
-    private BlockingQueue<ActionRequest> tasks = new ArrayBlockingQueue<>(1024);
-    private Semaphore semaphore = new Semaphore(0);
-    private ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private AtomicBoolean parsingFinished = new AtomicBoolean();
-    private CyclicBarrier barrier = new CyclicBarrier(2);
-
-    //private HtmlBackendDelegate delegate;
-    private boolean documentTitleUndefined = true;
 
     private void processReadyRequests() throws InterruptedException {
         ActionRequest ar = tasks.peek();
@@ -129,9 +123,6 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         }
     }
 
-    /////
-
-
     private AttributeList consumeAttList() {
         AttributeList attList = ef.attributeList(rawAttList);
         rawAttList = null;// consumed
@@ -156,20 +147,17 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     @Override
     public void enterDocument(AsciidocParser.DocumentContext ctx) {
-        document = new ModifiableDocument();
-        //handler.startDocument();
+        headerInfo = new HeaderInfoHolder();
         addActionRequest(StartDocument, () -> handler.startDocument(), true);
     }
 
     @Override
     public void exitDocument(AsciidocParser.DocumentContext ctx) {
-        //notifyDocumentIfNotDone();// TODO
 
-        //handler.endDocument();
         addActionRequest(EndDocument, () -> handler.endDocument(), true);
 
         // mark end of parsing
-        parsingFinished.set(true);
+        parsingComplete.set(true);
 
         // end of parsing, mark every action ready
         tasks.stream().filter(ar -> !ar.isReady()).forEach(ar -> ar.ready());
@@ -198,46 +186,40 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     @Override
     public void exitDocumentTitle(AsciidocParser.DocumentTitleContext ctx) {
         if (currentTitle != null) {
-            document.setTitle(ef.title(currentTitle));
+            headerInfo.setTitle(ef.title(currentTitle));
             currentTitle = null;
         }
     }
 
-    private void notifyDocumentIfNotDone() {// TODO rename method
-        if (!documentNotified) {
-            //handler.documentHeader(document.getHeader());
-            //DocumentHeader header = document.getHeader();//TODO remove
-            //boolean ready = header.getTitle() != null;// TODO find another way to compute ready
-
-            DocumentHeader header = document.getHeader();
-            boolean ready = document.headerPresent;
+    private void notifyDocumentHeaderIfNotDone() {
+        if (!headerInfo.documentHeaderNotified) {
+            DocumentHeader header = headerInfo.getHeader();
+            boolean ready = headerInfo.headerPresent;
 
             addActionRequest(DocumentHeader, () -> handler.documentHeader(header), ready);
-            documentNotified = true;
+            headerInfo.documentHeaderNotified = true;
         }
     }
 
     @Override
     public void exitHeader(AsciidocParser.HeaderContext ctx) {
-        document.setHeaderPresent(true);
-        notifyDocumentIfNotDone();
+        headerInfo.setHeaderPresent(true);
+        notifyDocumentHeaderIfNotDone();
     }
 
     @Override
     public void enterPreamble(AsciidocParser.PreambleContext ctx) {
-        //handler.startPreamble();
         addActionRequest(StartPreamble, () -> handler.startPreamble(), true);
     }
 
     @Override
     public void exitPreamble(AsciidocParser.PreambleContext ctx) {
-        //handler.endPreamble();
         addActionRequest(EndPreamble, () -> handler.endPreamble(), true);
     }
 
     @Override
     public void enterContent(AsciidocParser.ContentContext ctx) {
-        notifyDocumentIfNotDone();// TODO
+        notifyDocumentHeaderIfNotDone();
     }
 
     @Override
@@ -250,20 +232,17 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     public void enterParagraph(AsciidocParser.ParagraphContext ctx) {
         String text = ctx.getText().trim();
         Paragraph p = ef.paragraph(consumeAttList(), text);
-        //handler.startParagraph(ef.paragraph(consumeAttList(), text));
         addActionRequest(StartParagraph, () -> handler.startParagraph(p), true);
     }
 
     @Override
     public void enterSection(AsciidocParser.SectionContext ctx) {
-        //handler.startSection(ef.section());
         Section section = ef.section();
         addActionRequest(StartSection, () -> handler.startSection(section), true);
     }
 
     @Override
     public void exitSection(AsciidocParser.SectionContext ctx) {
-        //handler.endSection(ef.section());
         Section section = ef.section();
         addActionRequest(StartSection, () -> handler.endSection(section), true);
     }
@@ -277,19 +256,17 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     public void exitSectionTitle(AsciidocParser.SectionTitleContext ctx) {
         int level = min(ctx.EQ().size(), 6);
         SectionTitle sectionTitle = ef.sectionTitle(level, currentTitle);
-        //handler.startSectionTitle(ef.sectionTitle(level, currentTitle));
 
-        if (documentTitleUndefined) {
-            //delegate.fallbackDocumentTitle = sectionTitle.getText();
-            documentTitleUndefined = false;                 // TODO
-            document.setTitle(ef.title(currentTitle));
-            //notifyDocumentIfNotDone();    // TODO
-            //tasks.stream().filter(ar -> ar.getType().equals(DocumentHeader)).findFirst().ifPresent(ar -> ar.ready());
-            DocumentHeader header = document.getHeader();
+        if (headerInfo.documentTitleUndefined) {
+            headerInfo.documentTitleUndefined = false;
+            headerInfo.setTitle(ef.title(currentTitle));
+
+            DocumentHeader header = headerInfo.getHeader();
             tasks.stream()
                  .filter(ar -> ar.getType().equals(DocumentHeader))
                  .findFirst()
                  .ifPresent(ar -> ar.ready(() -> handler.documentHeader(header)));
+
             // unlock outputter thread if locked
             if (semaphore.getQueueLength() == 1) {
                 ActionRequest ar = tasks.peek();
@@ -310,8 +287,8 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         final String address = (ctx.authorAddress() == null)?
                 null:ctx.authorAddress().getText();
         Author author = ef.author(null, ctx.authorName().getText().trim(),
-                address, document.getNextAuthorPosition());
-        document.addAuthor(author);
+                address, headerInfo.getNextAuthorPosition());
+        headerInfo.addAuthor(author);
     }
 
     @Override
@@ -325,10 +302,9 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
         AttributeEntry att = ef.attributeEntry(ctx.attributeName().getText(), value, enabled);
 
-        if (!documentNotified) {
-            document.addAttribute(att);
+        if (!headerInfo.documentHeaderNotified) {
+            headerInfo.addAttribute(att);
         } else {
-            //handler.startAttributeEntry(att);
             addActionRequest(StartAttributeEntry, () -> handler.startAttributeEntry(att), true);
         }
     }
