@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 
-public class HtmlBackendDelegate extends HtmlBaseBackend {
+public class HtmlBackend extends HtmlBaseBackend {
 
-    public HtmlBackendDelegate(Writer writer) {
+    public HtmlBackend(Writer writer) {
         super(writer);
     }
 

@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser;
 
-import fr.icodem.asciidoc.backend.html.HtmlBackendDelegate;
+import fr.icodem.asciidoc.backend.html.HtmlBackend;
 import fr.icodem.asciidoc.parser.elements.AttributeEntry;
 import org.junit.Test;
 
@@ -38,8 +38,7 @@ public class HeaderTest {
         List<AttributeEntry> attributes = new ArrayList<>();
 
         StringWriter writer = new StringWriter();
-        //new AsciidocAntlrProcessor(new HtmlBackend(writer), attributes).parse(text);
-        new AsciidocAntlrProcessor(new HtmlBackendDelegate(writer), attributes).parse(text);
+        new AsciidocAntlrProcessor(new HtmlBackend(writer), attributes).parse(text);
 
         System.out.println(writer);
 
