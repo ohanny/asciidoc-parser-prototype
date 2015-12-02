@@ -17,50 +17,6 @@ import static java.lang.Math.min;
 
 public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
-    private class HeaderInfoHolder {
-        Title title;
-        List<Author> authors;
-        Map<String, AttributeEntry> nameToAttributeMap;
-        boolean headerPresent;
-        boolean documentTitleUndefined = true;
-        boolean documentHeaderNotified;
-
-        HeaderInfoHolder() {
-            authors = new ArrayList<>();
-            nameToAttributeMap = AttributeDefaults.Instance.getAttributes();
-        }
-
-        void setTitle(Title title) {
-            this.title = title;
-        }
-
-        void addAttribute(AttributeEntry att) {
-            this.nameToAttributeMap.put(att.getName(), att);
-        }
-
-        void addAuthor(Author author) {
-            this.authors.add(author);
-        }
-
-        int getNextAuthorPosition() {
-            return (authors == null)?1:authors.size() + 1;
-        }
-
-        void setHeaderPresent(boolean headerPresent) {
-            this.headerPresent = headerPresent;
-        }
-
-        DocumentHeader getHeader() {
-            Title title = (this.title == null)?null:ef.title(this.title.getText());
-
-            return ef.documentHeader(title,
-                               Collections.unmodifiableList(authors),
-                               Collections.unmodifiableMap(nameToAttributeMap),
-                               headerPresent);
-        }
-
-    }
-
     private HeaderInfoHolder headerInfo;
     private String currentTitle;
     private List<Attribute> rawAttList;
