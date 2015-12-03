@@ -88,7 +88,7 @@ public class HandlerNotificationsEmitter {
                 .ifPresent(ar -> ar.ready(runnable));
     }
 
-    public void releaseBackend() {
+    public void releaseListener() {
         // unlock outputter thread if locked
         if (semaphore.getQueueLength() == 1) {
             ActionRequest ar = tasks.peek();

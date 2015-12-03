@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-class HeaderInfoHolder {
+class HeaderContext {
     Title title;
     List<Author> authors;
     Map<String, AttributeEntry> nameToAttributeMap;
@@ -15,7 +15,7 @@ class HeaderInfoHolder {
     boolean documentTitleUndefined = true;
     boolean documentHeaderNotified;
 
-    HeaderInfoHolder() {
+    HeaderContext() {
         authors = new ArrayList<>();
         nameToAttributeMap = AttributeDefaults.Instance.getAttributes();
     }

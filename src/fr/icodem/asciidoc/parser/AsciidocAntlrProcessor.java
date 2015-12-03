@@ -9,15 +9,13 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static fr.icodem.asciidoc.parser.ActionRequest.ActionRequestType.*;
 import static java.lang.Math.min;
 
 public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
-    private HeaderInfoHolder headerInfo;
+    private HeaderContext headerContext;
     private String currentTitle;
     private List<Attribute> rawAttList;
 
@@ -34,6 +32,16 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         rawAttList = null;// consumed
 
         return attList;
+    }
+
+    private void notifyDocumentHeaderIfNotDone() {
+        if (!headerContext.documentHeaderNotified) {
+            DocumentHeader header = headerContext.getHeader();
+            boolean ready = headerContext.headerPresent;
+
+            emitter.addActionRequest(DocumentHeader, () -> handler.documentHeader(header), ready);
+            headerContext.documentHeaderNotified = true;
+        }
     }
 
     @Override
@@ -53,7 +61,7 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     @Override
     public void enterDocument(AsciidocParser.DocumentContext ctx) {
-        headerInfo = new HeaderInfoHolder();
+        headerContext = new HeaderContext();
         emitter.addActionRequest(StartDocument, () -> handler.startDocument(), true);
     }
 
@@ -71,90 +79,15 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     @Override
     public void exitDocumentTitle(AsciidocParser.DocumentTitleContext ctx) {
         if (currentTitle != null) {
-            headerInfo.setTitle(ef.title(currentTitle));
+            headerContext.setTitle(ef.title(currentTitle));
             currentTitle = null;
-        }
-    }
-
-    private void notifyDocumentHeaderIfNotDone() {
-        if (!headerInfo.documentHeaderNotified) {
-            DocumentHeader header = headerInfo.getHeader();
-            boolean ready = headerInfo.headerPresent;
-
-            emitter.addActionRequest(DocumentHeader, () -> handler.documentHeader(header), ready);
-            headerInfo.documentHeaderNotified = true;
         }
     }
 
     @Override
     public void exitHeader(AsciidocParser.HeaderContext ctx) {
-        headerInfo.setHeaderPresent(true);
+        headerContext.setHeaderPresent(true);
         notifyDocumentHeaderIfNotDone();
-    }
-
-    @Override
-    public void enterPreamble(AsciidocParser.PreambleContext ctx) {
-        emitter.addActionRequest(StartPreamble, () -> handler.startPreamble(), true);
-    }
-
-    @Override
-    public void exitPreamble(AsciidocParser.PreambleContext ctx) {
-        emitter.addActionRequest(EndPreamble, () -> handler.endPreamble(), true);
-    }
-
-    @Override
-    public void enterContent(AsciidocParser.ContentContext ctx) {
-        notifyDocumentHeaderIfNotDone();
-    }
-
-    @Override
-    public void enterTitle(AsciidocParser.TitleContext ctx) {
-        currentTitle = ctx.getText();
-    }
-
-
-    @Override
-    public void enterParagraph(AsciidocParser.ParagraphContext ctx) {
-        String text = ctx.getText().trim();
-        Paragraph p = ef.paragraph(consumeAttList(), text);
-        emitter.addActionRequest(StartParagraph, () -> handler.startParagraph(p), true);
-    }
-
-    @Override
-    public void enterSection(AsciidocParser.SectionContext ctx) {
-        Section section = ef.section();
-        emitter.addActionRequest(StartSection, () -> handler.startSection(section), true);
-    }
-
-    @Override
-    public void exitSection(AsciidocParser.SectionContext ctx) {
-        Section section = ef.section();
-        emitter.addActionRequest(StartSection, () -> handler.endSection(section), true);
-    }
-
-    @Override
-    public void enterSectionTitle(AsciidocParser.SectionTitleContext ctx) {
-        currentTitle = null;
-    }
-
-    @Override
-    public void exitSectionTitle(AsciidocParser.SectionTitleContext ctx) {
-        int level = min(ctx.EQ().size(), 6);
-        SectionTitle sectionTitle = ef.sectionTitle(level, currentTitle);
-
-        if (headerInfo.documentTitleUndefined) {
-            headerInfo.documentTitleUndefined = false;
-            headerInfo.setTitle(ef.title(currentTitle));
-
-            DocumentHeader header = headerInfo.getHeader();
-            emitter.markFirstReady(DocumentHeader, () -> handler.documentHeader(header));
-            emitter.releaseBackend();
-
-        }
-        emitter.addActionRequest(StartSectionTitle, () -> handler.startSectionTitle(sectionTitle), true);
-
-        currentTitle = null;
-
     }
 
     @Override
@@ -162,8 +95,8 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         final String address = (ctx.authorAddress() == null)?
                 null:ctx.authorAddress().getText();
         Author author = ef.author(null, ctx.authorName().getText().trim(),
-                address, headerInfo.getNextAuthorPosition());
-        headerInfo.addAuthor(author);
+                address, headerContext.getNextAuthorPosition());
+        headerContext.addAuthor(author);
     }
 
     @Override
@@ -177,8 +110,8 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
         AttributeEntry att = ef.attributeEntry(ctx.attributeName().getText(), value, enabled);
 
-        if (!headerInfo.documentHeaderNotified) {
-            headerInfo.addAttribute(att);
+        if (!headerContext.documentHeaderNotified) {
+            headerContext.addAttribute(att);
         } else {
             emitter.addActionRequest(StartAttributeEntry, () -> handler.startAttributeEntry(att), true);
         }
@@ -217,5 +150,79 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         String name = ctx.attributeName().getText();
         String value = ctx.attributeValue().getText();
         rawAttList.add(ef.attribute(name, value));
+    }
+
+    @Override
+    public void enterPreamble(AsciidocParser.PreambleContext ctx) {
+        emitter.addActionRequest(StartPreamble, () -> handler.startPreamble(), true);
+    }
+
+    @Override
+    public void exitPreamble(AsciidocParser.PreambleContext ctx) {
+        emitter.addActionRequest(EndPreamble, () -> handler.endPreamble(), true);
+    }
+
+    @Override
+    public void enterContent(AsciidocParser.ContentContext ctx) {
+        notifyDocumentHeaderIfNotDone();
+    }
+
+    @Override
+    public void enterTitle(AsciidocParser.TitleContext ctx) {
+        currentTitle = ctx.getText();
+    }
+
+    @Override
+    public void enterSection(AsciidocParser.SectionContext ctx) {
+        Section section = ef.section();
+        emitter.addActionRequest(StartSection, () -> handler.startSection(section), true);
+    }
+
+    @Override
+    public void exitSection(AsciidocParser.SectionContext ctx) {
+        Section section = ef.section();
+        emitter.addActionRequest(StartSection, () -> handler.endSection(section), true);
+    }
+
+    @Override
+    public void enterSectionTitle(AsciidocParser.SectionTitleContext ctx) {
+        currentTitle = null;
+    }
+
+    @Override
+    public void exitSectionTitle(AsciidocParser.SectionTitleContext ctx) {
+        int level = min(ctx.EQ().size(), 6);
+        SectionTitle sectionTitle = ef.sectionTitle(level, currentTitle);
+
+        if (headerContext.documentTitleUndefined) {
+            headerContext.documentTitleUndefined = false;
+            headerContext.setTitle(ef.title(currentTitle));
+
+            DocumentHeader header = headerContext.getHeader();
+            emitter.markFirstReady(DocumentHeader, () -> handler.documentHeader(header));
+            emitter.releaseListener();
+
+        }
+        emitter.addActionRequest(StartSectionTitle, () -> handler.startSectionTitle(sectionTitle), true);
+
+        currentTitle = null;
+
+    }
+
+    @Override
+    public void enterParagraph(AsciidocParser.ParagraphContext ctx) {
+        String text = ctx.getText().trim();
+        Paragraph p = ef.paragraph(consumeAttList(), text);
+        emitter.addActionRequest(StartParagraph, () -> handler.startParagraph(p), true);
+    }
+
+    @Override
+    public void enterList(AsciidocParser.ListContext ctx) {
+
+    }
+
+    @Override
+    public void enterListItem(AsciidocParser.ListItemContext ctx) {
+
     }
 }
