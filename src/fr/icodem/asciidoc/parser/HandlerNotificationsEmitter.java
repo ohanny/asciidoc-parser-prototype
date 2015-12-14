@@ -43,6 +43,11 @@ public class HandlerNotificationsEmitter {
     }
 
     public void addActionRequest(ActionRequest.ActionRequestType type,
+                                  Runnable runnable) {
+        addActionRequest(type, runnable, true);
+    }
+
+    public void addActionRequest(ActionRequest.ActionRequestType type,
                                   Runnable runnable, boolean ready) {
         try {
             ActionRequest req = new ActionRequest(type, runnable, ready);

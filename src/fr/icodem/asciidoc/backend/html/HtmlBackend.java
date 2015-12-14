@@ -3,6 +3,11 @@ package fr.icodem.asciidoc.backend.html;
 import fr.icodem.asciidoc.parser.elements.*;
 
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
@@ -11,6 +16,12 @@ public class HtmlBackend extends HtmlBaseBackend {
 
     public HtmlBackend(Writer writer) {
         super(writer);
+    }
+
+    private void addBlock(Block b) {
+        if (b instanceof Paragraph) {
+            addParagraph((Paragraph) b);
+        }
     }
 
     @Override
@@ -80,6 +91,10 @@ public class HtmlBackend extends HtmlBaseBackend {
 
     @Override
     public void startParagraph(Paragraph p) {
+        addParagraph(p);
+    }
+
+    private void addParagraph(Paragraph p) {
         indent().append(DIV.start("class", "paragraph")).nl()
                 .incrementIndentLevel()
                 .indent().append(P.start())
@@ -88,6 +103,56 @@ public class HtmlBackend extends HtmlBaseBackend {
                 .decrementIndentLevel()
                 .indent().append(DIV.end())
                 .nl();
+    }
+
+    private void addList(AbstractList list) {
+        if (list instanceof UnorderedList) {
+            addUnorderedList((UnorderedList) list);
+        }
+        else if (list instanceof OrderedList) {
+            addOrderedList((OrderedList) list);
+        }
+    }
+
+    private void addUnorderedList(UnorderedList list) {
+        indent().append(DIV.start("class", "ulist")).nl().incrementIndentLevel()
+                .indent().append(UL.start()).nl().incrementIndentLevel()
+                .forEach(list.getItems(), this::addListItem)
+                .decrementIndentLevel().indent().append(UL.end()).nl()
+                .decrementIndentLevel().indent().append(DIV.end()).nl();
+    }
+
+    private void addOrderedList(OrderedList list) {
+        CssElement css = CssElement.getOrderedListNumerationStyle(list.getFirstPositionalAttribute());
+        if (css == null) {
+            css = CssElement.getOrderedListNumerationStyle(list.getLevel());
+        }
+
+        String divStyles = "olist " + css.getOrderedListNumerationStyleName();
+        String olStyle = css.getOrderedListNumerationStyleName();
+        String olType = css.getOrderedListNumerationType();
+
+        indent().append(DIV.start("class", divStyles)).nl().incrementIndentLevel()
+                .runIf(olType == null, () -> indent().append(OL.start("class", olStyle)).nl().incrementIndentLevel())
+                .runIf(olType != null, () -> indent().append(OL.start("class", olStyle, "type", olType)).nl().incrementIndentLevel())
+                .forEach(list.getItems(), this::addListItem)
+                .decrementIndentLevel().indent().append(OL.end()).nl()
+                .decrementIndentLevel().indent().append(DIV.end()).nl();
+    }
+
+    private void addListItem(ListItem li) {
+        indent().append(LI.start()).nl().incrementIndentLevel()
+                .indent().append(P.start()).append(li.getText())
+                .append(P.end()).nl()
+                .runIf(li.hasNestedList(), () -> addList(li.getNestedList()))
+                .forEach(li.getBlocks(), this::addBlock)
+                .decrementIndentLevel().indent().append(LI.end()).nl();
+    }
+
+    @Override
+    public void visitList(AbstractList list) {
+        System.out.println(list);
+        addList(list);
     }
 
     @Override
@@ -105,11 +170,6 @@ public class HtmlBackend extends HtmlBaseBackend {
         indent().append(getTitleHeader(sectionTitle.getLevel()).start())
                 .append(sectionTitle.getText())
                 .append(getTitleHeader(sectionTitle.getLevel()).end()).nl();
-    }
-
-    @Override
-    public void startAttributeEntry(AttributeEntry att) {
-        System.out.println(att);
     }
 
 }

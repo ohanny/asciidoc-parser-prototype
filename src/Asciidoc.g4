@@ -33,8 +33,10 @@ grammar Asciidoc;
         boolean nextCharIsBL = isStartOfBlankLineAtIndex(2, false);
         boolean nextCharIsListItem = isStartOfListItemAtIndex(2);
         boolean nextCharIsListContinuation = isStartOfListContinuationAtIndex(2);
+        boolean nextCharIsAttributeList = isStartOfAttributeListAtIndex(2);
 
-        return !nextCharIsBL && !nextCharIsListItem && !nextCharIsListContinuation;
+        return !nextCharIsBL && !nextCharIsListItem && !nextCharIsListContinuation
+                && !nextCharIsAttributeList;
     }
 
     private boolean isBlankInParagraph() {
@@ -128,7 +130,6 @@ grammar Asciidoc;
     }
 
 
-
     // ---------------------------------------------------------------
     // 'isStartOfAtIndex' element methods
     // ---------------------------------------------------------------
@@ -200,6 +201,38 @@ grammar Asciidoc;
 
         return false;
     }
+
+    private boolean isStartOfAttributeListAtIndex(int index) {
+        int i = index;
+        int nextChar = _input.LA(i);
+
+        // check start with '['
+        if (nextChar != LSBRACK) return false;
+        nextChar = _input.LA(++i);
+
+        // check attribute name starts with 'other' char
+        if (nextChar != OTHER) return false;
+        nextChar = _input.LA(++i);
+
+        while (nextChar != EOF && nextChar != NL) {
+
+            if (nextChar == RSBRACK) {
+                nextChar = _input.LA(++i);
+                while (nextChar == SP || nextChar == TAB || nextChar == EOF || nextChar == NL || nextChar == CR) {
+                    if (nextChar == EOF || nextChar == NL) {
+                        return true;
+                    }
+                    nextChar = _input.LA(++i);
+                }
+                return false;
+            }
+
+            nextChar = _input.LA(++i);
+        }
+
+        return false;
+    }
+
 
 }
 
@@ -461,6 +494,7 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
       |COLON
       |SEMICOLON
       |BANG
+      |TIMES
       |{isBlankInParagraph()}? NL
       )+ EOF?
     ;
@@ -483,6 +517,7 @@ singleComment
       |COLON
       |SEMICOLON
       |BANG
+      |TIMES
       )*
       (CR? NL|EOF)
     ;
@@ -504,6 +539,7 @@ multiComment
       |COLON
       |SEMICOLON
       |BANG
+      |TIMES
       |QUOTE
       |NL
       )*?
@@ -573,7 +609,8 @@ literalBlockDelimiter
     ;
 
 list
-    : listItem (listItem|{!isCurrentCharEOF()}? bl[false] listItem)*
+    : listItem
+      (({!isCurrentCharEOF()}? bl[false]|nl|attributeList)* listItem)*
     ;
 
 listItem

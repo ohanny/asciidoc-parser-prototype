@@ -157,6 +157,19 @@ public class OrderedListTest extends GrammarTest {
 
                 /* expected */
                 "(document (content (block (list (listItem .   (listItemValue F r u i t s) \\n) (listItem . .   (listItemValue C h e r r y) \\n) (listItem . .   (listItemValue K i w i) \\n) (listItem .   (listItemValue V e g e t a b l e s) \\n) (listItem . .   (listItemValue C a b b a g e) \\n) (listItem . .   (listItemValue S a l a d) \\n) (listItem . . .   (listItemValue G r e e n   s a l a d) \\n) (listItem . . .   (listItemValue R e d   s a l a d) <EOF>)))))"
+            },
+            {
+                /* message */
+                "nested attribute list",
+
+                /* input */
+                ". Apple\n" +
+                "[lowergreek]\n" +
+                ".. Cherry\n" +
+                ".. Kiwi",
+
+                /* expected */
+                "(document (content (block (list (listItem .   (listItemValue A p p l e) \\n) (attributeList [ (positionalAttribute (attributeValue l o w e r g r e e k)) ] \\n) (listItem . .   (listItemValue C h e r r y) \\n) (listItem . .   (listItemValue K i w i) <EOF>)))))"
             }
         });
 

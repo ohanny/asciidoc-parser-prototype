@@ -157,6 +157,17 @@ public class UnorderedListTest extends GrammarTest {
 
                 /* expected */
                 "(document (content (block (list (listItem *   (listItemValue F r u i t s) \\n) (listItem * *   (listItemValue C h e r r y) \\n) (listItem * *   (listItemValue K i w i) \\n) (listItem *   (listItemValue V e g e t a b l e s) \\n) (listItem * *   (listItemValue C a b b a g e) \\n) (listItem * *   (listItemValue S a l a d) \\n) (listItem * * *   (listItemValue G r e e n   s a l a d) \\n) (listItem * * *   (listItemValue R e d   s a l a d) <EOF>)))))"
+            },
+            {
+                /* message */
+                "commented list",
+
+                /* input */
+                "//* Kiwi\n" +
+                "// * Banana",
+
+                /* expected */
+                "(document (singleComment / / *   K i w i \\n) (singleComment / /   *   B a n a n a <EOF>))"
             }
         });
 

@@ -143,6 +143,20 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
 
                 /* expected */
                 "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - \\n)))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOF>))))))))"
+            },
+            {
+                /* message */
+                "a list item continued by source block interspersed in two paragraphs",
+
+                /* input */
+                "* The sun is shining...\n" +
+                "+\n" +
+                "Yes !\n" +
+                "\n" +
+                "* ...and the sky is blue",
+
+                /* expected */
+                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !)))) (nl \\n) (bl \\n) (listItem *   (listItemValue . . . a n d   t h e   s k y   i s   b l u e) <EOF>)))))"
             }
         });
 

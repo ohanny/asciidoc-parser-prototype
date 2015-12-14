@@ -15,4 +15,5 @@ public interface AsciidocParserHandler {
     void endSection(Section section);
     void startSectionTitle(SectionTitle sectionTitle);
     void startAttributeEntry(AttributeEntry att);
+    void visitList(AbstractList list);
 }

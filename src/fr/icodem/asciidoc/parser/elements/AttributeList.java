@@ -67,6 +67,10 @@ public class AttributeList {
 
     }
 
+    public String getFirstPositionalAttribute() {
+        return firstPositionalAttribute;
+    }
+
     public Attribute getAttribute(String name) {
         return attributes.get(name);
     }

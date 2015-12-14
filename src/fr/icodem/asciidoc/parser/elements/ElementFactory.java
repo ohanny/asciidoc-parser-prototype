@@ -41,4 +41,15 @@ public class ElementFactory {
     public Author author(String id, String name, String address, int position) {
         return new Author(id, name, address, position);
     }
+
+    public ListItem listItem(String id, String text, AbstractList nestedList, List<Block> blocks) {
+        return new ListItem(id, text, nestedList, blocks);
+    }
+
+    public OrderedList orderedList(AttributeList attList, List<ListItem> items, int level) {
+        return new OrderedList(attList, items, level);
+    }
+    public UnorderedList unorderedList(AttributeList attList, List<ListItem> items, int level) {
+        return new UnorderedList(attList, items, level);
+    }
 }

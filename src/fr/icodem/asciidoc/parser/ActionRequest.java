@@ -11,7 +11,8 @@ class ActionRequest {
         StartParagraph,
         StartSection,
         StartSectionTitle,
-        StartAttributeEntry
+        StartAttributeEntry,
+        VisitList
     }
 
     private ActionRequestType type;

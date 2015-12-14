@@ -7,7 +7,7 @@ public enum HtmlTag {
     DOCTYPE,
     HTML, BODY, HEAD,
     META, TITLE,
-    DIV, SECTION, P,
+    DIV, SECTION, P, UL, OL, LI,
     H1, H2, H3, H4, H5, H6,
     BR,
     A, SPAN;
@@ -38,6 +38,7 @@ public enum HtmlTag {
                     })
                     .collect(Collectors.joining(" "));
         }
+        if (atts.isEmpty()) atts = null;
         return atts;
     }
 
@@ -74,6 +75,9 @@ public enum HtmlTag {
             case DIV: return buildStartTag("div", attributes);
             case SECTION: return "<section>";
             case P: return "<p>";
+            case UL: return buildStartTag("ul", attributes);
+            case OL: return buildStartTag("ol", attributes);
+            case LI: return buildStartTag("li", attributes);
             case H1: return "<h1>";
             case H2: return "<h2>";
             case H3: return "<h3>";
@@ -95,6 +99,9 @@ public enum HtmlTag {
             case DIV: return "</div>";
             case SECTION: return "</section>";
             case P: return "</p>";
+            case UL: return "</ul>";
+            case OL: return "</ol>";
+            case LI: return "</li>";
             case H1: return "</h1>";
             case H2: return "</h2>";
             case H3: return "</h3>";

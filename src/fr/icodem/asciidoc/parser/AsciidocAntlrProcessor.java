@@ -3,12 +3,14 @@ package fr.icodem.asciidoc.parser;
 import fr.icodem.asciidoc.parser.antlr.AsciidocLexer;
 import fr.icodem.asciidoc.parser.antlr.AsciidocParser;
 import fr.icodem.asciidoc.parser.elements.*;
+import fr.icodem.asciidoc.parser.elements.AbstractList;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.parser.ActionRequest.ActionRequestType.*;
 import static java.lang.Math.min;
@@ -16,8 +18,11 @@ import static java.lang.Math.min;
 public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     private HeaderContext headerContext;
+    private RootListContext rootListContext;
     private String currentTitle;
     private List<Attribute> rawAttList;
+
+    boolean blockNestedInList;
 
     private HandlerNotificationsEmitter emitter;
 
@@ -210,19 +215,95 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     }
 
     @Override
+    public void enterBlock(AsciidocParser.BlockContext ctx) {
+        blockNestedInList = ctx.fromList;
+    }
+
+    @Override
     public void enterParagraph(AsciidocParser.ParagraphContext ctx) {
         String text = ctx.getText().trim();
         Paragraph p = ef.paragraph(consumeAttList(), text);
-        emitter.addActionRequest(StartParagraph, () -> handler.startParagraph(p), true);
+        if (!blockNestedInList) {
+            emitter.addActionRequest(StartParagraph, () -> handler.startParagraph(p), true);
+        } else {
+            rootListContext.addBlockToLastListItem(p);
+        }
     }
 
     @Override
     public void enterList(AsciidocParser.ListContext ctx) {
+        rootListContext = new RootListContext();
+        rootListContext.enterList();
+    }
+
+    private ListItem toListItem(ListItemContext ctx) {
+        List<Block> blocks = null;
+        if (ctx.blocks == null) {
+            blocks = Collections.emptyList();
+        }
+        else {
+            blocks = Collections.unmodifiableList(ctx.blocks);
+        }
+
+        ListItem li = null;
+        if (ctx.nestedList == null) { // leaf
+            li = ef.listItem(null, ctx.text, null, blocks);
+        }
+        else {
+            li = ef.listItem(null, ctx.text, toList(ctx.nestedList), blocks);
+        }
+        return li;
+    }
+
+    private List<ListItem> toListItems(List<ListItemContext> itemsCtx) {
+        return itemsCtx.stream()
+                .map(ctx -> toListItem(ctx))
+                .collect(Collectors.toList());
+    }
+
+    private AbstractList toList(ListContext ctx) {
+        AbstractList list = null;
+        if (ctx.isUnordered()) {
+            list = ef.unorderedList(ctx.attributeList, toListItems(ctx.items), ctx.level);
+        }
+        else if (ctx.isOrdered()) {
+            list = ef.orderedList(ctx.attributeList, toListItems(ctx.items), ctx.level);
+        }
+
+        return list;
+    }
+
+    @Override
+    public void exitList(AsciidocParser.ListContext ctx) {
+        rootListContext.exitList();
+
+        //
+//        rootListContext.flattened()
+//                       .map(l -> l.type)
+//                       .collect(Collectors.toCollection(LinkedList::new))
+//                       .descendingIterator()
+//                       .forEachRemaining(System.out::println);
+
+//        List<ListContext> list = rootListContext.flattened()
+//                       .collect(Collectors.toCollection(LinkedList::new));
+//        Collections.reverse(list);
+
+//        System.out.println("=======================");
+        AbstractList list = toList(rootListContext.listContext);
+        emitter.addActionRequest(VisitList, () -> handler.visitList(list));
+//        System.out.println(l);
+//        System.out.println("=======================");
+
+
+        rootListContext = null;
 
     }
 
     @Override
     public void enterListItem(AsciidocParser.ListItemContext ctx) {
+        AttributeList attList = consumeAttList();
 
+        rootListContext.addItem(ctx.listItemValue().getText(),
+                ctx.TIMES().size(), ctx.DOT().size(), attList);
     }
 }
