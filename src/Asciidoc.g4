@@ -448,7 +448,7 @@ block[boolean fromList]       // argument 'fromList' indicates that block is att
       |sourceBlock
       |literalBlock
       |table
-      |paragraph[$fromList]
+      |paragraph[$fromList] nl?
       )
     ;
 
@@ -610,7 +610,7 @@ literalBlockDelimiter
 
 list
     : listItem
-      (({!isCurrentCharEOF()}? bl[false]|nl|attributeList)* listItem)*
+      (({!isCurrentCharEOF()}? bl[false]|attributeList)* listItem)*
     ;
 
 listItem

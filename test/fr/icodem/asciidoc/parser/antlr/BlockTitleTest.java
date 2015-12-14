@@ -102,7 +102,7 @@ public class BlockTitleTest extends GrammarTest {
                 "b\n",
 
                 /* expected */
-                "(document (content (blockTitle . (title a) \\n) (block (paragraph b)) (nl \\n)) (bl <EOF>))"
+                "(document (content (blockTitle . (title a) \\n) (block (paragraph b) (nl \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -113,7 +113,7 @@ public class BlockTitleTest extends GrammarTest {
                 "Kiwi and apple\n",
 
                 /* expected */
-                "(document (content (blockTitle . (title F r u i t s . . .) \\n) (block (paragraph K i w i   a n d   a p p l e)) (nl \\n)) (bl <EOF>))"
+                "(document (content (blockTitle . (title F r u i t s . . .) \\n) (block (paragraph K i w i   a n d   a p p l e) (nl \\n))) (bl <EOF>))"
             }
         });
 

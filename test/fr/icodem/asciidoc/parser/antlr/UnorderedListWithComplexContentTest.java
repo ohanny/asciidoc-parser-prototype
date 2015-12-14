@@ -80,7 +80,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "Yes !\n",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !)))))) (nl \\n)) (bl <EOF>))"
+                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !) (nl \\n))))))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -146,7 +146,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
             },
             {
                 /* message */
-                "a list item continued by source block interspersed in two paragraphs",
+                "a list with the first item continued with a paragraph",
 
                 /* input */
                 "* The sun is shining...\n" +
@@ -156,7 +156,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "* ...and the sky is blue",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !)))) (nl \\n) (bl \\n) (listItem *   (listItemValue . . . a n d   t h e   s k y   i s   b l u e) <EOF>)))))"
+                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !) (nl \\n)))) (bl \\n) (listItem *   (listItemValue . . . a n d   t h e   s k y   i s   b l u e) <EOF>)))))"
             }
         });
 

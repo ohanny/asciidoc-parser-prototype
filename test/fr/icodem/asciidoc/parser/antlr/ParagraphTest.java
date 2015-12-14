@@ -49,7 +49,7 @@ public class ParagraphTest extends GrammarTest {
                 "This is some content \n",
 
                 /* expected */
-                "(document (content (block (paragraph T h i s   i s   s o m e   c o n t e n t  )) (nl \\n)) (bl <EOF>))"
+                "(document (content (block (paragraph T h i s   i s   s o m e   c o n t e n t  ) (nl \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -71,7 +71,7 @@ public class ParagraphTest extends GrammarTest {
                 "on two lines\n",
 
                 /* expected */
-                "(document (content (block (paragraph T h i s   i s   s o m e   c o n t e n t   \\n o n   t w o   l i n e s)) (nl \\n)) (bl <EOF>))"
+                "(document (content (block (paragraph T h i s   i s   s o m e   c o n t e n t   \\n o n   t w o   l i n e s) (nl \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -147,7 +147,7 @@ public class ParagraphTest extends GrammarTest {
                 "=Banana\n",
 
                 /* expected */
-                "(document (content (block (paragraph = B a n a n a)) (nl \\n)) (bl <EOF>))"
+                "(document (content (block (paragraph = B a n a n a) (nl \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -157,7 +157,7 @@ public class ParagraphTest extends GrammarTest {
                 "==Banana\n",
 
                 /* expected */
-                "(document (content (block (paragraph = = B a n a n a)) (nl \\n)) (bl <EOF>))"
+                "(document (content (block (paragraph = = B a n a n a) (nl \\n))) (bl <EOF>))"
             }
         });
 
