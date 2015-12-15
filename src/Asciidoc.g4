@@ -273,6 +273,9 @@ bl [boolean withEOF]
     : {isFirstCharInLine()}? (SP|TAB)* (CR? NL|{$withEOF}? EOF)
     ;
 
+spaces
+    : (SP|TAB)+
+    ;
 
 title
     : ~(SP|TAB|NL|EOF) ~(NL|EOF)*
@@ -651,7 +654,7 @@ tableCell
     ;
 
 tableCellContent
-    : (OTHER|SP)* nl?
+    : spaces? (OTHER|SP)*? spaces? nl?
     ;
 
 tableDelimiter
