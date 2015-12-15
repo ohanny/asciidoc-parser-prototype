@@ -58,10 +58,10 @@ class RootListContext {
 
         // list item type and level
         ListType type = Unordered;
-        int level = times;
+        int level = Math.max(times, 5);
         if (times == 0 && dots > 0) {
             type = Ordered;
-            level = dots;
+            level = Math.max(dots, 5);
         }
 
         // determine current node
