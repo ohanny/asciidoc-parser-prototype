@@ -645,8 +645,16 @@ listContinuation
     : PLUS (SP|TAB)* CR? NL block[true]
     ;
 
+//table
+//    : tableDelimiter (tableCell|{!isCurrentCharEOF()}? bl[false])* tableDelimiter
+//    ;
+
 table
-    : tableDelimiter (tableCell|{!isCurrentCharEOF()}? bl[false])* tableDelimiter
+    : tableDelimiter (tableRow|{!isCurrentCharEOF()}? bl[false])* tableDelimiter
+    ;
+
+tableRow
+    : tableCell+
     ;
 
 tableCell
