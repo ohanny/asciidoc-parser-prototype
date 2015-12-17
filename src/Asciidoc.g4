@@ -211,7 +211,9 @@ grammar Asciidoc;
         nextChar = _input.LA(++i);
 
         // check attribute name starts with 'other' char
-        if (nextChar != OTHER) return false;
+        if (nextChar != OTHER && nextChar != ALOWER && nextChar != ELOWER
+            && nextChar != HLOWER && nextChar != LLOWER && nextChar != MLOWER
+            && nextChar != DLOWER && nextChar != SLOWER && nextChar != VLOWER) return false;
         nextChar = _input.LA(++i);
 
         while (nextChar != EOF && nextChar != NL) {
@@ -311,6 +313,15 @@ author
 
 authorName
     : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
       |SP
       |MINUS
       |DOT
@@ -319,6 +330,15 @@ authorName
 
 authorAddress
     : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
       |MINUS
       |SLASH
       |DOT
@@ -328,6 +348,15 @@ authorAddress
 revisionInfo
     : {isStartOfRevisionInfo()}?
       (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
       |SP
       |EQ
       |{!isStartOfComment()}? SLASH
@@ -347,7 +376,17 @@ revisionInfo
     ;
 
 attributeName
-    : OTHER+
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
     ;
 
 attributeEntry
@@ -359,11 +398,31 @@ attributeValueParts
     ;
 
 attributeValuePart
-    : OTHER+
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
     ;
 
 attributeValue
-    : (OTHER|SP)+
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |SP)+
     ;
 
 attributeList
@@ -386,7 +445,17 @@ idAttribute
     ;
 
 idName
-    : OTHER+
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
     ;
 
 roleAttribute
@@ -394,7 +463,17 @@ roleAttribute
     ;
 
 roleName
-    : OTHER+
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
     ;
 
 optionAttribute
@@ -402,7 +481,17 @@ optionAttribute
     ;
 
 optionName
-    : OTHER+
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
     ;
 
 namedAttribute
@@ -414,11 +503,31 @@ blockMacro
     ;
 
 macroName
-    : OTHER+
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
     ;
 
 macroTarget
-    : (OTHER|DOT)+
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |DOT)+
     ;
 
 preamble
@@ -467,11 +576,30 @@ anchor
     ;
 
 anchorId
-    : (OTHER)+
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
     ;
 
 anchorLabel
     : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
       |SP
       |EQ
       |SLASH
@@ -482,6 +610,15 @@ anchorLabel
 paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
     : {isStartOfParagraph()}?
       (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
       |{isBlankInParagraph()}? SP
       |{isBlankInParagraph()}? TAB
       |EQ
@@ -491,6 +628,7 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
       |RSBRACK
       |LABRACK
       |RABRACK
+      |CARET
       |MINUS
       |{isPlusInParagraph($fromList)}? PLUS
       |DOT
@@ -506,6 +644,15 @@ singleComment
     : {isFirstCharInLine()}?
       SLASH SLASH
       (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
       |SP
       |EQ
       |SLASH
@@ -514,6 +661,7 @@ singleComment
       |RSBRACK
       |LABRACK
       |RABRACK
+      |CARET
       |MINUS
       |PLUS
       |DOT
@@ -528,6 +676,15 @@ singleComment
 multiComment
     : multiCommentDelimiter
       (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
       |SP
       |EQ
       |SLASH
@@ -536,6 +693,7 @@ multiComment
       |RSBRACK
       |LABRACK
       |RABRACK
+      |CARET
       |MINUS
       |PLUS
       |DOT
@@ -557,6 +715,15 @@ multiCommentDelimiter
 sourceBlock
     : sourceBlockDelimiter
       (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
       |SP
       |EQ
       |SLASH
@@ -565,6 +732,7 @@ sourceBlock
       |RSBRACK
       |LABRACK
       |RABRACK
+      |CARET
       |MINUS
       |PLUS
       |TIMES
@@ -586,6 +754,15 @@ sourceBlockDelimiter
 literalBlock
     : literalBlockDelimiter
       (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
       |SP
       |EQ
       |SLASH
@@ -594,6 +771,7 @@ literalBlock
       |RSBRACK
       |LABRACK
       |RABRACK
+      |CARET
       |MINUS
       |PLUS
       |TIMES
@@ -622,6 +800,15 @@ listItem
 
 listItemValue
     : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
       |SP
       |EQ
       |SLASH
@@ -630,6 +817,7 @@ listItemValue
       |RSBRACK
       |LABRACK
       |RABRACK
+      |CARET
       |MINUS
       |PLUS
       |TIMES
@@ -645,10 +833,6 @@ listContinuation
     : PLUS (SP|TAB)* CR? NL block[true]
     ;
 
-//table
-//    : tableDelimiter (tableCell|{!isCurrentCharEOF()}? bl[false])* tableDelimiter
-//    ;
-
 table
     : tableDelimiter (tableRow|{!isCurrentCharEOF()}? bl[false])* tableDelimiter
     ;
@@ -658,11 +842,55 @@ tableRow
     ;
 
 tableCell
-    : PIPE tableCellContent
+    : tableCellSpecifiers? PIPE tableCellContent
+    ;
+
+tableCellSpecifiers
+    : tableCellSpan
+      |tableCellAlign
+      |tableCellStyle
+      |tableCellSpan tableCellAlign
+      |tableCellSpan tableCellStyle
+      |tableCellAlign tableCellStyle
+      |tableCellSpan tableCellAlign tableCellStyle
+    ;
+
+tableCellSpan
+    : (DIGIT+|DOT DIGIT+|DIGIT+ DOT DIGIT+) (PLUS|TIMES)
+    ;
+
+tableCellAlign
+    : (LABRACK|CARET|RABRACK)
+      |(DOT LABRACK|DOT CARET|DOT RABRACK)
+      |(LABRACK|CARET|RABRACK) (DOT LABRACK|DOT CARET|DOT RABRACK)
+    ;
+
+tableCellStyle
+    : (ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      )
     ;
 
 tableCellContent
-    : spaces? (OTHER|SP)*? spaces? nl?
+    : spaces?
+      (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |SP)*?
+      spaces? nl?
     ;
 
 tableDelimiter
@@ -672,6 +900,15 @@ tableDelimiter
 
 // Lexer
 
+ALOWER      : 'a'  ;
+ELOWER      : 'e'  ;
+HLOWER      : 'h'  ;
+LLOWER      : 'l'  ;
+MLOWER      : 'm'  ;
+DLOWER      : 'd'  ;
+SLOWER      : 's'  ;
+VLOWER      : 'v'  ;
+DIGIT       : [0-9];
 EQ          : '='  ;
 SP          : ' '  ;
 TAB         : '\t' ;
@@ -682,6 +919,7 @@ LSBRACK     : '['  ;
 RSBRACK     : ']'  ;
 LABRACK     : '<'  ;
 RABRACK     : '>'  ;
+CARET       : '^'  ;
 COMMA       : ','  ;
 MINUS       : '-'  ;
 PLUS        : '+'  ;

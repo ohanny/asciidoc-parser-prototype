@@ -27,6 +27,7 @@ import org.junit.runners.Suite;
     BlockMacroTest.class,
     HorizontalRuleTest.class,
     SimpleTableTest.class,
+    CellFormatingTableTest.class,
     AuthorLineTest.class,
     PreambleTest.class
 })
