@@ -108,7 +108,7 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
     public void enterAttributeEntry(AsciidocParser.AttributeEntryContext ctx) {
         String value = null;
         if (ctx.attributeValueParts() != null) {
-            value = ctx.attributeValueParts().getText();
+            value = ctx.attributeValueParts().getText();// TODO concat all parts by iteration
         }
 
         boolean enabled = ctx.BANG().size() > 0;
@@ -306,4 +306,10 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
         rootListContext.addItem(ctx.listItemValue().getText(),
                 ctx.TIMES().size(), ctx.DOT().size(), attList);
     }
+
+    @Override
+    public void enterTableCell(AsciidocParser.TableCellContext ctx) {
+        //ctx.tableCellSpecifiers().CELL_SPECIFIERS().getText();
+    }
+
 }

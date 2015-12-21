@@ -1,5 +1,9 @@
 grammar Asciidoc;
 
+@parser::header {
+  import java.util.Arrays;
+}
+
 @parser::members {
 
     private boolean isFirstCharInLine() {
@@ -54,13 +58,16 @@ grammar Asciidoc;
         return true;
     }
 
+    private boolean isBlankInTableBlock() {
+        return isBlankInParagraph();
+    }
+
     private boolean isPlusInParagraph(boolean fromList) {
         if (fromList) {
             return !isStartOfListContinuation();
         }
         return true;
     }
-
 
     // ---------------------------------------------------------------
     // 'isStartOf' element methods
@@ -129,6 +136,62 @@ grammar Asciidoc;
         return ok;
     }
 
+    private boolean isStartOfTableCellSpecifier() {
+        char[] buf = new char[20];
+        int i = 1;
+        int c = _input.LA(i);
+
+        while (true) {
+            if (c == PIPE) {
+                char[] used = Arrays.copyOfRange(buf, 0, i - 1);
+                String str = new String(used);
+                return str.matches("((\\d+\\.\\d+|\\.\\d+|\\d+)(\\*|\\+))?((<|^|>)\\.(<|^|>)|\\.(<|^|>)|(<|^|>))?[aehlmdsv]?");
+            }
+            else if (c == ALOWER || c == ELOWER || c == HLOWER
+                || c == LLOWER || c == MLOWER || c == DLOWER
+                || c == SLOWER || c == VLOWER || c == DIGIT
+                || c == LABRACK || c == RABRACK || c == CARET
+                || c == DOT || c == PLUS || c == TIMES) {
+
+                switch (c) {
+                    case ALOWER:
+                    case ELOWER:
+                    case HLOWER:
+                    case LLOWER:
+                    case MLOWER:
+                    case DLOWER:
+                    case SLOWER:
+                    case VLOWER:
+                        buf[i - 1] = 'a';
+                        break;
+                    case DIGIT:
+                        buf[i - 1] = '1';
+                        break;
+                    case DOT:
+                        buf[i - 1] = '.';
+                        break;
+                    case TIMES:
+                        buf[i - 1] = '*';
+                        break;
+                    case PLUS:
+                        buf[i - 1] = '+';
+                        break;
+                    case LABRACK:
+                    case RABRACK:
+                    case CARET:
+                        buf[i - 1] = '<';
+                        break;
+                    default:
+                        buf[i - 1] = 'X';
+
+                }
+                c = _input.LA(++i);
+                continue;
+            }
+
+            return false;
+        }
+    }
 
     // ---------------------------------------------------------------
     // 'isStartOfAtIndex' element methods
@@ -834,15 +897,20 @@ listContinuation
     ;
 
 table
-    : tableDelimiter (tableRow|{!isCurrentCharEOF()}? bl[false])* tableDelimiter
-    ;
+    : tableDelimiter (tableRow|bl[false])* tableDelimiter
+    //: tableDelimiter (tableRow|{!isCurrentCharEOF()}? bl[false])* tableDelimiter
+    ;// TODO retirer isCurrentCharEOF()
 
 tableRow
     : tableCell+
     ;
 
 tableCell
-    : tableCellSpecifiers? PIPE tableCellContent
+    : tableCellSpecifiers? PIPE tableBlock (bl[false]+ tableBlock)*?
+    //: tableCellSpecifiers? PIPE (tableBlock|(bl[false]|tableBlock)+ tableBlock)?
+    //: tableCellSpecifiers? PIPE (tableBlock|tableBlock bl[false] tableBlock)?
+    //: tableCellSpecifiers? PIPE tableBlock (bl[false] tableBlock)?
+    //: tableCellSpecifiers? PIPE tableCellContent
     ;
 
 tableCellSpecifiers
@@ -877,20 +945,41 @@ tableCellStyle
       )
     ;
 
-tableCellContent
+tableBlock
     : spaces?
       (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |SP)*?
-      spaces? nl?
+      |{!isStartOfTableCellSpecifier()}? ALOWER
+      |{!isStartOfTableCellSpecifier()}? ELOWER
+      |{!isStartOfTableCellSpecifier()}? HLOWER
+      |{!isStartOfTableCellSpecifier()}? LLOWER
+      |{!isStartOfTableCellSpecifier()}? MLOWER
+      |{!isStartOfTableCellSpecifier()}? DLOWER
+      |{!isStartOfTableCellSpecifier()}? SLOWER
+      |{!isStartOfTableCellSpecifier()}? VLOWER
+      |{!isStartOfTableCellSpecifier()}? DIGIT
+      |{isBlankInTableBlock()}? SP
+      |{isBlankInTableBlock()}? TAB
+      |EQ
+      |{!isStartOfComment()}? SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |{!isStartOfTableCellSpecifier()}? LABRACK
+      |{!isStartOfTableCellSpecifier()}? RABRACK
+      |{!isStartOfTableCellSpecifier()}? CARET
+      |MINUS
+      //|{isPlusInParagraph(false)}? PLUS
+      |{!isStartOfTableCellSpecifier()}? PLUS
+      |{!isStartOfTableCellSpecifier()}? DOT
+      |COLON
+      |SEMICOLON
+      |BANG
+      |{!isStartOfTableCellSpecifier()}? TIMES
+      |{isBlankInTableBlock()}? NL
+      //)+?
+      )+
+      nl?
+      //spaces? nl?
     ;
 
 tableDelimiter
