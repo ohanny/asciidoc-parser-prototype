@@ -1,0 +1,32 @@
+package fr.icodem.asciidoc.parser.peg;
+
+/**
+ * A wrapper rule that allows to define a name for a delegate rule.
+ */
+public class NamedRule implements Rule {
+
+    private String name;
+    private Rule delegate;
+    private Matcher matcher; // caching
+
+    public NamedRule(String name, Rule delegate) {
+        this.name = name;
+        this.delegate = delegate;
+    }
+
+    @Override
+    public Matcher getMatcher() {
+        if (matcher == null) {
+            matcher = delegate.getMatcher();
+        }
+        return matcher;
+    }
+
+    /**
+     * @see Rule#getName()
+     */
+    @Override
+    public String getName() {
+        return name;
+    }
+}
