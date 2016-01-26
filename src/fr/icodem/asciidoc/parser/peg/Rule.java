@@ -25,7 +25,8 @@ public interface Rule {
      * Indicates whether the rule should lead to a {@link Node node} creation
      * @return true if node creation is required
      */
-    default boolean isNode() {
+    @Deprecated
+    default boolean isNode() {//TODO unused ?
         return false;
     }
 

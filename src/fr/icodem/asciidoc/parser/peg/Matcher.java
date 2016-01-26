@@ -12,4 +12,9 @@ public interface Matcher {
      * @return true if the match was successful
      */
     boolean match(MatcherContext context);
+
+    default boolean isOptional() {
+        return false;
+    }
+
 }

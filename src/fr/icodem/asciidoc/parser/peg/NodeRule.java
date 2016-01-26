@@ -10,6 +10,15 @@ public class NodeRule extends NamedRule {
         super(name, delegate);
     }
 
+    @Override
+    public Matcher getMatcher() {
+        if (matcher == null) {
+            this.matcher = new NodeMatcher(name, super.getMatcher());
+        }
+
+        return matcher;
+    }
+
     /**
      * @see Rule#isNode()
      */

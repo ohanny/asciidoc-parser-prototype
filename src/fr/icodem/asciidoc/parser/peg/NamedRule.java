@@ -5,9 +5,9 @@ package fr.icodem.asciidoc.parser.peg;
  */
 public class NamedRule implements Rule {
 
-    private String name;
+    protected String name;
     private Rule delegate;
-    private Matcher matcher; // caching
+    protected Matcher matcher; // caching
 
     public NamedRule(String name, Rule delegate) {
         this.name = name;

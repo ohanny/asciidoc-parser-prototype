@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HeaderTest {
@@ -30,10 +31,27 @@ public class HeaderTest {
                       "[quote#think, Donald Trump]\n" +
                       "I love fruits\n" +
                       "\n" +
-                      "[.summary.incremental%header%footer,xxx=yyy,xxx=zzz]\n" +
-                      "* Apple\n" +
-                      "* Kiwi\n" +
-                      "* Banana\n";
+                      "* One\n" +
+                      "+\n" +
+                      "Un paragraphe\n" +
+                      "\n" +
+                      "* Two \n" +
+                      "* Three\n" +
+                      "\n" +
+                      "\n" +
+                      "** Un\n" +
+                      "** Deux\n" +
+                      "\n" +
+                      "[lowerroman.summary.incremental%header%footer,xxx=yyy,xxx=zzz]\n" +
+                      ". Apple\n" +
+                      "** Kiwi\n" +
+                      "** Cherry\n" +
+                      "* Banana\n" +
+                      "[lowergreek]\n" +
+                      ". Lemon\n" +
+                      ". Strawberry\n" +
+                      ".. Un\n" +
+                      ".. Deux\n";
 
         List<AttributeEntry> attributes = new ArrayList<>();
 
@@ -41,6 +59,17 @@ public class HeaderTest {
         new AsciidocAntlrProcessor(new HtmlBackend(writer), attributes).parse(text);
 
         System.out.println(writer);
+
+        String a = "((<|^|>)\\.(<|^|>)|\\.(<|^|>)|(<|^|>))?";
+
+
+
+
+    }
+
+    private boolean testxx() {
+        "".matches("((\\d+\\.\\d+|\\.\\d+|\\d+)(\\*|\\+))?((<|^|>)\\.(<|^|>)|\\.(<|^|>)|(<|^|>))?[aehlmdsv]?");
+        return false;
 
     }
 }

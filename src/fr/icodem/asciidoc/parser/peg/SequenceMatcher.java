@@ -19,12 +19,10 @@ public class SequenceMatcher implements Matcher {
 
         for (int i = 0; i < rules.length; i++) {
             Matcher matcher = getSubMatcher(i);
-/*            Matcher matcher = matchers[i];
-            if (matcher == null) {
-                matcher = rules[i].getMatcher();
-                matchers[i] = matcher;
-            }*/
+            checkCanFlush(context, i);
+
             if (!matcher.match(context.getSubContext())) {
+                context.removeLastSubContext();
                 return false;
             }
         }
@@ -41,5 +39,15 @@ public class SequenceMatcher implements Matcher {
         return matcher;
     }
 
+    private void checkCanFlush(MatcherContext context, int childIndex) {
+        if (context.isCanStartFlushing()) return; // already set
+
+        for (int i = childIndex + 1; i < rules.length; i++) {
+            Matcher matcher = getSubMatcher(i);
+            if (!matcher.isOptional()) return;
+        }
+
+        context.canStartFlushing();
+    }
 
 }

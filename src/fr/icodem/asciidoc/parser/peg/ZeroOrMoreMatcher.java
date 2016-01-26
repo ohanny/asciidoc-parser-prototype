@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.peg;
 
 /**
  * A {@link Matcher matcher} that repeatedly tries its
- * submatcher against the input. Always succeeds.
+ * submatcher against the input. This matcher always succeeds.
  */
 public class ZeroOrMoreMatcher implements Matcher {
 
@@ -25,14 +25,19 @@ public class ZeroOrMoreMatcher implements Matcher {
         while (true) {
             context.mark();
             if (!matcher.match(context.getSubContext())) {
+                context.removeLastSubContext();
+                context.reset();
+                context.release();
+
                 break;
             }
         }
 
-        context.reset();
-        context.release();
-
         return true;
     }
 
+    @Override
+    public boolean isOptional() {
+        return true;
+    }
 }

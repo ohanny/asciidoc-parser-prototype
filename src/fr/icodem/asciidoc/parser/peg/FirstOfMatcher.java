@@ -30,6 +30,7 @@ public class FirstOfMatcher implements Matcher {
                 return true;
             }
 
+            context.removeLastSubContext();
             shouldReset = true;
         }
 
