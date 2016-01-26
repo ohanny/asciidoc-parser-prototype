@@ -123,6 +123,44 @@ public class ParserTest extends BaseParser {
     @Test
     public void test4() throws Exception {
 
+        Rule rule = node("root", sequence(optional(ch('a')), ch('b')));
+        InputBuffer input = new InputBuffer("ab");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Matched", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test5() throws Exception {
+
+        Rule rule = node("root", sequence(optional(ch('a')), ch('b')));
+        InputBuffer input = new InputBuffer("b");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Matched", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'b'}, 0, 0);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test7() throws Exception {
+
         Rule rule = node("expression", sequence(ch('a'), zeroOrMore(proxy("expression")), ch('b')));
         InputBuffer input = new InputBuffer("aabb");
 
@@ -144,7 +182,7 @@ public class ParserTest extends BaseParser {
     }
 
     @Test
-    public void test5() throws Exception {
+    public void test8() throws Exception {
 
         Rule rule = node("expression", sequence(ch('a'), zeroOrMore(proxy("expression")), ch('b')));
         InputBuffer input = new InputBuffer("aababb");

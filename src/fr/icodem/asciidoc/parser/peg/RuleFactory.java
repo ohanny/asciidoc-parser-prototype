@@ -66,6 +66,15 @@ public class RuleFactory {
     }
 
     /**
+     * Creates a rule that supplies an {@link OptionalMatcher optional matcher}
+     * @param rule the rule to be matched
+     * @return the zero or more rule
+     */
+    public Rule optional(Rule rule) {
+        return () -> new OptionalMatcher(rule);
+    }
+
+    /**
      * Creates a rule that supplies a {@link ZeroOrMoreMatcher zero or more matcher}
      * @param rule the rule to be matched
      * @return the zero or more rule

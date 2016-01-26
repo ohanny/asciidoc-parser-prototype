@@ -50,6 +50,14 @@ public class BaseParser {
     }
 
     /**
+     * Creates an optional rule.
+     * @see RuleFactory#optional(Rule)
+     */
+    protected Rule optional(Rule rule) {
+        return factory.optional(rule);
+    }
+
+    /**
      * Creates a zero or more rule.
      * @see RuleFactory#zeroOrMore(Rule)
      */

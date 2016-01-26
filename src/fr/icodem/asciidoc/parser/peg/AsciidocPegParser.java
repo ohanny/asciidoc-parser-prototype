@@ -41,39 +41,7 @@ public class AsciidocPegParser extends BaseParser {
         //return sequence(a(), zeroOrMore(call(() -> expression().supply())), b());
     }
 
-    /*
 
-    private Map<String, Rule> nameToRuleCache = new HashMap<>();
-    public Rule toCache(Rule rule) {
-        nameToRuleCache.put(rule.getName(), rule);
-        return rule;
-    }
-
-    public Rule fromCache(String name) {
-        System.out.println("YYYYY => " + nameToRuleCache.get(name));
-        return nameToRuleCache.get(name);
-    }
-
-    public Rule named(String name, Rule delegate) {
-        return toCache(new NamedRule(name, delegate));
-    }
-
-    public Rule node(String name, Rule delegate) {
-        return toCache(new NodeRule(name, delegate));
-    }
-
-    public Rule proxy(String name) {
-        return new ProxyRule(name, nameToRuleCache);
-    }
-
-    */
-
-
-//    public Matcher expression() {
-//        Matcher matcher = sequence(ch('a'), zeroOrMore(expression()), ch('b'));
-//
-//        return matcher;
-//    }
 
 //    public Rule ch(char c) {
 //        String name = "CharRule." + c;
