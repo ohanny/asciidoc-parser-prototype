@@ -206,4 +206,21 @@ public class ParserTest extends BaseParser {
         inOrder.verify(listener).exitNode("expression");
 
     }
+
+    @Test
+    public void test9() throws Exception {
+
+        Rule rule = node("expression", sequence(ch('a'), zeroOrMore(proxy("expression")), ch('b')));
+        InputBuffer input = new InputBuffer("aababb");
+
+        ToStringTreeBuilder treeBuilder = new ToStringTreeBuilder();
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, treeBuilder);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Matched", matched);
+        assertEquals("", "(expression a (expression a b) (expression a b) b)", treeBuilder.getStringTree());
+    }
 }
