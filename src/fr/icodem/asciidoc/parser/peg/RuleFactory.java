@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.matchers.*;
+
 /**
  * A factory that creates {@link Rule rule objects}. Named rules are stored in cache.
  */

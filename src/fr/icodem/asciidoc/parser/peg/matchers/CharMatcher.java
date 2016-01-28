@@ -1,4 +1,6 @@
-package fr.icodem.asciidoc.parser.peg;
+package fr.icodem.asciidoc.parser.peg.matchers;
+
+import fr.icodem.asciidoc.parser.peg.MatcherContext;
 
 /**
  * A {@link Matcher matcher} matching a single character

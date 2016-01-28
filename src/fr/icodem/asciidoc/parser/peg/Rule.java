@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
+
 /**
  * Rules are used to describe a grammar. Each rule supplies a matcher.
  */

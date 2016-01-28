@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
+
 /**
  * A ParseRunner performs the actual parsing run of a given parser rule on a given input text.
  */

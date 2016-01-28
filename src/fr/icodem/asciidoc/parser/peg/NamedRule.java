@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
+
 /**
  * A wrapper rule that allows to define a name for a delegate rule.
  */

@@ -1,4 +1,7 @@
-package fr.icodem.asciidoc.parser.peg;
+package fr.icodem.asciidoc.parser.peg.matchers;
+
+import fr.icodem.asciidoc.parser.peg.MatcherContext;
+import fr.icodem.asciidoc.parser.peg.Rule;
 
 public class OptionalMatcher implements Matcher {
 
