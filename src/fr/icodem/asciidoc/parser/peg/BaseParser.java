@@ -1,5 +1,8 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.rules.Rule;
+import fr.icodem.asciidoc.parser.peg.rules.RuleFactory;
+
 /**
  * Base class for parsers. Defines the basic rule creation methods.
  */

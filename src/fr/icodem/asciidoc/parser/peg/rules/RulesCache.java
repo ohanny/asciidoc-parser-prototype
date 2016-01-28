@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.peg;
+package fr.icodem.asciidoc.parser.peg.rules;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.matchers;
 
 import fr.icodem.asciidoc.parser.peg.MatcherContext;
-import fr.icodem.asciidoc.parser.peg.Rule;
+import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 /**
  * A {@link Matcher matcher} that repeatedly tries its

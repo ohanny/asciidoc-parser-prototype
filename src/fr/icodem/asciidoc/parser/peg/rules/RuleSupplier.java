@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.peg;
+package fr.icodem.asciidoc.parser.peg.rules;
 
 /**
  * Represent a supplier of rules.

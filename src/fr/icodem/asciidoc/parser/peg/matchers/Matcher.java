@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.matchers;
 
 import fr.icodem.asciidoc.parser.peg.MatcherContext;
-import fr.icodem.asciidoc.parser.peg.Rule;
+import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 /**
  * A matcher is responsible for executing a specific {@link Rule rule} instance.

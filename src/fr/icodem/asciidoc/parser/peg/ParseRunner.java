@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
+import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 /**
  * A ParseRunner performs the actual parsing run of a given parser rule on a given input text.

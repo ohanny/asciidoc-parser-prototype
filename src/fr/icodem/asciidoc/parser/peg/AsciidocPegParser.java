@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
+import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 public class AsciidocPegParser extends BaseParser {
 

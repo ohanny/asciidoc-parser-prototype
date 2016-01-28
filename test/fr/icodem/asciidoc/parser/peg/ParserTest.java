@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
+import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
