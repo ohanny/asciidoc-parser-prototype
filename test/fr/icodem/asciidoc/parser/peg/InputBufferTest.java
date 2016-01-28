@@ -37,10 +37,10 @@ public class InputBufferTest {
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();
         final char nextChar3 = buffer.getNextChar();
-        int marker1 = buffer.mark();
+        int marker1 = buffer.getPosition();
 
         final char nextChar4 = buffer.getNextChar();
-        int marker2 = buffer.mark();
+        int marker2 = buffer.getPosition();
 
         final char nextChar5 = buffer.getNextChar();
         final char nextChar6 = buffer.getNextChar();
@@ -49,10 +49,10 @@ public class InputBufferTest {
         assertEquals("First char is wrong", 'a', nextChar1);
         assertEquals("Second char is wrong", 'b', nextChar2);
         assertEquals("Third char is wrong", 'c', nextChar3);
-        assertEquals("First marker is wrong", 0, marker1);
+        assertEquals("First marker is wrong", 3, marker1);
 
         assertEquals("Fourth char is wrong", 'd', nextChar4);
-        assertEquals("First marker is wrong", 1, marker2);
+        assertEquals("Second marker is wrong", 4, marker2);
 
         assertEquals("Fifth char is wrong", 'e', nextChar5);
         assertEquals("Sixth char is wrong", EOI, nextChar6);
@@ -65,7 +65,7 @@ public class InputBufferTest {
 
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();
-        int marker = buffer.mark();
+        int marker = buffer.getPosition();
 
         final char nextChar3 = buffer.getNextChar();
         final char nextChar4 = buffer.getNextChar();
@@ -81,29 +81,6 @@ public class InputBufferTest {
 
         assertEquals("Fifth char is wrong", 'c', nextChar5);
         assertEquals("Sixth char is wrong", 'd', nextChar6);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void itShouldThrowExceptionWhenMarkerResetIsWrong() throws Exception {
-        buffer = new InputBuffer("abcde");
-
-        buffer.getNextChar();
-        buffer.getNextChar();
-        buffer.mark();
-        buffer.reset(99);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void itShouldThrowExceptionWhenResettingAClearedMarker() throws Exception {
-        buffer = new InputBuffer("abcde");
-
-        buffer.getNextChar();
-        buffer.getNextChar();
-        int marker1 = buffer.mark();
-        buffer.getNextChar();
-        int marker2 = buffer.mark();
-        buffer.reset(marker1);
-        buffer.reset(marker2);
     }
 
     @Test

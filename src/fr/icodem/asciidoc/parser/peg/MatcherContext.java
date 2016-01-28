@@ -140,8 +140,6 @@ public class MatcherContext {
         if (isNode() && matched) {
             if (listener != null) {
                 //extract and notify
-                //notifyCharacters(lastStartExtractPosition, input.getPosition() - 1);
-                //System.out.println("SSSS => " + (input.getPosition() - 1) + " %% " + lastEndExtractPosition);
                 notifyCharacters(lastStartExtractPosition, lastEndExtractPosition);
 
                 listener.exitNode(nodeName);
@@ -176,7 +174,7 @@ public class MatcherContext {
             this.root = parent.root;
         }
         this.listener = listener;
-        clearMarker();
+        this.marker = -1;
     }
 
     public MatcherContext getSubContext() {
@@ -209,26 +207,13 @@ public class MatcherContext {
     }
 
     public void mark() {
-        // TODO allow mark() to be called twice ? YES
-        if (marker != -1) input.release(marker);
-        marker = input.mark();
-    }
-
-    public void release() {
-        if (marker != -1) {
-            input.release(marker);
-            clearMarker();
-        }
+        marker = input.getPosition();
     }
 
     public void reset() {
         if (dirty) {
             input.reset(marker);
         }
-    }
-
-    public void clearMarker() {
-        marker = -1;
     }
 
     public void shouldResetIfDirty() {

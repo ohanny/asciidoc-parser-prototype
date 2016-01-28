@@ -10,6 +10,13 @@ import static fr.icodem.asciidoc.parser.peg.Chars.*;
 public class InputBuffer {
 
     /**
+     * A {@link InputBufferVisitor visitor} is notified of the internal
+     * state of the input buffer at various stage of the parsing.
+     * Mainly used for test purpose.
+     */
+    private InputBufferVisitor visitor;
+
+    /**
      * A moving window buffer of the data being scanned. We keep adding
      * to the buffer while there's data in the input source.
      * When {@link #consume consume()} occurs, characters starting from
@@ -27,22 +34,26 @@ public class InputBuffer {
      */
     private int numberOfCharacters;
 
-    private int[] markers;
-    private int lastMarker;
-
     /**
      * Constructs an input buffer given an input text.
      * @param text the input text to be parsed
      */
     public InputBuffer(String text) {
+        this(text, null);
+    }
+
+    /**
+     * Constructs an input buffer given an input text.
+     * @param text the input text to be parsed
+     * @param visitor the visitor notified of internal state of the buffer
+     */
+    public InputBuffer(String text, InputBufferVisitor visitor) {
         data = new char[1024];
         System.arraycopy(text.toCharArray(), 0, data, 0, text.length());
 
         numberOfCharacters = text.length();
 
-        markers = new int[10];
-        Arrays.fill(markers, -1);
-        lastMarker = -1;
+        this.visitor = visitor;
     }
 
     /**
@@ -52,17 +63,14 @@ public class InputBuffer {
      */
     public char getNextChar() {
         if (position < numberOfCharacters) {
+            if (visitor != null) {
+                visitor.visitNextChar(position, data[position]);
+            }
             //System.out.println("POS = " + position + " => " + data[position]);
             return data[position++];
         }
 
         return EOI;
-    }
-
-    public int mark() {
-        markers[++lastMarker] = position;
-
-        return lastMarker;
     }
 
     public int getPosition() {
@@ -77,6 +85,10 @@ public class InputBuffer {
         // TODO prendre en compte offset en plus
         if (end < start) return null;
 
+        if (visitor != null) {
+            visitor.visitExtract(Arrays.copyOfRange(data, start, end + 1));
+        }
+
         return Arrays.copyOfRange(data, start, end + 1);
     }
 
@@ -86,20 +98,7 @@ public class InputBuffer {
      * @param marker the marker used to reset the position
      */
     public void reset(int marker) {
-        if (marker < 0 || marker > lastMarker)
-            throw new IllegalArgumentException("Wrong marker : " + marker + " (last marker was " + lastMarker + ")");
-
-        position = markers[marker];
-        //System.out.println("RESET => " + position);
-        lastMarker = marker - 1;// ???
-//        for (int i = marker; i < markers.length; i++) {
-//            if (markers[i] == -1) break;
-//            //markers[i] = -1;
-//        }
-    }
-
-    public void release(int marker) {// ajouter des tests
-        markers[marker] = NULL;
+        position = marker;
     }
 
     /**

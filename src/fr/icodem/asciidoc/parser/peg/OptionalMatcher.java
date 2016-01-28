@@ -22,7 +22,6 @@ public class OptionalMatcher implements Matcher {
         if (!matcher.match(context.getSubContext())) {
             context.removeLastSubContext();
             context.reset();
-            context.release();
         }
 
         return true;

@@ -31,8 +31,6 @@ public class FirstOfMatcher implements Matcher {
             context.removeLastSubContext();
         }
 
-        context.release();
-
         return false;
     }
 
