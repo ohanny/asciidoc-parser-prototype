@@ -110,10 +110,6 @@ public class MatcherContext {
         return ctx;
     }
 
-    public boolean isRoot() {
-        return parent == null;
-    }
-
     private boolean enterNodeNotified;
 
     // émettre vers le listener ce qui n'a pas encore été émis
