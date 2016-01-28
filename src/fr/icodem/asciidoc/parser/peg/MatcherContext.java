@@ -209,6 +209,7 @@ public class MatcherContext {
     public void reset() {
         if (dirty) {
             input.reset(marker);
+            dirty = false;
         }
     }
 
