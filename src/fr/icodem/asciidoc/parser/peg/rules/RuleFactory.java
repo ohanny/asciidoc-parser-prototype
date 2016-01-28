@@ -59,6 +59,15 @@ public class RuleFactory {
     }
 
     /**
+     * Creates a rule that supplies a {@link OneOrMoreMatcher one or more matcher}
+     * @param rule the rule to be matched
+     * @return the one or more rule
+     */
+    public Rule oneOreMore(Rule rule) {
+        return () -> new OneOrMoreMatcher(rule);
+    }
+
+    /**
      * Creates a rule that supplies a {@link SequenceMatcher sequence matcher}
      * @param rules the rules to be matched
      * @return the sequence rule

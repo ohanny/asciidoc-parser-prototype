@@ -53,6 +53,14 @@ public class BaseParser {
     }
 
     /**
+     * Creates a one or more rule.
+     * @see RuleFactory#oneOreMore(Rule)
+     */
+    protected Rule oneOrMore(Rule rule) {
+        return factory.oneOreMore(rule);
+    }
+
+    /**
      * Creates a sequence rule.
      * @see RuleFactory#sequence(Rule...)
      */

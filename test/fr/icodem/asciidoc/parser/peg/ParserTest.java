@@ -264,4 +264,56 @@ public class ParserTest extends BaseParser {
 
     }
 
+    @Test
+    public void test12() throws Exception {
+
+        Rule rule = node("root", oneOrMore(ch('a')));
+        InputBuffer input = new InputBuffer("a");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test13() throws Exception {
+
+        Rule rule = node("root", oneOrMore(ch('a')));
+        InputBuffer input = new InputBuffer("aaa");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'a', 'a', 'a'}, 0, 2);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test14() throws Exception {
+
+        Rule rule = node("root", oneOrMore(ch('a')));
+        InputBuffer input = new InputBuffer("b");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertFalse("Rule matched", matched);
+    }
+
 }
