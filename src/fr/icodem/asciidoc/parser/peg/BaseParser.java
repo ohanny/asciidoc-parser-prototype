@@ -42,6 +42,14 @@ public class BaseParser {
     }
 
     /**
+     * Creates a first of rule.
+     * @see RuleFactory#firstOf(Rule...)
+     */
+    protected Rule firstOf(Rule... rules) {
+        return factory.firstOf(rules);
+    }
+
+    /**
      * Creates a sequence rule.
      * @see RuleFactory#sequence(Rule...)
      */

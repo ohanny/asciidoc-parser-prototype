@@ -16,38 +16,20 @@ public class FirstOfMatcher implements Matcher {
 
     @Override
     public boolean match(MatcherContext context) {
-
+        context.shouldResetIfDirty();
         context.mark();
 
-        boolean shouldReset = false;
         for (int i = 0; i < rules.length; i++) {
             Matcher matcher = getSubMatcher(i);
 
-            if (shouldReset) { // if last match fails, reset will be done by parent
-                context.reset();
-            }
             if (matcher.match(context.getSubContext())) {
                 return true;
             }
 
+            // last match fails, reset
+            context.reset();
             context.removeLastSubContext();
-            shouldReset = true;
         }
-
-
-/*
-        for (Rule rule : rules) {
-            Matcher matcher = rule.getMatcher();
-            if (shouldReset) { // if last match fails, reset will be done by parent
-                context.reset();
-            }
-            if (matcher.match(context.getSubContext())) {
-                return true;
-            }
-
-            shouldReset = true;
-        }
-*/
 
         context.release();
 

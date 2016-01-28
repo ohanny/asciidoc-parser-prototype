@@ -57,7 +57,7 @@ public class ParserTest extends BaseParser {
 
         boolean matched = matcher.match(context);
 
-        Assert.assertFalse("Matched", matched);
+        Assert.assertFalse("Did not match", matched);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class ParserTest extends BaseParser {
 
         boolean matched = matcher.match(context);
 
-        assertTrue("Matched", matched);
+        assertTrue("Did not match", matched);
         InOrder inOrder = inOrder(listener);
         inOrder.verify(listener).enterNode("root");
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
@@ -90,7 +90,7 @@ public class ParserTest extends BaseParser {
 
         boolean matched = matcher.match(context);
 
-        assertTrue("Matched", matched);
+        assertTrue("Did not match", matched);
         InOrder inOrder = inOrder(listener);
         inOrder.verify(listener).enterNode("root");
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
@@ -112,7 +112,7 @@ public class ParserTest extends BaseParser {
 
         boolean matched = matcher.match(context);
 
-        assertTrue("Matched", matched);
+        assertTrue("Did not match", matched);
         InOrder inOrder = inOrder(listener);
         inOrder.verify(listener).enterNode("root");
         inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
@@ -131,7 +131,7 @@ public class ParserTest extends BaseParser {
 
         boolean matched = matcher.match(context);
 
-        assertTrue("Matched", matched);
+        assertTrue("Did not match", matched);
         InOrder inOrder = inOrder(listener);
         inOrder.verify(listener).enterNode("root");
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
@@ -150,7 +150,7 @@ public class ParserTest extends BaseParser {
 
         boolean matched = matcher.match(context);
 
-        assertTrue("Matched", matched);
+        assertTrue("Did not match", matched);
         InOrder inOrder = inOrder(listener);
         inOrder.verify(listener).enterNode("root");
         inOrder.verify(listener).characters(new char[] {'b'}, 0, 0);
@@ -169,7 +169,7 @@ public class ParserTest extends BaseParser {
 
         boolean matched = matcher.match(context);
 
-        assertTrue("Matched", matched);
+        assertTrue("Did not match", matched);
         InOrder inOrder = inOrder(listener);
         inOrder.verify(listener).enterNode("expression");
         inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
@@ -192,7 +192,7 @@ public class ParserTest extends BaseParser {
 
         boolean matched = matcher.match(context);
 
-        assertTrue("Matched", matched);
+        assertTrue("Did not match", matched);
         InOrder inOrder = inOrder(listener);
         inOrder.verify(listener).enterNode("expression");
         inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
@@ -220,7 +220,46 @@ public class ParserTest extends BaseParser {
 
         boolean matched = matcher.match(context);
 
-        assertTrue("Matched", matched);
+        assertTrue("Did not match", matched);
         assertEquals("", "(expression a (expression a b) (expression a b) b)", treeBuilder.getStringTree());
     }
+
+    @Test
+    public void test10() throws Exception {
+
+        Rule rule = node("root", firstOf(ch('a'), ch('b')));
+        InputBuffer input = new InputBuffer("a");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test11() throws Exception {
+
+        Rule rule = node("root", firstOf(ch('a'), ch('b')));
+        InputBuffer input = new InputBuffer("b");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'b'}, 0, 0);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
 }
