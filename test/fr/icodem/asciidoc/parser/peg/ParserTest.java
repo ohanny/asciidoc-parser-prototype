@@ -354,4 +354,107 @@ public class ParserTest extends BaseParser {
 
     }
 
+    @Test
+    public void test17() throws Exception {
+
+        Rule rule1 = firstOf(sequence(ch('a'), ch('b')), oneOrMore(ch('c')));
+        Rule rule2 = firstOf(sequence(ch('c'), ch('d')), zeroOrMore(ch('d')));
+        Rule rule = node("root", sequence(rule1, rule2));
+        InputBuffer input = new InputBuffer("abddd");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'a', 'b', 'd', 'd', 'd'}, 0, 4);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test18() throws Exception {
+
+        Rule rule1 = firstOf(sequence(ch('a'), ch('b')), oneOrMore(ch('c')));
+        Rule rule2 = firstOf(sequence(ch('c'), ch('d')), zeroOrMore(ch('d')));
+        Rule rule = node("root", sequence(rule1, rule2));
+        InputBuffer input = new InputBuffer("ab");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test19() throws Exception {
+
+        Rule rule1 = firstOf(sequence(ch('a'), ch('b')), oneOrMore(ch('c')));
+        Rule rule2 = firstOf(sequence(ch('c'), ch('d')), zeroOrMore(ch('d')));
+        Rule rule = node("root", sequence(rule1, rule2));
+        InputBuffer input = new InputBuffer("cccd");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'c', 'c', 'c', 'd'}, 0, 3);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test20() throws Exception {
+
+        Rule rule = node("root", sequence(test(sequence(ch('a'), ch('b'))), oneOrMore(firstOf(ch('a'),ch('b'),ch('c'),ch('d')))));
+        InputBuffer input = new InputBuffer("abcd");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'a', 'b', 'c', 'd'}, 0, 3);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test21() throws Exception {
+
+        Rule rule2 = sequence(ch('c'), ch('d'));
+        Rule rule1 = firstOf(sequence(ch('a'), ch('b')), oneOrMore(sequence(testNot(rule2), ch('c'))));
+        Rule rule = node("root", sequence(rule1, rule2));
+        InputBuffer input = new InputBuffer("cccd");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'c', 'c', 'c', 'd'}, 0, 3);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
 }

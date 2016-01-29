@@ -69,6 +69,22 @@ public class BaseParser {
     }
 
     /**
+     * Creates a test rule.
+     * @see RuleFactory#test(Rule)
+     */
+    protected Rule test(Rule rule) {
+        return factory.test(rule);
+    }
+
+    /**
+     * Creates a test not rule.
+     * @see RuleFactory#testNot(Rule)
+     */
+    protected Rule testNot(Rule rule) {
+        return factory.testNot(rule);
+    }
+
+    /**
      * Creates an optional rule.
      * @see RuleFactory#optional(Rule)
      */

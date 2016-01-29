@@ -77,6 +77,24 @@ public class RuleFactory {
     }
 
     /**
+     * Creates a rule that supplies a {@link TestMatcher test matcher}
+     * @param rule the rule to be matched
+     * @return the test rule
+     */
+    public Rule test(Rule rule) {
+        return () -> new TestMatcher(rule);
+    }
+
+    /**
+     * Creates a rule that supplies a {@link TestNotMatcher test not matcher}
+     * @param rule the rule to be not matched
+     * @return the test rule
+     */
+    public Rule testNot(Rule rule) {
+        return () -> new TestNotMatcher(rule);
+    }
+
+    /**
      * Creates a rule that supplies an {@link OptionalMatcher optional matcher}
      * @param rule the rule to be matched
      * @return the zero or more rule
