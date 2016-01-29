@@ -21,8 +21,6 @@ public class CharMatcher implements Matcher {
             return true;
         }
 
-        context.dirty();
-
         return false;
     }
 }

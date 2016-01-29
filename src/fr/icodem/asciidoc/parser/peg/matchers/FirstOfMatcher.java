@@ -19,7 +19,6 @@ public class FirstOfMatcher implements Matcher {
 
     @Override
     public boolean match(MatcherContext context) {
-        context.shouldResetIfDirty();
         context.mark();
 
         for (int i = 0; i < rules.length; i++) {

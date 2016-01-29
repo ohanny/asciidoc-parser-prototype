@@ -12,5 +12,4 @@ public interface InputBufferVisitor {
 
     void visitReset(int position, int marker);
 
-    void visitRelease(int marker, int[] markers);
 }

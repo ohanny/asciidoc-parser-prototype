@@ -19,8 +19,6 @@ public class ZeroOrMoreMatcher implements Matcher {
     @Override
     public boolean match(MatcherContext context) {
 
-        context.shouldResetIfDirty();
-
         if (matcher == null) {
             matcher = rule.getMatcher();
         }

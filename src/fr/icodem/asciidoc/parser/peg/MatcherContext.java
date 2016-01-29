@@ -2,8 +2,6 @@ package fr.icodem.asciidoc.parser.peg;
 
 public class MatcherContext {
     private int marker;
-    private boolean shouldResetIfDirty; // est capable de faire un reset, intercepte dirty
-    private boolean dirty; // marque le fait que l'input buffer est dirty
 
     private InputBuffer input;
     private MatcherContext root;// peut être pas utilisé
@@ -207,23 +205,7 @@ public class MatcherContext {
     }
 
     public void reset() {
-        if (dirty) {
-            input.reset(marker);
-            dirty = false;
-        }
-    }
-
-    public void shouldResetIfDirty() {
-        shouldResetIfDirty = true;
-    }
-
-    public void dirty() {
-        if (shouldResetIfDirty) {
-            dirty = true;
-        }
-        else if (parent != null) {
-            parent.dirty();
-        }
+        input.reset(marker);
     }
 
     public void setNodeName(String nodeName) {

@@ -19,6 +19,7 @@ public class SequenceMatcher implements Matcher {
 
     @Override
     public boolean match(MatcherContext context) {
+        context.mark();
 
         for (int i = 0; i < rules.length; i++) {
             Matcher matcher = getSubMatcher(i);
@@ -26,6 +27,7 @@ public class SequenceMatcher implements Matcher {
 
             if (!matcher.match(context.getSubContext())) {
                 context.removeLastSubContext();
+                context.reset();
                 return false;
             }
         }

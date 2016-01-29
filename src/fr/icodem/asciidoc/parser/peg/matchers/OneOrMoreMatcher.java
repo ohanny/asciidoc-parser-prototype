@@ -19,13 +19,12 @@ public class OneOrMoreMatcher implements Matcher {
     @Override
     public boolean match(MatcherContext context) {
 
-        context.shouldResetIfDirty();
-
         if (matcher == null) {
             matcher = rule.getMatcher();
         }
 
         context.mark();
+
         if (!matcher.match(context.getSubContext())) {
             context.reset();
             return false;

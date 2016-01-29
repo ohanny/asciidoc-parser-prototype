@@ -15,8 +15,6 @@ public class OptionalMatcher implements Matcher {
     @Override
     public boolean match(MatcherContext context) {
 
-        context.shouldResetIfDirty();
-
         if (matcher == null) {
             matcher = rule.getMatcher();
         }

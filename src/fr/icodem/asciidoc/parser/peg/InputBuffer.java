@@ -97,7 +97,7 @@ public class InputBuffer {
      * corresponding to the marker.
      * @param marker the marker used to reset the position
      */
-    public void reset(int marker) {
+    public void reset(int marker) {// TODO add assert
         position = marker;
     }
 
