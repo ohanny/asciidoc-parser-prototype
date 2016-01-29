@@ -316,4 +316,42 @@ public class ParserTest extends BaseParser {
         assertFalse("Rule matched", matched);
     }
 
+    @Test
+    public void test15() throws Exception {
+
+        Rule rule = node("root", firstOf(sequence(ch('a'), ch('b')), sequence(ch('c'), ch('d'))));
+        InputBuffer input = new InputBuffer("ab");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test16() throws Exception {
+
+        Rule rule = node("root", firstOf(sequence(ch('a'), ch('b')), sequence(ch('c'), ch('d'))));
+        InputBuffer input = new InputBuffer("cd");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'c', 'd'}, 0, 1);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
 }
