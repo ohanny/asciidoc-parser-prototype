@@ -69,6 +69,14 @@ public class BaseParser {
     }
 
     /**
+     * Creates a string in set rule.
+     * @see RuleFactory#stringInSet(String...)
+     */
+    protected Rule stringInSet(String... stringSet) {
+        return factory.stringInSet(stringSet);
+    }
+
+    /**
      * Creates a first of rule.
      * @see RuleFactory#firstOf(Rule...)
      */

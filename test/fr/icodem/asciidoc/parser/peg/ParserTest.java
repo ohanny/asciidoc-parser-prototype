@@ -694,4 +694,65 @@ public class ParserTest extends BaseParser {
 
     }
 
+    @Test
+    public void test37() throws Exception {
+
+        Rule rule = stringInSet("abc", "def");
+        InputBuffer input = new InputBuffer("abc");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+    }
+
+    @Test
+    public void test38() throws Exception {
+
+        Rule rule = stringInSet("abc", "def");
+        InputBuffer input = new InputBuffer("def");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+    }
+
+    @Test
+    public void test39() throws Exception {
+
+        Rule rule = stringInSet("abc", "def");
+        InputBuffer input = new InputBuffer("gh");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input);
+
+        boolean matched = matcher.match(context);
+
+        assertFalse("Rule should not match", matched);
+    }
+
+    @Test
+    public void test40() throws Exception {
+
+        Rule rule = node("root", sequence(stringInSet("abc", "def"), ch('z')));
+        InputBuffer input = new InputBuffer("defz");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'d', 'e', 'f', 'z'}, 0, 3);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
 }

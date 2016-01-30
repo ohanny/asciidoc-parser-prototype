@@ -84,6 +84,19 @@ public class RuleFactory {
     }
 
     /**
+     * Creates a rule that supplies a {@link StringInSetMatcher string in set matcher}
+     * @param stringSet one of the string in the set should be matched
+     * @return the string in set rule
+     */
+    public Rule stringInSet(String... stringSet) {
+        String name = "StringInSetRule.";
+        for (String string : stringSet) {
+            name += string;
+        }
+        return named(name, () -> new StringInSetMatcher(stringSet));
+    }
+
+    /**
      * Creates a rule that supplies a {@link FirstOfMatcher first of matcher}
      * @param rules the rules to be matched
      * @return the first of rule
