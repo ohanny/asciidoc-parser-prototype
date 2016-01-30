@@ -61,6 +61,14 @@ public class BaseParser {
     }
 
     /**
+     * Creates a string rule.
+     * @see RuleFactory#string(String)
+     */
+    protected Rule string(String string) {
+        return factory.string(string);
+    }
+
+    /**
      * Creates a first of rule.
      * @see RuleFactory#firstOf(Rule...)
      */

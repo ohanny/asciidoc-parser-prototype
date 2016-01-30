@@ -74,6 +74,16 @@ public class RuleFactory {
     }
 
     /**
+     * Creates a rule that supplies a {@link StringMatcher string matcher}
+     * @param string the string to be matched
+     * @return the string rule
+     */
+    public Rule string(String string) {
+        String name = "String." + string;
+        return named(name, () -> new StringMatcher(string));
+    }
+
+    /**
      * Creates a rule that supplies a {@link FirstOfMatcher first of matcher}
      * @param rules the rules to be matched
      * @return the first of rule
