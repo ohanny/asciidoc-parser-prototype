@@ -53,6 +53,14 @@ public class BaseParser {
     }
 
     /**
+     * Creates a char in set rule.
+     * @see RuleFactory#charInSet(char...)
+     */
+    protected Rule charInSet(char... charSet) {
+        return factory.charInSet(charSet);
+    }
+
+    /**
      * Creates a first of rule.
      * @see RuleFactory#firstOf(Rule...)
      */
