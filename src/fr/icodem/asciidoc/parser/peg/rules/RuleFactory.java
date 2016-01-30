@@ -50,6 +50,17 @@ public class RuleFactory {
     }
 
     /**
+     * Creates a rule that supplies a {@link CharInRangeMatcher char in range matcher}
+     * @param cLow the lower bound character
+     * @param cHigh the upper bound character
+     * @return the char in range rule
+     */
+    public Rule charInRange(char cLow, char cHigh) {
+        String name = "CharInRangeRule." + cLow + cHigh;
+        return named(name, () -> new CharInRangeMatcher(cLow, cHigh));
+    }
+
+    /**
      * Creates a rule that supplies a {@link FirstOfMatcher first of matcher}
      * @param rules the rules to be matched
      * @return the first of rule

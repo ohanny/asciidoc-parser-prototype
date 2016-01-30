@@ -457,4 +457,99 @@ public class ParserTest extends BaseParser {
 
     }
 
+    @Test
+    public void test22() throws Exception {
+
+        Rule rule = charInRange('a', 'f');
+        InputBuffer input = new InputBuffer("a");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+    }
+
+    @Test
+    public void test23() throws Exception {
+
+        Rule rule = charInRange('a', 'f');
+        InputBuffer input = new InputBuffer("f");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+    }
+
+    @Test
+    public void test24() throws Exception {
+
+        Rule rule = charInRange('a', 'f');
+        InputBuffer input = new InputBuffer("k");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input);
+
+        boolean matched = matcher.match(context);
+
+        assertFalse("Rule should not matched", matched);
+    }
+
+    @Test
+    public void test25() throws Exception {
+
+        Rule rule = node("root", sequence(charInRange('a', 'c'), ch('z')));
+        InputBuffer input = new InputBuffer("az");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'a', 'z'}, 0, 1);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test26() throws Exception {
+
+        Rule rule = node("root", sequence(charInRange('a', 'c'), ch('z')));
+        InputBuffer input = new InputBuffer("bz");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input, listener);
+
+        boolean matched = matcher.match(context);
+
+        assertTrue("Rule did not match", matched);
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[] {'b', 'z'}, 0, 1);
+        inOrder.verify(listener).exitNode("root");
+
+    }
+
+    @Test
+    public void test27() throws Exception {
+
+        Rule rule = node("root", sequence(charInRange('a', 'c'), ch('z')));
+        InputBuffer input = new InputBuffer("kz");
+
+        Matcher matcher = rule.getMatcher();
+        MatcherContext context = new MatcherContext(input);
+
+        boolean matched = matcher.match(context);
+
+        assertFalse("Rule should not match", matched);
+
+    }
+
 }

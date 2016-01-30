@@ -45,6 +45,14 @@ public class BaseParser {
     }
 
     /**
+     * Creates a char in range rule.
+     * @see RuleFactory#charInRange(char, char)
+     */
+    protected Rule charInRange(char cLow, char cHigh) {
+        return factory.charInRange(cLow, cHigh);
+    }
+
+    /**
      * Creates a first of rule.
      * @see RuleFactory#firstOf(Rule...)
      */
