@@ -4,6 +4,7 @@ import fr.icodem.asciidoc.parser.peg.MatcherContext;
 
 /**
  * A {@link Matcher matcher} matching a single character
+ * out of a given range of characters.
  */
 public class CharInRangeMatcher implements Matcher {
 
