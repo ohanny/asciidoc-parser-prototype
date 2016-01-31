@@ -85,11 +85,13 @@ public class InputBuffer {
         // TODO prendre en compte offset en plus
         if (end < start) return null;
 
+        char[] chars = Arrays.copyOfRange(data, start, end + 1);
+
         if (visitor != null) {
-            visitor.visitExtract(Arrays.copyOfRange(data, start, end + 1));
+            visitor.visitExtract(chars, start, end);
         }
 
-        return Arrays.copyOfRange(data, start, end + 1);
+        return chars;
     }
 
     /**
@@ -98,6 +100,10 @@ public class InputBuffer {
      * @param marker the marker used to reset the position
      */
     public void reset(int marker) {// TODO add assert
+        if (visitor != null) {
+            visitor.visitReset(position, marker);
+        }
+
         position = marker;
     }
 

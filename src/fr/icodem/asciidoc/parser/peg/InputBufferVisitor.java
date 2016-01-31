@@ -8,7 +8,7 @@ package fr.icodem.asciidoc.parser.peg;
 public interface InputBufferVisitor {
     void visitNextChar(int position, char c);
 
-    void visitExtract(char[] chars);
+    void visitExtract(char[] chars, int start, int end);
 
     void visitReset(int position, int marker);
 

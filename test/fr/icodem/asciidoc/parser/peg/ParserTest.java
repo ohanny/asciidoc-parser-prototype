@@ -2,7 +2,6 @@ package fr.icodem.asciidoc.parser.peg;
 
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -59,7 +58,7 @@ public class ParserTest extends BaseParser {
 
         boolean matched = matcher.match(context);
 
-        Assert.assertFalse("Did not match", matched);
+        assertFalse("Did not match", matched);
     }
 
     @Test
@@ -77,7 +76,6 @@ public class ParserTest extends BaseParser {
         inOrder.verify(listener).enterNode("root");
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
         inOrder.verify(listener).exitNode("root");
-
     }
 
     @Test
