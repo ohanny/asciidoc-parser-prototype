@@ -38,7 +38,7 @@ public class FlushingTest extends BaseParser {
 
     @Test
     public void test1() throws Exception {
-        Rule rule = node("root", sequence(ch('a'), ch('b')));
+        Rule rule = node("root", sequence(node("child", ch('a')), ch('b')));
         InputBuffer input = new InputBuffer("ab", visitor);
 
         Matcher matcher = rule.getMatcher();
@@ -48,9 +48,13 @@ public class FlushingTest extends BaseParser {
 
         assertTrue("Did not match", matched);
         InOrder inOrder = inOrder(listener, visitor);
+        inOrder.verify(visitor).visitNextChar(0, 'a');
+        inOrder.verify(visitor).visitNextChar(1, 'b');
         inOrder.verify(listener).enterNode("root");
-        inOrder.verify(visitor).visitExtract(new char[] {'a', 'b'}, 0, 1);
-        inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
+        inOrder.verify(listener).enterNode("child");
+        inOrder.verify(visitor).visitExtract(new char[] {'a'}, 0, 0);
+        inOrder.verify(listener).exitNode("child");
+        inOrder.verify(listener).characters(new char[] {'b'}, 1, 1);
         inOrder.verify(listener).exitNode("root");
     }
 
