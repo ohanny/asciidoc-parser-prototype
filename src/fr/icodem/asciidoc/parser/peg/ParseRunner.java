@@ -20,17 +20,22 @@ public class ParseRunner {
      * @param text the input text to parse
      * @return the ParsingResult for the run
      */
-    public ParsingResult parse(String text) {
+    public ParsingResult parse(String text, ParseTreeListener listener) {
 
         InputBuffer input = new InputBuffer(text);
 
         Matcher matcher = rule.getMatcher();
 
-        boolean matched = matcher.match(new MatcherContext(input));
+        boolean matched = matcher.match(new MatcherContext(input, listener));
 
         ParsingResult result = new ParsingResult(matched);
 
         return result;
 
     }
+
+    public ParsingResult parse(String text) {
+        return parse(text, null);
+    }
+
 }
