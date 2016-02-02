@@ -1,7 +1,5 @@
 package fr.icodem.asciidoc.parser.peg.listeners;
 
-import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
-
 public class ToStringTreeBuilder implements ParseTreeListener {
 
     private StringBuilder sb = new StringBuilder();
