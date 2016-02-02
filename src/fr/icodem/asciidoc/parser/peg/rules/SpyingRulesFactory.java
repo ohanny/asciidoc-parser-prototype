@@ -48,6 +48,11 @@ public class SpyingRulesFactory extends RulesFactory {
     }
 
     @Override
+    public Rule noneOf(char... charSet) {
+        return getSpyingRule(super.noneOf(charSet));
+    }
+
+    @Override
     public Rule string(String string) {
         return getSpyingRule(super.string(string));
     }

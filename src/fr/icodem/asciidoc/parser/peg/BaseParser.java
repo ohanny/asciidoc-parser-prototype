@@ -69,6 +69,28 @@ public class BaseParser {
     }
 
     /**
+     * Creates an 'any of' rule with a string argument.
+     */
+    protected Rule anyOf(String charSet) {
+        return anyOf(charSet.toCharArray());
+    }
+
+    /**
+     * Creates a 'none of' rule.
+     * @see RulesFactory#noneOf(char...)
+     */
+    protected Rule noneOf(char... charSet) {
+        return factory.noneOf(charSet);
+    }
+
+    /**
+     * Creates a 'none of' rule with a string argument.
+     */
+    protected Rule noneOf(String charSet) {
+        return noneOf(charSet.toCharArray());
+    }
+
+    /**
      * Creates a string rule.
      * @see RulesFactory#string(String)
      */

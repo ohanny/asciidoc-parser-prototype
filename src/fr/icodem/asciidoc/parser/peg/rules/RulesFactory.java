@@ -66,11 +66,24 @@ public class RulesFactory {
      * @return the char in set rule
      */
     public Rule anyOf(char... charSet) {
-        String name = "CharInSetRule.";
+        String name = "AnyOfRule.";
         for (char c : charSet) {
             name += c;
         }
         return named(name, () -> new AnyOfMatcher(charSet));
+    }
+
+    /**
+     * Creates a rule that supplies a {@link NoneOfMatcher 'none of' matcher}
+     * @param charSet the current char must be out of this char set
+     * @return the char in set rule
+     */
+    public Rule noneOf(char... charSet) {
+        String name = "NoneOfRule.";
+        for (char c : charSet) {
+            name += c;
+        }
+        return named(name, () -> new NoneOfMatcher(charSet));
     }
 
     /**

@@ -589,4 +589,25 @@ public class ParserTest extends BaseParser {
 
     }
 
+    @Test
+    public void test41() throws Exception {
+
+        Rule rule = noneOf("abc");
+
+        ParsingResult result = new ParseRunner(rule).parse("z");
+
+        assertTrue("Rule did not match", result.matched);
+    }
+
+    @Test
+    public void test42() throws Exception {
+
+        Rule rule = noneOf("abc");
+
+        ParsingResult result = new ParseRunner(rule).parse("b");
+
+        assertFalse("Rule should not match", result.matched);
+    }
+
+
 }
