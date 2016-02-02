@@ -48,8 +48,8 @@ public class SpyingRulesFactory extends RulesFactory {
     }
 
     @Override
-    public Rule charInSet(char... charSet) {
-        return getSpyingRule(super.charInSet(charSet));
+    public Rule anyOf(char... charSet) {
+        return getSpyingRule(super.anyOf(charSet));
     }
 
     @Override

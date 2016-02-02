@@ -63,11 +63,11 @@ public class BaseParser {
     }
 
     /**
-     * Creates a char in set rule.
-     * @see RulesFactory#charInSet(char...)
+     * Creates an 'any of' rule.
+     * @see RulesFactory#anyOf(char...)
      */
-    protected Rule charInSet(char... charSet) {
-        return factory.charInSet(charSet);
+    protected Rule anyOf(char... charSet) {
+        return factory.anyOf(charSet);
     }
 
     /**

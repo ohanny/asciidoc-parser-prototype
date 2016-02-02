@@ -61,16 +61,16 @@ public class RulesFactory {
     }
 
     /**
-     * Creates a rule that supplies a {@link CharInSetMatcher char in set matcher}
+     * Creates a rule that supplies a {@link AnyOfMatcher 'any of' matcher}
      * @param charSet the current char must be in this char set
      * @return the char in set rule
      */
-    public Rule charInSet(char... charSet) {
+    public Rule anyOf(char... charSet) {
         String name = "CharInSetRule.";
         for (char c : charSet) {
             name += c;
         }
-        return named(name, () -> new CharInSetMatcher(charSet));
+        return named(name, () -> new AnyOfMatcher(charSet));
     }
 
     /**

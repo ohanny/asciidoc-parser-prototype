@@ -6,14 +6,14 @@ import fr.icodem.asciidoc.parser.peg.MatcherContext;
  * A {@link Matcher matcher} matching a single character
  * out of a given set of characters.
  */
-public class CharInSetMatcher implements Matcher {
+public class AnyOfMatcher implements Matcher {
 
     private char[] charSet;
     private String label;
 
-    public CharInSetMatcher(char... charSet) {
+    public AnyOfMatcher(char... charSet) {
         this.charSet = charSet;
-        this.label = "charSet [" + new String(charSet) + "]";
+        this.label = "anyOf [" + new String(charSet) + "]";
     }
 
     @Override

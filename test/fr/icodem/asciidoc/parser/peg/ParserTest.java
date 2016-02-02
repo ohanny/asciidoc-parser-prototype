@@ -443,7 +443,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test28() throws Exception {
 
-        Rule rule = charInSet('a', 'x', 'i');
+        Rule rule = anyOf('a', 'x', 'i');
 
         ParsingResult result = new ParseRunner(rule).parse("a");
 
@@ -453,7 +453,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test29() throws Exception {
 
-        Rule rule = charInSet('a', 'x', 'i');
+        Rule rule = anyOf('a', 'x', 'i');
 
         ParsingResult result = new ParseRunner(rule).parse("i");
 
@@ -463,7 +463,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test30() throws Exception {
 
-        Rule rule = charInSet('a', 'x', 'i');
+        Rule rule = anyOf('a', 'x', 'i');
 
         ParsingResult result = new ParseRunner(rule).parse("k");
 
@@ -473,7 +473,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test31() throws Exception {
 
-        Rule rule = node("root", sequence(charInSet('y', 'm'), ch('z')));
+        Rule rule = node("root", sequence(anyOf('y', 'm'), ch('z')));
 
         ParsingResult result = new ParseRunner(rule).parse("yz", listener);
 
@@ -488,7 +488,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test32() throws Exception {
 
-        Rule rule = node("root", sequence(charInSet('y', 'm'), ch('z')));
+        Rule rule = node("root", sequence(anyOf('y', 'm'), ch('z')));
 
         ParsingResult result = new ParseRunner(rule).parse("mz", listener);
 
@@ -503,7 +503,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test33() throws Exception {
 
-        Rule rule = node("root", sequence(charInSet('y', 'm'), ch('z')));
+        Rule rule = node("root", sequence(anyOf('y', 'm'), ch('z')));
 
         ParsingResult result = new ParseRunner(rule).parse("kz");
 

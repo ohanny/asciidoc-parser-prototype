@@ -160,13 +160,6 @@ public class MatcherContext {
         listener.characters(extracted, start, end);
     }
 
-//    public MatcherContext(InputBuffer input) {
-//        this(input, null, null, new DefaultParsingProcessListener());
-//    }
-
-//    public MatcherContext(InputBuffer input, ParseTreeListener listener) {
-//        this(input, null, listener, new DefaultParsingProcessListener());
-//    }
     public MatcherContext(InputBuffer input,
                            ParseTreeListener listener,
                            ParsingProcessListener parsingProcessListener) {
