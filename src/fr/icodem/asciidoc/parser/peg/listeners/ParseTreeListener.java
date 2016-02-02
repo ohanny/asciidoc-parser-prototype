@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.peg;
+package fr.icodem.asciidoc.parser.peg.listeners;
 
 public interface ParseTreeListener {
     void characters(char[] chars, int startIndex, int endIndex);
