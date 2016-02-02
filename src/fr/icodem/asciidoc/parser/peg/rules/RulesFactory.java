@@ -5,7 +5,7 @@ import fr.icodem.asciidoc.parser.peg.matchers.*;
 /**
  * A factory that creates {@link Rule rule objects}. Named rules are stored in cache.
  */
-public class RuleFactory {
+public class RulesFactory {
 
     private RulesCache cache = new RulesCache();
 
