@@ -48,6 +48,13 @@ public class BaseParser {
     }
 
     /**
+     * Creates an EOI rule.
+     */
+    protected Rule eoi() {
+        return ch(Chars.EOI);
+    }
+
+    /**
      * Creates a char in range rule.
      * @see RulesFactory#charInRange(char, char)
      */

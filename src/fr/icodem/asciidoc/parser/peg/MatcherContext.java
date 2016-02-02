@@ -1,6 +1,5 @@
 package fr.icodem.asciidoc.parser.peg;
 
-import fr.icodem.asciidoc.parser.peg.listeners.DefaultParsingProcessListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
 
@@ -187,8 +186,6 @@ public class MatcherContext {
         this.listener = listener;
         this.parsingProcessListener = parsingProcessListener;
         this.marker = -1;
-
-        parsingProcessListener.matcherContextLevel(level);
     }
 
     public MatcherContext getSubContext() {
@@ -217,7 +214,9 @@ public class MatcherContext {
     }
 
     public char getNextChar() {
-        return input.getNextChar();
+        char c = input.getNextChar();
+        parsingProcessListener.nextChar(c);
+        return c;
     }
 
     public void mark() {
@@ -239,5 +238,13 @@ public class MatcherContext {
 
     public ParsingProcessListener getParsingProcessListener() {
         return parsingProcessListener;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getPosition() {
+        return input.getPosition();
     }
 }

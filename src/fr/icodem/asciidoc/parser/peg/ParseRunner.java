@@ -47,6 +47,12 @@ public class ParseRunner {
 
     }
 
+    public ParsingResult parse(String text, ParseTreeListener parseTreeListener,
+                               ParsingProcessListener parsingProcessListener) {
+        return parse(text, parseTreeListener,
+                parsingProcessListener, new DefaultInputBufferStateListener());
+    }
+
     public ParsingResult parse(String text, ParseTreeListener parseTreeListener) {
         return parse(text, parseTreeListener,
                 new DefaultParsingProcessListener(), new DefaultInputBufferStateListener());

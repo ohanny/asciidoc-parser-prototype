@@ -68,10 +68,7 @@ public class InputBuffer {
      */
     public char getNextChar() {
         if (position < numberOfCharacters) {
-            //if (visitor != null) {
-                listener.visitNextChar(position, data[position]);
-            //}
-            //System.out.println("POS = " + position + " => " + data[position]);
+            listener.visitNextChar(position, data[position]);
             return data[position++];
         }
 
@@ -92,9 +89,7 @@ public class InputBuffer {
 
         char[] chars = Arrays.copyOfRange(data, start, end + 1);
 
-        //if (visitor != null) {
-            listener.visitExtract(chars, start, end);
-        //}
+        listener.visitExtract(chars, start, end);
 
         return chars;
     }
@@ -105,9 +100,7 @@ public class InputBuffer {
      * @param marker the marker used to reset the position
      */
     public void reset(int marker) {// TODO add assert
-        //if (visitor != null) {
-            listener.visitReset(position, marker);
-        //}
+        listener.visitReset(position, marker);
 
         position = marker;
     }
@@ -120,7 +113,5 @@ public class InputBuffer {
         System.arraycopy(data, position, data, 0, numberOfCharacters - position);
         numberOfCharacters -= position;
         position = 0;
-//        System.out.println("POS=" + position + ", nb="+numberOfCharacters);
-//        System.out.println(new String(Arrays.copyOf(data, numberOfCharacters)));
     }
 }
