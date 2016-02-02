@@ -4,6 +4,7 @@ import fr.icodem.asciidoc.parser.peg.BaseParser;
 import fr.icodem.asciidoc.parser.peg.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.ParsingResult;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
+import fr.icodem.asciidoc.parser.peg.listeners.ToStringAnalysisBuilder;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 import java.util.Deque;

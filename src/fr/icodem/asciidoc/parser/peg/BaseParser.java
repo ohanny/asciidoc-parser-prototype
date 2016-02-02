@@ -1,6 +1,5 @@
 package fr.icodem.asciidoc.parser.peg;
 
-import fr.icodem.asciidoc.parser.peg.listeners.ToStringAnalysisBuilder;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.rules.SpyingRulesFactory;
@@ -12,7 +11,7 @@ public class BaseParser {
     /**
      * Rules instantiation is delegated to a factory
      */
-    private RulesFactory factory = new SpyingRulesFactory(new ToStringAnalysisBuilder());
+    private RulesFactory factory = new SpyingRulesFactory();
 
     /**
      * Creates a named rule.

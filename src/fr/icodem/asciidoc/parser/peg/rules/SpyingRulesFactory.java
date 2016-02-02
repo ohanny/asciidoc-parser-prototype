@@ -1,16 +1,11 @@
 package fr.icodem.asciidoc.parser.peg.rules;
 
-import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.matchers.SpyingMatcher;
 
 public class SpyingRulesFactory extends RulesFactory {
 
-    private ParsingProcessListener listener;
-
-    public SpyingRulesFactory(ParsingProcessListener listener) {
-        this.listener = listener;
-    }
+    public SpyingRulesFactory() {}
 
     private Rule getSpyingRule(Rule rule) {
         return () -> {
