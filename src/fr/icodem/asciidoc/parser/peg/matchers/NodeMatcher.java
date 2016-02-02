@@ -5,10 +5,12 @@ import fr.icodem.asciidoc.parser.peg.MatcherContext;
 public class NodeMatcher implements Matcher {
 
     private String name;
+    private String label;
     private Matcher delegate;
 
     public NodeMatcher(String name, Matcher delegate) {
         this.name = name;
+        this.label = "node [" + name + "]";
         this.delegate = delegate;
     }
 
@@ -30,5 +32,10 @@ public class NodeMatcher implements Matcher {
     @Override
     public boolean isOptional() {
         return delegate.isOptional();
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 }

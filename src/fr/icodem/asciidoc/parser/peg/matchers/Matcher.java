@@ -20,4 +20,8 @@ public interface Matcher {
         return false;
     }
 
+    default String getLabel() {
+        return null;
+    }
+
 }

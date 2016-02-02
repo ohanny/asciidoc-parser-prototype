@@ -32,4 +32,9 @@ public class OptionalMatcher implements Matcher {
     public boolean isOptional() {
         return true;
     }
+
+    @Override
+    public String getLabel() {
+        return "optional";
+    }
 }

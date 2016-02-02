@@ -55,4 +55,8 @@ public class OneOrMoreMatcher implements Matcher {
 //    }
 
 
+    @Override
+    public String getLabel() {
+        return "oneOrMore";
+    }
 }

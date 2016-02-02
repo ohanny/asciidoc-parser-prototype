@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.listeners.DefaultInputBufferStateListener;
 import org.junit.Test;
 
 import static fr.icodem.asciidoc.parser.peg.Chars.*;
@@ -11,7 +12,7 @@ public class InputBufferTest {
 
     @Test
     public void itShouldReadAllCharacters() throws Exception {
-        buffer = new InputBuffer("abcde");
+        buffer = new InputBuffer("abcde", new DefaultInputBufferStateListener());
 
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();
@@ -32,7 +33,7 @@ public class InputBufferTest {
 
     @Test
     public void itShouldGetMarkers() throws Exception {
-        buffer = new InputBuffer("abcde");
+        buffer = new InputBuffer("abcde", new DefaultInputBufferStateListener());
 
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();
@@ -61,7 +62,7 @@ public class InputBufferTest {
 
     @Test
     public void itShouldResetToMarker() throws Exception {
-        buffer = new InputBuffer("abcde");
+        buffer = new InputBuffer("abcde", new DefaultInputBufferStateListener());
 
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();
@@ -85,7 +86,7 @@ public class InputBufferTest {
 
     @Test
     public void itShouldConsumeReadCharacters() throws Exception {
-        buffer = new InputBuffer("abcde");
+        buffer = new InputBuffer("abcde", new DefaultInputBufferStateListener());
         buffer.getNextChar();
         buffer.getNextChar();
         buffer.consume();

@@ -40,4 +40,9 @@ public class ZeroOrMoreMatcher implements Matcher {
     public boolean isOptional() {
         return true;
     }
+
+    @Override
+    public String getLabel() {
+        return "zeroOrMore";
+    }
 }

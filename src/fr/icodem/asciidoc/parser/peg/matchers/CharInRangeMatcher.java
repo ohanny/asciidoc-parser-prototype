@@ -10,10 +10,12 @@ public class CharInRangeMatcher implements Matcher {
 
     private char cLow;
     private char cHigh;
+    private String label;
 
     public CharInRangeMatcher(char cLow, char cHigh) {
         this.cLow = cLow;
         this.cHigh = cHigh;
+        this.label = "charRange [" + cLow + ".." + cHigh + "]";
     }
 
     @Override
@@ -25,5 +27,10 @@ public class CharInRangeMatcher implements Matcher {
         }
 
         return true;
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 }

@@ -55,4 +55,8 @@ public class SequenceMatcher implements Matcher {
         context.canStartFlushing();
     }
 
+    @Override
+    public String getLabel() {
+        return "sequence";
+    }
 }

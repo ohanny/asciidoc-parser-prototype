@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
+import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import org.junit.Before;
@@ -11,7 +13,7 @@ import static org.mockito.Mockito.*;
 
 public class FlushingTest extends BaseParser {
     private ParseTreeListener listener;
-    private InputBufferVisitor visitor;
+    private InputBufferStateListener inputBufferStateListener;
 
     private ParseTreeListener listener2 = new ParseTreeListener() {
         @Override
@@ -33,26 +35,22 @@ public class FlushingTest extends BaseParser {
     @Before
     public void init() {
         listener = mock(ParseTreeListener.class);
-        visitor = mock(InputBufferVisitor.class);
+        inputBufferStateListener = mock(InputBufferStateListener.class);
     }
 
     @Test
     public void test1() throws Exception {
         Rule rule = node("root", sequence(node("child", ch('a')), ch('b')));
-        InputBuffer input = new InputBuffer("ab", visitor);
 
-        Matcher matcher = rule.getMatcher();
-        MatcherContext context = new MatcherContext(input, listener);
+        ParsingResult result = new ParseRunner(rule).parse("ab", listener, null, inputBufferStateListener);
 
-        boolean matched = matcher.match(context);
-
-        assertTrue("Did not match", matched);
-        InOrder inOrder = inOrder(listener, visitor);
-        inOrder.verify(visitor).visitNextChar(0, 'a');
-        inOrder.verify(visitor).visitNextChar(1, 'b');
+        assertTrue("Did not match", result.matched);
+        InOrder inOrder = inOrder(listener, inputBufferStateListener);
+        inOrder.verify(inputBufferStateListener).visitNextChar(0, 'a');
+        inOrder.verify(inputBufferStateListener).visitNextChar(1, 'b');
         inOrder.verify(listener).enterNode("root");
         inOrder.verify(listener).enterNode("child");
-        inOrder.verify(visitor).visitExtract(new char[] {'a'}, 0, 0);
+        inOrder.verify(inputBufferStateListener).visitExtract(new char[] {'a'}, 0, 0);
         inOrder.verify(listener).exitNode("child");
         inOrder.verify(listener).characters(new char[] {'b'}, 1, 1);
         inOrder.verify(listener).exitNode("root");
@@ -61,21 +59,17 @@ public class FlushingTest extends BaseParser {
     @Test
     public void test2() throws Exception {
         Rule rule = node("root", sequence(node("child", ch('a')), optional(ch('b'))));
-        InputBuffer input = new InputBuffer("ab", visitor);
 
-        Matcher matcher = rule.getMatcher();
-        MatcherContext context = new MatcherContext(input, listener);
+        ParsingResult result = new ParseRunner(rule).parse("ab", listener, null, inputBufferStateListener);
 
-        boolean matched = matcher.match(context);
-
-        assertTrue("Did not match", matched);
-        InOrder inOrder = inOrder(listener, visitor);
-        inOrder.verify(visitor).visitNextChar(0, 'a');
+        assertTrue("Did not match", result.matched);
+        InOrder inOrder = inOrder(listener, inputBufferStateListener);
+        inOrder.verify(inputBufferStateListener).visitNextChar(0, 'a');
         inOrder.verify(listener).enterNode("root");
         inOrder.verify(listener).enterNode("child");
-        inOrder.verify(visitor).visitExtract(new char[] {'a'}, 0, 0);
+        inOrder.verify(inputBufferStateListener).visitExtract(new char[] {'a'}, 0, 0);
         inOrder.verify(listener).exitNode("child");
-        inOrder.verify(visitor).visitNextChar(1, 'b');
+        inOrder.verify(inputBufferStateListener).visitNextChar(1, 'b');
         inOrder.verify(listener).characters(new char[] {'b'}, 1, 1);
         inOrder.verify(listener).exitNode("root");
     }

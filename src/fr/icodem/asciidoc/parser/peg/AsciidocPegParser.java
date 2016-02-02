@@ -1,6 +1,5 @@
 package fr.icodem.asciidoc.parser.peg;
 
-import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 public class AsciidocPegParser extends BaseParser {
@@ -9,17 +8,14 @@ public class AsciidocPegParser extends BaseParser {
         new AsciidocPegParser().parse("aaaaabbbbb");
     }
 
-    private InputBuffer input;
-
     public void parse(String text) {
-        input = new InputBuffer(text);
 
         Rule ab = ab();
 
         Rule expression = expression();
-        Matcher matcher = expression.getMatcher();
 
-        boolean result = matcher.match(new MatcherContext(input));
+        ParseRunner runner = new ParseRunner(expression);
+        ParsingResult result = runner.parse(text);
 
         System.out.println(result);
     }

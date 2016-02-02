@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.listeners.*;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
@@ -20,13 +21,25 @@ public class ParseRunner {
      * @param text the input text to parse
      * @return the ParsingResult for the run
      */
-    public ParsingResult parse(String text, ParseTreeListener listener) {
+    public ParsingResult parse(String text, ParseTreeListener parseTreeListener,
+                               ParsingProcessListener parsingProcessListener,
+                               InputBufferStateListener inputBufferStateListener) {
 
-        InputBuffer input = new InputBuffer(text);
+        if (parseTreeListener == null) {
+            parseTreeListener = new DefaultParseTreeListener();
+        }
+        if (parsingProcessListener == null) {
+            parsingProcessListener = new DefaultParsingProcessListener();
+        }
+        if (inputBufferStateListener == null) {
+            inputBufferStateListener = new DefaultInputBufferStateListener();
+        }
+
+        InputBuffer input = new InputBuffer(text, inputBufferStateListener);
 
         Matcher matcher = rule.getMatcher();
 
-        boolean matched = matcher.match(new MatcherContext(input, listener));
+        boolean matched = matcher.match(new MatcherContext(input, parseTreeListener, parsingProcessListener));
 
         ParsingResult result = new ParsingResult(matched);
 
@@ -34,8 +47,15 @@ public class ParseRunner {
 
     }
 
+    public ParsingResult parse(String text, ParseTreeListener parseTreeListener) {
+        return parse(text, parseTreeListener,
+                new DefaultParsingProcessListener(), new DefaultInputBufferStateListener());
+    }
+
     public ParsingResult parse(String text) {
-        return parse(text, null);
+        return parse(text, new DefaultParseTreeListener(),
+                new DefaultParsingProcessListener(),
+                new DefaultInputBufferStateListener());
     }
 
 }

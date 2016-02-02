@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
+
 import java.util.Arrays;
 
 import static fr.icodem.asciidoc.parser.peg.Chars.*;
@@ -10,11 +12,11 @@ import static fr.icodem.asciidoc.parser.peg.Chars.*;
 public class InputBuffer {
 
     /**
-     * A {@link InputBufferVisitor visitor} is notified of the internal
+     * A {@link InputBufferStateListener listener} is notified of the internal
      * state of the input buffer at various stage of the parsing.
      * Mainly used for test purpose.
      */
-    private InputBufferVisitor visitor;
+    private InputBufferStateListener listener;
 
     /**
      * A moving window buffer of the data being scanned. We keep adding
@@ -34,26 +36,29 @@ public class InputBuffer {
      */
     private int numberOfCharacters;
 
-    /**
-     * Constructs an input buffer given an input text.
-     * @param text the input text to be parsed
-     */
-    public InputBuffer(String text) {
-        this(text, null);
-    }
+//    /**
+//     * Constructs an input buffer given an input text.
+//     * @param text the input text to be parsed
+//     */
+//    public InputBuffer(String text) {
+//        this(text, null);
+//    }
 
     /**
      * Constructs an input buffer given an input text.
      * @param text the input text to be parsed
-     * @param visitor the visitor notified of internal state of the buffer
+     * @param listener the listener notified of internal state of the buffer
      */
-    public InputBuffer(String text, InputBufferVisitor visitor) {
+    public InputBuffer(String text, InputBufferStateListener listener) {
         data = new char[1024];
         System.arraycopy(text.toCharArray(), 0, data, 0, text.length());
 
         numberOfCharacters = text.length();
 
-        this.visitor = visitor;
+        if (listener == null) {
+            throw new IllegalArgumentException("Input buffer state listener must not be null");
+        }
+        this.listener = listener;
     }
 
     /**
@@ -63,9 +68,9 @@ public class InputBuffer {
      */
     public char getNextChar() {
         if (position < numberOfCharacters) {
-            if (visitor != null) {
-                visitor.visitNextChar(position, data[position]);
-            }
+            //if (visitor != null) {
+                listener.visitNextChar(position, data[position]);
+            //}
             //System.out.println("POS = " + position + " => " + data[position]);
             return data[position++];
         }
@@ -87,9 +92,9 @@ public class InputBuffer {
 
         char[] chars = Arrays.copyOfRange(data, start, end + 1);
 
-        if (visitor != null) {
-            visitor.visitExtract(chars, start, end);
-        }
+        //if (visitor != null) {
+            listener.visitExtract(chars, start, end);
+        //}
 
         return chars;
     }
@@ -100,9 +105,9 @@ public class InputBuffer {
      * @param marker the marker used to reset the position
      */
     public void reset(int marker) {// TODO add assert
-        if (visitor != null) {
-            visitor.visitReset(position, marker);
-        }
+        //if (visitor != null) {
+            listener.visitReset(position, marker);
+        //}
 
         position = marker;
     }

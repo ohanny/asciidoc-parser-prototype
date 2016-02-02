@@ -45,4 +45,8 @@ public class FirstOfMatcher implements Matcher {
         return matcher;
     }
 
+    @Override
+    public String getLabel() {
+        return "firstOf";
+    }
 }

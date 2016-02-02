@@ -8,9 +8,11 @@ import fr.icodem.asciidoc.parser.peg.MatcherContext;
 public class CharMatcher implements Matcher {
 
     private char character;
+    private String label;
 
     public CharMatcher(char c) {
         this.character = c;
+        this.label = "ch [" + character + "]";
     }
 
     @Override
@@ -22,5 +24,10 @@ public class CharMatcher implements Matcher {
         }
 
         return false;
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 }

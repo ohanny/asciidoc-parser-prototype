@@ -1,11 +1,19 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.listeners.DefaultParsingProcessListener;
+import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
+import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
+
 public class MatcherContext {
     private int marker;
 
     private InputBuffer input;
     private MatcherContext root;// peut être pas utilisé
     private MatcherContext parent;
+
+    // The level is mainly useful when analyzing the context at debug time.
+    // It is not used during the normal process.
+    private int level;
 
     // children
     private MatcherContext subContext; // first child
@@ -24,7 +32,9 @@ public class MatcherContext {
         return canStartFlushing;
     }
 
+    // listeners
     private ParseTreeListener listener;
+    private ParsingProcessListener parsingProcessListener;
 
     private String nodeName;
     private boolean flushed;// node only
@@ -151,32 +161,42 @@ public class MatcherContext {
         listener.characters(extracted, start, end);
     }
 
-    public MatcherContext(InputBuffer input) {
-        this(input, null, null);
+//    public MatcherContext(InputBuffer input) {
+//        this(input, null, null, new DefaultParsingProcessListener());
+//    }
+
+//    public MatcherContext(InputBuffer input, ParseTreeListener listener) {
+//        this(input, null, listener, new DefaultParsingProcessListener());
+//    }
+    public MatcherContext(InputBuffer input,
+                           ParseTreeListener listener,
+                           ParsingProcessListener parsingProcessListener) {
+        this(input, null, listener, parsingProcessListener);
     }
 
-    public MatcherContext(InputBuffer input, ParseTreeListener listener) {
-        this(input, null, listener);
-    }
-
-    private MatcherContext(InputBuffer input, MatcherContext parent, ParseTreeListener listener) {
+    private MatcherContext(InputBuffer input, MatcherContext parent,
+                           ParseTreeListener listener, ParsingProcessListener parsingProcessListener) {
         this.input = input;
         this.parent = parent;
         if (parent == null) {
             this.root = this;
         } else {
             this.root = parent.root;
+            this.level = parent.level + 1;
         }
         this.listener = listener;
+        this.parsingProcessListener = parsingProcessListener;
         this.marker = -1;
+
+        parsingProcessListener.matcherContextLevel(level);
     }
 
     public MatcherContext getSubContext() {
         if (subContext == null) {
-            subContext = new MatcherContext(input, this, listener);
+            subContext = new MatcherContext(input, this, listener, parsingProcessListener);
             subContext.lastContext = subContext;
         } else {
-            MatcherContext ctx = new MatcherContext(input, this, listener);
+            MatcherContext ctx = new MatcherContext(input, this, listener, parsingProcessListener);
             subContext.lastContext.nextContext = ctx;
             ctx.prevContext = subContext.lastContext;
             subContext.lastContext = ctx;
@@ -217,4 +237,7 @@ public class MatcherContext {
         return nodeName != null;
     }
 
+    public ParsingProcessListener getParsingProcessListener() {
+        return parsingProcessListener;
+    }
 }
