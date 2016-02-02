@@ -78,11 +78,11 @@ public class BaseParser {
     }
 
     /**
-     * Creates a string in set rule.
-     * @see RulesFactory#stringInSet(String...)
+     * Creates an 'any of string' rule.
+     * @see RulesFactory#anyOfString(String...)
      */
-    protected Rule stringInSet(String... stringSet) {
-        return factory.stringInSet(stringSet);
+    protected Rule anyOfString(String... stringSet) {
+        return factory.anyOfString(stringSet);
     }
 
     /**

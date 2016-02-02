@@ -84,16 +84,16 @@ public class RulesFactory {
     }
 
     /**
-     * Creates a rule that supplies a {@link StringInSetMatcher string in set matcher}
+     * Creates a rule that supplies a {@link AnyOfStringMatcher 'any of string' matcher}
      * @param stringSet one of the string in the set should be matched
-     * @return the string in set rule
+     * @return the 'any of string' rule
      */
-    public Rule stringInSet(String... stringSet) {
-        String name = "StringInSetRule.";
+    public Rule anyOfString(String... stringSet) {
+        String name = "AnyOfStringRule.";
         for (String string : stringSet) {
             name += string;
         }
-        return named(name, () -> new StringInSetMatcher(stringSet));
+        return named(name, () -> new AnyOfStringMatcher(stringSet));
     }
 
     /**

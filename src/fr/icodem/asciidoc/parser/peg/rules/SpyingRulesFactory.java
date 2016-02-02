@@ -58,8 +58,8 @@ public class SpyingRulesFactory extends RulesFactory {
     }
 
     @Override
-    public Rule stringInSet(String... stringSet) {
-        return getSpyingRule(super.stringInSet(stringSet));
+    public Rule anyOfString(String... stringSet) {
+        return getSpyingRule(super.anyOfString(stringSet));
     }
 
     @Override

@@ -547,7 +547,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test37() throws Exception {
 
-        Rule rule = stringInSet("abc", "def");
+        Rule rule = anyOfString("abc", "def");
 
         ParsingResult result = new ParseRunner(rule).parse("abc");
 
@@ -557,7 +557,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test38() throws Exception {
 
-        Rule rule = stringInSet("abc", "def");
+        Rule rule = anyOfString("abc", "def");
 
         ParsingResult result = new ParseRunner(rule).parse("def");
 
@@ -567,7 +567,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test39() throws Exception {
 
-        Rule rule = stringInSet("abc", "def");
+        Rule rule = anyOfString("abc", "def");
 
         ParsingResult result = new ParseRunner(rule).parse("gh");
 
@@ -577,7 +577,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test40() throws Exception {
 
-        Rule rule = node("root", sequence(stringInSet("abc", "def"), ch('z')));
+        Rule rule = node("root", sequence(anyOfString("abc", "def"), ch('z')));
 
         ParsingResult result = new ParseRunner(rule).parse("defz", listener);
 

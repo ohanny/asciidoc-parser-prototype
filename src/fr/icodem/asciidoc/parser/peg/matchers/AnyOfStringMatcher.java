@@ -6,11 +6,11 @@ import fr.icodem.asciidoc.parser.peg.MatcherContext;
  * A {@link Matcher matcher} matching a string
  * out of a given set of strings.
  */
-public class StringInSetMatcher implements Matcher {
+public class AnyOfStringMatcher implements Matcher {
 
     private String[] stringSet;
 
-    public StringInSetMatcher(String... stringSet) {
+    public AnyOfStringMatcher(String... stringSet) {
         this.stringSet = stringSet;
     }
 
