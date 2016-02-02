@@ -50,14 +50,14 @@ public class RulesFactory {
     }
 
     /**
-     * Creates a rule that supplies a {@link CharInRangeMatcher char in range matcher}
+     * Creates a rule that supplies a {@link CharRangeMatcher 'char range' matcher}
      * @param cLow the lower bound character
      * @param cHigh the upper bound character
-     * @return the char in range rule
+     * @return the 'char range' rule
      */
-    public Rule charInRange(char cLow, char cHigh) {
-        String name = "CharInRangeRule." + cLow + cHigh;
-        return named(name, () -> new CharInRangeMatcher(cLow, cHigh));
+    public Rule charRange(char cLow, char cHigh) {
+        String name = "CharRangeRule." + cLow + cHigh;
+        return named(name, () -> new CharRangeMatcher(cLow, cHigh));
     }
 
     /**

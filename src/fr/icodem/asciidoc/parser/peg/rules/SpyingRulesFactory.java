@@ -43,8 +43,8 @@ public class SpyingRulesFactory extends RulesFactory {
     }
 
     @Override
-    public Rule charInRange(char cLow, char cHigh) {
-        return getSpyingRule(super.charInRange(cLow, cHigh));
+    public Rule charRange(char cLow, char cHigh) {
+        return getSpyingRule(super.charRange(cLow, cHigh));
     }
 
     @Override

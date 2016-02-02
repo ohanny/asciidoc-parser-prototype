@@ -1,6 +1,5 @@
 package fr.icodem.asciidoc.parser.peg;
 
-import fr.icodem.asciidoc.parser.peg.listeners.DefaultParsingProcessListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ToStringAnalysisBuilder;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
@@ -55,11 +54,11 @@ public class BaseParser {
     }
 
     /**
-     * Creates a char in range rule.
-     * @see RulesFactory#charInRange(char, char)
+     * Creates a 'char range' rule.
+     * @see RulesFactory#charRange(char, char)
      */
-    protected Rule charInRange(char cLow, char cHigh) {
-        return factory.charInRange(cLow, cHigh);
+    protected Rule charRange(char cLow, char cHigh) {
+        return factory.charRange(cLow, cHigh);
     }
 
     /**

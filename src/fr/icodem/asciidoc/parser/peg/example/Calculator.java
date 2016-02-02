@@ -4,7 +4,6 @@ import fr.icodem.asciidoc.parser.peg.BaseParser;
 import fr.icodem.asciidoc.parser.peg.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.ParsingResult;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
-import fr.icodem.asciidoc.parser.peg.listeners.ToStringAnalysisBuilder;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 import java.util.Deque;
@@ -130,7 +129,7 @@ public class Calculator extends BaseParser implements ParseTreeListener {
     }
 
     Rule number() {
-        return node("number", oneOrMore(charInRange('0', '9')));
+        return node("number", oneOrMore(charRange('0', '9')));
     }
 
 }

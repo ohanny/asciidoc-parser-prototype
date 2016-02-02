@@ -6,13 +6,13 @@ import fr.icodem.asciidoc.parser.peg.MatcherContext;
  * A {@link Matcher matcher} matching a single character
  * out of a given range of characters.
  */
-public class CharInRangeMatcher implements Matcher {
+public class CharRangeMatcher implements Matcher {
 
     private char cLow;
     private char cHigh;
     private String label;
 
-    public CharInRangeMatcher(char cLow, char cHigh) {
+    public CharRangeMatcher(char cLow, char cHigh) {
         this.cLow = cLow;
         this.cHigh = cHigh;
         this.label = "charRange [" + cLow + ".." + cHigh + "]";

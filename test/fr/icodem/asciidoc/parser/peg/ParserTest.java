@@ -1,9 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
-import fr.icodem.asciidoc.parser.peg.listeners.ToStringAnalysisBuilder;
 import fr.icodem.asciidoc.parser.peg.listeners.ToStringTreeBuilder;
-import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import org.junit.Before;
 import org.junit.Test;
@@ -372,7 +370,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test22() throws Exception {
 
-        Rule rule = charInRange('a', 'f');
+        Rule rule = charRange('a', 'f');
 
         ParsingResult result = new ParseRunner(rule).parse("a");
 
@@ -382,7 +380,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test23() throws Exception {
 
-        Rule rule = charInRange('a', 'f');
+        Rule rule = charRange('a', 'f');
 
         ParsingResult result = new ParseRunner(rule).parse("f");
 
@@ -392,7 +390,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test24() throws Exception {
 
-        Rule rule = charInRange('a', 'f');
+        Rule rule = charRange('a', 'f');
 
         ParsingResult result = new ParseRunner(rule).parse("g");
 
@@ -402,7 +400,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test25() throws Exception {
 
-        Rule rule = node("root", sequence(charInRange('a', 'c'), ch('z')));
+        Rule rule = node("root", sequence(charRange('a', 'c'), ch('z')));
 
         ParsingResult result = new ParseRunner(rule).parse("az", listener);
 
@@ -417,7 +415,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test26() throws Exception {
 
-        Rule rule = node("root", sequence(charInRange('a', 'c'), ch('z')));
+        Rule rule = node("root", sequence(charRange('a', 'c'), ch('z')));
 
         ParsingResult result = new ParseRunner(rule).parse("bz", listener);
 
@@ -432,7 +430,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test27() throws Exception {
 
-        Rule rule = node("root", sequence(charInRange('a', 'c'), ch('z')));
+        Rule rule = node("root", sequence(charRange('a', 'c'), ch('z')));
 
         ParsingResult result = new ParseRunner(rule).parse("kz", listener);
 
