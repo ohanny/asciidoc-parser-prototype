@@ -97,7 +97,7 @@ public class RulesFactory {
     }
 
     /**
-     * Creates a rule that supplies a {@link FirstOfMatcher first of matcher}
+     * Creates a rule that supplies a {@link FirstOfMatcher 'first of' matcher}
      * @param rules the rules to be matched
      * @return the first of rule
      */
@@ -106,7 +106,7 @@ public class RulesFactory {
     }
 
     /**
-     * Creates a rule that supplies a {@link OneOrMoreMatcher one or more matcher}
+     * Creates a rule that supplies a {@link OneOrMoreMatcher 'one or more' matcher}
      * @param rule the rule to be matched
      * @return the one or more rule
      */
@@ -133,7 +133,7 @@ public class RulesFactory {
     }
 
     /**
-     * Creates a rule that supplies a {@link TestNotMatcher test not matcher}
+     * Creates a rule that supplies a {@link TestNotMatcher 'test not' matcher}
      * @param rule the rule to be not matched
      * @return the test rule
      */
@@ -151,7 +151,7 @@ public class RulesFactory {
     }
 
     /**
-     * Creates a rule that supplies a {@link ZeroOrMoreMatcher zero or more matcher}
+     * Creates a rule that supplies a {@link ZeroOrMoreMatcher 'zero or more' matcher}
      * @param rule the rule to be matched
      * @return the zero or more rule
      */

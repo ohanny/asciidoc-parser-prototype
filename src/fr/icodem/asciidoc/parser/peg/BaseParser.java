@@ -86,7 +86,7 @@ public class BaseParser {
     }
 
     /**
-     * Creates a first of rule.
+     * Creates a 'first of' rule.
      * @see RulesFactory#firstOf(Rule...)
      */
     protected Rule firstOf(Rule... rules) {
@@ -94,7 +94,7 @@ public class BaseParser {
     }
 
     /**
-     * Creates a one or more rule.
+     * Creates a 'one or more' rule.
      * @see RulesFactory#oneOreMore(Rule)
      */
     protected Rule oneOrMore(Rule rule) {
@@ -118,7 +118,7 @@ public class BaseParser {
     }
 
     /**
-     * Creates a test not rule.
+     * Creates a 'test not' rule.
      * @see RulesFactory#testNot(Rule)
      */
     protected Rule testNot(Rule rule) {
@@ -134,7 +134,7 @@ public class BaseParser {
     }
 
     /**
-     * Creates a zero or more rule.
+     * Creates a 'zero or more' rule.
      * @see RulesFactory#zeroOrMore(Rule)
      */
     protected Rule zeroOrMore(Rule rule) {
