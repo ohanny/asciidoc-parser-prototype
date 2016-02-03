@@ -51,6 +51,7 @@ public class InputBuffer {
      */
     public InputBuffer(String text, InputBufferStateListener listener) {
         data = new char[1024];
+        Arrays.fill(data, Chars.EOI);
         System.arraycopy(text.toCharArray(), 0, data, 0, text.length());
 
         numberOfCharacters = text.length();
@@ -70,6 +71,8 @@ public class InputBuffer {
         if (position < numberOfCharacters) {
             listener.visitNextChar(position, data[position]);
             return data[position++];
+        } else if (position == numberOfCharacters) {
+            position++;
         }
 
         return EOI;

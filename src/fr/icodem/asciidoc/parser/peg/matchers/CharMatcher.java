@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.matchers;
 
+import fr.icodem.asciidoc.parser.peg.Chars;
 import fr.icodem.asciidoc.parser.peg.MatcherContext;
 
 /**
@@ -12,7 +13,7 @@ public class CharMatcher implements Matcher {
 
     public CharMatcher(char c) {
         this.character = c;
-        this.label = "ch [" + character + "]";
+        this.label = "ch [" + Chars.toString(character) + "]";
     }
 
     @Override

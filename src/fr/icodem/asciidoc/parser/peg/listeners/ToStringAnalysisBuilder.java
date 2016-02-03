@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.listeners;
 
+import fr.icodem.asciidoc.parser.peg.Chars;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 
 import java.util.Deque;
@@ -26,17 +27,27 @@ public class ToStringAnalysisBuilder implements ParsingProcessListener {
             if (chars == null) {
                 chars = new StringBuilder();
             }
-            chars.append(c);
+            Chars.append(c, chars);
         }
 
     }
 
     private void print(TreeNode node) {
 
-        System.out.println(getTab(node.level) + node.label +
-                " (" + node.position + ")" +
-                (node.chars == null?"":" - chars read -> [" + node.chars + "]") +
-                (node.match?(node.level == 0?" - MATCHED":""):" - FAILED"));
+        StringBuilder sb = new StringBuilder();
+        sb.append(getTab(node.level)).append(node.label)
+          .append(" (").append(node.position).append(')');
+        if (node.chars != null) {
+            sb.append(" - chars read -> [").append(node.chars).append("]");
+        }
+        if (!node.match) {
+            sb.append(" - FAILED");
+        }
+        else if (node.level == 0) {
+            sb.append(" - MATCHED");
+        }
+
+        System.out.println(sb);
         node.children.forEach(this::print);
 
     }

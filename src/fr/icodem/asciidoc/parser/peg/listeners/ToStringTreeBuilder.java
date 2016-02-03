@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.listeners;
 
+import fr.icodem.asciidoc.parser.peg.Chars;
+
 public class ToStringTreeBuilder implements ParseTreeListener {
 
     private StringBuilder sb = new StringBuilder();
@@ -7,7 +9,8 @@ public class ToStringTreeBuilder implements ParseTreeListener {
     @Override
     public void characters(char[] characters, int startIndex, int endIndex) {
         for (char c: characters) {
-            sb.append(' ').append(c);
+            sb.append(' ');
+            Chars.append(c, sb);
         }
     }
 

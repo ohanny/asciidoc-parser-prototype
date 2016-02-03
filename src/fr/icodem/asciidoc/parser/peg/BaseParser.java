@@ -115,6 +115,13 @@ public class BaseParser {
     }
 
     /**
+     * Creates a 'first of' rule with characters.
+     */
+    protected Rule firstOf(char... chars) {
+        return firstOf(toRule(chars));
+    }
+
+    /**
      * Creates a 'one or more' rule.
      * @see RulesFactory#oneOreMore(Rule)
      */
@@ -155,10 +162,26 @@ public class BaseParser {
     }
 
     /**
+     * Creates an optional rule with character.
+     */
+    protected Rule optional(char c) {
+        return optional(ch(c));
+    }
+
+    /**
      * Creates a 'zero or more' rule.
      * @see RulesFactory#zeroOrMore(Rule)
      */
     protected Rule zeroOrMore(Rule rule) {
         return factory.zeroOrMore(rule);
     }
+
+    private Rule[] toRule(char[] chars) {
+        Rule[] rules = new Rule[chars.length];
+        for (int i = 0; i < chars.length; i++) {
+            rules[i] = ch(chars[i]);
+        }
+        return rules;
+    }
+
 }

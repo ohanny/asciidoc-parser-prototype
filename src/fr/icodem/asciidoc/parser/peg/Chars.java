@@ -15,4 +15,28 @@ public interface Chars {
      */
     final static char EOI = '\uFFFF';
 
+    static void append(char c, StringBuilder sb) {
+        switch (c) {
+            case Chars.EOI:
+                sb.append("<EOF>");
+                break;
+            case '\r':
+                sb.append("\\r");
+                break;
+            case '\n':
+                sb.append("\\n");
+                break;
+            default:
+                sb.append(c);
+        }
+    }
+
+    static String toString(char... chars) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : chars) {
+            append(c, sb);
+        }
+        return sb.toString();
+    }
+
 }
