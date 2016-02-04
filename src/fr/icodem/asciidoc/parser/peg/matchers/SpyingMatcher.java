@@ -14,7 +14,7 @@ public class SpyingMatcher implements Matcher {
     @Override
     public boolean match(MatcherContext context) {
         ParsingProcessListener listener = context.getParsingProcessListener();
-        listener.matcherStart(delegate, context.getLevel(), context.getPosition());
+        listener.matcherStart(delegate, context.getLevel(), context.getPosition() + 1);
 
         boolean match = delegate.match(context);
 
