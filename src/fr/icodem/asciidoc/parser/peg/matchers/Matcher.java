@@ -21,7 +21,7 @@ public interface Matcher {
     }
 
     default String getLabel() {
-        return null;
+        return "anonymous";
     }
 
 }
