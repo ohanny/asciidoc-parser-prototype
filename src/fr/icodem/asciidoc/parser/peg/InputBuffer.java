@@ -95,7 +95,7 @@ public class InputBuffer {
     }
 
     private void syncNewLinePositions() {
-        for (int i = lastNewLinePositionIndex; i == 0 ; i--) {
+        for (int i = lastNewLinePositionIndex; i > -1 ; i--) {
             if (position >= newLinePositions[lastNewLinePositionIndex]) {
                 break;
             }
