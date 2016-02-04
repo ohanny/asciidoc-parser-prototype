@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.matchers.AnyMatcher;
+import fr.icodem.asciidoc.parser.peg.matchers.EmptyMatcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.rules.SpyingRulesFactory;
@@ -28,6 +30,31 @@ public class BaseParser {
     protected Rule node(String name, Rule delegate) {
         return factory.node(name, delegate);
     }
+
+    protected Rule cached(String name) {
+        return factory.cached(name);
+    }
+
+    protected boolean isCached(String name) {
+        return cached(name) != null;
+    }
+
+    protected Rule wrap(Rule before, Rule inner) {
+        return wrap(before, inner, null);
+    }
+
+    protected Rule wrap(Rule before, Rule inner, Rule after) {
+        return factory.wrap(before, inner, after);
+    }
+
+    protected Rule empty() {
+        return factory.empty();
+    }
+
+    protected Rule any() {
+        return factory.any();
+    }
+
 
     /**
      * Creates a proxy rule.
@@ -123,10 +150,14 @@ public class BaseParser {
 
     /**
      * Creates a 'one or more' rule.
-     * @see RulesFactory#oneOreMore(Rule)
+     * @see RulesFactory#oneOrMore(Rule)
      */
     protected Rule oneOrMore(Rule rule) {
-        return factory.oneOreMore(rule);
+        return factory.oneOrMore(rule);
+    }
+
+    protected Rule oneOrMore(char c) {
+        return oneOrMore(ch(c));
     }
 
     /**

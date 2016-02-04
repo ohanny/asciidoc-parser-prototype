@@ -29,6 +29,10 @@ public class RulesFactory {
         return cache.get(name, () -> new NodeRule(name, delegate));
     }
 
+    public Rule cached(String name) {
+        return cache.get(name);
+    }
+
     /**
      * Creates and store a {@link ProxyRule proxy rule}
      * @param name the name of the rule
@@ -37,6 +41,20 @@ public class RulesFactory {
     public Rule proxy(String name) {
         String proxyName = "ProxyRule." + name;
         return cache.get(proxyName, () -> new ProxyRule(name, () -> cache.get(name)));
+    }
+
+    public Rule wrap(Rule before, Rule inner, Rule after) {
+        Rule ruleBefore = (before == null)?empty():before;
+        Rule ruleAfter = (after == null)?empty():after;
+        return () -> new WrapperMatcher(ruleBefore, inner, ruleAfter);
+    }
+
+    public Rule empty() {
+        return named("EmptyRule", () -> new EmptyMatcher());
+    }
+
+    public Rule any() {
+        return named("AnyRule", () -> new AnyMatcher());
     }
 
     /**
@@ -123,7 +141,7 @@ public class RulesFactory {
      * @param rule the rule to be matched
      * @return the one or more rule
      */
-    public Rule oneOreMore(Rule rule) {
+    public Rule oneOrMore(Rule rule) {
         return () -> new OneOrMoreMatcher(rule);
     }
 

@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.rules;
 
+import fr.icodem.asciidoc.parser.peg.matchers.AnyMatcher;
+import fr.icodem.asciidoc.parser.peg.matchers.EmptyMatcher;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.matchers.SpyingMatcher;
 
@@ -30,6 +32,21 @@ public class SpyingRulesFactory extends RulesFactory {
     @Override
     public Rule proxy(String name) {
         return getSpyingRule(super.proxy(name));
+    }
+
+    @Override
+    public Rule wrap(Rule before, Rule inner, Rule after) {
+        return getSpyingRule(super.wrap(before, inner, after));
+    }
+
+    @Override
+    public Rule empty() {
+        return getSpyingRule(super.empty());
+    }
+
+    @Override
+    public Rule any() {
+        return getSpyingRule(super.any());
     }
 
     @Override
@@ -68,8 +85,8 @@ public class SpyingRulesFactory extends RulesFactory {
     }
 
     @Override
-    public Rule oneOreMore(Rule rule) {
-        return getSpyingRule(super.oneOreMore(rule));
+    public Rule oneOrMore(Rule rule) {
+        return getSpyingRule(super.oneOrMore(rule));
     }
 
     @Override
