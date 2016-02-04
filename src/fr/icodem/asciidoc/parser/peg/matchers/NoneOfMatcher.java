@@ -16,7 +16,7 @@ public class NoneOfMatcher implements Matcher {
 
     public NoneOfMatcher(char... charSet) {
         this.charSet = Arrays.copyOf(charSet, charSet.length + 1);
-        this.charSet[charSet.length - 1] = Chars.EOI;
+        this.charSet[charSet.length] = Chars.EOI;
         this.label = "noneOf [" + Chars.toString(charSet) + "]";
     }
 
