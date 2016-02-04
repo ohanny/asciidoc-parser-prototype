@@ -36,6 +36,9 @@ public class InputBuffer {
      */
     private int numberOfCharacters;
 
+    private int[] newLinePositions;
+    private int lastNewLinePositionIndex;
+
 //    /**
 //     * Constructs an input buffer given an input text.
 //     * @param text the input text to be parsed
@@ -51,6 +54,10 @@ public class InputBuffer {
      */
     public InputBuffer(String text, InputBufferStateListener listener) {
         data = new char[1024];
+        position = -1;
+        newLinePositions = new int[128];
+        Arrays.fill(newLinePositions, -1);
+        lastNewLinePositionIndex = -1;
         Arrays.fill(data, Chars.EOI);
         System.arraycopy(text.toCharArray(), 0, data, 0, text.length());
 
@@ -69,21 +76,53 @@ public class InputBuffer {
      */
     public char getNextChar() {
         if (position < numberOfCharacters) {
-            listener.visitNextChar(position, data[position]);
-            return data[position++];
+            char c = data[++position];
+            if (c == '\n') {
+                System.out.println("XXXXXXX => " + position);
+                addNewLinePosition(position);
+            }
+            listener.visitNextChar(position, c);
+            return c;
         } else if (position == numberOfCharacters) {
             position++;
         }
 
+        listener.visitNextChar(position, EOI);
         return EOI;
+    }
+
+    private void addNewLinePosition(int position) {
+        newLinePositions[++lastNewLinePositionIndex] = position;
+    }
+
+    private void syncNewLinePositions() {
+        for (int i = lastNewLinePositionIndex; i == 0 ; i--) {
+            if (position >= newLinePositions[lastNewLinePositionIndex]) {
+                break;
+            }
+            else {
+                newLinePositions[lastNewLinePositionIndex--] = -1;
+            }
+        }
+    }
+
+    // getCharPositionInLine
+    public int getPositionInLine() {
+        if (lastNewLinePositionIndex > -1) {
+            if (newLinePositions[lastNewLinePositionIndex] == position) {
+                if (lastNewLinePositionIndex > 0) {
+                    return position - newLinePositions[lastNewLinePositionIndex - 1] - 1;
+                }
+                return position;
+            }
+
+            return position - newLinePositions[lastNewLinePositionIndex] - 1;
+        }
+        return position;
     }
 
     public int getPosition() {
         return position;
-    }
-
-    public int getLastReadPosition() {
-        return position - 1;
     }
 
     public char[] extract(int start, int end) {
@@ -103,9 +142,11 @@ public class InputBuffer {
      * @param marker the marker used to reset the position
      */
     public void reset(int marker) {// TODO add assert
-        listener.visitReset(position, marker);
-
+        int oldPos = position;
         position = marker;
+        syncNewLinePositions();
+
+        listener.visitReset(oldPos, marker);
     }
 
     /**
@@ -114,7 +155,7 @@ public class InputBuffer {
      */
     public void consume() {
         System.arraycopy(data, position, data, 0, numberOfCharacters - position);
-        numberOfCharacters -= position;
+        numberOfCharacters -= position + 1;
         position = 0;
     }
 }
