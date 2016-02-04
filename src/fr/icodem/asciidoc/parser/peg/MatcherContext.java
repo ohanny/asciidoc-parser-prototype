@@ -3,6 +3,9 @@ package fr.icodem.asciidoc.parser.peg;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MatcherContext {
     private int marker;
 
@@ -41,8 +44,7 @@ public class MatcherContext {
 
     public void matched() {
         matched = true;
-        //lastEndExtractPosition = input.getPosition();
-        lastEndExtractPosition = input.getLastReadPosition();
+        lastEndExtractPosition = input.getPosition();
     }
 
 
@@ -57,9 +59,6 @@ public class MatcherContext {
         lastStartExtractPosition = -1;
     }
     private void childFlushEndNode(int position) {
-        //System.out.println("childFlushEndNode() => " + input.getPosition());
-        //System.out.println("childFlushEndNode() => " + position);
-        //lastStartExtractPosition = input.getPosition() - 1;
         lastStartExtractPosition = position + 1;
     }
 
@@ -222,7 +221,7 @@ public class MatcherContext {
 
     public void setNodeName(String nodeName) {
         this.nodeName = nodeName;
-        this.lastStartExtractPosition = input.getPosition();
+        this.lastStartExtractPosition = input.getPosition() + 1;
     }
 
     public boolean isNode() {
@@ -239,5 +238,28 @@ public class MatcherContext {
 
     public int getPosition() {
         return input.getPosition();
+    }
+
+    public int getPositionInLine() {
+        return input.getPositionInLine();
+    }
+
+    private Map<String, Object> attributes;
+
+    public void setAttribute(String name, Object value) {
+        if (attributes == null) {
+            attributes = new HashMap<>(5);
+        }
+        attributes.put(name, value);
+    }
+    public Object getAttribute(String name) {
+        if (attributes == null) {
+            if (parent == null) return null;
+            return parent.getAttribute(name);
+        }
+        return attributes.get(name);
+    }
+    public boolean getBooleanAttribute(String name) {
+        return (Boolean)getAttribute(name);
     }
 }
