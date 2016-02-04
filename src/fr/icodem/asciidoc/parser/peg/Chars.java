@@ -26,6 +26,9 @@ public interface Chars {
             case '\n':
                 sb.append("\\n");
                 break;
+            case '\t':
+                sb.append("\\t");
+                break;
             default:
                 sb.append(c);
         }
