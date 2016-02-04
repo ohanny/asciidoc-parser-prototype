@@ -78,7 +78,6 @@ public class InputBuffer {
         if (position < numberOfCharacters) {
             char c = data[++position];
             if (c == '\n') {
-                System.out.println("XXXXXXX => " + position);
                 addNewLinePosition(position);
             }
             listener.visitNextChar(position, c);
