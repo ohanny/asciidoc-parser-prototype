@@ -37,4 +37,8 @@ public class TestMatcher implements Matcher {
         return matcher.isOptional();
     }
 
+    @Override
+    public String getLabel() {
+        return "test";
+    }
 }

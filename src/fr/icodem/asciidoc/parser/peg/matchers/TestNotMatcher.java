@@ -37,4 +37,8 @@ public class TestNotMatcher implements Matcher {
         return matcher.isOptional();
     }
 
+    @Override
+    public String getLabel() {
+        return "testNot";
+    }
 }
