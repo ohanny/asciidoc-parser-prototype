@@ -16,4 +16,8 @@ public class AnyMatcher implements Matcher {
         return true;
     }
 
+    @Override
+    public String getLabel() {
+        return "any";
+    }
 }
