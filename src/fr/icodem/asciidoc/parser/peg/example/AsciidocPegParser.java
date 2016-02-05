@@ -58,8 +58,21 @@ public class AsciidocPegParser extends BaseParser {
      */
 
     private Rule header() {
-        return node("header", sequence(documentTitle()));
+        return node("header", sequence(documentTitle(), optional(sequence(authors()))));
     }
+
+    /*
+    header
+    : documentTitle
+      (multiComment|singleComment)*
+      (authors
+        (multiComment|singleComment)*
+        (attributeEntry|revisionInfo)?
+      )?
+      attributeEntry*
+    ;
+
+     */
 
     private Rule content() {
         return node("content", oneOrMore(firstOf(
@@ -239,6 +252,69 @@ attributeValuePart
 
      */
 
+    private Rule authors() {
+        return node("authors", sequence(author(), zeroOrMore(sequence(ch(';'), author())), optional(blank()), firstOf(newLine(), eoi())));
+    }
+
+    private Rule author() {
+        return node("author", sequence(authorName(), optional(sequence(ch('<'), authorAddress(), ch('>')))));
+    }
+
+    private Rule authorName() {
+        return node("authorName", oneOrMore(noneOf("<>{}[]=\r\n\t")));
+    }
+
+    private Rule authorAddress() {
+        return node("authorAddress", oneOrMore(noneOf("<>{}[]=\r\n\t")));
+    }
+
+    /*
+    authors
+    : author
+      (SEMICOLON author)*
+      (SP|TAB)* (CR? NL|EOF)
+    ;
+
+author
+    : authorName (LABRACK authorAddress RABRACK)?
+    ;
+
+authorName
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |SP
+      |MINUS
+      |DOT
+      )+
+    ;
+
+authorAddress
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |MINUS
+      |SLASH
+      |DOT
+      )+
+    ;
+
+     */
+
     // utils rules
     private Rule blank() {
         return oneOrMore(firstOf(' ', '\t'));
@@ -249,12 +325,7 @@ attributeValuePart
     }
 
     private Rule isFirstCharInLine() {// TODO store rule in cache
-        //return () -> ctx -> ctx.getPositionInLine() == 0;
-        return () -> ctx -> {
-            System.out.println("POS IN LINE => " + ctx.getPositionInLine());
-            return ctx.getPositionInLine() == 0;
-        };
-        //return node("isFirstCharInLine", () -> ctx -> ctx.getPositionInLine() == 0);
+        return () -> ctx -> ctx.getPositionInLine() == 0;
     }
 
     private Rule isNextCharAtBeginningOfLine() {
