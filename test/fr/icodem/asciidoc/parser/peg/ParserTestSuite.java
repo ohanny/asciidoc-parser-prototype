@@ -8,7 +8,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
     InputBufferTest.class,
     ParserTest.class,
-    FlushingTest.class
+    FlushingTest.class,
+    CalculatorTest.class
 })
 public class ParserTestSuite {
 }
