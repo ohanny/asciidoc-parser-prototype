@@ -1,7 +1,5 @@
 package fr.icodem.asciidoc.parser.peg;
 
-import fr.icodem.asciidoc.parser.peg.matchers.AnyMatcher;
-import fr.icodem.asciidoc.parser.peg.matchers.EmptyMatcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.rules.SpyingRulesFactory;
@@ -29,6 +27,14 @@ public class BaseParser {
      */
     protected Rule node(String name, Rule delegate) {
         return factory.node(name, delegate);
+    }
+
+    /**
+     * Creates a cached rule.
+     * @see RulesFactory#cached(String, Rule)
+     */
+    protected Rule cached(String name, Rule delegate) {
+        return factory.cached(name, delegate);
     }
 
     protected Rule cached(String name) {

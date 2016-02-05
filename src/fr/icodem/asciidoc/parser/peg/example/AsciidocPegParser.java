@@ -321,7 +321,8 @@ authorAddress
     }
 
     private Rule newLine() {
-        return sequence(optional('\r'), ch('\n'));
+        if (isCached("newLine")) return cached("newLine");
+        return cached("newLine", sequence(optional('\r'), ch('\n')));
     }
 
     private Rule isFirstCharInLine() {// TODO store rule in cache

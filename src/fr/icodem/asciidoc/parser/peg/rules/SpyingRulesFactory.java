@@ -1,7 +1,5 @@
 package fr.icodem.asciidoc.parser.peg.rules;
 
-import fr.icodem.asciidoc.parser.peg.matchers.AnyMatcher;
-import fr.icodem.asciidoc.parser.peg.matchers.EmptyMatcher;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.matchers.SpyingMatcher;
 
@@ -17,6 +15,17 @@ public class SpyingRulesFactory extends RulesFactory {
             }
             return new SpyingMatcher(rule.getMatcher());
         };
+    }
+
+    /**
+     * The spying rule factory promotes cached instance to named rule
+     * @param name the name of the rule
+     * @param rule the rule object to be cached
+     * @return the spying rule wrapping the rule argument
+     */
+    @Override
+    public Rule cached(String name, Rule rule) {
+        return named(name, rule);
     }
 
     @Override

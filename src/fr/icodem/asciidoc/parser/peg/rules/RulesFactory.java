@@ -10,6 +10,24 @@ public class RulesFactory {
     private RulesCache cache = new RulesCache();
 
     /**
+     * Stores a rule in cache
+     * @param name the name of the rule
+     * @param rule the rule object to be cached
+     * @return the cached rule
+     */
+    public Rule cached(String name, Rule rule) {
+        return cachedInternal(name, rule);
+    }
+
+    private Rule cachedInternal(String name, Rule rule) {
+        return cache.get(name, () -> rule);
+    }
+
+    public Rule cached(String name) {
+        return cache.get(name);
+    }
+
+    /**
      * Creates and store a {@link NamedRule named rule}
      * @param name the name of the rule
      * @param delegate the delegate object that provides the matcher
@@ -29,9 +47,6 @@ public class RulesFactory {
         return cache.get(name, () -> new NodeRule(name, delegate));
     }
 
-    public Rule cached(String name) {
-        return cache.get(name);
-    }
 
     /**
      * Creates and store a {@link ProxyRule proxy rule}
@@ -50,11 +65,11 @@ public class RulesFactory {
     }
 
     public Rule empty() {
-        return named("EmptyRule", () -> new EmptyMatcher());
+        return cachedInternal("EmptyRule", () -> new EmptyMatcher());
     }
 
     public Rule any() {
-        return named("AnyRule", () -> new AnyMatcher());
+        return cachedInternal("AnyRule", () -> new AnyMatcher());
     }
 
     /**
@@ -64,7 +79,7 @@ public class RulesFactory {
      */
     public Rule ch(char c) {
         String name = "CharRule." + c;
-        return named(name, () -> new CharMatcher(c));
+        return cachedInternal(name, () -> new CharMatcher(c));
     }
 
     /**
@@ -75,7 +90,7 @@ public class RulesFactory {
      */
     public Rule charRange(char cLow, char cHigh) {
         String name = "CharRangeRule." + cLow + cHigh;
-        return named(name, () -> new CharRangeMatcher(cLow, cHigh));
+        return cachedInternal(name, () -> new CharRangeMatcher(cLow, cHigh));
     }
 
     /**
@@ -88,7 +103,7 @@ public class RulesFactory {
         for (char c : charSet) {
             name += c;
         }
-        return named(name, () -> new AnyOfMatcher(charSet));
+        return cachedInternal(name, () -> new AnyOfMatcher(charSet));
     }
 
     /**
@@ -101,7 +116,7 @@ public class RulesFactory {
         for (char c : charSet) {
             name += c;
         }
-        return named(name, () -> new NoneOfMatcher(charSet));
+        return cachedInternal(name, () -> new NoneOfMatcher(charSet));
     }
 
     /**
@@ -111,7 +126,7 @@ public class RulesFactory {
      */
     public Rule string(String string) {
         String name = "String." + string;
-        return named(name, () -> new StringMatcher(string));
+        return cachedInternal(name, () -> new StringMatcher(string));
     }
 
     /**
@@ -124,7 +139,7 @@ public class RulesFactory {
         for (String string : stringSet) {
             name += string;
         }
-        return named(name, () -> new AnyOfStringMatcher(stringSet));
+        return cachedInternal(name, () -> new AnyOfStringMatcher(stringSet));
     }
 
     /**

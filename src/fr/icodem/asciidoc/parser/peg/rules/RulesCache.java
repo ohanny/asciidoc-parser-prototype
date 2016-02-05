@@ -26,9 +26,6 @@ public class RulesCache {
                 throw new IllegalArgumentException("Rule supplier must not be null");
             }
             rule = supplier.getRule();
-            if (rule.getName() == null) {
-                throw new IllegalArgumentException("Supplied rule should get a name, but was null");
-            }
             nameToRuleCache.put(name, rule);
         }
         return rule;
