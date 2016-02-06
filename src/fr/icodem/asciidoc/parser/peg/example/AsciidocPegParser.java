@@ -58,7 +58,11 @@ public class AsciidocPegParser extends BaseParser {
      */
 
     private Rule header() {
-        return node("header", sequence(documentTitle(), optional(sequence(authors()))));
+        return node("header", sequence(
+                documentTitle(),
+                optional(sequence(authors())),
+                zeroOrMore(attributeEntry())
+        ));
     }
 
     /*
@@ -224,7 +228,7 @@ sectionTitle :
     }
 
     private Rule attributeValuePart() {
-        return node("attributeValuePart", oneOrMore(noneOf("\r\n+")));
+        return node("attributeValuePart", oneOrMore(noneOf("\r\n\t+")));
     }
 
     /*
@@ -314,6 +318,9 @@ authorAddress
     ;
 
      */
+
+
+
 
     // utils rules
     private Rule blank() {
