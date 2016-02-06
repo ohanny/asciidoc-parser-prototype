@@ -26,7 +26,6 @@ public class ZeroOrMoreMatcher implements Matcher {
         while (true) {
             context.mark();
             if (!matcher.match(context.getSubContext())) {
-                context.removeLastSubContext();
                 context.reset();
 
                 break;

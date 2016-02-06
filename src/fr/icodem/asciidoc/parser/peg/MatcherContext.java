@@ -57,9 +57,12 @@ public class MatcherContext {
             notifyCharacters(lastStartExtractPosition, position - 1);
         }
         lastStartExtractPosition = -1;
+        //lastStartExtractPosition = 0;
+        //System.out.println(nodeName + " (childFlushStartNode) = " + lastStartExtractPosition);
     }
     private void childFlushEndNode(int position) {
         lastStartExtractPosition = position + 1;
+        //System.out.println(nodeName + " (childFlushEndNode) = " + lastStartExtractPosition);
     }
 
     private void notifyParentFlushStartNode() {
@@ -194,7 +197,7 @@ public class MatcherContext {
     }
 
 
-    public void removeLastSubContext() {
+    private void removeLastSubContext() {
         if (subContext != null) {
             if (subContext.lastContext.prevContext == null) { // first child
                 subContext = null;
@@ -217,11 +220,13 @@ public class MatcherContext {
 
     public void reset() {
         input.reset(marker);
+        removeLastSubContext();
     }
 
     public void setNodeName(String nodeName) {
         this.nodeName = nodeName;
         this.lastStartExtractPosition = input.getPosition() + 1;
+        //System.out.println("input.getPosition() => "  + input.getPosition() +  ", lastStartExtractPosition => " + lastStartExtractPosition);
     }
 
     public boolean isNode() {

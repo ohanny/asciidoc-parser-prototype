@@ -28,7 +28,6 @@ public class TestMatcher implements Matcher {
         boolean matched = matcher.match(context.getSubContext());
 
         context.reset();
-        context.removeLastSubContext();
 
         return matched;
     }

@@ -26,7 +26,6 @@ public class SequenceMatcher implements Matcher {
             checkCanFlush(context, i);
 
             if (!matcher.match(context.getSubContext())) {
-                context.removeLastSubContext();
                 context.reset();
                 return false;
             }
