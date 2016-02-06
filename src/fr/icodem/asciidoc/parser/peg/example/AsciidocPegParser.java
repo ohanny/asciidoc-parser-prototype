@@ -36,7 +36,8 @@ public class AsciidocPegParser extends BaseParser {
                                zeroOrMore(firstOf(
                                    sequence(isCurrentCharNotEOI(), bl(false)),
                                    nl()
-                               ))
+                               )),
+                               optional(preamble())
                            )
                         ), optional(content()), optional(bl(true))));
     }
@@ -65,6 +66,8 @@ public class AsciidocPegParser extends BaseParser {
         ));
     }
 
+
+
     /*
     header
     : documentTitle
@@ -78,12 +81,113 @@ public class AsciidocPegParser extends BaseParser {
 
      */
 
+    private Rule preamble() {
+        return node("preamble", sequence(
+                block(false),
+                zeroOrMore(firstOf(
+                        sequence(isCurrentCharNotEOI(), bl(false)),
+                        nl(),
+                        block(false)
+                ))
+        ));
+    }
+
+    /*
+    preamble
+    :       //(attributeList   // TODO
+            //|anchor
+            //|blockTitle
+            //|blockMacro
+            //)
+
+      block[false]
+      ({!isCurrentCharEOF()}? bl[false]|nl|block[false])*
+    ;
+
+     */
+
+    private Rule block(boolean fromList) {
+        return node("block", firstOf(
+                sequence(paragraph(fromList), optional(nl()))
+        ));
+    }
+
+    /*
+    block[boolean fromList]       // argument 'fromList' indicates that block is attached to a list item
+    : (multiComment
+      |singleComment
+      |list
+      |sourceBlock
+      |literalBlock
+      |table
+      |paragraph[$fromList] nl?
+      )
+    ;
+
+     */
+
+    private Rule paragraph(boolean fromList) {
+        return node("paragraph", sequence(
+                testNot(sectionTitle()),
+                oneOrMore(firstOf(
+                        noneOf("= \t/+\r\n"),
+                        blank(),
+                        sequence(isBlankInParagraph(), newLine()),
+                        ch('/'),
+                        ch('+'),
+                        ch('=')
+                )),
+                optional(eoi())
+        ));
+    }
+
+    private Rule isBlankInParagraph() {
+        return testNot(sequence(any(), bl(true)));
+    }
+
+    /*
+paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
+    : {isStartOfParagraph()}?
+      (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |{isBlankInParagraph()}? SP
+      |{isBlankInParagraph()}? TAB
+      |EQ
+      |{!isStartOfComment()}? SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |LABRACK
+      |RABRACK
+      |CARET
+      |MINUS
+      |{isPlusInParagraph($fromList)}? PLUS
+      |DOT
+      |COLON
+      |SEMICOLON
+      |BANG
+      |TIMES
+      |{isBlankInParagraph()}? NL
+      )+ EOF?
+    ;
+
+     */
+
     private Rule content() {
         return node("content", oneOrMore(firstOf(
                 sequence(isCurrentCharNotEOI(), bl(false)),
                 horizontalRule(),
                 attributeEntry(),
                 section(),
+                block(false),
                 nl()
         )));
     }
@@ -122,7 +226,8 @@ public class AsciidocPegParser extends BaseParser {
                 zeroOrMore(firstOf(
                         sequence(isCurrentCharNotEOI(), bl(false)),
                         nl(),
-                        attributeEntry()
+                        attributeEntry(),
+                        block(false)
                 ))
         ));
     }
@@ -132,7 +237,7 @@ public class AsciidocPegParser extends BaseParser {
     : sectionTitle ({!isCurrentCharEOF()}? bl[false]
                     |nl
                     |attributeEntry
-                    |attributeList
+                    |attributeList // TODO
                     |block[false])*
     ;
 
@@ -265,7 +370,7 @@ attributeValuePart
     }
 
     private Rule authorName() {
-        return node("authorName", oneOrMore(noneOf("<>{}[]=\r\n\t")));
+        return node("authorName", oneOrMore(noneOf(":<>{}[]=\r\n\t")));
     }
 
     private Rule authorAddress() {
