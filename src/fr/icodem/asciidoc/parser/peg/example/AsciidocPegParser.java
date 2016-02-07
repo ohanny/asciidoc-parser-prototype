@@ -30,7 +30,13 @@ public class AsciidocPegParser extends BaseParser {
     private Rule document() {
         //return node("document", sequence(optional(header()), optional(bl(true))));
         return node("document",
-                sequence(optional(
+                sequence(
+                        zeroOrMore(firstOf(
+                                sequence(isCurrentCharNotEOI(), bl(false)),
+                                multiComment(),
+                                singleComment()
+                        )),
+                        optional(
                            sequence(
                                header(),
                                zeroOrMore(firstOf(
@@ -61,7 +67,10 @@ public class AsciidocPegParser extends BaseParser {
     private Rule header() {
         return node("header", sequence(
                 documentTitle(),
-                optional(sequence(authors())),
+                optional(sequence(
+                        authors(),
+                        zeroOrMore(firstOf(multiComment(), singleComment()))
+                )),
                 zeroOrMore(attributeEntry())
         ));
     }
@@ -108,6 +117,8 @@ public class AsciidocPegParser extends BaseParser {
 
     private Rule block(boolean fromList) {
         return node("block", firstOf(
+                multiComment(),
+                singleComment(),
                 sequence(paragraph(fromList), optional(nl()))
         ));
     }
@@ -424,8 +435,116 @@ authorAddress
 
      */
 
+    private Rule singleComment() {
+        return node("singleComment", sequence(
+                test(sequence(any(), isFirstCharInLine())),
+                ch('/'), ch('/'),// TODO ntimes
+                zeroOrMore(noneOf("\r\n")),
+                firstOf(newLine(), eoi())// TODO replace
+        ));
+    }
 
 
+    /*
+    singleComment
+    : {isFirstCharInLine()}?
+      SLASH SLASH
+      (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |SP
+      |EQ
+      |SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |LABRACK
+      |RABRACK
+      |CARET
+      |MINUS
+      |PLUS
+      |DOT
+      |COLON
+      |SEMICOLON
+      |BANG
+      |TIMES
+      )*
+      (CR? NL|EOF)
+    ;
+*/
+
+    private Rule multiComment() {
+        return node("multiComment", sequence(
+                multiCommentDelimiter(),
+                zeroOrMore(firstOf(
+                    noneOf("/"),
+                    sequence(testNot(multiCommentDelimiter()), ch('/'))
+                )),
+                multiCommentDelimiter()
+        ));
+    }
+
+    /*
+multiComment
+    : multiCommentDelimiter
+      (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |SP
+      |EQ
+      |SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |LABRACK
+      |RABRACK
+      |CARET
+      |MINUS
+      |PLUS
+      |DOT
+      |COLON
+      |SEMICOLON
+      |BANG
+      |TIMES
+      |QUOTE
+      |NL
+      )*?
+      multiCommentDelimiter
+    ;
+*/
+
+
+/*
+multiCommentDelimiter
+    : {isFirstCharInLine()}?
+      SLASH SLASH SLASH SLASH (SP|TAB)* (CR? NL|EOF)
+    ;
+
+     */
+
+
+    private Rule multiCommentDelimiter() {
+        return node("multiCommentDelimiter", sequence(
+                test(sequence(any(), isFirstCharInLine())), // TODO add nextCharIsBeginOfLine
+                ch('/'), ch('/'), ch('/'), ch('/'), // TODO add ntimes rule
+                zeroOrMore(blank()),// TODO blanks
+                firstOf(newLine(), eoi()) // TODO newLineOrEOI
+        ));
+    }
 
     // utils rules
     private Rule blank() {
