@@ -67,6 +67,7 @@ public class AsciidocPegParser extends BaseParser {
     private Rule header() {
         return node("header", sequence(
                 documentTitle(),
+                zeroOrMore(firstOf(multiComment(), singleComment())),
                 optional(sequence(
                         authors(),
                         zeroOrMore(firstOf(multiComment(), singleComment()))
@@ -116,12 +117,46 @@ public class AsciidocPegParser extends BaseParser {
      */
 
     private Rule block(boolean fromList) {
+        Rule setFromList = () -> ctx -> {
+            ctx.setAttribute("fromList", fromList);// TODO create standard rule ?
+            return true;
+        };
+
+        return wrap(setFromList, block());
+    }
+
+    private Rule block() {
         return node("block", firstOf(
                 multiComment(),
                 singleComment(),
-                sequence(paragraph(fromList), optional(nl()))
+                list(),
+                sourceBlock(),
+                literalBlock(),
+                sequence(paragraph(), optional(nl()))
         ));
     }
+
+    /*
+        private Rule bl(boolean withEOI) {
+        Rule setWithEOI = () -> ctx -> {
+            ctx.setAttribute("withEOI", withEOI);
+            return true;
+        };
+
+        return wrap(setWithEOI, bl());
+    }
+    private Rule bl() {
+        if (isCached("bl")) return cached("bl");
+        Rule checkWithEOI = () -> ctx -> ctx.getBooleanAttribute("withEOI");
+        return node("bl", sequence(
+                isNextCharAtBeginningOfLine(),
+                optional(blank()),
+                firstOf(newLine(), sequence(checkWithEOI, eoi()))
+        ));
+    }
+
+     */
+
 
     /*
     block[boolean fromList]       // argument 'fromList' indicates that block is attached to a list item
@@ -137,15 +172,15 @@ public class AsciidocPegParser extends BaseParser {
 
      */
 
-    private Rule paragraph(boolean fromList) {
+    private Rule paragraph() {
         return node("paragraph", sequence(
                 testNot(sectionTitle()),
                 oneOrMore(firstOf(
                         noneOf("= \t/+\r\n"),
                         blank(),
                         sequence(isBlankInParagraph(), newLine()),
-                        ch('/'),
-                        ch('+'),
+                        sequence(isNotStartOfComment(), ch('/')),
+                        ch('+'), // TODO add from list
                         ch('=')
                 )),
                 optional(eoi())
@@ -546,6 +581,220 @@ multiCommentDelimiter
         ));
     }
 
+    private Rule list() {
+        return node("list", sequence(
+                listItem(),
+                zeroOrMore(sequence(
+                        zeroOrMore(firstOf(sequence(isCurrentCharNotEOI(), bl(false)))),// TODO add attribute list
+                        listItem()
+                ))
+        ));
+    }
+
+    /*
+    list
+    : listItem
+      (({!isCurrentCharEOF()}? bl[false]|attributeList)* listItem)*
+    ;
+
+listItem
+    : (TIMES+|DOT+) SP listItemValue (CR? NL listContinuation*|EOF)
+    ;
+*/
+    private Rule listItem() {
+        return node("listItem", sequence(
+                firstOf(oneOrMore('*'), oneOrMore('.')),
+                ch(' '), // TODO replace with blank rule
+                listItemValue(),
+                firstOf(
+                        sequence(newLine(), zeroOrMore(listContinuation())),
+                        eoi()
+                )
+        ));
+    }
+
+    private Rule listItemValue() {
+        return node("listItemValue", zeroOrMore(firstOf(
+                noneOf("\r\n")  // TODO {isNewLineInListItemValue()}?
+        )));
+    }
+
+    /*
+listItemValue
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |SP
+      |EQ
+      |SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |LABRACK
+      |RABRACK
+      |CARET
+      |MINUS
+      |PLUS
+      |TIMES
+      |DOT
+      |COLON
+      |SEMICOLON
+      |BANG
+      |{isNewLineInListItemValue()}? (CR? NL)
+      )*
+    ;
+
+listContinuation
+    : PLUS (SP|TAB)* CR? NL block[true]
+    ;
+
+     */
+
+    private Rule listContinuation() {
+        Rule setFromList = () -> ctx -> {
+            ctx.setAttribute("fromList", true);// TODO create standard rule ?
+            return true;
+        };
+
+        return node("listContinuation", sequence(
+                ch('+'), optional(blank()), newLine(), wrap(setFromList, proxy("block"))
+        ));
+    }
+
+    /*
+    sourceBlockDelimiter
+    : {isFirstCharInLine()}?
+      MINUS MINUS MINUS MINUS (SP|TAB)* (CR? NL|EOF)
+    ;
+
+     */
+
+    private Rule sourceBlock() {
+        return node("sourceBlock", sequence(
+                sourceBlockDelimiter(),
+                zeroOrMore(firstOf(
+                        noneOf("-"),
+                        sequence(testNot(sourceBlockDelimiter()), ch('-'))
+                )),
+                sourceBlockDelimiter()
+        ));
+
+    }
+
+    private Rule sourceBlockDelimiter() {
+        return node("sourceBlockDelimiter", sequence(
+                    test(sequence(any(), isFirstCharInLine())), // TODO replace
+                    ch('-'), ch('-'), ch('-'), ch('-'), // TODO ntimes
+                    optional(blank()), // TODO replace with blanks
+                    firstOf(newLine(), eoi())
+                ));
+    }
+
+    private Rule literalBlock() {
+        return node("literalBlock", sequence(
+                literalBlockDelimiter(),
+                zeroOrMore(firstOf(
+                        noneOf("."),
+                        sequence(testNot(literalBlockDelimiter()), ch('.'))
+                )),
+                literalBlockDelimiter()
+        ));
+
+    }
+
+
+    private Rule literalBlockDelimiter() {
+        return node("literalBlockDelimiter", sequence(
+                    test(sequence(any(), isFirstCharInLine())), // TODO replace
+                    ch('.'), ch('.'), ch('.'), ch('.'), // TODO ntimes
+                    optional(blank()), // TODO replace with blanks
+                    firstOf(newLine(), eoi())
+                ));
+    }
+
+    /*
+    sourceBlock
+    : sourceBlockDelimiter
+      (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |SP
+      |EQ
+      |SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |LABRACK
+      |RABRACK
+      |CARET
+      |MINUS
+      |PLUS
+      |TIMES
+      |DOT
+      |COLON
+      |SEMICOLON
+      |BANG
+      |QUOTE
+      |NL
+      )*?
+      sourceBlockDelimiter
+    ;
+
+
+literalBlock
+    : literalBlockDelimiter
+      (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |SP
+      |EQ
+      |SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |LABRACK
+      |RABRACK
+      |CARET
+      |MINUS
+      |PLUS
+      |TIMES
+      |DOT
+      |COLON
+      |SEMICOLON
+      |BANG
+      |NL
+      )*?
+      literalBlockDelimiter
+    ;
+
+literalBlockDelimiter
+    : {isFirstCharInLine()}?
+      DOT DOT DOT DOT (SP|TAB)* (CR? NL|EOF)
+    ;
+
+     */
+
     // utils rules
     private Rule blank() {
         return oneOrMore(firstOf(' ', '\t'));
@@ -566,6 +815,10 @@ multiCommentDelimiter
 
     private Rule isCurrentCharNotEOI() {
         return testNot(ch(Chars.EOI));
+    }
+
+    private Rule isNotStartOfComment() {
+        return testNot(sequence(test(sequence(any(), isFirstCharInLine())), ch('/'), ch('/')));//TODO replace with ntimes
     }
 
 }
