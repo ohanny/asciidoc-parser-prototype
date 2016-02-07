@@ -43,7 +43,7 @@ public class RulesFactory {
      * @param delegate the delegate object that provides the matcher
      * @return the node rule
      */
-    public Rule node(String name, Rule delegate) {
+    public Rule node(String name, Rule delegate) {// TODO throw exception if name is empty or already used
         return cache.get(name, () -> new NodeRule(name, delegate));
     }
 
