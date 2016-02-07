@@ -172,6 +172,67 @@ public class AsciidocPegParser extends BaseParser {
 
      */
 
+    private Rule anchor() {
+        return node("anchor", sequence(
+                test(sequence(any(), isFirstCharInLine())), // TODO replace
+                ch('['), ch('['), // TODO ntimes
+                anchorId(),
+                optional(sequence(ch(','), anchorLabel())),
+                ch(']'), ch(']'), // TODO ntimes
+                optional(newLine())
+        ));
+    }
+
+    private Rule anchorId() {
+        return node("anchorId", oneOrMore(noneOf(",[]\r\n")));
+    }
+
+    private Rule anchorLabel() {
+        return node("anchorLabel", oneOrMore(noneOf("[]\r\n")));
+    }
+
+    /*
+    anchor
+    : {isFirstCharInLine()}?
+      LSBRACK LSBRACK anchorId
+      (COMMA anchorLabel)?
+      RSBRACK RSBRACK NL?
+    ;
+
+anchorId
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
+    ;
+
+anchorLabel
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |SP
+      |EQ
+      |SLASH
+      |COMMA
+      )+
+    ;
+
+     */
+
     private Rule paragraph() {
         return node("paragraph", sequence(
                 testNot(sectionTitle()),
@@ -232,6 +293,7 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
                 sequence(isCurrentCharNotEOI(), bl(false)),
                 horizontalRule(),
                 attributeEntry(),
+                anchor(),
                 section(),
                 block(false),
                 nl()
