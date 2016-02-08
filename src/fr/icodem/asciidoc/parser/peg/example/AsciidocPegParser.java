@@ -41,7 +41,9 @@ public class AsciidocPegParser extends BaseParser {
                                header(),
                                zeroOrMore(firstOf(
                                    sequence(isCurrentCharNotEOI(), bl(false)),
-                                   nl()
+                                   nl(),
+                                   multiComment(),
+                                   singleComment()
                                )),
                                optional(preamble())
                            )
@@ -70,7 +72,8 @@ public class AsciidocPegParser extends BaseParser {
                 zeroOrMore(firstOf(multiComment(), singleComment())),
                 optional(sequence(
                         authors(),
-                        zeroOrMore(firstOf(multiComment(), singleComment()))
+                        zeroOrMore(firstOf(multiComment(), singleComment())),
+                        optional(firstOf(attributeEntry(), revisionInfo()))
                 )),
                 zeroOrMore(attributeEntry())
         ));
@@ -469,6 +472,61 @@ attributeValuePart
 
      */
 
+    private Rule revisionInfo() {
+        return node("revisionInfo", sequence(
+                testNot(firstOf(newLine(), sectionTitle())),
+                oneOrMore(firstOf(
+                        noneOf("\r\n/"),
+                        sequence(isNotStartOfComment(), ch('/')),
+                        sequence(newLine(), testNot(firstOf(
+                            newLine(),
+                            eoi(),
+                            attributeEntry()
+                    )), test(isNotStartOfComment())))
+                ),
+                firstOf(newLine(), eoi()) // TODO replace
+        ));
+
+        /*
+                return !nextCharIsNL && !nextCharIsEOF &&
+            !nextCharIsBeginningOfAComment && ! nextCharIsBeginningOfAttributeEntry;
+
+         */
+    }
+
+    /*
+    revisionInfo
+    : {isStartOfRevisionInfo()}?
+      (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |SP
+      |EQ
+      |{!isStartOfComment()}? SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |LABRACK
+      |RABRACK
+      |MINUS
+      |PLUS
+      |DOT
+      |COLON
+      |SEMICOLON
+      |BANG
+      |{isNewLineInRevisionInfo()}? NL
+      )+ (CR? NL|EOF)
+    ;
+
+     */
+
     private Rule authors() {
         return node("authors", sequence(author(), zeroOrMore(sequence(ch(';'), author())), optional(blank()), firstOf(newLine(), eoi())));
     }
@@ -478,7 +536,7 @@ attributeValuePart
     }
 
     private Rule authorName() {
-        return node("authorName", oneOrMore(noneOf(":<>{}[]=\r\n\t")));
+        return node("authorName", oneOrMore(noneOf(";:<>{}[]=\r\n\t")));
     }
 
     private Rule authorAddress() {
