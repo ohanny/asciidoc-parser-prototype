@@ -297,6 +297,7 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
                 horizontalRule(),
                 attributeEntry(),
                 anchor(),
+                blockTitle(),
                 section(),
                 block(false),
                 nl()
@@ -404,6 +405,22 @@ sectionTitle :
 
      */
 
+    private Rule blockTitle() {
+        return node("blockTitle", sequence(
+                testNot(literalBlockDelimiter()),
+                ch('.'),
+                test(isFirstCharInLine()),
+                title(),
+                firstOf(newLine(), eoi()) // TODO replace
+        ));
+    }
+
+    /*
+    blockTitle
+    : {isStartOfBlockTitle()}? DOT title (CR? NL|EOF)
+    ;
+
+     */
 
     private Rule horizontalRule() {
         return node("horizontalRule", sequence(string("'''"), optional(blank()), firstOf(newLine(), eoi())));
