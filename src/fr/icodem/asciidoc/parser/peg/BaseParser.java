@@ -155,6 +155,13 @@ public class BaseParser {
     }
 
     /**
+     * Creates a 'first of' rule with string.
+     */
+    protected Rule firstOf(String chars) {
+        return firstOf(toRule(chars.toCharArray()));
+    }
+
+    /**
      * Creates a 'one or more' rule.
      * @see RulesFactory#oneOrMore(Rule)
      */
