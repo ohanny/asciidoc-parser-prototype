@@ -33,11 +33,6 @@ public class TestNotMatcher implements Matcher {
     }
 
     @Override
-    public boolean isOptional() {
-        return matcher.isOptional();
-    }
-
-    @Override
     public String getLabel() {
         return "testNot";
     }
