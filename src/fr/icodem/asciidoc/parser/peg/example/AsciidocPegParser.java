@@ -94,6 +94,266 @@ public class AsciidocPegParser extends BaseParser {
 
      */
 
+
+    /*
+    blockMacro
+    : macroName COLON COLON macroTarget? attributeList
+    ;
+
+macroName
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
+    ;
+
+macroTarget
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |DOT)+
+    ;
+
+     */
+
+    private Rule blockMacro() {
+        return node("blockMacro", sequence(
+                macroName(),
+                string("::"),
+                optional(macroTarget()),
+                attributeList()
+        ));
+    }
+
+    private Rule macroName() {
+        return node("macroName", oneOrMore(firstOf(
+                charRange('A', 'Z'),
+                charRange('a', 'z'),
+                charRange('0', '9')
+        )));
+    }
+
+    private Rule macroTarget() {
+        return node("macroTarget", oneOrMore(firstOf(
+                charRange('A', 'Z'),
+                charRange('a', 'z'),
+                charRange('0', '9'),
+                ch('.')
+        )));
+    }
+
+    public static void main(String[] args) {
+//        for (char c = 'A'; c < 'z'; c++) {
+//            System.out.println(c + " => " + (int)c);
+//        }
+
+
+        AsciidocPegParser parser = new AsciidocPegParser();
+        ToStringTreeBuilder treeBuilder = new ToStringTreeBuilder();
+
+        AsciidocParsingResult result = new AsciidocParsingResult();
+        result.matched = new ParseRunner(parser.tableCellSpecifiers()).parse("<", treeBuilder, new ToStringAnalysisBuilder()).matched;
+        result.tree = treeBuilder.getStringTree();
+
+    }
+
+    private Rule attributeList() {
+        return node("attributeList", sequence(
+                ch('['),
+                firstOf(
+                    sequence(
+                        firstOf(
+                            namedAttribute(),
+                            sequence(positionalAttribute(), optional(idAttribute()), zeroOrMore(firstOf(roleAttribute(), optionAttribute()))),
+                            sequence(idAttribute(), zeroOrMore(firstOf(roleAttribute(), optionAttribute()))),
+                            oneOrMore(firstOf(roleAttribute(), optionAttribute()))
+
+                        ),
+                        optional(blank()),// TODO replace,
+                        zeroOrMore(sequence(
+                            ch(','),
+                            optional(blank()),// TODO replace,
+                            firstOf(namedAttribute(), positionalAttribute()),
+                            optional(blank())// TODO replace
+                        ))
+                    ),
+                    empty() // TODO replace with optional(sequence) ?
+                ),
+                ch(']'),
+                optional(blank()),// TODO replace
+                firstOf(newLine(), eoi())// TODO replace
+        ));
+    }
+
+    private Rule positionalAttribute() {
+        return node("positionalAttribute", attributeValue());
+    }
+    /*
+    attributeList
+    : LSBRACK
+      ((positionalAttribute idAttribute? (roleAttribute|optionAttribute)*
+       |idAttribute (roleAttribute|optionAttribute)*
+       |(roleAttribute|optionAttribute)+
+       |namedAttribute) (SP|TAB)*
+            (COMMA (SP|TAB)* (positionalAttribute|namedAttribute) (SP|TAB)*)*
+      |)
+      RSBRACK (SP|TAB)* (CR? NL|EOF)
+    ;
+
+positionalAttribute
+    : attributeValue
+    ;
+
+idAttribute
+    : POUND idName
+    ;
+
+idName
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
+    ;
+
+roleAttribute
+    : DOT roleName
+    ;
+
+roleName
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
+    ;
+
+optionAttribute
+    : PERCENT optionName
+    ;
+
+optionName
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      )+
+    ;
+
+namedAttribute
+    : attributeName EQ attributeValue?
+    ;
+    attributeValue
+    : (OTHER
+      |ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      |DIGIT
+      |SP)+
+    ;
+
+
+     */
+
+    private Rule idAttribute() {// TODO factorize
+        return node("idAttribute", sequence(
+                ch('#'), idName()
+        ));
+    }
+
+    private Rule roleAttribute() {// TODO factorize
+        return node("roleAttribute", sequence(
+                ch('.'), roleName()
+        ));
+    }
+
+    private Rule optionAttribute() {// TODO factorize
+        return node("optionAttribute", sequence(
+                ch('%'), optionName()
+        ));
+    }
+
+    private Rule idName() {// TODO factorize
+        return node("idName", oneOrMore(firstOf(
+                charRange('A', 'Z'),
+                charRange('a', 'z'),
+                charRange('0', '9'),
+                ch(' ')
+        )));
+    }
+
+    private Rule roleName() {// TODO factorize
+        return node("roleName", oneOrMore(firstOf(
+                charRange('A', 'Z'),
+                charRange('a', 'z'),
+                charRange('0', '9'),
+                ch(' ')
+        )));
+    }
+
+    private Rule optionName() {// TODO factorize
+        return node("optionName", oneOrMore(firstOf(
+                charRange('A', 'Z'),
+                charRange('a', 'z'),
+                charRange('0', '9'),
+                ch(' ')
+        )));
+    }
+
+    private Rule attributeValue() {// TODO factorize ?
+        return node("attributeValue", oneOrMore(firstOf(
+                charRange('A', 'Z'),
+                charRange('a', 'z'),
+                charRange('0', '9'),
+                ch(' ')
+        )));
+    }
+
+    private Rule namedAttribute() {
+        return node("namedAttribute", sequence(
+                attributeName(),
+                ch('='),
+                attributeValue()
+        ));
+    }
+
     private Rule preamble() {
         return node("preamble", sequence(
                 block(false),
@@ -104,6 +364,7 @@ public class AsciidocPegParser extends BaseParser {
                 ))
         ));
     }
+
 
     /*
     preamble
@@ -135,6 +396,7 @@ public class AsciidocPegParser extends BaseParser {
                 list(),
                 sourceBlock(),
                 literalBlock(),
+                table(),
                 sequence(paragraph(), optional(nl()))
         ));
     }
@@ -296,8 +558,10 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
                 sequence(isCurrentCharNotEOI(), bl(false)),
                 horizontalRule(),
                 attributeEntry(),
+                attributeList(),
                 anchor(),
                 blockTitle(),
+                blockMacro(),
                 section(),
                 block(false),
                 nl()
@@ -339,6 +603,7 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
                         sequence(isCurrentCharNotEOI(), bl(false)),
                         nl(),
                         attributeEntry(),
+                        attributeList(),
                         block(false)
                 ))
         ));
@@ -349,7 +614,7 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
     : sectionTitle ({!isCurrentCharEOF()}? bl[false]
                     |nl
                     |attributeEntry
-                    |attributeList // TODO
+                    |attributeList
                     |block[false])*
     ;
 
@@ -398,12 +663,21 @@ sectionTitle :
         if (isCached("nl")) return cached("nl");
         return node("nl", newLine());
     }
+
     /*
     nl
     : CR? NL
     ;
 
+spaces
+    : (SP|TAB)+
+    ;
+
      */
+
+    private Rule spaces() {// TODO replace with blanks ?
+        return node("spaces", oneOrMore(firstOf(" \t")));
+    }
 
     private Rule blockTitle() {
         return node("blockTitle", sequence(
@@ -426,9 +700,15 @@ sectionTitle :
         return node("horizontalRule", sequence(string("'''"), optional(blank()), firstOf(newLine(), eoi())));
     }
 
-    private Rule attributeName() {
-        return node("attributeName", oneOrMore(noneOf("\r\n\t :!")));
+    private Rule attributeName() {// TODO factorize ?
+        return node("attributeName", oneOrMore(firstOf(
+                charRange('A', 'Z'),
+                charRange('a', 'z'),
+                charRange('0', '9'),
+                ch(' ')
+        )));
     }
+
 
     /*
     attributeName
@@ -722,7 +1002,7 @@ multiCommentDelimiter
         return node("list", sequence(
                 listItem(),
                 zeroOrMore(sequence(
-                        zeroOrMore(firstOf(sequence(isCurrentCharNotEOI(), bl(false)))),// TODO add attribute list
+                        zeroOrMore(firstOf(sequence(isCurrentCharNotEOI(), bl(false)), attributeList())),// TODO add attribute list
                         listItem()
                 ))
         ));
@@ -931,6 +1211,185 @@ literalBlockDelimiter
     ;
 
      */
+//tableDelimiter (tableRow|bl[false])* tableDelimiter
+    private Rule table() {
+        return node("table", sequence(
+                tableDelimiter(),
+                zeroOrMore(firstOf(
+                    tableRow(),
+                    bl(false)
+                )),
+                tableDelimiter()
+        ));
+    }
+
+    private Rule tableDelimiter() {
+        return node("tableDelimiter", sequence(
+                ch('|'),
+                isFirstCharInLine(),
+                string("==="),
+                optional(blank()),// TODO replace
+                firstOf(newLine(), eoi())// TODO replace
+        ));
+    }
+
+    private Rule tableRow() {
+        return node("tableRow", oneOrMore(tableCell()));
+    }
+
+    private Rule tableCell() {
+        return node("tableCell", sequence(
+                optional(tableCellSpecifiers()),
+                testNot(tableDelimiter()),
+                ch('|'),
+                tableBlock(),
+                zeroOrMore(sequence(oneOrMore(bl(false)), tableBlock()))
+                //zeroOrMore(sequence(oneOrMore(bl(false)), testNot(sequence(optional(tableCellSpecifiers()), ch('|'))),tableBlock())) // TODO make it non greedy
+        ));
+    }
+
+    private Rule tableCellSpecifiers() {
+        return node("tableCellSpecifiers", firstOf(
+                sequence(tableCellSpan(), tableCellAlign(), tableCellStyle()),
+                sequence(tableCellSpan(), tableCellAlign()),
+                sequence(tableCellSpan(), tableCellStyle()),
+                sequence(tableCellAlign(), tableCellStyle()),
+                tableCellSpan(),
+                tableCellAlign(),
+                tableCellStyle()
+        ));
+    }
+
+    private Rule tableCellSpan() {
+        return node("tableCellSpan", sequence(
+                firstOf(
+                    sequence(digits(), ch('.'), digits()),
+                    sequence(ch('.'), digits()),
+                    digits()
+                ),
+                firstOf("+*")
+        ));
+    }
+
+    private Rule tableCellAlign() {
+        return node("tableCellAlign", firstOf(
+                sequence(firstOf("<^>"), firstOf(string(".<"), string(".^"), string(".>"))),
+                firstOf(string(".<"), string(".^"), string(".>")),
+                firstOf("<^>")
+        ));
+    }
+
+    private Rule tableCellStyle() {
+        return node("tableCellStyle", firstOf("aehlmdsv"));
+    }
+
+
+
+    /*
+    table
+    : tableDelimiter (tableRow|bl[false])* tableDelimiter
+
+tableRow
+    : tableCell+
+    ;
+
+tableCell
+    : tableCellSpecifiers? PIPE tableBlock (bl[false]+ tableBlock)*?
+    ;
+
+tableCellSpecifiers
+    : tableCellSpan
+      |tableCellAlign
+      |tableCellStyle
+      |tableCellSpan tableCellAlign
+      |tableCellSpan tableCellStyle
+      |tableCellAlign tableCellStyle
+      |tableCellSpan tableCellAlign tableCellStyle
+    ;
+
+tableCellSpan
+    : (DIGIT+|DOT DIGIT+|DIGIT+ DOT DIGIT+) (PLUS|TIMES)
+    ;
+
+tableCellAlign
+    : (LABRACK|CARET|RABRACK)
+      |(DOT LABRACK|DOT CARET|DOT RABRACK)
+      |(LABRACK|CARET|RABRACK) (DOT LABRACK|DOT CARET|DOT RABRACK)
+    ;
+
+tableCellStyle
+    : (ALOWER
+      |ELOWER
+      |HLOWER
+      |LLOWER
+      |MLOWER
+      |DLOWER
+      |SLOWER
+      |VLOWER
+      )
+    ;
+*/
+
+    private Rule tableBlock() {
+        return node("tableBlock", sequence(
+                optional(spaces()),
+                oneOrMore(firstOf(
+                    noneOf("|aehlmdsv0123456789<>^.* \t/\r\n"),
+                    sequence(testNot(sequence(tableCellSpecifiers(), ch('|'))), firstOf("aehlmdsv0123456789<>^.*")),
+                    sequence(firstOf(" \t")),// TODO replace add condition isBlankInTableBlock
+                    sequence(ch('/')),// TODO add condition is not start of comment
+                    sequence(newLine(), testNot(bl(false)))
+                )),
+                optional(nl())
+        ));
+    }
+
+//    private Rule isBlankInTableBlock() {
+//
+//    }
+
+     /*
+tableBlock
+    : spaces?
+      (OTHER
+      |{!isStartOfTableCellSpecifier()}? ALOWER
+      |{!isStartOfTableCellSpecifier()}? ELOWER
+      |{!isStartOfTableCellSpecifier()}? HLOWER
+      |{!isStartOfTableCellSpecifier()}? LLOWER
+      |{!isStartOfTableCellSpecifier()}? MLOWER
+      |{!isStartOfTableCellSpecifier()}? DLOWER
+      |{!isStartOfTableCellSpecifier()}? SLOWER
+      |{!isStartOfTableCellSpecifier()}? VLOWER
+      |{!isStartOfTableCellSpecifier()}? DIGIT
+      |{isBlankInTableBlock()}? SP
+      |{isBlankInTableBlock()}? TAB
+      |EQ
+      |{!isStartOfComment()}? SLASH
+      |COMMA
+      |LSBRACK
+      |RSBRACK
+      |{!isStartOfTableCellSpecifier()}? LABRACK
+      |{!isStartOfTableCellSpecifier()}? RABRACK
+      |{!isStartOfTableCellSpecifier()}? CARET
+      |MINUS
+      |{!isStartOfTableCellSpecifier()}? PLUS
+      |{!isStartOfTableCellSpecifier()}? DOT
+      |COLON
+      |SEMICOLON
+      |BANG
+      |{!isStartOfTableCellSpecifier()}? TIMES
+      |{isBlankInTableBlock()}? NL
+      )+
+      nl?
+    ;
+
+tableDelimiter
+    : {isFirstCharInLine()}?
+      PIPE EQ EQ EQ (SP|TAB)* (CR? NL|EOF)
+    ;
+
+     */
+
 
     // utils rules
     private Rule blank() {
@@ -940,6 +1399,14 @@ literalBlockDelimiter
     private Rule newLine() {
         if (isCached("newLine")) return cached("newLine");
         return cached("newLine", sequence(optional('\r'), ch('\n')));
+    }
+
+    private Rule digits() {
+        return oneOrMore(charRange('0', '9'));
+    }
+
+    private Rule digit() {
+        return charRange('0', '9');
     }
 
     private Rule isFirstCharInLine() {// TODO store rule in cache
