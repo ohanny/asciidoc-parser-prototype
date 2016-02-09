@@ -11,6 +11,7 @@ public class BaseParser {
     /**
      * Rules instantiation is delegated to a factory
      */
+    //private RulesFactory factory = new RulesFactory();
     private RulesFactory factory = new SpyingRulesFactory();
 
     /**

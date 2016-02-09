@@ -19,6 +19,7 @@ public class AsciidocPegParser extends BaseParser {
         ToStringTreeBuilder treeBuilder = new ToStringTreeBuilder();
 
         AsciidocParsingResult result = new AsciidocParsingResult();
+        //result.matched = new ParseRunner(document()).parse(text, treeBuilder).matched;
         result.matched = new ParseRunner(document()).parse(text, treeBuilder, new ToStringAnalysisBuilder()).matched;
         result.tree = treeBuilder.getStringTree();
 
@@ -502,12 +503,12 @@ anchorLabel
         return node("paragraph", sequence(
                 testNot(sectionTitle()),
                 oneOrMore(firstOf(
-                        noneOf("= \t/+\r\n"),
-                        blank(),
-                        sequence(isBlankInParagraph(), newLine()),
-                        sequence(isNotStartOfComment(), ch('/')),
-                        ch('+'), // TODO add from list
-                        ch('=')
+                    noneOf("= \t/+\r\n"),
+                    blank(),
+                    sequence(isBlankInParagraph(), newLine()),
+                    sequence(isNotStartOfComment(), ch('/')),
+                    sequence(test(() -> ctx -> ctx.getBooleanAttribute("fromList")), testNot(listContinuation()), ch('+')), // TODO optimize
+                    ch('=')
                 )),
                 optional(eoi())
         ));
@@ -516,6 +517,10 @@ anchorLabel
     private Rule isBlankInParagraph() {
         return testNot(sequence(any(), bl(true)));
     }
+
+    /*
+    {isPlusInParagraph($fromList)
+     */
 
     /*
 paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
@@ -1024,15 +1029,35 @@ listItem
                 ch(' '), // TODO replace with blank rule
                 listItemValue(),
                 firstOf(
-                        sequence(newLine(), zeroOrMore(listContinuation())),
-                        eoi()
+                    sequence(newLine(), zeroOrMore(listContinuation())),
+                    eoi()
                 )
         ));
     }
 
+    /*
+        private boolean isNewLineInListItemValue() {
+        boolean nextCharIsBL = isStartOfBlankLineAtIndex(2, false);
+        boolean nextCharIsListItem = isStartOfListItemAtIndex(2);
+        boolean nextCharIsListContinuation = isStartOfListContinuationAtIndex(2);
+        boolean nextCharIsAttributeList = isStartOfAttributeListAtIndex(2);
+
+        return !nextCharIsBL && !nextCharIsListItem && !nextCharIsListContinuation
+                && !nextCharIsAttributeList;
+    }
+
+     */
+
     private Rule listItemValue() {
         return node("listItemValue", zeroOrMore(firstOf(
-                noneOf("\r\n")  // TODO {isNewLineInListItemValue()}?
+                noneOf("\r\n"),
+                sequence( // TODO optimize isNewLineInListItemValue()
+                    newLine(),
+                    testNot(bl(true)),
+                    testNot(proxy("listItem")),
+                    testNot(listContinuation()),
+                    testNot(attributeList())
+                )
         )));
     }
 
