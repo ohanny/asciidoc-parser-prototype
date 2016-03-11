@@ -7,6 +7,7 @@ import fr.icodem.asciidoc.parser.peg.rules.Rule;
  * A matcher is responsible for executing a specific {@link Rule rule} instance.
  * It implements the rule type specific matching logic.
  */
+@FunctionalInterface
 public interface Matcher {
 
     /**
