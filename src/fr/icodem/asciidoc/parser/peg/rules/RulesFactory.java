@@ -3,7 +3,7 @@ package fr.icodem.asciidoc.parser.peg.rules;
 import fr.icodem.asciidoc.parser.peg.matchers.*;
 
 /**
- * Created by Olivier on 23/03/2016.
+ * A factory that creates {@link Rule rule objects}.
  */
 public interface RulesFactory {
 
