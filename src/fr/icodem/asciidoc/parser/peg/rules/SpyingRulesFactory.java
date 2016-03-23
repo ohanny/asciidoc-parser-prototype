@@ -3,7 +3,7 @@ package fr.icodem.asciidoc.parser.peg.rules;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.matchers.SpyingMatcher;
 
-public class SpyingRulesFactory extends RulesFactory {
+public class SpyingRulesFactory extends DefaultRulesFactory {
 
     public SpyingRulesFactory() {}
 

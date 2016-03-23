@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
+import fr.icodem.asciidoc.parser.peg.rules.DefaultRulesFactory;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.rules.SpyingRulesFactory;
 
@@ -11,12 +12,12 @@ public class BaseParser {
     /**
      * Rules instantiation is delegated to a factory
      */
-    //private RulesFactory factory = new RulesFactory();
-    private RulesFactory factory = new SpyingRulesFactory();
+    //private RulesFactory factory = RulesFactory.defaultRulesFactory();
+    private RulesFactory factory = RulesFactory.spyingRulesFactory();
 
     /**
      * Creates a named rule.
-     * @see RulesFactory#named(String, Rule)
+     * @see DefaultRulesFactory#named(String, Rule)
      */
     protected Rule named(String name, Rule delegate) {
         return factory.named(name, delegate);
@@ -24,7 +25,7 @@ public class BaseParser {
 
     /**
      * Creates a node rule.
-     * @see RulesFactory#node(String, Rule)
+     * @see DefaultRulesFactory#node(String, Rule)
      */
     protected Rule node(String name, Rule delegate) {
         return factory.node(name, delegate);
@@ -32,7 +33,7 @@ public class BaseParser {
 
     /**
      * Creates a cached rule.
-     * @see RulesFactory#cached(String, Rule)
+     * @see DefaultRulesFactory#cached(String, Rule)
      */
     protected Rule cached(String name, Rule delegate) {
         return factory.cached(name, delegate);
@@ -65,7 +66,7 @@ public class BaseParser {
 
     /**
      * Creates a proxy rule.
-     * @see RulesFactory#proxy(String)
+     * @see DefaultRulesFactory#proxy(String)
      */
     protected Rule proxy(String name) {
         return factory.proxy(name);
@@ -73,7 +74,7 @@ public class BaseParser {
 
     /**
      * Creates a char rule.
-     * @see RulesFactory#ch(char)
+     * @see DefaultRulesFactory#ch(char)
      */
     protected Rule ch(char c) {
         return factory.ch(c);
@@ -88,7 +89,7 @@ public class BaseParser {
 
     /**
      * Creates a 'char range' rule.
-     * @see RulesFactory#charRange(char, char)
+     * @see DefaultRulesFactory#charRange(char, char)
      */
     protected Rule charRange(char cLow, char cHigh) {
         return factory.charRange(cLow, cHigh);
@@ -96,7 +97,7 @@ public class BaseParser {
 
     /**
      * Creates an 'any of' rule.
-     * @see RulesFactory#anyOf(char...)
+     * @see DefaultRulesFactory#anyOf(char...)
      */
     protected Rule anyOf(char... charSet) {
         return factory.anyOf(charSet);
@@ -111,7 +112,7 @@ public class BaseParser {
 
     /**
      * Creates a 'none of' rule.
-     * @see RulesFactory#noneOf(char...)
+     * @see DefaultRulesFactory#noneOf(char...)
      */
     protected Rule noneOf(char... charSet) {
         return factory.noneOf(charSet);
@@ -126,7 +127,7 @@ public class BaseParser {
 
     /**
      * Creates a string rule.
-     * @see RulesFactory#string(String)
+     * @see DefaultRulesFactory#string(String)
      */
     protected Rule string(String string) {
         return factory.string(string);
@@ -134,7 +135,7 @@ public class BaseParser {
 
     /**
      * Creates an 'any of string' rule.
-     * @see RulesFactory#anyOfString(String...)
+     * @see DefaultRulesFactory#anyOfString(String...)
      */
     protected Rule anyOfString(String... stringSet) {
         return factory.anyOfString(stringSet);
@@ -142,7 +143,7 @@ public class BaseParser {
 
     /**
      * Creates a 'first of' rule.
-     * @see RulesFactory#firstOf(Rule...)
+     * @see DefaultRulesFactory#firstOf(Rule...)
      */
     protected Rule firstOf(Rule... rules) {
         return factory.firstOf(rules);
@@ -164,7 +165,7 @@ public class BaseParser {
 
     /**
      * Creates a 'one or more' rule.
-     * @see RulesFactory#oneOrMore(Rule)
+     * @see DefaultRulesFactory#oneOrMore(Rule)
      */
     protected Rule oneOrMore(Rule rule) {
         return factory.oneOrMore(rule);
@@ -176,7 +177,7 @@ public class BaseParser {
 
     /**
      * Creates a sequence rule.
-     * @see RulesFactory#sequence(Rule...)
+     * @see DefaultRulesFactory#sequence(Rule...)
      */
     protected Rule sequence(Rule... rules) {
         return factory.sequence(rules);
@@ -184,7 +185,7 @@ public class BaseParser {
 
     /**
      * Creates a test rule.
-     * @see RulesFactory#test(Rule)
+     * @see DefaultRulesFactory#test(Rule)
      */
     protected Rule test(Rule rule) {
         return factory.test(rule);
@@ -192,7 +193,7 @@ public class BaseParser {
 
     /**
      * Creates a 'test not' rule.
-     * @see RulesFactory#testNot(Rule)
+     * @see DefaultRulesFactory#testNot(Rule)
      */
     protected Rule testNot(Rule rule) {
         return factory.testNot(rule);
@@ -200,7 +201,7 @@ public class BaseParser {
 
     /**
      * Creates an optional rule.
-     * @see RulesFactory#optional(Rule)
+     * @see DefaultRulesFactory#optional(Rule)
      */
     protected Rule optional(Rule rule) {
         return factory.optional(rule);
@@ -215,7 +216,7 @@ public class BaseParser {
 
     /**
      * Creates a 'zero or more' rule.
-     * @see RulesFactory#zeroOrMore(Rule)
+     * @see DefaultRulesFactory#zeroOrMore(Rule)
      */
     protected Rule zeroOrMore(Rule rule) {
         return factory.zeroOrMore(rule);

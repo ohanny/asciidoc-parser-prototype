@@ -3,11 +3,18 @@ package fr.icodem.asciidoc.parser.peg.rules;
 import fr.icodem.asciidoc.parser.peg.matchers.*;
 
 /**
- * A factory that creates {@link Rule rule objects}. Named rules are stored in cache.
+ * Created by Olivier on 23/03/2016.
  */
-public class RulesFactory {
+public interface RulesFactory {
 
-    private RulesCache cache = new RulesCache();
+    // factory methods
+    public static RulesFactory defaultRulesFactory() {
+        return new DefaultRulesFactory();
+    }
+
+    public static RulesFactory spyingRulesFactory() {
+        return new SpyingRulesFactory();
+    }
 
     /**
      * Stores a rule in cache
@@ -15,17 +22,9 @@ public class RulesFactory {
      * @param rule the rule object to be cached
      * @return the cached rule
      */
-    public Rule cached(String name, Rule rule) {
-        return cachedInternal(name, rule);
-    }
+    Rule cached(String name, Rule rule);
 
-    private Rule cachedInternal(String name, Rule rule) {
-        return cache.get(name, () -> rule);
-    }
-
-    public Rule cached(String name) {
-        return cache.get(name);
-    }
+    Rule cached(String name);
 
     /**
      * Creates and store a {@link NamedRule named rule}
@@ -33,9 +32,7 @@ public class RulesFactory {
      * @param delegate the delegate object that provides the matcher
      * @return the named rule
      */
-    public Rule named(String name, Rule delegate) {
-        return cache.get(name, () -> new NamedRule(name, delegate));
-    }
+    Rule named(String name, Rule delegate);
 
     /**
      * Creates and store a {@link NodeRule node rule}
@@ -43,44 +40,27 @@ public class RulesFactory {
      * @param delegate the delegate object that provides the matcher
      * @return the node rule
      */
-    public Rule node(String name, Rule delegate) {// TODO throw exception if name is empty or already used
-        return cache.get(name, () -> new NodeRule(name, delegate));
-    }
-
+    Rule node(String name, Rule delegate);
 
     /**
      * Creates and store a {@link ProxyRule proxy rule}
      * @param name the name of the rule
      * @return the proxy rule
      */
-    public Rule proxy(String name) {
-        String proxyName = "ProxyRule." + name;
-        return cache.get(proxyName, () -> new ProxyRule(name, () -> cache.get(name)));
-    }
+    Rule proxy(String name);
 
-    public Rule wrap(Rule before, Rule inner, Rule after) {
-        Rule ruleBefore = (before == null)?empty():before;
-        Rule ruleAfter = (after == null)?empty():after;
-        return () -> new WrapperMatcher(ruleBefore, inner, ruleAfter);
-    }
+    Rule wrap(Rule before, Rule inner, Rule after);
 
-    public Rule empty() {
-        return cachedInternal("EmptyRule", () -> new EmptyMatcher());
-    }
+    Rule empty();
 
-    public Rule any() {
-        return cachedInternal("AnyRule", () -> new AnyMatcher());
-    }
+    Rule any();
 
     /**
      * Creates a rule that supplies a {@link CharMatcher char matcher}
      * @param c the character to be matched
      * @return the char rule
      */
-    public Rule ch(char c) {
-        String name = "CharRule." + c;
-        return cachedInternal(name, () -> new CharMatcher(c));
-    }
+    Rule ch(char c);
 
     /**
      * Creates a rule that supplies a {@link CharRangeMatcher 'char range' matcher}
@@ -88,121 +68,82 @@ public class RulesFactory {
      * @param cHigh the upper bound character
      * @return the 'char range' rule
      */
-    public Rule charRange(char cLow, char cHigh) {
-        String name = "CharRangeRule." + cLow + cHigh;
-        return cachedInternal(name, () -> new CharRangeMatcher(cLow, cHigh));
-    }
+    Rule charRange(char cLow, char cHigh);
 
     /**
      * Creates a rule that supplies a {@link AnyOfMatcher 'any of' matcher}
      * @param charSet the current char must be in this char set
      * @return the char in set rule
      */
-    public Rule anyOf(char... charSet) {
-        String name = "AnyOfRule.";
-        for (char c : charSet) {
-            name += c;
-        }
-        return cachedInternal(name, () -> new AnyOfMatcher(charSet));
-    }
+    Rule anyOf(char... charSet);
 
     /**
      * Creates a rule that supplies a {@link NoneOfMatcher 'none of' matcher}
      * @param charSet the current char must be out of this char set
      * @return the char in set rule
      */
-    public Rule noneOf(char... charSet) {
-        String name = "NoneOfRule.";
-        for (char c : charSet) {
-            name += c;
-        }
-        return cachedInternal(name, () -> new NoneOfMatcher(charSet));
-    }
+    Rule noneOf(char... charSet);
 
     /**
      * Creates a rule that supplies a {@link StringMatcher string matcher}
      * @param string the string to be matched
      * @return the string rule
      */
-    public Rule string(String string) {
-        String name = "String." + string;
-        return cachedInternal(name, () -> new StringMatcher(string));
-    }
+    Rule string(String string);
 
     /**
      * Creates a rule that supplies a {@link AnyOfStringMatcher 'any of string' matcher}
      * @param stringSet one of the string in the set should be matched
      * @return the 'any of string' rule
      */
-    public Rule anyOfString(String... stringSet) {
-        String name = "AnyOfStringRule.";
-        for (String string : stringSet) {
-            name += string;
-        }
-        return cachedInternal(name, () -> new AnyOfStringMatcher(stringSet));
-    }
+    Rule anyOfString(String... stringSet);
 
     /**
      * Creates a rule that supplies a {@link FirstOfMatcher 'first of' matcher}
      * @param rules the rules to be matched
      * @return the first of rule
      */
-    public Rule firstOf(Rule... rules) {
-        return () -> new FirstOfMatcher(rules);
-    }
+    Rule firstOf(Rule... rules);
 
     /**
      * Creates a rule that supplies a {@link OneOrMoreMatcher 'one or more' matcher}
      * @param rule the rule to be matched
      * @return the one or more rule
      */
-    public Rule oneOrMore(Rule rule) {
-        return () -> new OneOrMoreMatcher(rule);
-    }
+    Rule oneOrMore(Rule rule);
 
     /**
      * Creates a rule that supplies a {@link SequenceMatcher sequence matcher}
      * @param rules the rules to be matched
      * @return the sequence rule
      */
-    public Rule sequence(Rule... rules) {
-        return () -> new SequenceMatcher(rules);
-    }
+    Rule sequence(Rule... rules);
 
     /**
      * Creates a rule that supplies a {@link TestMatcher test matcher}
      * @param rule the rule to be matched
      * @return the test rule
      */
-    public Rule test(Rule rule) {
-        return () -> new TestMatcher(rule);
-    }
+    Rule test(Rule rule);
 
     /**
      * Creates a rule that supplies a {@link TestNotMatcher 'test not' matcher}
      * @param rule the rule to be not matched
      * @return the test rule
      */
-    public Rule testNot(Rule rule) {
-        return () -> new TestNotMatcher(rule);
-    }
+    Rule testNot(Rule rule);
 
     /**
      * Creates a rule that supplies an {@link OptionalMatcher optional matcher}
      * @param rule the rule to be matched
      * @return the zero or more rule
      */
-    public Rule optional(Rule rule) {
-        return () -> new OptionalMatcher(rule);
-    }
+    Rule optional(Rule rule);
 
     /**
      * Creates a rule that supplies a {@link ZeroOrMoreMatcher 'zero or more' matcher}
      * @param rule the rule to be matched
      * @return the zero or more rule
      */
-    public Rule zeroOrMore(Rule rule) {
-        return () -> new ZeroOrMoreMatcher(rule);
-    }
-
+    Rule zeroOrMore(Rule rule);
 }
