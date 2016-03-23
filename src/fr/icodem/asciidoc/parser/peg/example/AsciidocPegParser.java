@@ -29,7 +29,6 @@ public class AsciidocPegParser extends BaseParser {
 
     // rules
     private Rule document() {
-        //return node("document", sequence(optional(header()), optional(bl(true))));
         return node("document",
                 sequence(
                         zeroOrMore(firstOf(
@@ -51,22 +50,6 @@ public class AsciidocPegParser extends BaseParser {
                         ), optional(content()), optional(bl(true))));
     }
 
-    /*
-    document
-    : ({!isCurrentCharEOF()}? bl[false]
-      |multiComment
-      |singleComment
-      )*
-      (header ({!isCurrentCharEOF()}? bl[false]
-               |nl
-               |multiComment
-               |singleComment
-              )* preamble?)?
-      content? bl[true]?
-    ;
-
-     */
-
     private Rule header() {
         return node("header", sequence(
                 documentTitle(),
@@ -79,57 +62,6 @@ public class AsciidocPegParser extends BaseParser {
                 zeroOrMore(attributeEntry())
         ));
     }
-
-
-
-    /*
-    header
-    : documentTitle
-      (multiComment|singleComment)*
-      (authors
-        (multiComment|singleComment)*
-        (attributeEntry|revisionInfo)?
-      )?
-      attributeEntry*
-    ;
-
-     */
-
-
-    /*
-    blockMacro
-    : macroName COLON COLON macroTarget? attributeList
-    ;
-
-macroName
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      )+
-    ;
-
-macroTarget
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |DOT)+
-    ;
-
-     */
 
     private Rule blockMacro() {
         return node("blockMacro", sequence(
@@ -157,20 +89,20 @@ macroTarget
         )));
     }
 
-    public static void main(String[] args) {
-//        for (char c = 'A'; c < 'z'; c++) {
-//            System.out.println(c + " => " + (int)c);
-//        }
-
-
-        AsciidocPegParser parser = new AsciidocPegParser();
-        ToStringTreeBuilder treeBuilder = new ToStringTreeBuilder();
-
-        AsciidocParsingResult result = new AsciidocParsingResult();
-        result.matched = new ParseRunner(parser.tableCellSpecifiers()).parse("<", treeBuilder, new ToStringAnalysisBuilder()).matched;
-        result.tree = treeBuilder.getStringTree();
-
-    }
+//    public static void main(String[] args) {
+////        for (char c = 'A'; c < 'z'; c++) {
+////            System.out.println(c + " => " + (int)c);
+////        }
+//
+//
+//        AsciidocPegParser parser = new AsciidocPegParser();
+//        ToStringTreeBuilder treeBuilder = new ToStringTreeBuilder();
+//
+//        AsciidocParsingResult result = new AsciidocParsingResult();
+//        result.matched = new ParseRunner(parser.tableCellSpecifiers()).parse("<", treeBuilder, new ToStringAnalysisBuilder()).matched;
+//        result.tree = treeBuilder.getStringTree();
+//
+//    }
 
     private Rule attributeList() {
         return node("attributeList", sequence(
@@ -203,95 +135,6 @@ macroTarget
     private Rule positionalAttribute() {
         return node("positionalAttribute", attributeValue());
     }
-    /*
-    attributeList
-    : LSBRACK
-      ((positionalAttribute idAttribute? (roleAttribute|optionAttribute)*
-       |idAttribute (roleAttribute|optionAttribute)*
-       |(roleAttribute|optionAttribute)+
-       |namedAttribute) (SP|TAB)*
-            (COMMA (SP|TAB)* (positionalAttribute|namedAttribute) (SP|TAB)*)*
-      |)
-      RSBRACK (SP|TAB)* (CR? NL|EOF)
-    ;
-
-positionalAttribute
-    : attributeValue
-    ;
-
-idAttribute
-    : POUND idName
-    ;
-
-idName
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      )+
-    ;
-
-roleAttribute
-    : DOT roleName
-    ;
-
-roleName
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      )+
-    ;
-
-optionAttribute
-    : PERCENT optionName
-    ;
-
-optionName
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      )+
-    ;
-
-namedAttribute
-    : attributeName EQ attributeValue?
-    ;
-    attributeValue
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |SP)+
-    ;
-
-
-     */
 
     private Rule idAttribute() {// TODO factorize
         return node("idAttribute", sequence(
@@ -366,21 +209,6 @@ namedAttribute
         ));
     }
 
-
-    /*
-    preamble
-    :       //(attributeList   // TODO
-            //|anchor
-            //|blockTitle
-            //|blockMacro
-            //)
-
-      block[false]
-      ({!isCurrentCharEOF()}? bl[false]|nl|block[false])*
-    ;
-
-     */
-
     private Rule block(boolean fromList) {
         Rule setFromList = () -> ctx -> {
             ctx.setAttribute("fromList", fromList);// TODO create standard rule ?
@@ -402,42 +230,6 @@ namedAttribute
         ));
     }
 
-    /*
-        private Rule bl(boolean withEOI) {
-        Rule setWithEOI = () -> ctx -> {
-            ctx.setAttribute("withEOI", withEOI);
-            return true;
-        };
-
-        return wrap(setWithEOI, bl());
-    }
-    private Rule bl() {
-        if (isCached("bl")) return cached("bl");
-        Rule checkWithEOI = () -> ctx -> ctx.getBooleanAttribute("withEOI");
-        return node("bl", sequence(
-                isNextCharAtBeginningOfLine(),
-                optional(blank()),
-                firstOf(newLine(), sequence(checkWithEOI, eoi()))
-        ));
-    }
-
-     */
-
-
-    /*
-    block[boolean fromList]       // argument 'fromList' indicates that block is attached to a list item
-    : (multiComment
-      |singleComment
-      |list
-      |sourceBlock
-      |literalBlock
-      |table
-      |paragraph[$fromList] nl?
-      )
-    ;
-
-     */
-
     private Rule anchor() {
         return node("anchor", sequence(
                 test(sequence(any(), isFirstCharInLine())), // TODO replace
@@ -456,48 +248,6 @@ namedAttribute
     private Rule anchorLabel() {
         return node("anchorLabel", oneOrMore(noneOf("[]\r\n")));
     }
-
-    /*
-    anchor
-    : {isFirstCharInLine()}?
-      LSBRACK LSBRACK anchorId
-      (COMMA anchorLabel)?
-      RSBRACK RSBRACK NL?
-    ;
-
-anchorId
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      )+
-    ;
-
-anchorLabel
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |SP
-      |EQ
-      |SLASH
-      |COMMA
-      )+
-    ;
-
-     */
 
     private Rule paragraph() {
         return node("paragraph", sequence(
@@ -518,46 +268,6 @@ anchorLabel
         return testNot(sequence(any(), bl(true)));
     }
 
-    /*
-    {isPlusInParagraph($fromList)
-     */
-
-    /*
-paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is attached to a list item
-    : {isStartOfParagraph()}?
-      (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |{isBlankInParagraph()}? SP
-      |{isBlankInParagraph()}? TAB
-      |EQ
-      |{!isStartOfComment()}? SLASH
-      |COMMA
-      |LSBRACK
-      |RSBRACK
-      |LABRACK
-      |RABRACK
-      |CARET
-      |MINUS
-      |{isPlusInParagraph($fromList)}? PLUS
-      |DOT
-      |COLON
-      |SEMICOLON
-      |BANG
-      |TIMES
-      |{isBlankInParagraph()}? NL
-      )+ EOF?
-    ;
-
-     */
-
     private Rule content() {
         return node("content", oneOrMore(firstOf(
                 sequence(isCurrentCharNotEOI(), bl(false)),
@@ -572,25 +282,6 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
                 nl()
         )));
     }
-
-    /*
-    content
-    : ({!isCurrentCharEOF()}? bl[false]
-      |horizontalRule
-      |attributeEntry
-      |attributeList
-      |anchor
-      |blockTitle
-      |blockMacro
-      |section
-      |block[false]
-      |nl
-      )+
-    ;
-
-     */
-
-
 
     private Rule documentTitle() {
         return node("documentTitle",
@@ -614,31 +305,12 @@ paragraph [boolean fromList] // argument 'fromList' indicates that paragraph is 
         ));
     }
 
-    /*
-        section
-    : sectionTitle ({!isCurrentCharEOF()}? bl[false]
-                    |nl
-                    |attributeEntry
-                    |attributeList
-                    |block[false])*
-    ;
-
-     */
-
     private Rule sectionTitle() {
         return node("sectionTitle", sequence(
                 oneOrMore('='), oneOrMore(blank()), title(),
                 zeroOrMore(blank()), firstOf(newLine(), eoi())
         ));
     }
-
-    /*
-
-sectionTitle :
-    EQ+ (SP|TAB)+ title (SP|TAB)* (CR? NL|EOF)
-    ;
-
-     */
 
     private Rule bl(boolean withEOI) {
         Rule setWithEOI = () -> ctx -> {
@@ -669,17 +341,6 @@ sectionTitle :
         return node("nl", newLine());
     }
 
-    /*
-    nl
-    : CR? NL
-    ;
-
-spaces
-    : (SP|TAB)+
-    ;
-
-     */
-
     private Rule spaces() {// TODO replace with blanks ?
         return node("spaces", oneOrMore(firstOf(" \t")));
     }
@@ -694,13 +355,6 @@ spaces
         ));
     }
 
-    /*
-    blockTitle
-    : {isStartOfBlockTitle()}? DOT title (CR? NL|EOF)
-    ;
-
-     */
-
     private Rule horizontalRule() {
         return node("horizontalRule", sequence(string("'''"), optional(blank()), firstOf(newLine(), eoi())));
     }
@@ -713,24 +367,6 @@ spaces
                 ch(' ')
         )));
     }
-
-
-    /*
-    attributeName
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      )+
-    ;
-
-     */
 
     private Rule attributeEntry() {
         return node("attributeEntry", sequence(
@@ -749,31 +385,6 @@ spaces
         return node("attributeValuePart", oneOrMore(noneOf("\r\n\t+")));
     }
 
-    /*
-    attributeEntry
-    : COLON BANG? attributeName BANG? COLON SP* attributeValueParts? (SP|TAB)* (CR? NL|EOF)
-    ;
-
-attributeValueParts
-    : attributeValuePart (PLUS NL SP* attributeValuePart)*
-    ;
-
-attributeValuePart
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      )+
-    ;
-
-     */
-
     private Rule revisionInfo() {
         return node("revisionInfo", sequence(
                 testNot(firstOf(newLine(), sectionTitle())),
@@ -788,46 +399,7 @@ attributeValuePart
                 ),
                 firstOf(newLine(), eoi()) // TODO replace
         ));
-
-        /*
-                return !nextCharIsNL && !nextCharIsEOF &&
-            !nextCharIsBeginningOfAComment && ! nextCharIsBeginningOfAttributeEntry;
-
-         */
     }
-
-    /*
-    revisionInfo
-    : {isStartOfRevisionInfo()}?
-      (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |SP
-      |EQ
-      |{!isStartOfComment()}? SLASH
-      |COMMA
-      |LSBRACK
-      |RSBRACK
-      |LABRACK
-      |RABRACK
-      |MINUS
-      |PLUS
-      |DOT
-      |COLON
-      |SEMICOLON
-      |BANG
-      |{isNewLineInRevisionInfo()}? NL
-      )+ (CR? NL|EOF)
-    ;
-
-     */
 
     private Rule authors() {
         return node("authors", sequence(author(), zeroOrMore(sequence(ch(';'), author())), optional(blank()), firstOf(newLine(), eoi())));
@@ -845,53 +417,6 @@ attributeValuePart
         return node("authorAddress", oneOrMore(noneOf("<>{}[]=\r\n\t")));
     }
 
-    /*
-    authors
-    : author
-      (SEMICOLON author)*
-      (SP|TAB)* (CR? NL|EOF)
-    ;
-
-author
-    : authorName (LABRACK authorAddress RABRACK)?
-    ;
-
-authorName
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |SP
-      |MINUS
-      |DOT
-      )+
-    ;
-
-authorAddress
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |MINUS
-      |SLASH
-      |DOT
-      )+
-    ;
-
-     */
-
     private Rule singleComment() {
         return node("singleComment", sequence(
                 test(sequence(any(), isFirstCharInLine())),
@@ -900,42 +425,6 @@ authorAddress
                 firstOf(newLine(), eoi())// TODO replace
         ));
     }
-
-
-    /*
-    singleComment
-    : {isFirstCharInLine()}?
-      SLASH SLASH
-      (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |SP
-      |EQ
-      |SLASH
-      |COMMA
-      |LSBRACK
-      |RSBRACK
-      |LABRACK
-      |RABRACK
-      |CARET
-      |MINUS
-      |PLUS
-      |DOT
-      |COLON
-      |SEMICOLON
-      |BANG
-      |TIMES
-      )*
-      (CR? NL|EOF)
-    ;
-*/
 
     private Rule multiComment() {
         return node("multiComment", sequence(
@@ -947,52 +436,6 @@ authorAddress
                 multiCommentDelimiter()
         ));
     }
-
-    /*
-multiComment
-    : multiCommentDelimiter
-      (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |SP
-      |EQ
-      |SLASH
-      |COMMA
-      |LSBRACK
-      |RSBRACK
-      |LABRACK
-      |RABRACK
-      |CARET
-      |MINUS
-      |PLUS
-      |DOT
-      |COLON
-      |SEMICOLON
-      |BANG
-      |TIMES
-      |QUOTE
-      |NL
-      )*?
-      multiCommentDelimiter
-    ;
-*/
-
-
-/*
-multiCommentDelimiter
-    : {isFirstCharInLine()}?
-      SLASH SLASH SLASH SLASH (SP|TAB)* (CR? NL|EOF)
-    ;
-
-     */
-
 
     private Rule multiCommentDelimiter() {
         return node("multiCommentDelimiter", sequence(
@@ -1013,16 +456,6 @@ multiCommentDelimiter
         ));
     }
 
-    /*
-    list
-    : listItem
-      (({!isCurrentCharEOF()}? bl[false]|attributeList)* listItem)*
-    ;
-
-listItem
-    : (TIMES+|DOT+) SP listItemValue (CR? NL listContinuation*|EOF)
-    ;
-*/
     private Rule listItem() {
         return node("listItem", sequence(
                 firstOf(oneOrMore('*'), oneOrMore('.')),
@@ -1034,19 +467,6 @@ listItem
                 )
         ));
     }
-
-    /*
-        private boolean isNewLineInListItemValue() {
-        boolean nextCharIsBL = isStartOfBlankLineAtIndex(2, false);
-        boolean nextCharIsListItem = isStartOfListItemAtIndex(2);
-        boolean nextCharIsListContinuation = isStartOfListContinuationAtIndex(2);
-        boolean nextCharIsAttributeList = isStartOfAttributeListAtIndex(2);
-
-        return !nextCharIsBL && !nextCharIsListItem && !nextCharIsListContinuation
-                && !nextCharIsAttributeList;
-    }
-
-     */
 
     private Rule listItemValue() {
         return node("listItemValue", zeroOrMore(firstOf(
@@ -1061,44 +481,6 @@ listItem
         )));
     }
 
-    /*
-listItemValue
-    : (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |SP
-      |EQ
-      |SLASH
-      |COMMA
-      |LSBRACK
-      |RSBRACK
-      |LABRACK
-      |RABRACK
-      |CARET
-      |MINUS
-      |PLUS
-      |TIMES
-      |DOT
-      |COLON
-      |SEMICOLON
-      |BANG
-      |{isNewLineInListItemValue()}? (CR? NL)
-      )*
-    ;
-
-listContinuation
-    : PLUS (SP|TAB)* CR? NL block[true]
-    ;
-
-     */
-
     private Rule listContinuation() {
         Rule setFromList = () -> ctx -> {
             ctx.setAttribute("fromList", true);// TODO create standard rule ?
@@ -1109,14 +491,6 @@ listContinuation
                 ch('+'), optional(blank()), newLine(), wrap(setFromList, proxy("block"))
         ));
     }
-
-    /*
-    sourceBlockDelimiter
-    : {isFirstCharInLine()}?
-      MINUS MINUS MINUS MINUS (SP|TAB)* (CR? NL|EOF)
-    ;
-
-     */
 
     private Rule sourceBlock() {
         return node("sourceBlock", sequence(
@@ -1161,82 +535,6 @@ listContinuation
                 ));
     }
 
-    /*
-    sourceBlock
-    : sourceBlockDelimiter
-      (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |SP
-      |EQ
-      |SLASH
-      |COMMA
-      |LSBRACK
-      |RSBRACK
-      |LABRACK
-      |RABRACK
-      |CARET
-      |MINUS
-      |PLUS
-      |TIMES
-      |DOT
-      |COLON
-      |SEMICOLON
-      |BANG
-      |QUOTE
-      |NL
-      )*?
-      sourceBlockDelimiter
-    ;
-
-
-literalBlock
-    : literalBlockDelimiter
-      (OTHER
-      |ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      |DIGIT
-      |SP
-      |EQ
-      |SLASH
-      |COMMA
-      |LSBRACK
-      |RSBRACK
-      |LABRACK
-      |RABRACK
-      |CARET
-      |MINUS
-      |PLUS
-      |TIMES
-      |DOT
-      |COLON
-      |SEMICOLON
-      |BANG
-      |NL
-      )*?
-      literalBlockDelimiter
-    ;
-
-literalBlockDelimiter
-    : {isFirstCharInLine()}?
-      DOT DOT DOT DOT (SP|TAB)* (CR? NL|EOF)
-    ;
-
-     */
-//tableDelimiter (tableRow|bl[false])* tableDelimiter
     private Rule table() {
         return node("table", sequence(
                 tableDelimiter(),
@@ -1310,51 +608,6 @@ literalBlockDelimiter
 
 
 
-    /*
-    table
-    : tableDelimiter (tableRow|bl[false])* tableDelimiter
-
-tableRow
-    : tableCell+
-    ;
-
-tableCell
-    : tableCellSpecifiers? PIPE tableBlock (bl[false]+ tableBlock)*?
-    ;
-
-tableCellSpecifiers
-    : tableCellSpan
-      |tableCellAlign
-      |tableCellStyle
-      |tableCellSpan tableCellAlign
-      |tableCellSpan tableCellStyle
-      |tableCellAlign tableCellStyle
-      |tableCellSpan tableCellAlign tableCellStyle
-    ;
-
-tableCellSpan
-    : (DIGIT+|DOT DIGIT+|DIGIT+ DOT DIGIT+) (PLUS|TIMES)
-    ;
-
-tableCellAlign
-    : (LABRACK|CARET|RABRACK)
-      |(DOT LABRACK|DOT CARET|DOT RABRACK)
-      |(LABRACK|CARET|RABRACK) (DOT LABRACK|DOT CARET|DOT RABRACK)
-    ;
-
-tableCellStyle
-    : (ALOWER
-      |ELOWER
-      |HLOWER
-      |LLOWER
-      |MLOWER
-      |DLOWER
-      |SLOWER
-      |VLOWER
-      )
-    ;
-*/
-
     private Rule tableBlock() {
         return node("tableBlock", sequence(
                 optional(spaces()),
@@ -1368,53 +621,6 @@ tableCellStyle
                 optional(nl())
         ));
     }
-
-//    private Rule isBlankInTableBlock() {
-//
-//    }
-
-     /*
-tableBlock
-    : spaces?
-      (OTHER
-      |{!isStartOfTableCellSpecifier()}? ALOWER
-      |{!isStartOfTableCellSpecifier()}? ELOWER
-      |{!isStartOfTableCellSpecifier()}? HLOWER
-      |{!isStartOfTableCellSpecifier()}? LLOWER
-      |{!isStartOfTableCellSpecifier()}? MLOWER
-      |{!isStartOfTableCellSpecifier()}? DLOWER
-      |{!isStartOfTableCellSpecifier()}? SLOWER
-      |{!isStartOfTableCellSpecifier()}? VLOWER
-      |{!isStartOfTableCellSpecifier()}? DIGIT
-      |{isBlankInTableBlock()}? SP
-      |{isBlankInTableBlock()}? TAB
-      |EQ
-      |{!isStartOfComment()}? SLASH
-      |COMMA
-      |LSBRACK
-      |RSBRACK
-      |{!isStartOfTableCellSpecifier()}? LABRACK
-      |{!isStartOfTableCellSpecifier()}? RABRACK
-      |{!isStartOfTableCellSpecifier()}? CARET
-      |MINUS
-      |{!isStartOfTableCellSpecifier()}? PLUS
-      |{!isStartOfTableCellSpecifier()}? DOT
-      |COLON
-      |SEMICOLON
-      |BANG
-      |{!isStartOfTableCellSpecifier()}? TIMES
-      |{isBlankInTableBlock()}? NL
-      )+
-      nl?
-    ;
-
-tableDelimiter
-    : {isFirstCharInLine()}?
-      PIPE EQ EQ EQ (SP|TAB)* (CR? NL|EOF)
-    ;
-
-     */
-
 
     // utils rules
     private Rule blank() {
