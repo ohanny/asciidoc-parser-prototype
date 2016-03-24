@@ -12,8 +12,11 @@ public class BaseParser {
     /**
      * Rules instantiation is delegated to a factory
      */
-    //private RulesFactory factory = RulesFactory.defaultRulesFactory();
-    private RulesFactory factory = RulesFactory.spyingRulesFactory();
+    private RulesFactory factory = RulesFactory.defaultRulesFactory();
+
+    public void useSpyingRulesFactory() {
+        factory = RulesFactory.spyingRulesFactory();
+    }
 
     /**
      * Creates a named rule.

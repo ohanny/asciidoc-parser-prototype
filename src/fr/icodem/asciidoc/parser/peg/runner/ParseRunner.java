@@ -1,18 +1,41 @@
-package fr.icodem.asciidoc.parser.peg;
+package fr.icodem.asciidoc.parser.peg.runner;
 
+import fr.icodem.asciidoc.parser.peg.BaseParser;
+import fr.icodem.asciidoc.parser.peg.InputBuffer;
+import fr.icodem.asciidoc.parser.peg.MatcherContext;
 import fr.icodem.asciidoc.parser.peg.listeners.*;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
+import fr.icodem.asciidoc.parser.peg.rules.RuleSupplier;
 
 /**
  * A ParseRunner performs the actual parsing run of a given parser rule on a given input text.
  */
 public class ParseRunner {
 
-    private final Rule rule;
+    private BaseParser parser;
+    private RuleSupplier ruleSupplier;
+    private boolean generateStringTree;
+    private boolean trace;
 
-    public ParseRunner(Rule rule) {
-        this.rule = rule;
+    public ParseRunner(BaseParser parser, RuleSupplier ruleSupplier) {
+        this.parser = parser;
+        this.ruleSupplier = ruleSupplier;
+
+        if (ruleSupplier == null) {
+            throw new IllegalArgumentException("A rule supplier must be provided");
+        }
+
+    }
+
+    public ParseRunner generateStringTree() {
+        this.generateStringTree = true;
+        return this;
+    }
+
+    public ParseRunner trace() {
+        this.trace = true;
+        return this;
     }
 
     /**
@@ -35,13 +58,28 @@ public class ParseRunner {
             inputBufferStateListener = new DefaultInputBufferStateListener();
         }
 
+        if (generateStringTree) {
+            parseTreeListener = new ToStringTreeBuilder();
+        }
+        if (trace) {
+            parsingProcessListener = new ToStringAnalysisBuilder();
+            parser.useSpyingRulesFactory();
+        }
+
         InputBuffer input = new InputBuffer(text, inputBufferStateListener);
 
+        Rule rule = ruleSupplier.getRule();
         Matcher matcher = rule.getMatcher();
 
         boolean matched = matcher.match(new MatcherContext(input, parseTreeListener, parsingProcessListener));
 
-        ParsingResult result = new ParsingResult(matched);
+        ParsingResult result;
+        if (generateStringTree) {
+            String tree = ((ToStringTreeBuilder)parseTreeListener).getStringTree();
+            result = new ParsingResult(matched, tree);
+        } else {
+            result = new ParsingResult(matched);
+        }
 
         return result;
 

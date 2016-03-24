@@ -2,8 +2,10 @@ package fr.icodem.asciidoc.parser.peg;
 
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
-import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
+import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
+import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
+import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -15,34 +17,23 @@ public class FlushingTest extends BaseParser {
     private ParseTreeListener listener;
     private InputBufferStateListener inputBufferStateListener;
 
-    private ParseTreeListener listener2 = new ParseTreeListener() {
-        @Override
-        public void characters(char[] characters, int startIndex, int endIndex) {
-            System.out.println("\tchars => [" + startIndex + "," + endIndex + "] " + new String(characters));
-        }
-
-        @Override
-        public void enterNode(String nodeName) {
-            System.out.println("ENTER => " + nodeName);
-        }
-
-        @Override
-        public void exitNode(String nodeName) {
-            System.out.println("EXIT => " + nodeName);
-        }
-    };
-
     @Before
     public void init() {
         listener = mock(ParseTreeListener.class);
         inputBufferStateListener = mock(InputBufferStateListener.class);
     }
 
+    private ParsingResult parse(Rule rule, String text, ParseTreeListener parseTreeListener,
+                                ParsingProcessListener parsingProcessListener, InputBufferStateListener bufferListener) {
+        return new ParseRunner(this, () -> rule).parse(text, parseTreeListener, parsingProcessListener, bufferListener);
+    }
+
+
     @Test
     public void test1() throws Exception {
         Rule rule = node("root", sequence(node("child", ch('a')), ch('b')));
 
-        ParsingResult result = new ParseRunner(rule).parse("ab", listener, null, inputBufferStateListener);
+        ParsingResult result = parse(rule, "ab", listener, null, inputBufferStateListener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
@@ -60,7 +51,7 @@ public class FlushingTest extends BaseParser {
     public void test2() throws Exception {
         Rule rule = node("root", sequence(node("child", ch('a')), optional(ch('b'))));
 
-        ParsingResult result = new ParseRunner(rule).parse("ab", listener, null, inputBufferStateListener);
+        ParsingResult result = parse(rule, "ab", listener, null, inputBufferStateListener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);

@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser.antlr;
 
-import fr.icodem.asciidoc.parser.peg.example.AsciidocParsingResult;
+import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
+import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import fr.icodem.asciidoc.parser.peg.example.AsciidocPegParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -11,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 
 public abstract class GrammarTest {
 
-    private static boolean ANTLR = false;
+    private final static boolean ANTLR = false;
 
     protected void check(String message, String input, String expected) {
         if (ANTLR) {
@@ -20,7 +21,12 @@ public abstract class GrammarTest {
             assertEquals(message, expected, tree.toStringTree(parser));
         }
         else {
-            AsciidocParsingResult result = new AsciidocPegParser().parse(input);
+            AsciidocPegParser parser = new AsciidocPegParser();
+            ParsingResult result = new ParseRunner(parser, parser::document)
+                    .generateStringTree()
+                    .trace()
+                    .parse(input);
+
             assertEquals(message, expected, result.tree);
         }
     }

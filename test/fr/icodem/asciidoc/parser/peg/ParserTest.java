@@ -3,6 +3,8 @@ package fr.icodem.asciidoc.parser.peg;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ToStringTreeBuilder;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
+import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
+import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -14,33 +16,25 @@ public class ParserTest extends BaseParser {
 
     private ParseTreeListener listener;
 
-    private ParseTreeListener listener2 = new ParseTreeListener() {
-        @Override
-        public void characters(char[] characters, int startIndex, int endIndex) {
-            System.out.println("\tchars => [" + startIndex + "," + endIndex + "] " + new String(characters));
-        }
+    private ParsingResult parse(Rule rule, String text) {
+        return new ParseRunner(this, () -> rule).parse(text);
+    }
 
-        @Override
-        public void enterNode(String nodeName) {
-            System.out.println("ENTER => " + nodeName);
-        }
-
-        @Override
-        public void exitNode(String nodeName) {
-            System.out.println("EXIT => " + nodeName);
-        }
-    };
+    private ParsingResult parse(Rule rule, String text, ParseTreeListener listener) {
+        return new ParseRunner(this, () -> rule).parse(text, listener);
+    }
 
     @Before
     public void init() {
         listener = mock(ParseTreeListener.class);
+        useSpyingRulesFactory();
     }
 
     @Test
     public void twoCharsInSequenceWithCorrectInput() throws Exception {
         Rule rule = sequence(ch('a'), ch('b'));
 
-        ParsingResult result = new ParseRunner(rule).parse("ab");
+        ParsingResult result = parse(rule, "ab");
 
         assertTrue("Did not match", result.matched);
     }
@@ -49,7 +43,7 @@ public class ParserTest extends BaseParser {
     public void twoCharsInSequenceWithIncorrectInput() throws Exception {
         Rule rule = sequence(ch('a'), ch('b'));
 
-        ParsingResult result = new ParseRunner(rule).parse("zz");
+        ParsingResult result = parse(rule, "zz");
 
         assertFalse("Did not match", result.matched);
     }
@@ -57,7 +51,7 @@ public class ParserTest extends BaseParser {
     @Test
     public void test1() throws Exception {
         Rule rule = node("root", sequence(ch('a'), ch('b')));
-        ParsingResult result = new ParseRunner(rule).parse("ab", listener);
+        ParsingResult result = parse(rule, "ab", listener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -72,7 +66,7 @@ public class ParserTest extends BaseParser {
         Rule rule1 = node("child", sequence(ch('c'), ch('d')));
         Rule rule2 = node("root", sequence(ch('a'), ch('b'), rule1));
 
-        ParsingResult result = new ParseRunner(rule2).parse("abcd", listener);
+        ParsingResult result = parse(rule2, "abcd", listener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -90,7 +84,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", zeroOrMore(ch('a')));
 
-        ParsingResult result = new ParseRunner(rule).parse("ab", listener);
+        ParsingResult result = parse(rule, "ab", listener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -105,7 +99,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", sequence(optional(ch('a')), ch('b')));
 
-        ParsingResult result = new ParseRunner(rule).parse("ab", listener);
+        ParsingResult result = parse(rule, "ab", listener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -120,7 +114,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", sequence(optional(ch('a')), ch('b')));
 
-        ParsingResult result = new ParseRunner(rule).parse("b", listener);
+        ParsingResult result = parse(rule, "b", listener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -135,7 +129,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("expression", sequence(ch('a'), zeroOrMore(proxy("expression")), ch('b')));
 
-        ParsingResult result = new ParseRunner(rule).parse("aabb", listener);
+        ParsingResult result = parse(rule, "aabb", listener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -154,7 +148,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("expression", sequence(ch('a'), zeroOrMore(proxy("expression")), ch('b')));
 
-        ParsingResult result = new ParseRunner(rule).parse("aababb", listener);
+        ParsingResult result = parse(rule, "aababb", listener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -178,7 +172,7 @@ public class ParserTest extends BaseParser {
 
         ToStringTreeBuilder treeBuilder = new ToStringTreeBuilder();
 
-        ParsingResult result = new ParseRunner(rule).parse("aababb", treeBuilder);
+        ParsingResult result = parse(rule, "aababb", treeBuilder);
 
         assertTrue("Did not match", result.matched);
         assertEquals("", "(expression a (expression a b) (expression a b) b)", treeBuilder.getStringTree());
@@ -189,7 +183,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", firstOf(ch('a'), ch('b')));
 
-        ParsingResult result = new ParseRunner(rule).parse("a", listener);
+        ParsingResult result = parse(rule, "a", listener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -204,7 +198,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", firstOf(ch('a'), ch('b')));
 
-        ParsingResult result = new ParseRunner(rule).parse("b", listener);
+        ParsingResult result = parse(rule, "b", listener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -219,7 +213,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", oneOrMore(ch('a')));
 
-        ParsingResult result = new ParseRunner(rule).parse("a", listener);
+        ParsingResult result = parse(rule, "a", listener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -234,7 +228,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", oneOrMore(ch('a')));
 
-        ParsingResult result = new ParseRunner(rule).parse("aaa", listener);
+        ParsingResult result = parse(rule, "aaa", listener);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -249,7 +243,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", oneOrMore(ch('a')));
 
-        ParsingResult result = new ParseRunner(rule).parse("b", listener);
+        ParsingResult result = parse(rule, "b", listener);
 
         assertFalse("Rule matched", result.matched);
     }
@@ -259,7 +253,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", firstOf(sequence(ch('a'), ch('b')), sequence(ch('c'), ch('d'))));
 
-        ParsingResult result = new ParseRunner(rule).parse("ab", listener);
+        ParsingResult result = parse(rule, "ab", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -274,7 +268,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", firstOf(sequence(ch('a'), ch('b')), sequence(ch('c'), ch('d'))));
 
-        ParsingResult result = new ParseRunner(rule).parse("cd", listener);
+        ParsingResult result = parse(rule, "cd", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -291,7 +285,7 @@ public class ParserTest extends BaseParser {
         Rule rule2 = firstOf(sequence(ch('c'), ch('d')), zeroOrMore(ch('d')));
         Rule rule = node("root", sequence(rule1, rule2));
 
-        ParsingResult result = new ParseRunner(rule).parse("abddd", listener);
+        ParsingResult result = parse(rule, "abddd", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -308,7 +302,7 @@ public class ParserTest extends BaseParser {
         Rule rule2 = firstOf(sequence(ch('c'), ch('d')), zeroOrMore(ch('d')));
         Rule rule = node("root", sequence(rule1, rule2));
 
-        ParsingResult result = new ParseRunner(rule).parse("ab", listener);
+        ParsingResult result = parse(rule, "ab", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -325,7 +319,7 @@ public class ParserTest extends BaseParser {
         Rule rule2 = firstOf(sequence(ch('c'), ch('d')), zeroOrMore(ch('d')));
         Rule rule = node("root", sequence(rule1, rule2));
 
-        ParsingResult result = new ParseRunner(rule).parse("cccd", listener);
+        ParsingResult result = parse(rule, "cccd", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -340,7 +334,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", sequence(test(sequence(ch('a'), ch('b'))), oneOrMore(firstOf(ch('a'),ch('b'),ch('c'),ch('d')))));
 
-        ParsingResult result = new ParseRunner(rule).parse("abcd", listener);
+        ParsingResult result = parse(rule, "abcd", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -357,7 +351,7 @@ public class ParserTest extends BaseParser {
         Rule rule1 = firstOf(sequence(ch('a'), ch('b')), oneOrMore(sequence(testNot(rule2), ch('c'))));
         Rule rule = node("root", sequence(rule1, rule2));
 
-        ParsingResult result = new ParseRunner(rule).parse("cccd", listener);
+        ParsingResult result = parse(rule, "cccd", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -372,7 +366,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = charRange('a', 'f');
 
-        ParsingResult result = new ParseRunner(rule).parse("a");
+        ParsingResult result = parse(rule, "a");
 
         assertTrue("Rule did not match", result.matched);
     }
@@ -382,7 +376,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = charRange('a', 'f');
 
-        ParsingResult result = new ParseRunner(rule).parse("f");
+        ParsingResult result = parse(rule, "f");
 
         assertTrue("Rule did not match", result.matched);
     }
@@ -392,7 +386,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = charRange('a', 'f');
 
-        ParsingResult result = new ParseRunner(rule).parse("g");
+        ParsingResult result = parse(rule, "g");
 
         assertFalse("Rule should not matched", result.matched);
     }
@@ -402,7 +396,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", sequence(charRange('a', 'c'), ch('z')));
 
-        ParsingResult result = new ParseRunner(rule).parse("az", listener);
+        ParsingResult result = parse(rule, "az", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -417,7 +411,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", sequence(charRange('a', 'c'), ch('z')));
 
-        ParsingResult result = new ParseRunner(rule).parse("bz", listener);
+        ParsingResult result = parse(rule, "bz", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -432,7 +426,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", sequence(charRange('a', 'c'), ch('z')));
 
-        ParsingResult result = new ParseRunner(rule).parse("kz", listener);
+        ParsingResult result = parse(rule, "kz", listener);
 
         assertFalse("Rule should not match", result.matched);
 
@@ -443,7 +437,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = anyOf('a', 'x', 'i');
 
-        ParsingResult result = new ParseRunner(rule).parse("a");
+        ParsingResult result = parse(rule, "a");
 
         assertTrue("Rule did not match", result.matched);
     }
@@ -453,7 +447,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = anyOf('a', 'x', 'i');
 
-        ParsingResult result = new ParseRunner(rule).parse("i");
+        ParsingResult result = parse(rule, "i");
 
         assertTrue("Rule did not match", result.matched);
     }
@@ -463,7 +457,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = anyOf('a', 'x', 'i');
 
-        ParsingResult result = new ParseRunner(rule).parse("k");
+        ParsingResult result = parse(rule, "k");
 
         assertFalse("Rule should not match", result.matched);
     }
@@ -473,7 +467,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", sequence(anyOf('y', 'm'), ch('z')));
 
-        ParsingResult result = new ParseRunner(rule).parse("yz", listener);
+        ParsingResult result = parse(rule, "yz", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -488,7 +482,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", sequence(anyOf('y', 'm'), ch('z')));
 
-        ParsingResult result = new ParseRunner(rule).parse("mz", listener);
+        ParsingResult result = parse(rule, "mz", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -503,7 +497,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", sequence(anyOf('y', 'm'), ch('z')));
 
-        ParsingResult result = new ParseRunner(rule).parse("kz");
+        ParsingResult result = parse(rule, "kz");
 
         assertFalse("Rule should not match", result.matched);
 
@@ -514,7 +508,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = string("abc");
 
-        ParsingResult result = new ParseRunner(rule).parse("abc");
+        ParsingResult result = parse(rule, "abc");
 
         assertTrue("Rule did not match", result.matched);
     }
@@ -524,7 +518,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = string("abc");
 
-        ParsingResult result = new ParseRunner(rule).parse("ab");
+        ParsingResult result = parse(rule, "ab");
 
         assertFalse("Rule should not match", result.matched);
     }
@@ -534,7 +528,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", sequence(string("abc"), ch('z')));
 
-        ParsingResult result = new ParseRunner(rule).parse("abcz", listener);
+        ParsingResult result = parse(rule, "abcz", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -549,7 +543,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = anyOfString("abc", "def");
 
-        ParsingResult result = new ParseRunner(rule).parse("abc");
+        ParsingResult result = parse(rule, "abc");
 
         assertTrue("Rule did not match", result.matched);
     }
@@ -559,7 +553,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = anyOfString("abc", "def");
 
-        ParsingResult result = new ParseRunner(rule).parse("def");
+        ParsingResult result = parse(rule, "def");
 
         assertTrue("Rule did not match", result.matched);
     }
@@ -569,7 +563,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = anyOfString("abc", "def");
 
-        ParsingResult result = new ParseRunner(rule).parse("gh");
+        ParsingResult result = parse(rule, "gh");
 
         assertFalse("Rule should not match", result.matched);
     }
@@ -579,7 +573,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = node("root", sequence(anyOfString("abc", "def"), ch('z')));
 
-        ParsingResult result = new ParseRunner(rule).parse("defz", listener);
+        ParsingResult result = parse(rule, "defz", listener);
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
@@ -594,7 +588,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = noneOf("abc");
 
-        ParsingResult result = new ParseRunner(rule).parse("z");
+        ParsingResult result = parse(rule, "z");
 
         assertTrue("Rule did not match", result.matched);
     }
@@ -604,7 +598,7 @@ public class ParserTest extends BaseParser {
 
         Rule rule = noneOf("abc");
 
-        ParsingResult result = new ParseRunner(rule).parse("b");
+        ParsingResult result = parse(rule, "b");
 
         assertFalse("Rule should not match", result.matched);
     }

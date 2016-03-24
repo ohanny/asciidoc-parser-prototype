@@ -1,10 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example;
 
 import fr.icodem.asciidoc.parser.peg.BaseParser;
-import fr.icodem.asciidoc.parser.peg.ParseRunner;
-import fr.icodem.asciidoc.parser.peg.ParsingResult;
+import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
+import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
-import fr.icodem.asciidoc.parser.peg.listeners.ToStringAnalysisBuilder;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 import java.util.Deque;
@@ -37,11 +36,11 @@ public class Calculator extends BaseParser implements ParseTreeListener {
     }
 
     public int calc(String line) {
-        ParseRunner runner = new ParseRunner(inputLine());
+        ParseRunner runner = new ParseRunner(this, this::inputLine);
         ParsingResult result = runner.parse(line, this);
 
         // uncomment to get more detail about processing
-        //ParsingResult result = runner.parse(line, this, new ToStringAnalysisBuilder());
+        //ParsingResult result = runner.trace().parse(line, this);
 
         if (!result.matched) {
             throw new IllegalArgumentException("Wrong input line");

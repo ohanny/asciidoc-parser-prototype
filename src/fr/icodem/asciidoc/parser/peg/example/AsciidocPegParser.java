@@ -2,33 +2,15 @@ package fr.icodem.asciidoc.parser.peg.example;
 
 import fr.icodem.asciidoc.parser.peg.BaseParser;
 import fr.icodem.asciidoc.parser.peg.Chars;
-import fr.icodem.asciidoc.parser.peg.ParseRunner;
-import fr.icodem.asciidoc.parser.peg.ParsingResult;
-import fr.icodem.asciidoc.parser.peg.listeners.ToStringAnalysisBuilder;
-import fr.icodem.asciidoc.parser.peg.listeners.ToStringTreeBuilder;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
-import fr.icodem.asciidoc.parser.peg.rules.RuleSupplier;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class AsciidocPegParser extends BaseParser {
 
-    public AsciidocParsingResult parse(String text) {
-
-        ToStringTreeBuilder treeBuilder = new ToStringTreeBuilder();
-
-        AsciidocParsingResult result = new AsciidocParsingResult();
-        //result.matched = new ParseRunner(document()).parse(text, treeBuilder).matched;
-        result.matched = new ParseRunner(document()).parse(text, treeBuilder, new ToStringAnalysisBuilder()).matched;
-        result.tree = treeBuilder.getStringTree();
-
-        return result;
-    }
-
-
     // rules
-    private Rule document() {
+    public Rule document() {
         return node("document",
                 sequence(
                         zeroOrMore(firstOf(
