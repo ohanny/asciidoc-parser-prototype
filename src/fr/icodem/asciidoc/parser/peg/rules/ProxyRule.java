@@ -36,8 +36,4 @@ public class ProxyRule implements Rule {
         return name;
     }
 
-    @Override
-    public boolean isNode() {
-        return getDelegate().isNode();
-    }
 }

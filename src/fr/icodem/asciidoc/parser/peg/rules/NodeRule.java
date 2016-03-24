@@ -22,11 +22,4 @@ public class NodeRule extends NamedRule {
         return matcher;
     }
 
-    /**
-     * @see Rule#isNode()
-     */
-    @Override
-    public boolean isNode() {
-        return true;
-    }
 }
