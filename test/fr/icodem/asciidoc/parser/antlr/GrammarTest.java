@@ -24,7 +24,7 @@ public abstract class GrammarTest {
             AsciidocPegParser parser = new AsciidocPegParser();
             ParsingResult result = new ParseRunner(parser, parser::document)
                     .generateStringTree()
-                    .trace()
+                    //.trace()
                     .parse(input);
 
             assertEquals(message, expected, result.tree);

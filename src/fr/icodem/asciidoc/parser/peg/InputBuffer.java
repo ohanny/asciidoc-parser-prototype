@@ -39,14 +39,6 @@ public class InputBuffer {
     private int[] newLinePositions;
     private int lastNewLinePositionIndex;
 
-//    /**
-//     * Constructs an input buffer given an input text.
-//     * @param text the input text to be parsed
-//     */
-//    public InputBuffer(String text) {
-//        this(text, null);
-//    }
-
     /**
      * Constructs an input buffer given an input text.
      * @param text the input text to be parsed
@@ -105,7 +97,6 @@ public class InputBuffer {
         }
     }
 
-    // getCharPositionInLine
     public int getPositionInLine() {
         if (lastNewLinePositionIndex > -1) {
             if (newLinePositions[lastNewLinePositionIndex] == position) {
