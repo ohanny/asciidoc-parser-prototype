@@ -19,11 +19,8 @@ public class StringInputBuffer implements InputBuffer {
      */
     private InputBufferStateListener listener;
 
-    /** NON TODO
-     * A moving window buffer of the data being scanned. We keep adding
-     * to the buffer while there's data in the input source.
-     * When {@link #consume consume()} occurs, characters starting from
-     * next position are shifted to index 0.
+    /**
+     * The text to be parsed converted into a char array
      */
     private char[] data;
 
