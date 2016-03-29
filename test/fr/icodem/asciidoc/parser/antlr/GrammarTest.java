@@ -8,6 +8,8 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import java.io.StringReader;
+
 import static org.junit.Assert.assertEquals;
 
 public abstract class GrammarTest {
@@ -25,7 +27,8 @@ public abstract class GrammarTest {
             ParsingResult result = new ParseRunner(parser, parser::document)
                     .generateStringTree()
                     //.trace()
-                    .parse(input);
+                    //.parse(input);
+                    .parse(new StringReader(input), null, null, null);
 
             assertEquals(message, expected, result.tree);
         }

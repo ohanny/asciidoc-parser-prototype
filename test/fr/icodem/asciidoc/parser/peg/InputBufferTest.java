@@ -1,18 +1,46 @@
 package fr.icodem.asciidoc.parser.peg;
 
-import fr.icodem.asciidoc.parser.peg.listeners.DefaultInputBufferStateListener;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+import org.junit.runners.Parameterized.Parameter;
 
-import static fr.icodem.asciidoc.parser.peg.Chars.*;
-import static org.junit.Assert.*;
+import java.io.StringReader;
+import java.util.Arrays;
+import java.util.function.Function;
 
-public class StringInputBufferTest {
+import static fr.icodem.asciidoc.parser.peg.Chars.EOI;
+import static org.junit.Assert.assertEquals;
+
+@RunWith(Parameterized.class)
+public class InputBufferTest {
 
     private InputBuffer buffer;
 
+    @Parameter @SuppressWarnings("unused")
+    public String bufferName;
+
+    @Parameter(value = 1)
+    public Function<String, InputBuffer> bufferSuplier;
+
+    private static InputBuffer getReaderInputBuffer(String input) {
+        return InputBuffer.readerInputBuffer(new StringReader(input));
+    }
+
+    @Parameters(name = "{index}: {0}")
+    public static Iterable<Object[]> data() {
+        Function<String, InputBuffer> stringIB = InputBuffer::stringInputBuffer;
+        Function<String, InputBuffer> readerIB = InputBufferTest::getReaderInputBuffer;
+
+        return Arrays.asList(new Object[][] {
+                { "StringInputBuffer", stringIB }, { "ReaderInputBuffer", readerIB }
+        });
+    }
+
     @Test
     public void itShouldReadAllCharacters() throws Exception {
-        buffer = InputBuffer.stringInputBuffer("abcde");
+        buffer = bufferSuplier.apply("abcde");
 
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();
@@ -33,7 +61,7 @@ public class StringInputBufferTest {
 
     @Test
     public void itShouldGetMarkers() throws Exception {
-        buffer = InputBuffer.stringInputBuffer("abcde");
+        buffer = bufferSuplier.apply("abcde");
 
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();
@@ -62,7 +90,7 @@ public class StringInputBufferTest {
 
     @Test
     public void itShouldResetToMarker() throws Exception {
-        buffer = InputBuffer.stringInputBuffer("abcde");
+        buffer = bufferSuplier.apply("abcde");
 
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();
@@ -86,7 +114,7 @@ public class StringInputBufferTest {
 
     @Test
     public void itShouldConsumeReadCharacters() throws Exception {
-        buffer = InputBuffer.stringInputBuffer("abcde");
+        buffer = bufferSuplier.apply("abcde");
         buffer.getNextChar();
         buffer.getNextChar();
         buffer.consume();
@@ -105,8 +133,7 @@ public class StringInputBufferTest {
 
     @Test
     public void test() throws Exception {
-        buffer = new StringInputBuffer("abc\n\n");
-
+        buffer = bufferSuplier.apply("abc\n\n");
 
         int pos0 = buffer.getPositionInLine();
 

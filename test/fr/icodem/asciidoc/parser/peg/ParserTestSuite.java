@@ -6,7 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-    StringInputBufferTest.class,
+    InputBufferTest.class,
     ParserTest.class,
     FlushingTest.class,
     CalculatorTest.class

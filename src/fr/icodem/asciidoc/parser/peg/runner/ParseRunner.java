@@ -9,6 +9,8 @@ import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RuleSupplier;
 
+import java.io.Reader;
+
 /**
  * A ParseRunner performs the actual parsing run of a given parser rule on a given input text.
  */
@@ -38,6 +40,53 @@ public class ParseRunner {
         this.trace = true;
         return this;
     }
+
+    /**
+     * Performs the actual parse and creates a corresponding ParsingResult instance.
+     *
+     * @param reader the input reader to parse
+     * @return the ParsingResult for the run
+     */
+    public ParsingResult parse(Reader reader, ParseTreeListener parseTreeListener,
+                               ParsingProcessListener parsingProcessListener,
+                               InputBufferStateListener inputBufferStateListener) {
+
+        InputBuffer input = InputBuffer.readerInputBuffer(reader)
+                                       .useListener(inputBufferStateListener);
+
+        if (parseTreeListener == null) {
+            parseTreeListener = new DefaultParseTreeListener();
+        }
+        if (parsingProcessListener == null) {
+            parsingProcessListener = new DefaultParsingProcessListener();
+        }
+
+        if (generateStringTree) {
+            parseTreeListener = new ToStringTreeBuilder();
+        }
+        if (trace) {
+            parsingProcessListener = new ToStringAnalysisBuilder();
+            parser.useSpyingRulesFactory();
+        }
+
+
+        Rule rule = ruleSupplier.getRule();
+        Matcher matcher = rule.getMatcher();
+
+        boolean matched = matcher.match(new MatcherContext(input, parseTreeListener, parsingProcessListener));
+
+        ParsingResult result;
+        if (generateStringTree) {
+            String tree = ((ToStringTreeBuilder)parseTreeListener).getStringTree();
+            result = new ParsingResult(matched, tree);
+        } else {
+            result = new ParsingResult(matched);
+        }
+
+        return result;
+
+    }
+
 
     /**
      * Performs the actual parse and creates a corresponding ParsingResult instance.

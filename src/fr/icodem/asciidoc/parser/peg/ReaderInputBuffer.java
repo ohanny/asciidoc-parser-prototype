@@ -1,7 +1,9 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.listeners.DefaultInputBufferStateListener;
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
 
@@ -45,41 +47,65 @@ public class ReaderInputBuffer implements InputBuffer {
     /**
      * Constructs an input buffer given an input reader.
      * @param reader the input text to be parsed
-     * @param listener the listener notified of internal state of the buffer
      */
-    ReaderInputBuffer(Reader reader, InputBufferStateListener listener) {
+    ReaderInputBuffer(Reader reader) {
+        if (reader == null) {
+            throw new IllegalArgumentException("Reader must not be null");
+        }
+
         this.reader = reader;
         data = new char[1024];
         position = -1;
         newLinePositions = new int[128];
         Arrays.fill(newLinePositions, -1);
         lastNewLinePositionIndex = -1;
-        Arrays.fill(data, Chars.EOI);
-//        System.arraycopy(text.toCharArray(), 0, data, 0, text.length());
 
-//        numberOfCharacters = text.length();
-
-        if (listener == null) {
-            throw new IllegalArgumentException("Input buffer state listener must not be null");
-        }
-        this.listener = listener;
+        this.listener = new DefaultInputBufferStateListener();
     }
+
+    /**
+     * The listener to be notified of internal state of the buffer
+     * @param listener the listener notified of internal state of the buffer
+     */
+    @Override
+    public InputBuffer useListener(InputBufferStateListener listener) {
+        if (listener != null) {
+            this.listener = listener;
+        }
+        return this;
+    }
+
 
     @Override
     public char getNextChar() {
-        if (position < numberOfCharacters) {
-            char c = data[++position];
-            if (c == '\n') {
-                addNewLinePosition(position);
+        // load chars from reader
+        if (position == numberOfCharacters - 1) {
+            try {
+                int free = data.length - numberOfCharacters;
+                if (free == 0) {
+                    data = Arrays.copyOf(data, data.length * 2);
+                }
+                int numRead = reader.read(data, numberOfCharacters, free);
+                if (numRead != -1) {
+                    numberOfCharacters += numRead;
+                } else { // end of input
+                    data[numberOfCharacters] = EOI;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            listener.visitNextChar(position, c);
-            return c;
-        } else if (position == numberOfCharacters) {
+        }
+
+        if (position < numberOfCharacters) {
             position++;
         }
 
-        listener.visitNextChar(position, EOI);
-        return EOI;
+        char c = data[position];
+        if (c == '\n') {
+            addNewLinePosition(position);
+        }
+        listener.visitNextChar(position, c);
+        return c;
     }
 
     private void addNewLinePosition(int position) {
@@ -140,8 +166,8 @@ public class ReaderInputBuffer implements InputBuffer {
 
     @Override
     public void consume() {
-        System.arraycopy(data, position, data, 0, numberOfCharacters - position);
+        System.arraycopy(data, position + 1, data, 0, numberOfCharacters - position);
         numberOfCharacters -= position + 1;
-        position = 0;
+        position = -1;// 0
     }
 }

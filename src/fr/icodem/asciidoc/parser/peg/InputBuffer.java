@@ -10,8 +10,8 @@ public interface InputBuffer {
         return new StringInputBuffer(text);
     }
 
-    static InputBuffer readerInputBuffer(Reader reader, InputBufferStateListener listener) {
-        return new ReaderInputBuffer(reader, listener);
+    static InputBuffer readerInputBuffer(Reader reader) {
+        return new ReaderInputBuffer(reader);
     }
 
     default InputBuffer useListener(InputBufferStateListener listener) {
