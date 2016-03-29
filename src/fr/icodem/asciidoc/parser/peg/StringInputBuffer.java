@@ -54,8 +54,11 @@ public class StringInputBuffer implements InputBuffer {
      * @param listener the listener notified of internal state of the buffer
      */
     @Override
-    public void useListener(InputBufferStateListener listener) {
-        this.listener = listener;
+    public InputBuffer useListener(InputBufferStateListener listener) {
+        if (listener != null) {
+            this.listener = listener;
+        }
+        return this;
     }
 
     @Override

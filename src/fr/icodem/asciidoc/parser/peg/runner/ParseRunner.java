@@ -49,16 +49,14 @@ public class ParseRunner {
                                ParsingProcessListener parsingProcessListener,
                                InputBufferStateListener inputBufferStateListener) {
 
-        InputBuffer input = InputBuffer.stringInputBuffer(text);
+        InputBuffer input = InputBuffer.stringInputBuffer(text)
+                                       .useListener(inputBufferStateListener);
 
         if (parseTreeListener == null) {
             parseTreeListener = new DefaultParseTreeListener();
         }
         if (parsingProcessListener == null) {
             parsingProcessListener = new DefaultParsingProcessListener();
-        }
-        if (inputBufferStateListener != null) {
-            input.useListener(inputBufferStateListener);
         }
 
         if (generateStringTree) {

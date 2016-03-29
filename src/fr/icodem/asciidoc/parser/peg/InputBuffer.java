@@ -14,7 +14,9 @@ public interface InputBuffer {
         return new ReaderInputBuffer(reader, listener);
     }
 
-    default void useListener(InputBufferStateListener listener) {}
+    default InputBuffer useListener(InputBufferStateListener listener) {
+        return this;
+    }
 
     /**
      * Gets next character from the buffer.
