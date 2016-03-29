@@ -6,13 +6,15 @@ import java.io.Reader;
 
 public interface InputBuffer {
 
-    static InputBuffer stringInputBuffer(String text, InputBufferStateListener listener) {
-        return new StringInputBuffer(text, listener);
+    static InputBuffer stringInputBuffer(String text) {
+        return new StringInputBuffer(text);
     }
 
     static InputBuffer readerInputBuffer(Reader reader, InputBufferStateListener listener) {
         return new ReaderInputBuffer(reader, listener);
     }
+
+    default void useListener(InputBufferStateListener listener) {}
 
     /**
      * Gets next character from the buffer.
@@ -38,5 +40,5 @@ public interface InputBuffer {
      * Characters from index 0 up to current position are removed from the buffer.
      * Characters starting at next position are shifted at index 0.
      */
-    void consume();
+    default void consume() {}
 }

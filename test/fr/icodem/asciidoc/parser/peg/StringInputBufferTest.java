@@ -12,7 +12,7 @@ public class StringInputBufferTest {
 
     @Test
     public void itShouldReadAllCharacters() throws Exception {
-        buffer = InputBuffer.stringInputBuffer("abcde", new DefaultInputBufferStateListener());
+        buffer = InputBuffer.stringInputBuffer("abcde");
 
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();
@@ -33,7 +33,7 @@ public class StringInputBufferTest {
 
     @Test
     public void itShouldGetMarkers() throws Exception {
-        buffer = InputBuffer.stringInputBuffer("abcde", new DefaultInputBufferStateListener());
+        buffer = InputBuffer.stringInputBuffer("abcde");
 
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();
@@ -62,7 +62,7 @@ public class StringInputBufferTest {
 
     @Test
     public void itShouldResetToMarker() throws Exception {
-        buffer = InputBuffer.stringInputBuffer("abcde", new DefaultInputBufferStateListener());
+        buffer = InputBuffer.stringInputBuffer("abcde");
 
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();
@@ -86,7 +86,7 @@ public class StringInputBufferTest {
 
     @Test
     public void itShouldConsumeReadCharacters() throws Exception {
-        buffer = InputBuffer.stringInputBuffer("abcde", new DefaultInputBufferStateListener());
+        buffer = InputBuffer.stringInputBuffer("abcde");
         buffer.getNextChar();
         buffer.getNextChar();
         buffer.consume();
@@ -105,7 +105,7 @@ public class StringInputBufferTest {
 
     @Test
     public void test() throws Exception {
-        buffer = new StringInputBuffer("abc\n\n", new DefaultInputBufferStateListener());
+        buffer = new StringInputBuffer("abc\n\n");
 
 
         int pos0 = buffer.getPositionInLine();

@@ -49,14 +49,16 @@ public class ParseRunner {
                                ParsingProcessListener parsingProcessListener,
                                InputBufferStateListener inputBufferStateListener) {
 
+        InputBuffer input = InputBuffer.stringInputBuffer(text);
+
         if (parseTreeListener == null) {
             parseTreeListener = new DefaultParseTreeListener();
         }
         if (parsingProcessListener == null) {
             parsingProcessListener = new DefaultParsingProcessListener();
         }
-        if (inputBufferStateListener == null) {
-            inputBufferStateListener = new DefaultInputBufferStateListener();
+        if (inputBufferStateListener != null) {
+            input.useListener(inputBufferStateListener);
         }
 
         if (generateStringTree) {
@@ -67,7 +69,6 @@ public class ParseRunner {
             parser.useSpyingRulesFactory();
         }
 
-        InputBuffer input = InputBuffer.stringInputBuffer(text, inputBufferStateListener);
 
         Rule rule = ruleSupplier.getRule();
         Matcher matcher = rule.getMatcher();
@@ -88,19 +89,15 @@ public class ParseRunner {
 
     public ParsingResult parse(String text, ParseTreeListener parseTreeListener,
                                ParsingProcessListener parsingProcessListener) {
-        return parse(text, parseTreeListener,
-                parsingProcessListener, new DefaultInputBufferStateListener());
+        return parse(text, parseTreeListener, parsingProcessListener, null);
     }
 
     public ParsingResult parse(String text, ParseTreeListener parseTreeListener) {
-        return parse(text, parseTreeListener,
-                new DefaultParsingProcessListener(), new DefaultInputBufferStateListener());
+        return parse(text, parseTreeListener, new DefaultParsingProcessListener(), null);
     }
 
     public ParsingResult parse(String text) {
-        return parse(text, new DefaultParseTreeListener(),
-                new DefaultParsingProcessListener(),
-                new DefaultInputBufferStateListener());
+        return parse(text, new DefaultParseTreeListener(), new DefaultParsingProcessListener(), null);
     }
 
 }

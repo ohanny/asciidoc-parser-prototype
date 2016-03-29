@@ -1,16 +1,16 @@
 package fr.icodem.asciidoc.parser.peg;
 
-import fr.icodem.asciidoc.parser.peg.listeners.DefaultInputBufferStateListener;
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 
+import java.io.Reader;
 import java.util.Arrays;
 
-import static fr.icodem.asciidoc.parser.peg.Chars.*;
+import static fr.icodem.asciidoc.parser.peg.Chars.EOI;
 
 /**
  * A buffer holding the input text to be parsed.
  */
-public class StringInputBuffer implements InputBuffer {
+public class ReaderInputBuffer implements InputBuffer {
 
     /**
      * A {@link InputBufferStateListener listener} is notified of the internal
@@ -19,7 +19,9 @@ public class StringInputBuffer implements InputBuffer {
      */
     private InputBufferStateListener listener;
 
-    /** NON TODO
+    private Reader reader;
+
+    /**
      * A moving window buffer of the data being scanned. We keep adding
      * to the buffer while there's data in the input source.
      * When {@link #consume consume()} occurs, characters starting from
@@ -32,42 +34,47 @@ public class StringInputBuffer implements InputBuffer {
      */
     private int position;
 
+    /**
+     * The number of character currently in {@link #data data}.
+     */
+    private int numberOfCharacters;
+
     private int[] newLinePositions;
     private int lastNewLinePositionIndex;
 
     /**
-     * Constructs an input buffer given an input text.
-     * @param text the input text to be parsed
+     * Constructs an input buffer given an input reader.
+     * @param reader the input text to be parsed
+     * @param listener the listener notified of internal state of the buffer
      */
-    StringInputBuffer(String text) {
-        data = text.toCharArray();
+    ReaderInputBuffer(Reader reader, InputBufferStateListener listener) {
+        this.reader = reader;
+        data = new char[1024];
         position = -1;
         newLinePositions = new int[128];
         Arrays.fill(newLinePositions, -1);
         lastNewLinePositionIndex = -1;
+        Arrays.fill(data, Chars.EOI);
+//        System.arraycopy(text.toCharArray(), 0, data, 0, text.length());
 
-        this.listener = new DefaultInputBufferStateListener();
-    }
+//        numberOfCharacters = text.length();
 
-    /**
-     * The listener to be notified of internal state of the buffer
-     * @param listener the listener notified of internal state of the buffer
-     */
-    @Override
-    public void useListener(InputBufferStateListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Input buffer state listener must not be null");
+        }
         this.listener = listener;
     }
 
     @Override
     public char getNextChar() {
-        if (position < data.length - 1) {
+        if (position < numberOfCharacters) {
             char c = data[++position];
             if (c == '\n') {
                 addNewLinePosition(position);
             }
             listener.visitNextChar(position, c);
             return c;
-        } else if (position == data.length - 1) {
+        } else if (position == numberOfCharacters) {
             position++;
         }
 
@@ -112,12 +119,10 @@ public class StringInputBuffer implements InputBuffer {
 
     @Override
     public char[] extract(int start, int end) {
+        // TODO prendre en compte offset en plus
         if (end < start) return null;
 
         char[] chars = Arrays.copyOfRange(data, start, end + 1);
-        if (end == data.length) {
-            chars[chars.length - 1] = EOI;
-        }
 
         listener.visitExtract(chars, start, end);
 
@@ -125,7 +130,7 @@ public class StringInputBuffer implements InputBuffer {
     }
 
     @Override
-    public void reset(int marker) {
+    public void reset(int marker) {// TODO add assert
         int oldPos = position;
         position = marker;
         syncNewLinePositions();
@@ -133,4 +138,10 @@ public class StringInputBuffer implements InputBuffer {
         listener.visitReset(oldPos, marker);
     }
 
+    @Override
+    public void consume() {
+        System.arraycopy(data, position, data, 0, numberOfCharacters - position);
+        numberOfCharacters -= position + 1;
+        position = 0;
+    }
 }
