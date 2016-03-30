@@ -36,6 +36,10 @@ public class ReaderInputBuffer implements InputBuffer {
      */
     private int position;
 
+    private int offset;
+
+    private boolean endOfInputReached;
+
     /**
      * The number of character currently in {@link #data data}.
      */
@@ -57,10 +61,19 @@ public class ReaderInputBuffer implements InputBuffer {
         data = new char[1024];
         position = -1;
         newLinePositions = new int[128];
-        Arrays.fill(newLinePositions, -1);
-        lastNewLinePositionIndex = -1;
+        clearNewLinePositions();
 
         this.listener = new DefaultInputBufferStateListener();
+    }
+
+    private void clearNewLinePositions() {
+        Arrays.fill(newLinePositions, -1);
+        lastNewLinePositionIndex = -1;
+    }
+
+    public ReaderInputBuffer bufferSize(int size) {
+        data = new char[size];
+        return this;
     }
 
     /**
@@ -79,24 +92,26 @@ public class ReaderInputBuffer implements InputBuffer {
     @Override
     public char getNextChar() {
         // load chars from reader
-        if (position == numberOfCharacters - 1) {
+        if (position == numberOfCharacters - 1 && !endOfInputReached) {
             try {
                 int free = data.length - numberOfCharacters;
                 if (free == 0) {
                     data = Arrays.copyOf(data, data.length * 2);
+                    listener.visitData("increase", data, numberOfCharacters, position, offset);
                 }
                 int numRead = reader.read(data, numberOfCharacters, free);
                 if (numRead != -1) {
                     numberOfCharacters += numRead;
                 } else { // end of input
-                    data[numberOfCharacters] = EOI;
+                    data[numberOfCharacters++] = EOI;
+                    endOfInputReached = true;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        if (position < numberOfCharacters) {
+        if (position < numberOfCharacters - 1) {
             position++;
         }
 
@@ -104,7 +119,7 @@ public class ReaderInputBuffer implements InputBuffer {
         if (c == '\n') {
             addNewLinePosition(position);
         }
-        listener.visitNextChar(position, c);
+        listener.visitNextChar(position + offset, c);
         return c;
     }
 
@@ -135,20 +150,19 @@ public class ReaderInputBuffer implements InputBuffer {
 
             return position - newLinePositions[lastNewLinePositionIndex] - 1;
         }
-        return position;
+        return position + offset;
     }
 
     @Override
     public int getPosition() {
-        return position;
+        return position + offset;
     }
 
     @Override
     public char[] extract(int start, int end) {
-        // TODO prendre en compte offset en plus
         if (end < start) return null;
 
-        char[] chars = Arrays.copyOfRange(data, start, end + 1);
+        char[] chars = Arrays.copyOfRange(data, start - offset, end - offset + 1);
 
         listener.visitExtract(chars, start, end);
 
@@ -156,9 +170,9 @@ public class ReaderInputBuffer implements InputBuffer {
     }
 
     @Override
-    public void reset(int marker) {// TODO add assert
+    public void reset(int marker) {
         int oldPos = position;
-        position = marker;
+        position = marker - offset;
         syncNewLinePositions();
 
         listener.visitReset(oldPos, marker);
@@ -166,8 +180,12 @@ public class ReaderInputBuffer implements InputBuffer {
 
     @Override
     public void consume() {
-        System.arraycopy(data, position + 1, data, 0, numberOfCharacters - position);
+        System.arraycopy(data, position + 1, data, 0, numberOfCharacters - position - 1);
         numberOfCharacters -= position + 1;
-        position = -1;// 0
+        offset += position + 1;
+        position = -1;
+        clearNewLinePositions();
+
+        listener.visitData("consume", data, numberOfCharacters, position, offset);
     }
 }

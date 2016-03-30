@@ -51,17 +51,17 @@ public class MatcherContext {
     private int lastStartExtractPosition = -1;
     private int lastEndExtractPosition = -1;
 
-    private void childFlushStartNode(int position) {
+    private void childFlushStartNode(int childPosition) {
         //extract and notify
         if (listener != null) {
-            notifyCharacters(lastStartExtractPosition, position - 1);
+            notifyCharacters(lastStartExtractPosition, childPosition - 1);
         }
         lastStartExtractPosition = -1;
         //lastStartExtractPosition = 0;
         //System.out.println(nodeName + " (childFlushStartNode) = " + lastStartExtractPosition);
     }
-    private void childFlushEndNode(int position) {
-        lastStartExtractPosition = position + 1;
+    private void childFlushEndNode(int childPosition) {
+        lastStartExtractPosition = childPosition + 1;
         //System.out.println(nodeName + " (childFlushEndNode) = " + lastStartExtractPosition);
     }
 
@@ -99,9 +99,11 @@ public class MatcherContext {
 
         if (canStartFlushing) {
             MatcherContext ctx = findContextNodeToFlush();
-            if (ctx != null) ctx.flush();
+            if (ctx != null) {
+                ctx.flush();
+                input.consume();
+            }
         }
-
     }
 
     private MatcherContext findContextNodeToFlush() {
@@ -122,7 +124,7 @@ public class MatcherContext {
     private boolean enterNodeNotified;
 
     // émettre vers le listener ce qui n'a pas encore été émis
-    public void flush() { // ne doit être invoqué que par node
+    private void flush() { // ne doit être invoqué que par node
         //System.out.println("FLUSH : " + nodeName);
 
         if (flushed) {
@@ -157,6 +159,7 @@ public class MatcherContext {
     }
 
     private void notifyCharacters(int start, int end) {
+        if (end < start) return;
         char[] extracted = input.extract(start, end);
         if (extracted == null) return;
         listener.characters(extracted, start, end);

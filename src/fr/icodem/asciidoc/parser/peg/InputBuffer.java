@@ -10,7 +10,7 @@ public interface InputBuffer {
         return new StringInputBuffer(text);
     }
 
-    static InputBuffer readerInputBuffer(Reader reader) {
+    static ReaderInputBuffer readerInputBuffer(Reader reader) {
         return new ReaderInputBuffer(reader);
     }
 

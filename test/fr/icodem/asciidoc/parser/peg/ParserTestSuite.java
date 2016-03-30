@@ -9,6 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
     InputBufferTest.class,
     ParserTest.class,
     FlushingTest.class,
+    FlushingWithReaderInputBufferTest.class,
     CalculatorTest.class
 })
 public class ParserTestSuite {

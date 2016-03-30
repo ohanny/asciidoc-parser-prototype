@@ -20,6 +20,7 @@ public class ParseRunner {
     private RuleSupplier ruleSupplier;
     private boolean generateStringTree;
     private boolean trace;
+    private int bufferSize; // initial buffer size used with ReaderInputBuffer
 
     public ParseRunner(BaseParser parser, RuleSupplier ruleSupplier) {
         this.parser = parser;
@@ -41,12 +42,30 @@ public class ParseRunner {
         return this;
     }
 
-    /**
-     * Performs the actual parse and creates a corresponding ParsingResult instance.
-     *
-     * @param reader the input reader to parse
-     * @return the ParsingResult for the run
-     */
+    public ParseRunner bufferSize(int size) {
+        this.bufferSize = size;
+        return this;
+    }
+
+    public ParsingResult parse(Reader reader, ParseTreeListener parseTreeListener,
+                               ParsingProcessListener parsingProcessListener,
+                               InputBufferStateListener inputBufferStateListener,
+                               int bufferSize) {
+        InputBuffer input = InputBuffer.readerInputBuffer(reader)
+                                       .bufferSize(bufferSize)
+                                       .useListener(inputBufferStateListener);
+
+        ParsingResult result = parse(parseTreeListener, parsingProcessListener, input);
+
+        return result;
+    }
+
+        /**
+         * Performs the actual parse and creates a corresponding ParsingResult instance.
+         *
+         * @param reader the input reader to parse
+         * @return the ParsingResult for the run
+         */
     public ParsingResult parse(Reader reader, ParseTreeListener parseTreeListener,
                                ParsingProcessListener parsingProcessListener,
                                InputBufferStateListener inputBufferStateListener) {
@@ -54,39 +73,11 @@ public class ParseRunner {
         InputBuffer input = InputBuffer.readerInputBuffer(reader)
                                        .useListener(inputBufferStateListener);
 
-        if (parseTreeListener == null) {
-            parseTreeListener = new DefaultParseTreeListener();
-        }
-        if (parsingProcessListener == null) {
-            parsingProcessListener = new DefaultParsingProcessListener();
-        }
-
-        if (generateStringTree) {
-            parseTreeListener = new ToStringTreeBuilder();
-        }
-        if (trace) {
-            parsingProcessListener = new ToStringAnalysisBuilder();
-            parser.useSpyingRulesFactory();
-        }
-
-
-        Rule rule = ruleSupplier.getRule();
-        Matcher matcher = rule.getMatcher();
-
-        boolean matched = matcher.match(new MatcherContext(input, parseTreeListener, parsingProcessListener));
-
-        ParsingResult result;
-        if (generateStringTree) {
-            String tree = ((ToStringTreeBuilder)parseTreeListener).getStringTree();
-            result = new ParsingResult(matched, tree);
-        } else {
-            result = new ParsingResult(matched);
-        }
+        ParsingResult result = parse(parseTreeListener, parsingProcessListener, input);
 
         return result;
 
     }
-
 
     /**
      * Performs the actual parse and creates a corresponding ParsingResult instance.
@@ -101,34 +92,7 @@ public class ParseRunner {
         InputBuffer input = InputBuffer.stringInputBuffer(text)
                                        .useListener(inputBufferStateListener);
 
-        if (parseTreeListener == null) {
-            parseTreeListener = new DefaultParseTreeListener();
-        }
-        if (parsingProcessListener == null) {
-            parsingProcessListener = new DefaultParsingProcessListener();
-        }
-
-        if (generateStringTree) {
-            parseTreeListener = new ToStringTreeBuilder();
-        }
-        if (trace) {
-            parsingProcessListener = new ToStringAnalysisBuilder();
-            parser.useSpyingRulesFactory();
-        }
-
-
-        Rule rule = ruleSupplier.getRule();
-        Matcher matcher = rule.getMatcher();
-
-        boolean matched = matcher.match(new MatcherContext(input, parseTreeListener, parsingProcessListener));
-
-        ParsingResult result;
-        if (generateStringTree) {
-            String tree = ((ToStringTreeBuilder)parseTreeListener).getStringTree();
-            result = new ParsingResult(matched, tree);
-        } else {
-            result = new ParsingResult(matched);
-        }
+        ParsingResult result = parse(parseTreeListener, parsingProcessListener, input);
 
         return result;
 
@@ -146,5 +110,38 @@ public class ParseRunner {
     public ParsingResult parse(String text) {
         return parse(text, new DefaultParseTreeListener(), new DefaultParsingProcessListener(), null);
     }
+
+    private ParsingResult parse(ParseTreeListener parseTreeListener, ParsingProcessListener parsingProcessListener, InputBuffer input) {
+        if (parseTreeListener == null) {
+            parseTreeListener = new DefaultParseTreeListener();
+        }
+        if (parsingProcessListener == null) {
+            parsingProcessListener = new DefaultParsingProcessListener();
+        }
+
+        if (generateStringTree) {
+            parseTreeListener = new ToStringTreeBuilder();
+        }
+        if (trace) {
+            parsingProcessListener = new ToStringAnalysisBuilder();
+            parser.useSpyingRulesFactory();
+        }
+
+
+        Rule rule = ruleSupplier.getRule();
+        Matcher matcher = rule.getMatcher();
+
+        boolean matched = matcher.match(new MatcherContext(input, parseTreeListener, parsingProcessListener));
+
+        ParsingResult result;
+        if (generateStringTree) {
+            String tree = ((ToStringTreeBuilder)parseTreeListener).getStringTree();
+            result = new ParsingResult(matched, tree);
+        } else {
+            result = new ParsingResult(matched);
+        }
+        return result;
+    }
+
 
 }

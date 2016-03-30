@@ -9,4 +9,7 @@ public class DefaultInputBufferStateListener implements InputBufferStateListener
 
     @Override
     public void visitReset(int position, int marker) {}
+
+    @Override
+    public void visitData(String event, char[] data, int numberOfCharacters, int position, int offset) {}
 }
