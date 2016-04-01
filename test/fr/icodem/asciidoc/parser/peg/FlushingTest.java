@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.buffers.ReaderInputBuffer;
+import fr.icodem.asciidoc.parser.peg.buffers.StringInputBuffer;
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;

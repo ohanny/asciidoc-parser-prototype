@@ -1,9 +1,8 @@
 package fr.icodem.asciidoc.parser.peg.runner;
 
 import fr.icodem.asciidoc.parser.peg.BaseParser;
-import fr.icodem.asciidoc.parser.peg.InputBuffer;
+import fr.icodem.asciidoc.parser.peg.buffers.InputBuffer;
 import fr.icodem.asciidoc.parser.peg.MatcherContext;
-import fr.icodem.asciidoc.parser.peg.StringInputBuffer;
 import fr.icodem.asciidoc.parser.peg.listeners.*;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;

@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.peg;
+package fr.icodem.asciidoc.parser.peg.buffers;
 
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 
