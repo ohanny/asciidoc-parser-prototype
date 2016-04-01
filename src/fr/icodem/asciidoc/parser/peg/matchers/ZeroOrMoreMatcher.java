@@ -23,6 +23,8 @@ public class ZeroOrMoreMatcher implements Matcher {
             matcher = rule.getMatcher();
         }
 
+        context.canStartFlushing();
+
         while (true) {
             context.mark();
             if (!matcher.match(context.getSubContext())) {

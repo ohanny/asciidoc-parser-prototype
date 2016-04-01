@@ -97,6 +97,7 @@ public class ReaderInputBuffer implements InputBuffer {
                 int free = data.length - numberOfCharacters;
                 if (free == 0) {
                     data = Arrays.copyOf(data, data.length * 2);
+                    free = data.length - numberOfCharacters;
                     listener.visitData("increase", data, numberOfCharacters, position, offset);
                 }
                 int numRead = reader.read(data, numberOfCharacters, free);
