@@ -35,7 +35,6 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
     @Before
     public void init() {
         listener = mock(ParseTreeListener.class);
-        //inputBufferStateListener = mock(InputBufferStateListener.class, withSettings().verboseLogging());
         inputBufferStateListener = mock(InputBufferStateListener.class);
 
         // clone data array, otherwise verifications are
@@ -44,34 +43,10 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
             Object[] args = invocationOnMock.getArguments();
             char[] data = (char[])args[1];
             char[] clone = Arrays.copyOf(data, data.length);
-//            System.out.println("*"+new String(data)+"**  " + data.length);
             args[1] = clone;
             return null;
         }).when(inputBufferStateListener)
           .visitData(anyString(), anyObject(), anyInt(), anyInt(),anyInt());
-
-        /*InputBufferStateListener */
-        InputBufferStateListener inputBufferStateListener = new InputBufferStateListener() {
-            @Override
-            public void visitNextChar(int position, char c) {
-                System.out.println("visitNextChar => " + position + " - " + c);
-            }
-
-            @Override
-            public void visitExtract(char[] chars, int start, int end) {
-                System.out.println("visitExtract => " + new String(chars) + " - " + start + " / " + end);
-            }
-
-            @Override
-            public void visitReset(int position, int marker) {
-                System.out.println("visitReset => " + position + " - " + marker);
-            }
-
-            @Override
-            public void visitData(String event, char[] data, int numberOfCharacters, int position, int offset) {
-                System.out.println("visitData => " + event + " : " + new String(data) + " *** nb = " + numberOfCharacters + ", pos = " + position + ", offset = " + offset);
-            }
-        };
     }
 
     private ParsingResult parse(Rule rule, String text, ParseTreeListener parseTreeListener,
