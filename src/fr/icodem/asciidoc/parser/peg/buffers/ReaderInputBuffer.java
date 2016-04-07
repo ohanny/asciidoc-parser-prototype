@@ -199,13 +199,5 @@ public class ReaderInputBuffer implements InputBuffer {
 
         listener.visitData("consume", data, numberOfCharacters, position, offset);
     }
-//    public void consume() {
-//        System.arraycopy(data, position + 1, data, 0, numberOfCharacters - position - 1);
-//        numberOfCharacters -= position + 1;
-//        offset += position + 1;
-//        position = -1;
-//        clearNewLinePositions();
-//
-//        listener.visitData("consume", data, numberOfCharacters, position, offset);
-//    }
+
 }
