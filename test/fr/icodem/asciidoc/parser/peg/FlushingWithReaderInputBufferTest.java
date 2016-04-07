@@ -112,8 +112,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         inOrder.verify(listener).exitNode("root");
         inOrder.verify(inputBufferStateListener).visitData("consume", data, 0, -1, 3);
 
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // test flushing with sequence / test input buffer increase
@@ -167,8 +167,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         inOrder.verify(inputBufferStateListener)
                .visitData(eq("consume"), aryEq(new char[] {'c', 'c'}), eq(0), eq(-1), eq(6));
 
-        verify(inputBufferStateListener, times(5)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(5)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
     }
 
@@ -179,8 +179,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         ParsingResult result = parse(rule, "axyxyb", listener, null, inputBufferStateListener, 2);
 
         assertTrue("Did not match", result.matched);
-        verify(inputBufferStateListener, times(3)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(3)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     @Test // buffer smaller than input data : 1. check that buffer size is increased twice 2. check that data are consumed only once
@@ -190,8 +190,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         ParsingResult result = parse(rule, "axyxyb", listener, null, inputBufferStateListener, 2);
 
         assertTrue("Did not match", result.matched);
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // ****** test intermediate flushings when optionals are detected ****** //
@@ -219,8 +219,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
 
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // 'empty' matcher should let flush preceeding nodes
@@ -245,8 +245,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
 
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // 'optional' matcher should let flush preceeding nodes
@@ -272,8 +272,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
 
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // 'zero or more' matcher should let flush preceeding nodes
@@ -299,8 +299,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
 
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // 'named' matcher should let flush preceeding nodes if children are optional
@@ -326,8 +326,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
 
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // 'node' matcher should let flush preceeding nodes if children are optional
@@ -353,8 +353,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
 
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // 'sequence' matcher should let flush preceeding nodes if remaining children are optional
@@ -386,8 +386,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         //inOrder.verify(inputBufferStateListener)
         //       .visitData(eq("consume"), aryEq(new char[] {'x', 'y', 'x', 'y'}), eq(0), eq(-1), eq(4));
 
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // 'spying' matcher should let flush preceeding nodes if children are optional
@@ -413,8 +413,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
 
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // 'wrapper' matcher should let flush preceeding nodes if children are optional
@@ -440,25 +440,116 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
 
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
 
     // ****** test no intermediate flushing occurs when no optionals are detected ****** //
 
     // 'any of' matcher should not let flush preceeding nodes
+    @Test
+    public void test14() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", named("child3", anyOf('x', 'y'))); // not optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abx", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+
+        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
 
     // 'any of string' matcher should not let flush preceeding nodes
+    @Test
+    public void test15() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", named("child3", string("xy"))); // not optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abxy", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+
+        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
 
     // 'char range' matcher should not let flush preceeding nodes
+    @Test
+    public void test16() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", named("child3", charRange('x', 'z'))); // not optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "aby", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+
+        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
 
     // 'none of' matcher should not let flush preceeding nodes
+    @Test
+    public void test17() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", named("child3", noneOf('x', 'z'))); // not optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "aby", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+
+        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
 
     // 'one or more' matcher should not let flush preceeding nodes
+    @Test
+    public void test18() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", named("child3", oneOrMore('x'))); // not optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abx", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+
+        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
 
     // 'test' matcher should not let flush preceeding nodes
+    @Test
+    public void test19() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", named("child3", test(ch('x')))); // not optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abx", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+
+        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
 
     // 'test not' matcher should not let flush preceeding nodes
+    @Test
+    public void test20() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", named("child3", testNot(ch('x')))); // not optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "aby", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+
+        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
 
 }
