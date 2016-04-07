@@ -3,6 +3,8 @@ package fr.icodem.asciidoc.parser.peg;
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
+import fr.icodem.asciidoc.parser.peg.matchers.OptionalMatcher;
+import fr.icodem.asciidoc.parser.peg.matchers.SpyingMatcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
@@ -37,6 +39,28 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         listener = mock(ParseTreeListener.class);
         inputBufferStateListener = mock(InputBufferStateListener.class);
 
+        InputBufferStateListener inputBufferStateListener1 = new InputBufferStateListener() {
+            @Override
+            public void visitNextChar(int position, char c) {
+                System.out.printf("visitNextChar => %d - %s\r\n", position, c);
+            }
+
+            @Override
+            public void visitExtract(char[] chars, int start, int end) {
+                System.out.printf("extract => %s - (%d, %d)\r\n", new String(chars), start, end);
+            }
+
+            @Override
+            public void visitReset(int position, int marker) {
+
+            }
+
+            @Override
+            public void visitData(String event, char[] data, int numberOfCharacters, int position, int offset) {
+                System.out.printf("visitData => %s : %s - (%d, %d, %d)\r\n", event, new String(data), numberOfCharacters, position, offset);
+            }
+        };
+
         // clone data array, otherwise verifications are
         // done only on the last state of the buffer
         doAnswer(invocationOnMock -> {
@@ -44,6 +68,7 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
             char[] data = (char[])args[1];
             char[] clone = Arrays.copyOf(data, data.length);
             args[1] = clone;
+            //System.out.println(args[0] + " => " + new String(data) + " : " + args[2] + " / " + args[3] + " / " + args[4]);
             return null;
         }).when(inputBufferStateListener)
           .visitData(anyString(), anyObject(), anyInt(), anyInt(),anyInt());
@@ -102,8 +127,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
         inOrder.verify(inputBufferStateListener).visitNextChar(0, 'a');
-        inOrder.verify(inputBufferStateListener).visitNextChar(1, 'b');
         inOrder.verify(listener).enterNode("root");
+        inOrder.verify(inputBufferStateListener).visitNextChar(1, 'b');
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'a'}, 0, 0);
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
         inOrder.verify(listener).enterNode("child");
@@ -163,10 +188,277 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         Rule rule = node("root", sequence(ch('a'), zeroOrMore(node("child", string("xy"))), ch('b')));
 
         ParsingResult result = parse(rule, "axyxyb", listener, null, inputBufferStateListener, 2);
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
 
         assertTrue("Did not match", result.matched);
+        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
     }
+
+    // ****** test intermediate flushings when optionals are detected ****** //
+
+    // 'any' matcher should let flush preceeding nodes
+    @Test
+    public void test5() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", any()); // optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abx", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+        InOrder inOrder = inOrder(listener, inputBufferStateListener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
+        inOrder.verify(listener).enterNode("child1");
+        inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
+        inOrder.verify(listener).exitNode("child1");
+        inOrder.verify(inputBufferStateListener)
+               .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
+        inOrder.verify(listener).enterNode("child2");
+        inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
+        inOrder.verify(listener).exitNode("child2");
+        inOrder.verify(listener).exitNode("root");
+
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
+
+    // 'empty' matcher should let flush preceeding nodes
+    @Test
+    public void test6() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", empty()); // optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "ab", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+        InOrder inOrder = inOrder(listener, inputBufferStateListener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
+        inOrder.verify(listener).enterNode("child1");
+        inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
+        inOrder.verify(listener).exitNode("child1");
+        inOrder.verify(inputBufferStateListener)
+               .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
+        inOrder.verify(listener).enterNode("child2");
+        inOrder.verify(listener).exitNode("child2");
+        inOrder.verify(listener).exitNode("root");
+
+        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
+
+    // 'optional' matcher should let flush preceeding nodes
+    @Test
+    public void test7() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", optional('x')); // optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abx", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+        InOrder inOrder = inOrder(listener, inputBufferStateListener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
+        inOrder.verify(listener).enterNode("child1");
+        inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
+        inOrder.verify(listener).exitNode("child1");
+        inOrder.verify(inputBufferStateListener)
+                .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
+        inOrder.verify(listener).enterNode("child2");
+        inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
+        inOrder.verify(listener).exitNode("child2");
+        inOrder.verify(listener).exitNode("root");
+
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
+
+    // 'zero or more' matcher should let flush preceeding nodes
+    @Test
+    public void test8() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", zeroOrMore(ch('x'))); // optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abx", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+        InOrder inOrder = inOrder(listener, inputBufferStateListener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
+        inOrder.verify(listener).enterNode("child1");
+        inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
+        inOrder.verify(listener).exitNode("child1");
+        inOrder.verify(inputBufferStateListener)
+               .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
+        inOrder.verify(listener).enterNode("child2");
+        inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
+        inOrder.verify(listener).exitNode("child2");
+        inOrder.verify(listener).exitNode("root");
+
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
+
+    // 'named' matcher should let flush preceeding nodes if children are optional
+    @Test
+    public void test9() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", named("child3", optional('x'))); // optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abx", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+        InOrder inOrder = inOrder(listener, inputBufferStateListener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
+        inOrder.verify(listener).enterNode("child1");
+        inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
+        inOrder.verify(listener).exitNode("child1");
+        inOrder.verify(inputBufferStateListener)
+                .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
+        inOrder.verify(listener).enterNode("child2");
+        inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
+        inOrder.verify(listener).exitNode("child2");
+        inOrder.verify(listener).exitNode("root");
+
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
+
+    // 'node' matcher should let flush preceeding nodes if children are optional
+    @Test
+    public void test10() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", node("child3", optional('x'))); // optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abx", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+        InOrder inOrder = inOrder(listener, inputBufferStateListener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
+        inOrder.verify(listener).enterNode("child1");
+        inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
+        inOrder.verify(listener).exitNode("child1");
+        inOrder.verify(inputBufferStateListener)
+               .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
+        inOrder.verify(listener).enterNode("child2");
+        inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
+        inOrder.verify(listener).exitNode("child2");
+        inOrder.verify(listener).exitNode("root");
+
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
+
+    // 'sequence' matcher should let flush preceeding nodes if remaining children are optional
+    @Test
+    public void test11() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", sequence(ch('x'), optional('y'))); // optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abxy", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+        InOrder inOrder = inOrder(listener, inputBufferStateListener);
+        inOrder.verify(inputBufferStateListener)
+               .visitData(eq("increase"), aryEq(new char[] {'a', 'b', '\u0000', '\u0000'}), eq(2), eq(1), eq(0));
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
+        inOrder.verify(listener).enterNode("child1");
+        inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
+        inOrder.verify(listener).exitNode("child1");
+        inOrder.verify(listener).enterNode("child2");
+        inOrder.verify(inputBufferStateListener)
+               .visitData(eq("consume"), aryEq(new char[] {'x', 'y', 'x', 'y'}), eq(2), eq(0), eq(2));
+        inOrder.verify(listener).characters(new char[]{'x', 'y'}, 2, 3);
+        inOrder.verify(listener).exitNode("child2");
+        inOrder.verify(inputBufferStateListener)
+               .visitData(eq("consume"), aryEq(new char[] {'x', 'y', 'x', 'y'}), eq(0), eq(-1), eq(4));
+        inOrder.verify(listener).exitNode("root");
+        //inOrder.verify(inputBufferStateListener)
+        //       .visitData(eq("consume"), aryEq(new char[] {'x', 'y', 'x', 'y'}), eq(0), eq(-1), eq(4));
+
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
+
+    // 'spying' matcher should let flush preceeding nodes if children are optional
+    @Test
+    public void test12() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", () -> new SpyingMatcher(new OptionalMatcher(ch('x')))); // optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abx", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+        InOrder inOrder = inOrder(listener, inputBufferStateListener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
+        inOrder.verify(listener).enterNode("child1");
+        inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
+        inOrder.verify(listener).exitNode("child1");
+        inOrder.verify(inputBufferStateListener)
+               .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
+        inOrder.verify(listener).enterNode("child2");
+        inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
+        inOrder.verify(listener).exitNode("child2");
+        inOrder.verify(listener).exitNode("root");
+
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
+
+    // 'wrapper' matcher should let flush preceeding nodes if children are optional
+    @Test
+    public void test13() throws Exception {
+        Rule child1 = node("child1", ch('b'));
+        Rule child2 = node("child2", named("child3", wrap(empty(), optional('x')))); // optional child
+        Rule rule = node("root", sequence(ch('a'), child1, child2));
+
+        ParsingResult result = parse(rule, "abx", listener, null, inputBufferStateListener, 2);
+
+        assertTrue("Did not match", result.matched);
+        InOrder inOrder = inOrder(listener, inputBufferStateListener);
+        inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
+        inOrder.verify(listener).enterNode("child1");
+        inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
+        inOrder.verify(listener).exitNode("child1");
+        inOrder.verify(inputBufferStateListener)
+               .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
+        inOrder.verify(listener).enterNode("child2");
+        inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
+        inOrder.verify(listener).exitNode("child2");
+        inOrder.verify(listener).exitNode("root");
+
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
+
+
+    // ****** test no intermediate flushing occurs when no optionals are detected ****** //
+
+    // 'any of' matcher should not let flush preceeding nodes
+
+    // 'any of string' matcher should not let flush preceeding nodes
+
+    // 'char range' matcher should not let flush preceeding nodes
+
+    // 'none of' matcher should not let flush preceeding nodes
+
+    // 'one or more' matcher should not let flush preceeding nodes
+
+    // 'test' matcher should not let flush preceeding nodes
+
+    // 'test not' matcher should not let flush preceeding nodes
 
 }

@@ -39,8 +39,8 @@ public interface InputBuffer {
     void reset(int marker);
 
     /**
-     * Characters from index 0 up to current position are removed from the buffer.
+     * Characters from index 0 up to limit are removed from the buffer.
      * Characters starting at next position are shifted at index 0.
      */
-    default void consume() {}
+    default void consume(int limit) {}
 }

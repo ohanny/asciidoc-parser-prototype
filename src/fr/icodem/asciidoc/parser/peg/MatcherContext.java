@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MatcherContext {
-    private int marker;
+    private int marker; // used for reset and consume
 
     private InputBuffer input;
     private MatcherContext root;// peut être pas utilisé
@@ -40,6 +40,7 @@ public class MatcherContext {
     private ParsingProcessListener parsingProcessListener;
 
     private String nodeName;
+    private boolean requestFlushingDone;
     private boolean flushed;// node only
     private boolean matched;// node only - utile ???
 
@@ -92,9 +93,9 @@ public class MatcherContext {
         return null;
     }
 
-
-    // appelé uniquement par les nodes en cas de succès
     public void requestFlushing() {
+        if (requestFlushingDone) return;
+        requestFlushingDone = true;
 
         //System.out.println("REQUEST FLUSHING : " + nodeName);
 
@@ -102,7 +103,7 @@ public class MatcherContext {
             MatcherContext ctx = findContextNodeToFlush();
             if (ctx != null) {
                 ctx.flush();
-                input.consume();
+                input.consume(marker);
             }
         }
     }

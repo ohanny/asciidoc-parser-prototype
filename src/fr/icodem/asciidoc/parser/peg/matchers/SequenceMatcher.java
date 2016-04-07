@@ -29,6 +29,10 @@ public class SequenceMatcher implements Matcher {
                 context.reset();
                 return false;
             }
+
+            if (context.isCanStartFlushing()) {
+                context.requestFlushing();
+            }
         }
 
         return true;

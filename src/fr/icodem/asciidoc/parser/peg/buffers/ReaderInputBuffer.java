@@ -26,8 +26,8 @@ public class ReaderInputBuffer implements InputBuffer {
     /**
      * A moving window buffer of the data being scanned. We keep adding
      * to the buffer while there's data in the input source.
-     * When {@link #consume consume()} occurs, characters starting from
-     * next position are shifted to index 0.
+     * When {@link #consume(int) consume} occurs, characters starting after
+     * limit position are shifted to index 0.
      */
     private char[] data;
 
@@ -37,6 +37,8 @@ public class ReaderInputBuffer implements InputBuffer {
     private int position;
 
     private int offset;
+
+    private int lastConsumeLimit = -1;
 
     private boolean endOfInputReached;
 
@@ -180,13 +182,30 @@ public class ReaderInputBuffer implements InputBuffer {
     }
 
     @Override
-    public void consume() {
-        System.arraycopy(data, position + 1, data, 0, numberOfCharacters - position - 1);
-        numberOfCharacters -= position + 1;
-        offset += position + 1;
-        position = -1;
+    public void consume(int limit) {
+        if (limit == -1 || limit == lastConsumeLimit) return;
+
+        lastConsumeLimit = limit;
+        int pos = limit - offset + 1;
+        int length = numberOfCharacters - pos;
+
+        System.arraycopy(data, pos, data, 0, length);
+
+        numberOfCharacters -= pos;
+        offset += pos;
+        position = position - pos;
+
         clearNewLinePositions();
 
         listener.visitData("consume", data, numberOfCharacters, position, offset);
     }
+//    public void consume() {
+//        System.arraycopy(data, position + 1, data, 0, numberOfCharacters - position - 1);
+//        numberOfCharacters -= position + 1;
+//        offset += position + 1;
+//        position = -1;
+//        clearNewLinePositions();
+//
+//        listener.visitData("consume", data, numberOfCharacters, position, offset);
+//    }
 }
