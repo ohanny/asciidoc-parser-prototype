@@ -39,28 +39,6 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         listener = mock(ParseTreeListener.class);
         inputBufferStateListener = mock(InputBufferStateListener.class);
 
-        InputBufferStateListener inputBufferStateListener1 = new InputBufferStateListener() {
-            @Override
-            public void visitNextChar(int position, char c) {
-                System.out.printf("visitNextChar => %d - %s\r\n", position, c);
-            }
-
-            @Override
-            public void visitExtract(char[] chars, int start, int end) {
-                System.out.printf("extract => %s - (%d, %d)\r\n", new String(chars), start, end);
-            }
-
-            @Override
-            public void visitReset(int position, int marker) {
-
-            }
-
-            @Override
-            public void visitData(String event, char[] data, int numberOfCharacters, int position, int offset) {
-                System.out.printf("visitData => %s : %s - (%d, %d, %d)\r\n", event, new String(data), numberOfCharacters, position, offset);
-            }
-        };
-
         // clone data array, otherwise verifications are
         // done only on the last state of the buffer
         doAnswer(invocationOnMock -> {
@@ -68,7 +46,6 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
             char[] data = (char[])args[1];
             char[] clone = Arrays.copyOf(data, data.length);
             args[1] = clone;
-            //System.out.println(args[0] + " => " + new String(data) + " : " + args[2] + " / " + args[3] + " / " + args[4]);
             return null;
         }).when(inputBufferStateListener)
           .visitData(anyString(), anyObject(), anyInt(), anyInt(),anyInt());
@@ -115,8 +92,6 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
-
-    // test flushing with sequence / test input buffer increase
 
     @Test // buffer smaller than input data : 1. check that buffer size is not increased 2. check that consumed data are removed from buffer
     public void test2() throws Exception {
