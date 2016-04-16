@@ -4,6 +4,7 @@ import fr.icodem.asciidoc.parser.peg.buffers.InputBuffer;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
 
+import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -125,6 +126,14 @@ public class MatcherContext {
 
     private boolean enterNodeNotified;
 
+    private NodeContext nodeContext;
+    private NodeContext getNodeContext() {
+        if (nodeContext == null) {
+            nodeContext = new NodeContext(nodeName, this);
+        }
+        return nodeContext;
+    }
+
     // émettre vers le listener ce qui n'a pas encore été émis
     private void flush() { // ne doit être invoqué que par node
         //System.out.println("FLUSH : " + nodeName);
@@ -136,7 +145,7 @@ public class MatcherContext {
         // un noeud
         if (isNode() && listener != null && !enterNodeNotified) {
             notifyParentFlushStartNode();
-            listener.enterNode(nodeName);
+            listener.enterNode(getNodeContext());
             enterNodeNotified = true;
         }
 
@@ -271,5 +280,9 @@ public class MatcherContext {
     }
     public boolean getBooleanAttribute(String name) {
         return (Boolean)getAttribute(name);
+    }
+
+    public void chain(Reader reader) {
+        input.chain(reader);
     }
 }

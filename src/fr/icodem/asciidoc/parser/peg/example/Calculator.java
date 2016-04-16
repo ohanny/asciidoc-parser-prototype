@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example;
 
 import fr.icodem.asciidoc.parser.peg.BaseParser;
+import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
@@ -57,7 +58,7 @@ public class Calculator extends BaseParser implements ParseTreeListener {
     }
 
     @Override
-    public void enterNode(String nodeName) {}
+    public void enterNode(NodeContext context) {}
 
     @Override
     public void exitNode(String nodeName) {

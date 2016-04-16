@@ -7,6 +7,7 @@ import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 
 import static org.junit.Assert.*;
@@ -15,6 +16,8 @@ import static org.mockito.Mockito.*;
 public class ParserTest extends BaseParser {
 
     private ParseTreeListener listener;
+
+    private ArgumentCaptor<NodeContext> ac;
 
     private ParsingResult parse(Rule rule, String text) {
         return new ParseRunner(this, () -> rule).parse(text);
@@ -27,6 +30,7 @@ public class ParserTest extends BaseParser {
     @Before
     public void init() {
         listener = mock(ParseTreeListener.class);
+        ac = ArgumentCaptor.forClass(NodeContext.class);
         useSpyingRulesFactory();
     }
 
@@ -55,7 +59,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
         inOrder.verify(listener).exitNode("root");
     }
@@ -70,9 +77,15 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
-        inOrder.verify(listener).enterNode("child");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'c', 'd'}, 2, 3);
         inOrder.verify(listener).exitNode("child");
         inOrder.verify(listener).exitNode("root");
@@ -88,7 +101,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
         inOrder.verify(listener).exitNode("root");
 
@@ -103,7 +119,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
         inOrder.verify(listener).exitNode("root");
 
@@ -118,7 +137,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'b'}, 0, 0);
         inOrder.verify(listener).exitNode("root");
 
@@ -133,9 +155,15 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("expression");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("expression");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 1, 2);
         inOrder.verify(listener).exitNode("expression");
         inOrder.verify(listener).characters(new char[] {'b'}, 3, 3);
@@ -152,12 +180,21 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("expression");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("expression");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 1, 2);
         inOrder.verify(listener).exitNode("expression");
-        inOrder.verify(listener).enterNode("expression");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 3, 4);
         inOrder.verify(listener).exitNode("expression");
         inOrder.verify(listener).characters(new char[] {'b'}, 5, 5);
@@ -187,7 +224,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
         inOrder.verify(listener).exitNode("root");
 
@@ -202,7 +242,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'b'}, 0, 0);
         inOrder.verify(listener).exitNode("root");
 
@@ -217,7 +260,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
         inOrder.verify(listener).exitNode("root");
 
@@ -232,7 +278,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'a', 'a'}, 0, 2);
         inOrder.verify(listener).exitNode("root");
 
@@ -257,7 +306,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
         inOrder.verify(listener).exitNode("root");
 
@@ -272,7 +324,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'c', 'd'}, 0, 1);
         inOrder.verify(listener).exitNode("root");
 
@@ -289,7 +344,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'b', 'd', 'd', 'd'}, 0, 4);
         inOrder.verify(listener).exitNode("root");
 
@@ -306,7 +364,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
         inOrder.verify(listener).exitNode("root");
 
@@ -323,7 +384,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'c', 'c', 'c', 'd'}, 0, 3);
         inOrder.verify(listener).exitNode("root");
 
@@ -338,7 +402,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'b', 'c', 'd'}, 0, 3);
         inOrder.verify(listener).exitNode("root");
 
@@ -355,7 +422,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'c', 'c', 'c', 'd'}, 0, 3);
         inOrder.verify(listener).exitNode("root");
 
@@ -400,7 +470,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'z'}, 0, 1);
         inOrder.verify(listener).exitNode("root");
 
@@ -415,7 +488,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'b', 'z'}, 0, 1);
         inOrder.verify(listener).exitNode("root");
 
@@ -471,7 +547,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", ac.getValue().getNodeName(), "root");
+
         inOrder.verify(listener).characters(new char[] {'y', 'z'}, 0, 1);
         inOrder.verify(listener).exitNode("root");
 
@@ -486,7 +565,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'m', 'z'}, 0, 1);
         inOrder.verify(listener).exitNode("root");
 
@@ -532,7 +614,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'a', 'b', 'c', 'z'}, 0, 3);
         inOrder.verify(listener).exitNode("root");
 
@@ -577,7 +662,10 @@ public class ParserTest extends BaseParser {
 
         assertTrue("Rule did not match", result.matched);
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[] {'d', 'e', 'f', 'z'}, 0, 3);
         inOrder.verify(listener).exitNode("root");
 

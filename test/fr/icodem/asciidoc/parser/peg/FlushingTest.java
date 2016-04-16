@@ -15,6 +15,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.Parameterized.Parameter;
 
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 
 import java.io.StringReader;
@@ -27,6 +28,8 @@ import static org.mockito.Mockito.*;
 public class FlushingTest extends BaseParser {
     private ParseTreeListener listener;
     private InputBufferStateListener inputBufferStateListener;
+
+    private ArgumentCaptor<NodeContext> ac;
 
     @Parameter
     public String bufferType;
@@ -42,6 +45,7 @@ public class FlushingTest extends BaseParser {
     public void init() {
         listener = mock(ParseTreeListener.class);
         inputBufferStateListener = mock(InputBufferStateListener.class);
+        ac = ArgumentCaptor.forClass(NodeContext.class);
     }
 
     private ParsingResult parse(Rule rule, String text, ParseTreeListener parseTreeListener,
@@ -67,8 +71,11 @@ public class FlushingTest extends BaseParser {
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
         inOrder.verify(inputBufferStateListener).visitNextChar(0, 'a');
         inOrder.verify(inputBufferStateListener).visitNextChar(1, 'b');
-        inOrder.verify(listener).enterNode("root");
-        inOrder.verify(listener).enterNode("child");
+
+        inOrder.verify(listener, times(2)).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getAllValues().get(0).getNodeName());
+        assertEquals("Node name incorrect", "child", ac.getAllValues().get(1).getNodeName());
+
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'a'}, 0, 0);
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
         inOrder.verify(listener).exitNode("child");
@@ -86,8 +93,11 @@ public class FlushingTest extends BaseParser {
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
         inOrder.verify(inputBufferStateListener).visitNextChar(0, 'a');
-        inOrder.verify(listener).enterNode("root");
-        inOrder.verify(listener).enterNode("child");
+
+        inOrder.verify(listener, times(2)).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getAllValues().get(0).getNodeName());
+        assertEquals("Node name incorrect", "child", ac.getAllValues().get(1).getNodeName());
+
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'a'}, 0, 0);
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
         inOrder.verify(listener).exitNode("child");

@@ -43,4 +43,6 @@ public interface InputBuffer {
      * Characters starting at next position are shifted at index 0.
      */
     default void consume(int limit) {}
+
+    default void chain(Reader reader) {};
 }

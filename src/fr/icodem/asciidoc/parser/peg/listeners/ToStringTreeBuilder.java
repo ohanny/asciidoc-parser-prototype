@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.listeners;
 
 import fr.icodem.asciidoc.parser.peg.Chars;
+import fr.icodem.asciidoc.parser.peg.NodeContext;
 
 public class ToStringTreeBuilder implements ParseTreeListener {
 
@@ -15,9 +16,9 @@ public class ToStringTreeBuilder implements ParseTreeListener {
     }
 
     @Override
-    public void enterNode(String nodeName) {
+    public void enterNode(NodeContext context) {
         if (sb.length() > 0) sb.append(' ');
-        sb.append("(").append(nodeName);
+        sb.append("(").append(context.getNodeName());
     }
 
     @Override

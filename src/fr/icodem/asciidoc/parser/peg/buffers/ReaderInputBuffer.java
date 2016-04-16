@@ -6,6 +6,8 @@ import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import static fr.icodem.asciidoc.parser.peg.Chars.EOI;
 
@@ -50,6 +52,8 @@ public class ReaderInputBuffer implements InputBuffer {
     private int[] newLinePositions;
     private int lastNewLinePositionIndex;
 
+    private Queue<Reader> nextReaders;
+
     /**
      * Constructs an input buffer given an input reader.
      * @param reader the input text to be parsed
@@ -59,6 +63,7 @@ public class ReaderInputBuffer implements InputBuffer {
             throw new IllegalArgumentException("Reader must not be null");
         }
 
+        this.nextReaders = new LinkedList<>();
         this.reader = reader;
         data = new char[1024];
         position = -1;
@@ -198,6 +203,12 @@ public class ReaderInputBuffer implements InputBuffer {
         clearNewLinePositions();
 
         listener.visitData("consume", data, numberOfCharacters, position, offset);
+    }
+
+    @Override
+    public void chain(Reader reader) {
+        System.out.println("CHAINING => " + reader);
+        nextReaders.offer(reader);
     }
 
 }

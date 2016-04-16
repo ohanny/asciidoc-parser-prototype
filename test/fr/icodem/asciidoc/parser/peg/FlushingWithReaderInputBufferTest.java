@@ -8,6 +8,7 @@ import fr.icodem.asciidoc.parser.peg.matchers.SpyingMatcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,9 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import org.mockito.AdditionalMatchers;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
+import org.mockito.Matchers;
 import org.mockito.internal.stubbing.answers.ClonesArguments;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -23,6 +26,8 @@ import org.mockito.stubbing.Answer;
 import java.io.StringReader;
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.AdditionalMatchers.*;
 import static org.mockito.Matchers.anyInt;
@@ -33,6 +38,8 @@ import static org.mockito.Mockito.*;
 public class FlushingWithReaderInputBufferTest extends BaseParser {
     private ParseTreeListener listener;
     private InputBufferStateListener inputBufferStateListener;
+
+    private ArgumentCaptor<NodeContext> ac;
 
     @Before
     public void init() {
@@ -49,6 +56,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
             return null;
         }).when(inputBufferStateListener)
           .visitData(anyString(), anyObject(), anyInt(), anyInt(),anyInt());
+
+        ac = ArgumentCaptor.forClass(NodeContext.class);
     }
 
     private ParsingResult parse(Rule rule, String text, ParseTreeListener parseTreeListener,
@@ -71,10 +80,16 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
         inOrder.verify(inputBufferStateListener).visitNextChar(0, 'a');
         inOrder.verify(inputBufferStateListener).visitNextChar(1, 'b');
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", ac.getValue().getNodeName(), "root");
+
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'a'}, 0, 0);
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("child");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
+
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("child");
@@ -102,11 +117,17 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
         inOrder.verify(inputBufferStateListener).visitNextChar(0, 'a');
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(inputBufferStateListener).visitNextChar(1, 'b');
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'a'}, 0, 0);
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("child");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
+
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("child");
@@ -114,7 +135,10 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
                .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
 
         inOrder.verify(inputBufferStateListener).visitNextChar(2, 'b');
-        inOrder.verify(listener).enterNode("child");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
+
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'b'}, 2, 2);
         inOrder.verify(listener).characters(new char[]{'b'}, 2, 2);
         inOrder.verify(listener).exitNode("child");
@@ -122,7 +146,10 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
                .visitData(eq("consume"), aryEq(new char[] {'b', 'b'}), eq(1), eq(-1), eq(3));
 
         inOrder.verify(inputBufferStateListener).visitNextChar(3, 'b');
-        inOrder.verify(listener).enterNode("child");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
+
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'b'}, 3, 3);
         inOrder.verify(listener).characters(new char[]{'b'}, 3, 3);
         inOrder.verify(listener).exitNode("child");
@@ -130,7 +157,10 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
                .visitData(eq("consume"), aryEq(new char[] {'b', 'b'}), eq(0), eq(-1), eq(4));
 
         inOrder.verify(inputBufferStateListener).visitNextChar(4, 'b');
-        inOrder.verify(listener).enterNode("child");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
+
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'b'}, 4, 4);
         inOrder.verify(listener).characters(new char[]{'b'}, 4, 4);
         inOrder.verify(listener).exitNode("child");
@@ -182,14 +212,23 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("child1");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child1", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("child1");
         inOrder.verify(inputBufferStateListener)
                .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
-        inOrder.verify(listener).enterNode("child2");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child2", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
@@ -209,14 +248,23 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("child1");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child1", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("child1");
         inOrder.verify(inputBufferStateListener)
                .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
-        inOrder.verify(listener).enterNode("child2");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child2", ac.getValue().getNodeName());
+
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
 
@@ -234,15 +282,26 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         ParsingResult result = parse(rule, "abx", listener, null, inputBufferStateListener, 2);
 
         assertTrue("Did not match", result.matched);
+
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
-        inOrder.verify(listener).enterNode("root");
+
+        //inOrder.verify(listener).enterNode("root");
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("child1");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child1", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("child1");
         inOrder.verify(inputBufferStateListener)
                 .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
-        inOrder.verify(listener).enterNode("child2");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child2", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
@@ -262,14 +321,23 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("child1");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child1", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("child1");
         inOrder.verify(inputBufferStateListener)
                .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
-        inOrder.verify(listener).enterNode("child2");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child2", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
@@ -289,14 +357,23 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("child1");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child1", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("child1");
         inOrder.verify(inputBufferStateListener)
                 .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
-        inOrder.verify(listener).enterNode("child2");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child2", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
@@ -316,15 +393,26 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("child1");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child1", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("child1");
         inOrder.verify(inputBufferStateListener)
                .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
-        inOrder.verify(listener).enterNode("child2");
+
+        inOrder.verify(listener, times(2)).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child2", ac.getAllValues().get(2).getNodeName());
+        assertEquals("Node name incorrect", "child3", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
+        inOrder.verify(listener).exitNode("child3");
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
 
@@ -345,12 +433,21 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
         inOrder.verify(inputBufferStateListener)
                .visitData(eq("increase"), aryEq(new char[] {'a', 'b', '\u0000', '\u0000'}), eq(2), eq(1), eq(0));
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("child1");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child1", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("child1");
-        inOrder.verify(listener).enterNode("child2");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child2", ac.getValue().getNodeName());
+
         inOrder.verify(inputBufferStateListener)
                .visitData(eq("consume"), aryEq(new char[] {'x', 'y', 'x', 'y'}), eq(2), eq(0), eq(2));
         inOrder.verify(listener).characters(new char[]{'x', 'y'}, 2, 3);
@@ -376,14 +473,23 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("child1");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child1", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("child1");
         inOrder.verify(inputBufferStateListener)
                .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
-        inOrder.verify(listener).enterNode("child2");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child2", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
@@ -403,14 +509,23 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
-        inOrder.verify(listener).enterNode("root");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).enterNode("child1");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child1", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("child1");
         inOrder.verify(inputBufferStateListener)
                .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
-        inOrder.verify(listener).enterNode("child2");
+
+        inOrder.verify(listener).enterNode(ac.capture());
+        assertEquals("Node name incorrect", "child2", ac.getValue().getNodeName());
+
         inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(listener).exitNode("root");
