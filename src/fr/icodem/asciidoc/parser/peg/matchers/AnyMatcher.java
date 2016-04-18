@@ -1,12 +1,16 @@
 package fr.icodem.asciidoc.parser.peg.matchers;
 
+import fr.icodem.asciidoc.parser.peg.Chars;
 import fr.icodem.asciidoc.parser.peg.MatcherContext;
 
 public class AnyMatcher implements Matcher {
 
     @Override
     public boolean match(MatcherContext context) {
-        context.getNextChar();
+        char c = context.getNextChar();
+        if (c == Chars.EOI) {
+            return false;
+        }
 
         return true;
     }
