@@ -44,5 +44,5 @@ public interface InputBuffer {
      */
     default void consume(int limit) {}
 
-    default void chain(Reader reader) {};
+    default void include(Reader reader) {}
 }

@@ -113,6 +113,7 @@ public class ReaderInputBuffer implements InputBuffer {
                 } else { // end of input
                     data[numberOfCharacters++] = EOI;
                     endOfInputReached = true;
+                    // TODO close reader
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -188,7 +189,7 @@ public class ReaderInputBuffer implements InputBuffer {
 
     @Override
     public void consume(int limit) {
-        if (limit == -1 || limit == lastConsumeLimit) return;
+        if (limit <= lastConsumeLimit) return;
 
         lastConsumeLimit = limit;
         int pos = limit - offset + 1;
@@ -206,8 +207,7 @@ public class ReaderInputBuffer implements InputBuffer {
     }
 
     @Override
-    public void chain(Reader reader) {
-        System.out.println("CHAINING => " + reader);
+    public void include(Reader reader) {
         nextReaders.offer(reader);
     }
 

@@ -98,8 +98,6 @@ public class MatcherContext {
         if (requestFlushingDone) return;
         requestFlushingDone = true;
 
-        //System.out.println("REQUEST FLUSHING : " + nodeName);
-
         if (canStartFlushing) {
             MatcherContext ctx = findContextNodeToFlush();
             if (ctx != null) {
@@ -282,7 +280,7 @@ public class MatcherContext {
         return (Boolean)getAttribute(name);
     }
 
-    public void chain(Reader reader) {
-        input.chain(reader);
+    public void include(Reader reader) {
+        input.include(reader);
     }
 }
