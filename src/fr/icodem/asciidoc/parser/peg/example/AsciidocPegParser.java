@@ -4,9 +4,6 @@ import fr.icodem.asciidoc.parser.peg.BaseParser;
 import fr.icodem.asciidoc.parser.peg.Chars;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 public class AsciidocPegParser extends BaseParser {
 
     // rules
