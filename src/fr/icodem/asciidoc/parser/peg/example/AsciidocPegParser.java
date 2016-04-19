@@ -211,7 +211,7 @@ public class AsciidocPegParser extends BaseParser {
 
     private Rule anchor() {
         return node("anchor", sequence(
-                test(sequence(any(), isFirstCharInLine())), // TODO replace
+                test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), // TODO replace
                 ch('['), ch('['), // TODO ntimes
                 anchorId(),
                 optional(sequence(ch(','), anchorLabel())),
@@ -244,7 +244,7 @@ public class AsciidocPegParser extends BaseParser {
     }
 
     private Rule isBlankInParagraph() {
-        return testNot(sequence(any(), bl(true)));
+        return testNot(sequence(firstOf(any(), eoi()), bl(true)));
     }
 
     private Rule content() {
@@ -398,7 +398,7 @@ public class AsciidocPegParser extends BaseParser {
 
     private Rule singleComment() {
         return node("singleComment", sequence(
-                test(sequence(any(), isFirstCharInLine())),
+                test(sequence(firstOf(any(), eoi()), isFirstCharInLine())),
                 ch('/'), ch('/'),// TODO ntimes
                 zeroOrMore(noneOf("\r\n")),
                 firstOf(newLine(), eoi())// TODO replace
@@ -418,7 +418,7 @@ public class AsciidocPegParser extends BaseParser {
 
     private Rule multiCommentDelimiter() {
         return node("multiCommentDelimiter", sequence(
-                test(sequence(any(), isFirstCharInLine())), // TODO add nextCharIsBeginOfLine
+                test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), // TODO add nextCharIsBeginOfLine
                 ch('/'), ch('/'), ch('/'), ch('/'), // TODO add ntimes rule
                 zeroOrMore(blank()),// TODO blanks
                 firstOf(newLine(), eoi()) // TODO newLineOrEOI
@@ -485,7 +485,7 @@ public class AsciidocPegParser extends BaseParser {
 
     private Rule sourceBlockDelimiter() {
         return node("sourceBlockDelimiter", sequence(
-                    test(sequence(any(), isFirstCharInLine())), // TODO replace
+                    test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), // TODO replace
                     ch('-'), ch('-'), ch('-'), ch('-'), // TODO ntimes
                     optional(blank()), // TODO replace with blanks
                     firstOf(newLine(), eoi())
@@ -507,7 +507,7 @@ public class AsciidocPegParser extends BaseParser {
 
     private Rule literalBlockDelimiter() {
         return node("literalBlockDelimiter", sequence(
-                    test(sequence(any(), isFirstCharInLine())), // TODO replace
+                    test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), // TODO replace
                     ch('.'), ch('.'), ch('.'), ch('.'), // TODO ntimes
                     optional(blank()), // TODO replace with blanks
                     firstOf(newLine(), eoi())
@@ -624,7 +624,7 @@ public class AsciidocPegParser extends BaseParser {
     }
 
     private Rule isNextCharAtBeginningOfLine() {
-        return test(sequence(any(), isFirstCharInLine()));
+        return test(sequence(firstOf(any(), eoi()), isFirstCharInLine()));
     }
 
     private Rule isCurrentCharNotEOI() {
@@ -632,7 +632,7 @@ public class AsciidocPegParser extends BaseParser {
     }
 
     private Rule isNotStartOfComment() {
-        return testNot(sequence(test(sequence(any(), isFirstCharInLine())), ch('/'), ch('/')));//TODO replace with ntimes
+        return testNot(sequence(test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), ch('/'), ch('/')));//TODO replace with ntimes
     }
 
 }
