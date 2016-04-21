@@ -6,8 +6,6 @@ import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import static fr.icodem.asciidoc.parser.peg.Chars.EOI;
 
@@ -23,7 +21,9 @@ public class ReaderInputBuffer implements InputBuffer {
      */
     private InputBufferStateListener listener;
 
-    private Reader reader;
+    private BufferController<Reader> bufferController;
+
+    //private Reader reader;
 
     /**
      * A moving window buffer of the data being scanned. We keep adding
@@ -52,8 +52,6 @@ public class ReaderInputBuffer implements InputBuffer {
     private int[] newLinePositions;
     private int lastNewLinePositionIndex;
 
-    private Queue<Reader> nextReaders;
-
     /**
      * Constructs an input buffer given an input reader.
      * @param reader the input text to be parsed
@@ -63,9 +61,11 @@ public class ReaderInputBuffer implements InputBuffer {
             throw new IllegalArgumentException("Reader must not be null");
         }
 
-        this.nextReaders = new LinkedList<>();
-        this.reader = reader;
+        //this.reader = reader;
+        bufferController = new BufferController();
+        include(reader);
         data = new char[1024];
+        bufferController.initBuffer(data);
         position = -1;
         newLinePositions = new int[128];
         clearNewLinePositions();
@@ -80,6 +80,7 @@ public class ReaderInputBuffer implements InputBuffer {
 
     public ReaderInputBuffer bufferSize(int size) {
         data = new char[size];
+        bufferController.initBuffer(data);
         return this;
     }
 
@@ -97,29 +98,47 @@ public class ReaderInputBuffer implements InputBuffer {
 
 
     @Override
-    public char getNextChar() {
+    public char getNextChar() { // SPECIFIC READER
         // load chars from reader
-        if (position == numberOfCharacters - 1 && !endOfInputReached) {
-            try {
-                int free = data.length - numberOfCharacters;
-                if (free == 0) {
-                    data = Arrays.copyOf(data, data.length * 2);
-                    free = data.length - numberOfCharacters;
-                    listener.visitData("increase", data, numberOfCharacters, position, offset);
-                }
-                int numRead = reader.read(data, numberOfCharacters, free);
-                if (numRead != -1) {
-                    numberOfCharacters += numRead;
-                } else { // end of input
-                    data[numberOfCharacters++] = EOI;
-                    endOfInputReached = true;
-                    // TODO close reader
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (shouldLoadFromSource()) {
+            loadFromSource();
         }
 
+        // get next char from buffer
+        return getNextCharFromBuffer();
+    }
+
+    private void loadFromSource() { // SPECIFIC READER
+        try {
+            data = bufferController.ensureCapacity(listener, position, offset, numberOfCharacters);
+            int free = bufferController.getFreeSize();
+
+            // fill data from input
+            final Reader reader = bufferController.getCurrentSource();
+            int numRead = reader.read(data, numberOfCharacters, free); // TODO change access
+
+            // new data added to buffer
+            newDataAddedToBuffer(numRead);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean shouldLoadFromSource() { // SPECIFIC READER ?
+        return position == numberOfCharacters - 1 && !endOfInputReached;
+    }
+
+    private void newDataAddedToBuffer(int size) {
+        if (size != -1) {
+            numberOfCharacters += size;
+        } else { // end of input
+            data[numberOfCharacters++] = EOI;
+            endOfInputReached = true;
+            // TODO close reader
+        }
+    }
+
+    private char getNextCharFromBuffer() {
         if (position < numberOfCharacters - 1) {
             position++;
         }
@@ -208,7 +227,20 @@ public class ReaderInputBuffer implements InputBuffer {
 
     @Override
     public void include(Reader reader) {
-        nextReaders.offer(reader);
+
+        bufferController.include(reader, position);
+
+/*        // save actual data that are still not read
+        SourceContext<Reader> prevReader = nextReaders.getLast();
+        if (prevReader != null) {
+            //prevReader.suspend(position + 1, numberOfCharacters - position - 1);
+        }
+
+        // add new reader
+        final SourceContext<Reader> ctx = new SourceContext<>(reader);
+        //ctx.append(position);
+        nextReaders.offer(ctx);
+        */
     }
 
 }

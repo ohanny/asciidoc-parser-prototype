@@ -9,6 +9,7 @@ import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -59,7 +60,7 @@ public class IncludeReaderTest extends BaseParser {
         return null;
     }
 
-    @Test
+    @Test @Ignore
     public void test1() throws Exception {
         Answer<?> answer = invocation -> {
             Object[] args = invocation.getArguments();
