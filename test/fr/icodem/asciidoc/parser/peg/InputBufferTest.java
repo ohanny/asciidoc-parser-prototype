@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser.peg;
 
 import fr.icodem.asciidoc.parser.peg.buffers.InputBuffer;
+import fr.icodem.asciidoc.parser.peg.buffers.InputBufferBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -25,13 +26,19 @@ public class InputBufferTest {
     @Parameter(value = 1)
     public Function<String, InputBuffer> bufferSuplier;
 
+    private static InputBuffer getStringInputBuffer(String input) {
+        return InputBufferBuilder.stringInputBuffer(input)
+                                 .build();
+    }
+
     private static InputBuffer getReaderInputBuffer(String input) {
-        return InputBuffer.readerInputBuffer(new StringReader(input));
+        return InputBufferBuilder.readerInputBuffer(new StringReader(input))
+                                 .build();
     }
 
     @Parameters(name = "{index}: {0}")
     public static Iterable<Object[]> data() {
-        Function<String, InputBuffer> stringIB = InputBuffer::stringInputBuffer;
+        Function<String, InputBuffer> stringIB = InputBufferTest::getStringInputBuffer;
         Function<String, InputBuffer> readerIB = InputBufferTest::getReaderInputBuffer;
 
         return Arrays.asList(new Object[][] {

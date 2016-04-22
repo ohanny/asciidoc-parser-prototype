@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.peg.buffers;
 import java.util.LinkedList;
 import java.util.List;
 
+@Deprecated
 public class SourceContext<T> {
     private T source;
     private List<Segment> segments = new LinkedList<>();

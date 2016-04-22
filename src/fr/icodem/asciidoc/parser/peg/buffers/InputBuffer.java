@@ -6,17 +6,17 @@ import java.io.Reader;
 
 public interface InputBuffer {
 
-    static InputBuffer stringInputBuffer(String text) {
-        return new StringInputBuffer(text);
-    }
+//    static InputBuffer stringInputBuffer(String text) {
+//        return new StringInputBuffer(text);
+//    }
 
-    static ReaderInputBuffer readerInputBuffer(Reader reader) {
-        return new ReaderInputBuffer(reader);
-    }
+//    static ReaderInputBuffer readerInputBuffer(Reader reader) {
+//        return new ReaderInputBuffer(reader);
+//    }
 
-    default InputBuffer useListener(InputBufferStateListener listener) {
-        return this;
-    }
+//    default InputBuffer useListener(InputBufferStateListener listener) {
+//        return this;
+//    }
 
     /**
      * Gets next character from the buffer.

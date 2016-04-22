@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.peg.runner;
 import fr.icodem.asciidoc.parser.peg.BaseParser;
 import fr.icodem.asciidoc.parser.peg.buffers.InputBuffer;
 import fr.icodem.asciidoc.parser.peg.MatcherContext;
+import fr.icodem.asciidoc.parser.peg.buffers.InputBufferBuilder;
 import fr.icodem.asciidoc.parser.peg.listeners.*;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
@@ -50,9 +51,10 @@ public class ParseRunner {
                                ParsingProcessListener parsingProcessListener,
                                InputBufferStateListener inputBufferStateListener,
                                int bufferSize) {
-        InputBuffer input = InputBuffer.readerInputBuffer(reader)
+        InputBuffer input = InputBufferBuilder.readerInputBuffer(reader)
                                        .bufferSize(bufferSize)
-                                       .useListener(inputBufferStateListener);
+                                       .useListener(inputBufferStateListener)
+                                       .build();
 
         ParsingResult result = parse(parseTreeListener, parsingProcessListener, input);
 
@@ -69,8 +71,9 @@ public class ParseRunner {
                                ParsingProcessListener parsingProcessListener,
                                InputBufferStateListener inputBufferStateListener) {
 
-        InputBuffer input = InputBuffer.readerInputBuffer(reader)
-                                       .useListener(inputBufferStateListener);
+        InputBuffer input = InputBufferBuilder.readerInputBuffer(reader)
+                                       .useListener(inputBufferStateListener)
+                                       .build();
 
         ParsingResult result = parse(parseTreeListener, parsingProcessListener, input);
 
@@ -88,8 +91,9 @@ public class ParseRunner {
                                ParsingProcessListener parsingProcessListener,
                                InputBufferStateListener inputBufferStateListener) {
 
-        InputBuffer input = InputBuffer.stringInputBuffer(text)
-                                       .useListener(inputBufferStateListener);
+        InputBuffer input = InputBufferBuilder.stringInputBuffer(text)
+                                       .useListener(inputBufferStateListener)
+                                       .build();
 
         ParsingResult result = parse(parseTreeListener, parsingProcessListener, input);
 

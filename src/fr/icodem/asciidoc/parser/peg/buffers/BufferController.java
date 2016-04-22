@@ -6,41 +6,79 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import static fr.icodem.asciidoc.parser.peg.Chars.EOI;
+
 public class BufferController<T> {
-    private SpaceInfo active;
-    private SpaceInfo free;
-    private SpaceInfo suspended;
+    private SpaceInfo activeSpace;
+    private SpaceInfo freeSpace;
+    private SpaceInfo suspendedSpace;
 
+    /**
+     * A {@link InputBufferStateListener listener} is notified of the internal
+     * state of the input buffer at various stage of the parsing.
+     * Mainly used for test purpose.
+     */
+    private InputBufferStateListener listener;
+
+
+    /**
+     * A moving window buffer of the data being scanned. We keep adding
+     * to the buffer while there's data in the input source.
+     * When {@link #consume(int) consume} occurs, characters starting after
+     * limit position are shifted to index 0.
+     */
     private char[] data;
-    //private int numberOfCharacters;
 
-    // temp variables
-    private int freeSize;
+    /**
+     * Position of current char in active space
+     */
+    private int position;
+
+    private int offset;
+
+    private int lastConsumeLimit = -1;
+
+    private boolean endOfInputReached;
+    /**
+     * The number of character currently in {@link #data data}.
+     */
+    private int numberOfCharacters;
+
+    private int[] newLinePositions;
+    private int lastNewLinePositionIndex;
+
 
     private Deque<SourceContext<T>> sources = new LinkedList<>();
 
-    public void initBuffer(char[] data) {
+    public BufferController<T> initBuffer(int size) {
+        return initBuffer(new char[size]);
+    }
+
+    public BufferController<T> initBuffer(char[] data) {
         this.data = data;
+        init();
+
+        return this;
     }
 
-    // remaining data to read - ensure capacity
-    public char[] ensureCapacity(InputBufferStateListener listener, int position, int offset, int numberOfCharacters) {// TODO temp args
-        int free = data.length - numberOfCharacters;
-        if (free == 0) {
-            data = Arrays.copyOf(data, data.length * 2);
-            free = data.length - numberOfCharacters;
-            listener.visitData("increase", data, numberOfCharacters, position, offset);
-        }
-        freeSize = free;
-        return data;
+    private void init() {
+        position = -1;
+        initNewLinePositions();
+        initSpaces();
     }
 
-    public T getCurrentSource() {
-        SourceContext<T> actualSource = sources.getLast();
-        return actualSource.getSource();
+    public BufferController<T> useListener(InputBufferStateListener listener) {
+        this.listener = listener;
+        return this;
     }
 
-    public void include(T source, int actualPos) {
+    private void initSpaces() {
+        activeSpace = SpaceInfo.newSpaceInfo(0, 0);
+        freeSpace = SpaceInfo.newSpaceInfo(0, data.length);
+        suspendedSpace = SpaceInfo.newSpaceInfo(-1, 0);
+    }
+
+    public BufferController<T> include(T source) {
 
         // split actual source data
         SourceContext<T> actualSource = sources.pollLast();
@@ -50,25 +88,168 @@ public class BufferController<T> {
 
 
         // append new source data in active space
-        SourceContext<T> sourceCtx = new SourceContext<>(source);
-        sourceCtx.addSegment(actualPos + 1);
+        activeSpace.append(source);
 
-        sources.offer(sourceCtx);
+        //SourceContext<T> sourceCtx = new SourceContext<>(source);
+        //sourceCtx.addSegment(position + 1);
+
+        // ???
+        sources.offer(new SourceContext<>(source));
 
 
         //active.append(source);
+        return this;
+    }
+
+    private void suspend() {
 
     }
 
-    public void suspend() {
+    private void restore() {
 
     }
 
-    public void restore() {
 
+
+    public boolean shouldLoadFromSource() {
+        return position == numberOfCharacters - 1 && !endOfInputReached;
     }
 
-    public int getFreeSize() {
-        return freeSize;
+    // remaining data to read - ensure capacity
+    public char[] ensureCapacity() {
+        int free = data.length - numberOfCharacters;
+        if (free == 0) {
+            freeSpace.increment(data.length);
+            data = Arrays.copyOf(data, data.length * 2);
+            listener.visitData("increase", data, numberOfCharacters, position, offset);
+        }
+        return data;
     }
+
+    public int getFreeSpaceOffset() {
+        return numberOfCharacters;
+    }
+
+    public int getFreeSpaceSize() {
+        return freeSpace.length;
+    }
+
+    public void endOfInput() {
+        data[numberOfCharacters++] = EOI;
+        endOfInputReached = true;
+    }
+
+    public void newDataAddedToBuffer(int size) {
+        numberOfCharacters += size;
+        activeSpace.incrementLastSize(size);
+        freeSpace.decrement(size);
+    }
+
+
+
+    public T getCurrentSource() {
+        SourceContext<T> actualSource = sources.getLast();
+        return actualSource.getSource();
+    }
+
+    public char getNextChar() {
+        if (position < numberOfCharacters - 1) {
+            position++;
+        }
+
+        char c = data[position];
+        if (c == '\n') {
+            addNewLinePosition(position);
+        }
+        listener.visitNextChar(position + offset, c);
+        return c;
+    }
+
+
+    public int getPosition() {
+        return position + offset;
+    }
+
+    public char[] extract(int start, int end) {
+        if (end < start) return null;
+
+        char[] chars = Arrays.copyOfRange(data, start - offset, end - offset + 1);
+
+        listener.visitExtract(chars, start, end);
+
+        return chars;
+    }
+
+    public void consume(int limit) {
+        if (limit <= lastConsumeLimit) return;
+
+        lastConsumeLimit = limit;
+        int pos = limit - offset + 1;
+        int length = numberOfCharacters - pos;
+
+        freeSpace.increment(pos);
+
+        System.arraycopy(data, pos, data, 0, length);
+
+        numberOfCharacters -= pos;
+        offset += pos;
+        position = position - pos;
+
+        clearNewLinePositions();
+
+        listener.visitData("consume", data, numberOfCharacters, position, offset);
+    }
+
+    public void reset(int marker) {
+        int oldPos = position;
+        position = marker - offset;
+        syncNewLinePositions();
+
+        listener.visitReset(oldPos, marker);
+    }
+
+
+
+    // *********************
+    // new lines ***********
+    // *********************
+    private void initNewLinePositions() {
+        newLinePositions = new int[128];
+        clearNewLinePositions();
+    }
+
+    private void clearNewLinePositions() {
+        Arrays.fill(newLinePositions, -1);
+        lastNewLinePositionIndex = -1;
+    }
+
+    private void addNewLinePosition(int position) {
+        newLinePositions[++lastNewLinePositionIndex] = position;
+    }
+
+    private void syncNewLinePositions() {
+        for (int i = lastNewLinePositionIndex; i > -1 ; i--) {
+            if (position >= newLinePositions[lastNewLinePositionIndex]) {
+                break;
+            }
+            else {
+                newLinePositions[lastNewLinePositionIndex--] = -1;
+            }
+        }
+    }
+    public int getPositionInLine() {
+        if (lastNewLinePositionIndex > -1) {
+            if (newLinePositions[lastNewLinePositionIndex] == position) {
+                if (lastNewLinePositionIndex > 0) {
+                    return position - newLinePositions[lastNewLinePositionIndex - 1] - 1;
+                }
+                return position;
+            }
+
+            return position - newLinePositions[lastNewLinePositionIndex] - 1;
+        }
+        return position + offset;
+    }
+
+
 }

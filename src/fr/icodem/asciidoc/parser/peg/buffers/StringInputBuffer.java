@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.peg.buffers;
 import fr.icodem.asciidoc.parser.peg.listeners.DefaultInputBufferStateListener;
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 
+import java.io.Reader;
 import java.util.Arrays;
 
 import static fr.icodem.asciidoc.parser.peg.Chars.*;
@@ -36,27 +37,40 @@ public class StringInputBuffer implements InputBuffer {
      * Constructs an input buffer given an input text.
      * @param text the input text to be parsed
      */
-    StringInputBuffer(String text) {
+//    StringInputBuffer(String text) {
+//        data = text.toCharArray();
+//        position = -1;
+//        newLinePositions = new int[128];
+//        Arrays.fill(newLinePositions, -1);
+//        lastNewLinePositionIndex = -1;
+
+        //this.listener = new DefaultInputBufferStateListener();
+//    }
+
+    StringInputBuffer() {}
+
+    void init(String text, InputBufferStateListener listener) {
         data = text.toCharArray();
         position = -1;
         newLinePositions = new int[128];
         Arrays.fill(newLinePositions, -1);
         lastNewLinePositionIndex = -1;
 
-        this.listener = new DefaultInputBufferStateListener();
+        this.listener = listener;
     }
 
-    /**
-     * The listener to be notified of internal state of the buffer
-     * @param listener the listener notified of internal state of the buffer
-     */
-    @Override
-    public InputBuffer useListener(InputBufferStateListener listener) {
-        if (listener != null) {
-            this.listener = listener;
-        }
-        return this;
-    }
+
+//    /**
+//     * The listener to be notified of internal state of the buffer
+//     * @param listener the listener notified of internal state of the buffer
+//     */
+//    @Override
+//    public InputBuffer useListener(InputBufferStateListener listener) {
+//        if (listener != null) {
+//            this.listener = listener;
+//        }
+//        return this;
+//    }
 
     @Override
     public char getNextChar() {

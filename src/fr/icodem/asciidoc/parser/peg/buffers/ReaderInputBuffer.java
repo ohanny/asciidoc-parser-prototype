@@ -1,246 +1,117 @@
 package fr.icodem.asciidoc.parser.peg.buffers;
 
-import fr.icodem.asciidoc.parser.peg.listeners.DefaultInputBufferStateListener;
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Arrays;
-
-import static fr.icodem.asciidoc.parser.peg.Chars.EOI;
 
 /**
  * A buffer holding the input text to be parsed.
  */
 public class ReaderInputBuffer implements InputBuffer {
 
-    /**
-     * A {@link InputBufferStateListener listener} is notified of the internal
-     * state of the input buffer at various stage of the parsing.
-     * Mainly used for test purpose.
-     */
-    private InputBufferStateListener listener;
-
     private BufferController<Reader> bufferController;
 
-    //private Reader reader;
+    ReaderInputBuffer() {}
 
-    /**
-     * A moving window buffer of the data being scanned. We keep adding
-     * to the buffer while there's data in the input source.
-     * When {@link #consume(int) consume} occurs, characters starting after
-     * limit position are shifted to index 0.
-     */
-    private char[] data;
-
-    /**
-     * Index into {@link #data data} of the next character.
-     */
-    private int position;
-
-    private int offset;
-
-    private int lastConsumeLimit = -1;
-
-    private boolean endOfInputReached;
-
-    /**
-     * The number of character currently in {@link #data data}.
-     */
-    private int numberOfCharacters;
-
-    private int[] newLinePositions;
-    private int lastNewLinePositionIndex;
+    void init(Reader reader, int bufferSize, InputBufferStateListener listener) {
+        bufferController = new BufferController()
+                .initBuffer(bufferSize)
+                .useListener(listener)
+                .include(reader);
+    }
 
     /**
      * Constructs an input buffer given an input reader.
      * @param reader the input text to be parsed
      */
-    ReaderInputBuffer(Reader reader) {
+    /*ReaderInputBuffer(Reader reader) {
         if (reader == null) {
             throw new IllegalArgumentException("Reader must not be null");
         }
 
-        //this.reader = reader;
-        bufferController = new BufferController();
-        include(reader);
-        data = new char[1024];
-        bufferController.initBuffer(data);
-        position = -1;
-        newLinePositions = new int[128];
-        clearNewLinePositions();
+        bufferController = new BufferController()
+                .initBuffer(1024)
+                .include(reader);
+    }*/
 
-        this.listener = new DefaultInputBufferStateListener();
-    }
-
-    private void clearNewLinePositions() {
-        Arrays.fill(newLinePositions, -1);
-        lastNewLinePositionIndex = -1;
-    }
-
-    public ReaderInputBuffer bufferSize(int size) {
-        data = new char[size];
-        bufferController.initBuffer(data);
-        return this;
-    }
+//    public ReaderInputBuffer bufferSize(int size) {
+//        bufferController.initBuffer(size);
+//        return this;
+//    }
 
     /**
      * The listener to be notified of internal state of the buffer
      * @param listener the listener notified of internal state of the buffer
      */
-    @Override
-    public InputBuffer useListener(InputBufferStateListener listener) {
-        if (listener != null) {
-            this.listener = listener;
-        }
-        return this;
-    }
+//    @Override
+//    public InputBuffer useListener(InputBufferStateListener listener) {
+//        bufferController.useListener(listener);
+//        return this;
+//    }
 
 
     @Override
-    public char getNextChar() { // SPECIFIC READER
-        // load chars from reader
-        if (shouldLoadFromSource()) {
+    public char getNextChar() {
+        // load chars from reader if needed
+        if (bufferController.shouldLoadFromSource()) {
             loadFromSource();
         }
 
         // get next char from buffer
-        return getNextCharFromBuffer();
+        return bufferController.getNextChar();
     }
 
-    private void loadFromSource() { // SPECIFIC READER
+    private void loadFromSource() {
         try {
-            data = bufferController.ensureCapacity(listener, position, offset, numberOfCharacters);
-            int free = bufferController.getFreeSize();
+            char[] data = bufferController.ensureCapacity();
+
+            int offset = bufferController.getFreeSpaceOffset();
+            int length = bufferController.getFreeSpaceSize();
 
             // fill data from input
             final Reader reader = bufferController.getCurrentSource();
-            int numRead = reader.read(data, numberOfCharacters, free); // TODO change access
+            int numRead = reader.read(data, offset, length);
 
             // new data added to buffer
-            newDataAddedToBuffer(numRead);
+            if (numRead != -1) {
+                bufferController.newDataAddedToBuffer(numRead);
+            } else {
+                bufferController.endOfInput();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private boolean shouldLoadFromSource() { // SPECIFIC READER ?
-        return position == numberOfCharacters - 1 && !endOfInputReached;
-    }
-
-    private void newDataAddedToBuffer(int size) {
-        if (size != -1) {
-            numberOfCharacters += size;
-        } else { // end of input
-            data[numberOfCharacters++] = EOI;
-            endOfInputReached = true;
-            // TODO close reader
-        }
-    }
-
-    private char getNextCharFromBuffer() {
-        if (position < numberOfCharacters - 1) {
-            position++;
-        }
-
-        char c = data[position];
-        if (c == '\n') {
-            addNewLinePosition(position);
-        }
-        listener.visitNextChar(position + offset, c);
-        return c;
-    }
-
-    private void addNewLinePosition(int position) {
-        newLinePositions[++lastNewLinePositionIndex] = position;
-    }
-
-    private void syncNewLinePositions() {
-        for (int i = lastNewLinePositionIndex; i > -1 ; i--) {
-            if (position >= newLinePositions[lastNewLinePositionIndex]) {
-                break;
-            }
-            else {
-                newLinePositions[lastNewLinePositionIndex--] = -1;
-            }
-        }
-    }
-
     @Override
     public int getPositionInLine() {
-        if (lastNewLinePositionIndex > -1) {
-            if (newLinePositions[lastNewLinePositionIndex] == position) {
-                if (lastNewLinePositionIndex > 0) {
-                    return position - newLinePositions[lastNewLinePositionIndex - 1] - 1;
-                }
-                return position;
-            }
-
-            return position - newLinePositions[lastNewLinePositionIndex] - 1;
-        }
-        return position + offset;
+        return bufferController.getPositionInLine();
     }
 
     @Override
     public int getPosition() {
-        return position + offset;
+        return bufferController.getPosition();
     }
 
     @Override
     public char[] extract(int start, int end) {
-        if (end < start) return null;
-
-        char[] chars = Arrays.copyOfRange(data, start - offset, end - offset + 1);
-
-        listener.visitExtract(chars, start, end);
-
-        return chars;
+        return bufferController.extract(start, end);
     }
 
     @Override
     public void reset(int marker) {
-        int oldPos = position;
-        position = marker - offset;
-        syncNewLinePositions();
-
-        listener.visitReset(oldPos, marker);
+        bufferController.reset(marker);
     }
 
     @Override
     public void consume(int limit) {
-        if (limit <= lastConsumeLimit) return;
-
-        lastConsumeLimit = limit;
-        int pos = limit - offset + 1;
-        int length = numberOfCharacters - pos;
-
-        System.arraycopy(data, pos, data, 0, length);
-
-        numberOfCharacters -= pos;
-        offset += pos;
-        position = position - pos;
-
-        clearNewLinePositions();
-
-        listener.visitData("consume", data, numberOfCharacters, position, offset);
+        bufferController.consume(limit);
     }
 
     @Override
     public void include(Reader reader) {
-
-        bufferController.include(reader, position);
-
-/*        // save actual data that are still not read
-        SourceContext<Reader> prevReader = nextReaders.getLast();
-        if (prevReader != null) {
-            //prevReader.suspend(position + 1, numberOfCharacters - position - 1);
-        }
-
-        // add new reader
-        final SourceContext<Reader> ctx = new SourceContext<>(reader);
-        //ctx.append(position);
-        nextReaders.offer(ctx);
-        */
+        bufferController.include(reader);
     }
 
 }
