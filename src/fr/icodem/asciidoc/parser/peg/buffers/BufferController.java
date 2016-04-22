@@ -42,7 +42,7 @@ public class BufferController<T> {
     /**
      * The number of character currently in {@link #data data}.
      */
-    private int numberOfCharacters;
+    //private int numberOfCharacters;
 
     private int[] newLinePositions;
     private int lastNewLinePositionIndex;
@@ -112,39 +112,67 @@ public class BufferController<T> {
 
 
     public boolean shouldLoadFromSource() {
-        return position == numberOfCharacters - 1 && !endOfInputReached;
+        //return position == numberOfCharacters - 1 && !endOfInputReached;
+        return position == activeSpace.length - 1 && !endOfInputReached;
     }
 
     // remaining data to read - ensure capacity
     public char[] ensureCapacity() {
-        int free = data.length - numberOfCharacters;
-        if (free == 0) {
-            freeSpace.increment(data.length);
+        //int free = data.length - numberOfCharacters;
+        //if (free == 0) {
+        if (freeSpace.length == 0) {
+            //freeSpace.increment(data.length);
+            freeSpace.expandEnd(data.length);
             data = Arrays.copyOf(data, data.length * 2);
-            listener.visitData("increase", data, numberOfCharacters, position, offset);
+            //listener.visitData("increase", data, numberOfCharacters, position, offset);
+            listener.visitData("increase", data, getUsedSize(), position, offset);
         }
         return data;
     }
 
     public int getFreeSpaceOffset() {
-        return numberOfCharacters;
+        return freeSpace.start;
+        //return numberOfCharacters;
     }
 
     public int getFreeSpaceSize() {
         return freeSpace.length;
     }
 
+    public int getUsedSize() {
+        return activeSpace.length + suspendedSpace.length;
+    }
+
     public void endOfInput() {
-        data[numberOfCharacters++] = EOI;
+        //freeSpace.decrement(1);
+        //freeSpace.move(1);
+        data[activeSpace.length] = EOI;
+
+        freeSpace.shrinkStart(1);
+        activeSpace.expandEnd(1);
+//        activeSpace.incrementLastSize(1);
+        //data[numberOfCharacters++] = EOI;
+        //numberOfCharacters++;
+
         endOfInputReached = true;
     }
 
     public void newDataAddedToBuffer(int size) {
-        numberOfCharacters += size;
-        activeSpace.incrementLastSize(size);
-        freeSpace.decrement(size);
+        //numberOfCharacters += size;
+        //activeSpace.incrementLastSize(size);
+        activeSpace.expandEnd(size);
+
+        freeSpace.shrinkStart(size);
+        //freeSpace.decrement(size);
+        //freeSpace.move(size);
     }
 
+//    void xx () {
+//        if (numberOfCharacters != freeSpace.start) {
+//            throw new RuntimeException("XXXXXX numberOfCharacters="+numberOfCharacters+", freeSpace.start="+freeSpace.start);
+//        }
+//
+//    }
 
 
     public T getCurrentSource() {
@@ -153,7 +181,8 @@ public class BufferController<T> {
     }
 
     public char getNextChar() {
-        if (position < numberOfCharacters - 1) {
+        //if (position < numberOfCharacters - 1) {
+        if (position < activeSpace.length - 1) {
             position++;
         }
 
@@ -184,20 +213,25 @@ public class BufferController<T> {
         if (limit <= lastConsumeLimit) return;
 
         lastConsumeLimit = limit;
-        int pos = limit - offset + 1;
-        int length = numberOfCharacters - pos;
+        int srcPos = limit - offset + 1;
+        //int length = numberOfCharacters - srcPos;
+        int length = activeSpace.length - srcPos;
 
-        freeSpace.increment(pos);
+        //freeSpace.move(-pos);
+        //freeSpace.increment(pos);
+        activeSpace.shrinkEndToLeft(srcPos);
+        freeSpace.expandStart(srcPos);
 
-        System.arraycopy(data, pos, data, 0, length);
+        System.arraycopy(data, srcPos, data, 0, length);
 
-        numberOfCharacters -= pos;
-        offset += pos;
-        position = position - pos;
+        //numberOfCharacters -= srcPos;
+        offset += srcPos;
+        position = position - srcPos;
 
         clearNewLinePositions();
 
-        listener.visitData("consume", data, numberOfCharacters, position, offset);
+        //listener.visitData("consume", data, numberOfCharacters, position, offset);
+        listener.visitData("consume", data, getUsedSize(), position, offset);
     }
 
     public void reset(int marker) {

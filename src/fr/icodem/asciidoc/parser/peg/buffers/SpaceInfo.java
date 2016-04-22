@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.buffers;
 
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class SpaceInfo<T> {
@@ -46,18 +47,62 @@ public class SpaceInfo<T> {
         sources.offer(Segment.newSegment(source, start, 0));
     }
 
-    void incrementLastSize(int size) {
+//    private void incrementLastSize(int size) {
+//        Segment<T> lastSource = sources.peekLast();
+//        lastSource.length += size;
+//        this.length += size;
+//    }
+
+//    private void increment(int size) {
+//        this.length += size;
+//    }
+//
+//    private void decrement(int size) {
+//        this.length -= size;
+//    }
+//
+//    private void move(int offset) {
+//        start += offset;
+//    }
+
+    void expandStart(int size) {
+        start -= size;
+        length += size;
+    }
+
+    void expandEnd(int size) {
+        length += size;
+
         Segment<T> lastSource = sources.peekLast();
-        lastSource.length += size;
-        this.length += size;
+        if (lastSource != null) {
+            lastSource.length += size;
+        }
     }
 
-    void increment(int size) {
-        this.length += size;
+    void shrinkStart(int size) {
+        start += size;
+        length -= size;
     }
 
-    void decrement(int size) {
-        this.length -= size;
+    void shrinkEndToLeft(int size) {// TODO rename
+        length -= size;
+
+        int removed = 0;
+        for (Iterator<Segment<T>> it = sources.iterator(); it.hasNext();) {
+            Segment<T> segment = it.next();
+
+            int remaining = size - removed;
+            int sizeToRemove = Math.min(remaining, segment.length);
+            segment.length -= sizeToRemove;
+            segment.start -= removed;
+            removed += sizeToRemove;
+
+            if (segment.start < 0) throw new RuntimeException("XXX="+segment.start);// TODO remove
+        }
+    }
+
+    void shrinkEnd(int size) {
+        length -= size;
     }
 
 
