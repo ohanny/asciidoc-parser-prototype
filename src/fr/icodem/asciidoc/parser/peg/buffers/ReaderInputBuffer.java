@@ -75,7 +75,7 @@ public class ReaderInputBuffer implements InputBuffer {
 
             // new data added to buffer
             if (numRead != -1) {
-                bufferController.newDataAddedToBuffer(numRead);
+                bufferController.newDataAdded(numRead);
             } else {
                 bufferController.endOfInput();
             }

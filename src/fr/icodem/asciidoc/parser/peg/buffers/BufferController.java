@@ -3,15 +3,11 @@ package fr.icodem.asciidoc.parser.peg.buffers;
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 
 import java.util.Arrays;
-import java.util.Deque;
-import java.util.LinkedList;
 
 import static fr.icodem.asciidoc.parser.peg.Chars.EOI;
 
 public class BufferController<T> {
-    private SpaceInfo activeSpace;
-    private SpaceInfo freeSpace;
-    private SpaceInfo suspendedSpace;
+    private BufferLayout<T> layout;
 
     /**
      * A {@link InputBufferStateListener listener} is notified of the internal
@@ -39,16 +35,10 @@ public class BufferController<T> {
     private int lastConsumeLimit = -1;
 
     private boolean endOfInputReached;
-    /**
-     * The number of character currently in {@link #data data}.
-     */
-    //private int numberOfCharacters;
 
     private int[] newLinePositions;
     private int lastNewLinePositionIndex;
 
-
-    private Deque<SourceContext<T>> sources = new LinkedList<>();
 
     public BufferController<T> initBuffer(int size) {
         return initBuffer(new char[size]);
@@ -73,31 +63,21 @@ public class BufferController<T> {
     }
 
     private void initSpaces() {
-        activeSpace = SpaceInfo.newSpaceInfo(0, 0);
-        freeSpace = SpaceInfo.newSpaceInfo(0, data.length);
-        suspendedSpace = SpaceInfo.newSpaceInfo(-1, 0);
+        layout = new BufferLayout(data.length);
     }
 
     public BufferController<T> include(T source) {
 
         // split actual source data
-        SourceContext<T> actualSource = sources.pollLast();
-        if (actualSource != null) {
+        //SourceContext<T> actualSource = sources.pollLast();
+        //if (actualSource != null) {
             //actualSource.suspend(pos);
-        }
+        //}
 
 
         // append new source data in active space
-        activeSpace.append(source);
+        layout.includeSource(source);
 
-        //SourceContext<T> sourceCtx = new SourceContext<>(source);
-        //sourceCtx.addSegment(position + 1);
-
-        // ???
-        sources.offer(new SourceContext<>(source));
-
-
-        //active.append(source);
         return this;
     }
 
@@ -112,77 +92,53 @@ public class BufferController<T> {
 
 
     public boolean shouldLoadFromSource() {
-        //return position == numberOfCharacters - 1 && !endOfInputReached;
-        return position == activeSpace.length - 1 && !endOfInputReached;
+        return position == layout.getActiveLength() - 1 && !endOfInputReached;
     }
 
     // remaining data to read - ensure capacity
     public char[] ensureCapacity() {
-        //int free = data.length - numberOfCharacters;
-        //if (free == 0) {
-        if (freeSpace.length == 0) {
-            //freeSpace.increment(data.length);
-            freeSpace.expandEnd(data.length);
+        if (layout.getFreeSpaceSize() == 0) {
+            layout.increaseFreeSpace(data.length);
             data = Arrays.copyOf(data, data.length * 2);
-            //listener.visitData("increase", data, numberOfCharacters, position, offset);
             listener.visitData("increase", data, getUsedSize(), position, offset);
         }
         return data;
     }
 
     public int getFreeSpaceOffset() {
-        return freeSpace.start;
-        //return numberOfCharacters;
+        return layout.getFreeSpaceOffset();
     }
 
     public int getFreeSpaceSize() {
-        return freeSpace.length;
+        return layout.getFreeSpaceSize();
     }
 
-    public int getUsedSize() {
-        return activeSpace.length + suspendedSpace.length;
+    /**
+     * The number of character currently in {@link #data data}.
+     */
+    private int getUsedSize() {
+        return layout.getUsedSize();
     }
 
     public void endOfInput() {
-        //freeSpace.decrement(1);
-        //freeSpace.move(1);
-        data[activeSpace.length] = EOI;
+        data[layout.getFreeSpaceOffset()] = EOI;
 
-        freeSpace.shrinkStart(1);
-        activeSpace.expandEnd(1);
-//        activeSpace.incrementLastSize(1);
-        //data[numberOfCharacters++] = EOI;
-        //numberOfCharacters++;
+        layout.newDataAdded(1);
 
         endOfInputReached = true;
     }
 
-    public void newDataAddedToBuffer(int size) {
-        //numberOfCharacters += size;
-        //activeSpace.incrementLastSize(size);
-        activeSpace.expandEnd(size);
-
-        freeSpace.shrinkStart(size);
-        //freeSpace.decrement(size);
-        //freeSpace.move(size);
+    public void newDataAdded(int size) {
+        layout.newDataAdded(size);
     }
-
-//    void xx () {
-//        if (numberOfCharacters != freeSpace.start) {
-//            throw new RuntimeException("XXXXXX numberOfCharacters="+numberOfCharacters+", freeSpace.start="+freeSpace.start);
-//        }
-//
-//    }
 
 
     public T getCurrentSource() {
-        SourceContext<T> actualSource = sources.getLast();
-        return actualSource.getSource();
+        return layout.getCurrentSource();
     }
 
     public char getNextChar() {
-        //if (position < numberOfCharacters - 1) {
-        if (position < activeSpace.length - 1) {
+        if (position < layout.getActiveLength() - 1) {
             position++;
         }
 
@@ -214,23 +170,18 @@ public class BufferController<T> {
 
         lastConsumeLimit = limit;
         int srcPos = limit - offset + 1;
-        //int length = numberOfCharacters - srcPos;
-        int length = activeSpace.length - srcPos;
+        int length = layout.getActiveLength() - srcPos;
 
-        //freeSpace.move(-pos);
-        //freeSpace.increment(pos);
-        activeSpace.shrinkEndToLeft(srcPos);
-        freeSpace.expandStart(srcPos);
+        layout.consume(srcPos);
+
 
         System.arraycopy(data, srcPos, data, 0, length);
 
-        //numberOfCharacters -= srcPos;
         offset += srcPos;
         position = position - srcPos;
 
         clearNewLinePositions();
 
-        //listener.visitData("consume", data, numberOfCharacters, position, offset);
         listener.visitData("consume", data, getUsedSize(), position, offset);
     }
 
