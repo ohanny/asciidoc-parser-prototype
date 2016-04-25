@@ -34,8 +34,6 @@ public class BufferController<T> {
 
     private int lastConsumeLimit = -1;
 
-    //private int[] newLinePositions;
-    //private int lastNewLinePositionIndex;
     private NewLinesTracker newLinesTracker;
 
 
