@@ -60,7 +60,7 @@ public class IncludeReaderTest extends BaseParser {
         return null;
     }
 
-    @Test @Ignore
+    @Test
     public void test1() throws Exception {
         Answer<?> answer = invocation -> {
             Object[] args = invocation.getArguments();
@@ -72,8 +72,10 @@ public class IncludeReaderTest extends BaseParser {
         };
         doAnswer(answer).when(listener).enterNode(anyObject());
 
-        Rule include = node("include", sequence(string("inc:"), node("input", oneOrMore(noneOf('*')))));
-        Rule rule = node("root", sequence(string("###"), include, optional(string("***"))));
+        Rule include = node("include", sequence(string("inc:"), node("input", oneOrMore(noneOf("&*")))));
+        Rule rule = node("root", sequence(string("###"), include, optional(sequence(oneOrMore(any()), eoi(), oneOrMore(any()), eoi()))));
+        //Rule rule = node("root", sequence(string("###"), include, optional(oneOrMore(any()))));
+//        Rule rule = node("root", sequence(string("###"), include, optional(oneOrMore(anyOf("abc*")))));
 
         ParsingResult result = parse(rule, "###inc:input.txt***", listener, null, inputBufferStateListener);
 
@@ -84,8 +86,6 @@ public class IncludeReaderTest extends BaseParser {
         verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
         verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("abc".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("***".toCharArray()), anyInt(), anyInt());
-
+        verify(listener).characters(aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
     }
 }

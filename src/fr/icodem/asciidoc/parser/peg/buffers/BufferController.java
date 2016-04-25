@@ -69,30 +69,16 @@ public class BufferController<T> {
     public BufferController<T> include(T source) {
 
         // split actual source data
-        //SourceContext<T> actualSource = sources.pollLast();
-        //if (actualSource != null) {
-            //actualSource.suspend(pos);
-        //}
-
 
         // append new source data in active space
-        layout.includeSource(source);
+        layout.includeSource(source, position, data);
 
         return this;
     }
 
-    private void suspend() {
-
-    }
-
-    private void restore() {
-
-    }
-
-
-
     public boolean shouldLoadFromSource() {
-        return position == layout.getActiveLength() - 1 && !endOfInputReached;
+        //return position == layout.getActiveLength() - 1 && !endOfInputReached;
+        return layout.shouldLoadFromSource(position);
     }
 
     // remaining data to read - ensure capacity
@@ -126,6 +112,9 @@ public class BufferController<T> {
         layout.newDataAdded(1);
 
         endOfInputReached = true;
+
+        layout.endOfInput();
+        layout.restoreLastSuspendedSegment(position, data);
     }
 
     public void newDataAdded(int size) {
@@ -147,6 +136,7 @@ public class BufferController<T> {
             addNewLinePosition(position);
         }
         listener.visitNextChar(position + offset, c);
+        System.out.printf("%s => %d pos=%d\r\n", c, layout.getActiveLength(), position);
         return c;
     }
 

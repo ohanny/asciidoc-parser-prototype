@@ -40,10 +40,10 @@ public class ReaderInputBuffer implements InputBuffer {
 //        return this;
 //    }
 
-    /**
-     * The listener to be notified of internal state of the buffer
-     * @param listener the listener notified of internal state of the buffer
-     */
+//    /**
+//     * The listener to be notified of internal state of the buffer
+//     * @param listener the listener notified of internal state of the buffer
+//     */
 //    @Override
 //    public InputBuffer useListener(InputBufferStateListener listener) {
 //        bufferController.useListener(listener);
