@@ -135,11 +135,6 @@ public class BufferLayout<T> {
         }
     }
 
-    private Segment<T> getLastSuspendedSegment() {
-        Segment<T> segment = suspendedSegments.peekLast();
-        return segment;
-    }
-
     // append source, don't know length yet
     public void includeSource(T source, int position, char[] buffer) {
         Segment<T> curSegment = activeSegments.peekLast();
@@ -164,7 +159,6 @@ public class BufferLayout<T> {
         Segment<T> lastSuspendedSegment = suspendedSegments.pollLast();
         if (lastSuspendedSegment != null) {
             System.arraycopy(buffer, lastSuspendedSegment.start, buffer, activeLength, lastSuspendedSegment.length);
-//            System.arraycopy(buffer, lastSuspendedSegment.start, buffer, position + 1, lastSuspendedSegment.length);
 
             activeSegments.add(lastSuspendedSegment);
             activeLength += lastSuspendedSegment.length;
@@ -174,7 +168,6 @@ public class BufferLayout<T> {
 
     public boolean shouldLoadFromSource(int position) {
         return position == activeLength - 1 && !activeSegments.peekLast().endOfInputReached;
-        //return position == layout.getActiveLength() - 1 && !endOfInputReached;
     }
 
 

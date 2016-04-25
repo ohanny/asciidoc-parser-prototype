@@ -34,10 +34,9 @@ public class BufferController<T> {
 
     private int lastConsumeLimit = -1;
 
-    private boolean endOfInputReached;
-
-    private int[] newLinePositions;
-    private int lastNewLinePositionIndex;
+    //private int[] newLinePositions;
+    //private int lastNewLinePositionIndex;
+    private NewLinesTracker newLinesTracker;
 
 
     public BufferController<T> initBuffer(int size) {
@@ -53,8 +52,14 @@ public class BufferController<T> {
 
     private void init() {
         position = -1;
-        initNewLinePositions();
+        //initNewLinePositions();
+        initNewLineTracker();
         initSpaces();
+    }
+
+    private void initNewLineTracker() {
+        newLinesTracker = new NewLinesTracker();
+        newLinesTracker.init();
     }
 
     public BufferController<T> useListener(InputBufferStateListener listener) {
@@ -110,9 +115,6 @@ public class BufferController<T> {
         data[layout.getFreeSpaceOffset()] = EOI;
 
         layout.newDataAdded(1);
-
-        endOfInputReached = true;
-
         layout.endOfInput();
         layout.restoreLastSuspendedSegment(position, data);
     }
@@ -133,10 +135,9 @@ public class BufferController<T> {
 
         char c = data[position];
         if (c == '\n') {
-            addNewLinePosition(position);
+            newLinesTracker.addNewLine(position);
         }
         listener.visitNextChar(position + offset, c);
-        System.out.printf("%s => %d pos=%d\r\n", c, layout.getActiveLength(), position);
         return c;
     }
 
@@ -170,7 +171,8 @@ public class BufferController<T> {
         offset += srcPos;
         position = position - srcPos;
 
-        clearNewLinePositions();
+        //clearNewLinePositions();
+        newLinesTracker.clear();
 
         listener.visitData("consume", data, getUsedSize(), position, offset);
     }
@@ -178,53 +180,15 @@ public class BufferController<T> {
     public void reset(int marker) {
         int oldPos = position;
         position = marker - offset;
-        syncNewLinePositions();
+        //syncNewLinePositions();
+        newLinesTracker.sync(position);
 
         listener.visitReset(oldPos, marker);
     }
 
-
-
-    // *********************
-    // new lines ***********
-    // *********************
-    private void initNewLinePositions() {
-        newLinePositions = new int[128];
-        clearNewLinePositions();
-    }
-
-    private void clearNewLinePositions() {
-        Arrays.fill(newLinePositions, -1);
-        lastNewLinePositionIndex = -1;
-    }
-
-    private void addNewLinePosition(int position) {
-        newLinePositions[++lastNewLinePositionIndex] = position;
-    }
-
-    private void syncNewLinePositions() {
-        for (int i = lastNewLinePositionIndex; i > -1 ; i--) {
-            if (position >= newLinePositions[lastNewLinePositionIndex]) {
-                break;
-            }
-            else {
-                newLinePositions[lastNewLinePositionIndex--] = -1;
-            }
-        }
-    }
     public int getPositionInLine() {
-        if (lastNewLinePositionIndex > -1) {
-            if (newLinePositions[lastNewLinePositionIndex] == position) {
-                if (lastNewLinePositionIndex > 0) {
-                    return position - newLinePositions[lastNewLinePositionIndex - 1] - 1;
-                }
-                return position;
-            }
-
-            return position - newLinePositions[lastNewLinePositionIndex] - 1;
-        }
-        return position + offset;
+        //return newLinesTracker.getPositionInLine(position, offset);
+        return newLinesTracker.getPositionInLine(position);
     }
-
 
 }
