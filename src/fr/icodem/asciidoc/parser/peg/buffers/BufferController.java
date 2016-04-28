@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.buffers;
 
+import fr.icodem.asciidoc.parser.peg.Chars;
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 
 import java.util.Arrays;
@@ -54,6 +55,8 @@ public class BufferController<T> implements InputBuffer<T> {
 
     private void init() {
         position = -1;
+        lastExtracted = -1;
+        lastConsumed = -1;
         initNewLineTracker();
         initSpaces();
     }
@@ -137,10 +140,18 @@ public class BufferController<T> implements InputBuffer<T> {
             position++;
         }
 
+        // EOI has been consumed, it can't be read from the buffer
+        if (position == -1) {
+            listener.visitNextChar(position + offset, Chars.EOI);
+            return Chars.EOI;
+        }
+
+
         char c = buffer[position];
         if (c == '\n') {
             newLinesTracker.addNewLine(position);
         }
+
         listener.visitNextChar(position + offset, c);
         return c;
     }
@@ -163,29 +174,30 @@ public class BufferController<T> implements InputBuffer<T> {
     }
 
     private int lastExtracted;
+    private int lastConsumed;
 
     @Override
     public void consume(int limit) {
-        if (limit <= lastConsumeLimit) return;
+        if (lastExtracted <= lastConsumed) return;
 
         lastConsumeLimit = limit;
-        int srcPos = limit - offset + 1;
+        lastConsumed = lastExtracted;
 
-srcPos = lastExtracted - offset + 1;
+        int srcPos = lastExtracted - offset + 1;
         int length = layout.getActiveLength() - srcPos;
 
         layout.consume(srcPos);
 
-
-if (length > 0)
-        System.arraycopy(buffer, srcPos, buffer, 0, length);
+        if (length > 0) {
+            System.arraycopy(buffer, srcPos, buffer, 0, length);
+        }
 
         offset += srcPos;
         position = position - srcPos;
 
         newLinesTracker.clear();
 
-lastExtracted = -1;
+        lastExtracted = -1;
 
         listener.visitData("consume", buffer, layout.getUsedSize(), position, offset);
     }

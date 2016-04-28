@@ -53,7 +53,6 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
             char[] data = (char[])args[1];
             char[] clone = Arrays.copyOf(data, data.length);
             args[1] = clone;
-            System.out.println("VISIT => " + args[0] + " : " + new String(clone));
             return null;
         }).when(inputBufferStateListener)
           .visitData(anyString(), anyObject(), anyInt(), anyInt(),anyInt());
@@ -197,7 +196,7 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         assertTrue("Did not match", result.matched);
         verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // ****** test intermediate flushings when optionals are detected ****** //
