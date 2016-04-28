@@ -62,6 +62,9 @@ public class BufferLayout<T> {
         return activeLength;
     }
 
+    /**
+     * The number of character currently in {@link #data data}.
+     */
     public int getUsedSize() {
         return activeLength + suspendedLength;
     }

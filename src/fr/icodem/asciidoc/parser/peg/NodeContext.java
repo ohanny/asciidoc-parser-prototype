@@ -12,8 +12,8 @@ public class NodeContext {
         this.matcherContext = matcherContext;
     }
 
-    public void include(Reader reader) {
-        matcherContext.include(reader);
+    public void include(Object source) {
+        matcherContext.include(source);
     }
 
     public String getNodeName() {

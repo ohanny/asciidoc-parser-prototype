@@ -49,11 +49,27 @@ public class InputBufferBuilder {
     public InputBuffer build() {
         if (instance instanceof ReaderInputBuffer) {
             if (listener == null) listener = new DefaultInputBufferStateListener();
-            ((ReaderInputBuffer)instance).init(reader, bufferSize, listener);
+            //((ReaderInputBuffer)instance).init(reader, bufferSize, listener);
+            BufferController<Reader> inputBuffer =
+                    new BufferController<>(new ReaderLoader())
+                        .initBuffer(bufferSize)
+                        .useListener(listener)
+                        .include(reader);
+
+            return inputBuffer;
         }
         else if (instance instanceof StringInputBuffer) {
             if (listener == null) listener = new DefaultInputBufferStateListener();
             ((StringInputBuffer)instance).init(text, listener);
+
+
+            BufferController<StringHolder> inputBuffer =
+                    new BufferController<>(new StringLoader())
+                            .initBuffer(text.length() + 1) // last pos for EOI
+                            .useListener(listener)
+                            .include(new StringHolder(text));
+
+            return inputBuffer;
         }
 
         return instance;

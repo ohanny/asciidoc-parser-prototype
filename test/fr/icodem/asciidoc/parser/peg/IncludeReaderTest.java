@@ -1,7 +1,6 @@
 package fr.icodem.asciidoc.parser.peg;
 
-import fr.icodem.asciidoc.parser.peg.buffers.ReaderInputBuffer;
-import fr.icodem.asciidoc.parser.peg.buffers.StringInputBuffer;
+import fr.icodem.asciidoc.parser.peg.buffers.StringHolder;
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
@@ -9,7 +8,6 @@ import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -42,7 +40,8 @@ public class IncludeReaderTest extends BaseParser {
     @Parameterized.Parameters(name="{index}: {0}")
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { StringInputBuffer.class.getSimpleName()}, { ReaderInputBuffer.class.getSimpleName()}
+                { "string" }, { "reader" }
+                //{ StringInputBuffer.class.getSimpleName()}, { ReaderInputBuffer.class.getSimpleName()}
         });
     }
 
@@ -50,13 +49,20 @@ public class IncludeReaderTest extends BaseParser {
     private ParsingResult parse(Rule rule, String text, ParseTreeListener parseTreeListener,
                                 ParsingProcessListener parsingProcessListener, InputBufferStateListener bufferListener) {
 
-        if (StringInputBuffer.class.getSimpleName().equals(bufferType)) {
+        if ("string".equals(bufferType)) {
             return new ParseRunner(this, () -> rule).parse(text, parseTreeListener, parsingProcessListener, bufferListener);
         }
-        else if (ReaderInputBuffer.class.getSimpleName().equals(bufferType)) {
+        else if ("reader".equals(bufferType)) {
             return new ParseRunner(this, () -> rule).parse(new StringReader(text), parseTreeListener, parsingProcessListener, bufferListener);
         }
 
+//        if (StringInputBuffer.class.getSimpleName().equals(bufferType)) {
+//            return new ParseRunner(this, () -> rule).parse(text, parseTreeListener, parsingProcessListener, bufferListener);
+//        }
+//        else if (ReaderInputBuffer.class.getSimpleName().equals(bufferType)) {
+//            return new ParseRunner(this, () -> rule).parse(new StringReader(text), parseTreeListener, parsingProcessListener, bufferListener);
+//        }
+//
         return null;
     }
 
@@ -66,7 +72,12 @@ public class IncludeReaderTest extends BaseParser {
             Object[] args = invocation.getArguments();
             NodeContext ctx = (NodeContext)args[0];
             if ("input".equals(ctx.getNodeName())) {
-                ctx.include(new StringReader("abc"));
+                if ("string".equals(bufferType)) {
+                    ctx.include(new StringHolder("abc"));
+                }
+                else if ("reader".equals(bufferType)) {
+                    ctx.include(new StringReader("abc"));
+                }
             }
             return null;
         };

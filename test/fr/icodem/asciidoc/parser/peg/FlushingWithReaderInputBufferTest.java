@@ -48,11 +48,12 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         // clone data array, otherwise verifications are
         // done only on the last state of the buffer
-        doAnswer(invocationOnMock -> {
-            Object[] args = invocationOnMock.getArguments();
+        doAnswer(invocation -> {
+            Object[] args = invocation.getArguments();
             char[] data = (char[])args[1];
             char[] clone = Arrays.copyOf(data, data.length);
             args[1] = clone;
+            System.out.println("VISIT => " + args[0] + " : " + new String(clone));
             return null;
         }).when(inputBufferStateListener)
           .visitData(anyString(), anyObject(), anyInt(), anyInt(),anyInt());

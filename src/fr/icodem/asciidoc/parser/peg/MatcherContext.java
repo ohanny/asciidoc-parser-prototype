@@ -51,23 +51,25 @@ public class MatcherContext {
     }
 
 
-    private int lastStartExtractPosition = -1;
-    private int lastEndExtractPosition = -1;
+    private int lastStartExtractPosition = -1; // marque la position de début du noeud ou la position après la fin d'un noeud enfant
+    private int lastEndExtractPosition = -1; // marque la position en fin de noeud après le matching
 
+    // un noeud enfant démarre : on extrait la partie déjà lue par le parent
     private void childFlushStartNode(int childPosition) {
         //extract and notify
-        if (listener != null) {
+        if (listener != null) { // TODO remove listener ?
             notifyCharacters(lastStartExtractPosition, childPosition - 1);
         }
-        lastStartExtractPosition = -1;
-        //lastStartExtractPosition = 0;
-        //System.out.println(nodeName + " (childFlushStartNode) = " + lastStartExtractPosition);
-    }
-    private void childFlushEndNode(int childPosition) {
-        lastStartExtractPosition = childPosition + 1;
-        //System.out.println(nodeName + " (childFlushEndNode) = " + lastStartExtractPosition);
+        lastStartExtractPosition = -1; // reset position début extraction car c'est l'enfant qui extrait maintenant
     }
 
+    // le noeud enfant vient de terminer son flushing : on marque
+    // un démarrage possible du flushing pour le parent
+    private void childFlushEndNode(int childPosition) {
+        lastStartExtractPosition = childPosition + 1;
+    }
+
+    // indique au parent que ce noeud enfant vient de commencer
     private void notifyParentFlushStartNode() {
         MatcherContext ctx = findParentContextNode();
         if (ctx != null) {
@@ -75,6 +77,7 @@ public class MatcherContext {
         }
     }
 
+    // indique au parent que ce noeud enfant vient de se terminer
     private void notifyParentFlushEndNode() {
         MatcherContext ctx = findParentContextNode();
         if (ctx != null) {
@@ -98,11 +101,26 @@ public class MatcherContext {
         if (requestFlushingDone) return;
         requestFlushingDone = true;
 
+        // if current context is not a node context, we
+        // request flushing starting from the parent node
+        if (!isNode()) {
+            MatcherContext ctx = findParentContextNode();
+            if (ctx != null) {
+                ctx.tryStartFlushing();
+            }
+            return;
+        }
+
+        tryStartFlushing();
+    }
+
+    private void tryStartFlushing() {
+        // current context is a node, we can request flushing
         if (canStartFlushing) {
             MatcherContext ctx = findContextNodeToFlush();
             if (ctx != null) {
                 ctx.flush();
-                input.consume(marker);
+                input.consume(marker);// marker = avant début séquence - après fin node
             }
         }
     }
@@ -141,20 +159,22 @@ public class MatcherContext {
         }
 
         // un noeud
-        if (isNode() && listener != null && !enterNodeNotified) {
+        if (isNode() && listener != null && !enterNodeNotified) { // TODO remove listener != null ?
             notifyParentFlushStartNode();
             listener.enterNode(getNodeContext());
             enterNodeNotified = true;
         }
 
+        // on flush tous les enfants
         MatcherContext ctx = subContext;
         while (ctx != null) {
             ctx.flush();
             ctx = ctx.nextContext;
         }
 
+        // un noeud vient de matcher : on extrait + notif fin de noeud
         if (isNode() && matched) {
-            if (listener != null) {
+            if (listener != null) { // TODO null to be checked ?
                 //extract and notify
                 notifyCharacters(lastStartExtractPosition, lastEndExtractPosition);
 
@@ -238,7 +258,6 @@ public class MatcherContext {
     public void setNodeName(String nodeName) {
         this.nodeName = nodeName;
         this.lastStartExtractPosition = input.getPosition() + 1;
-        //System.out.println("input.getPosition() => "  + input.getPosition() +  ", lastStartExtractPosition => " + lastStartExtractPosition);
     }
 
     public boolean isNode() {
@@ -280,7 +299,7 @@ public class MatcherContext {
         return (Boolean)getAttribute(name);
     }
 
-    public void include(Reader reader) {
-        input.include(reader);
+    public void include(Object source) {
+        input.include(source);
     }
 }

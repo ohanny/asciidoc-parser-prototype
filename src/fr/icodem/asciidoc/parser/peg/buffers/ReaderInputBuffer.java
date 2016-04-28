@@ -8,50 +8,26 @@ import java.io.Reader;
 /**
  * A buffer holding the input text to be parsed.
  */
-public class ReaderInputBuffer implements InputBuffer {
+@Deprecated
+public class ReaderInputBuffer implements InputBuffer<Reader> {
 
     private BufferController<Reader> bufferController;
 
     ReaderInputBuffer() {}
 
     void init(Reader reader, int bufferSize, InputBufferStateListener listener) {
-        bufferController = new BufferController()
+        BufferLoader<Reader> loader = (reader1, buffer, offset1, length1) -> reader1.read(buffer, offset1, length1);
+        //bufferController = new BufferController((reader1, buffer, offset, length) -> reader1.read(buffer, offset, length))
+        bufferController = new BufferController(loader)
                 .initBuffer(bufferSize)
-                .useListener(listener)
-                .include(reader);
+                .useListener(listener);
+
+        bufferController.include(reader);
     }
 
     @Override
     public char getNextChar() {
-        // load chars from reader if needed
-        if (bufferController.shouldLoadFromSource()) {
-            loadFromSource();
-        }
-
-        // get next char from buffer
         return bufferController.getNextChar();
-    }
-
-    private void loadFromSource() {
-        try {
-            char[] data = bufferController.ensureCapacity();
-
-            int offset = bufferController.getFreeSpaceOffset();
-            int length = bufferController.getFreeSpaceSize();
-
-            // fill data from input
-            final Reader reader = bufferController.getCurrentSource();
-            int numRead = reader.read(data, offset, length);
-
-            // new data added to buffer
-            if (numRead != -1) {
-                bufferController.newDataAdded(numRead);
-            } else {
-                bufferController.endOfInput();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -80,8 +56,9 @@ public class ReaderInputBuffer implements InputBuffer {
     }
 
     @Override
-    public void include(Reader reader) {
+    public ReaderInputBuffer include(Reader reader) {
         bufferController.include(reader);
+        return this;
     }
 
 }

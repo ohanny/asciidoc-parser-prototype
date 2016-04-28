@@ -1,10 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.buffers;
 
-import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
-
-import java.io.Reader;
-
-public interface InputBuffer {
+public interface InputBuffer<T> {
 
 //    static InputBuffer stringInputBuffer(String text) {
 //        return new StringInputBuffer(text);
@@ -44,5 +40,7 @@ public interface InputBuffer {
      */
     default void consume(int limit) {}
 
-    default void include(Reader reader) {}
+    default InputBuffer<T> include(T source) {
+        return this;
+    }
 }

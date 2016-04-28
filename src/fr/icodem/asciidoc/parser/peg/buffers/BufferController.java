@@ -6,8 +6,9 @@ import java.util.Arrays;
 
 import static fr.icodem.asciidoc.parser.peg.Chars.EOI;
 
-public class BufferController<T> {
+public class BufferController<T> implements InputBuffer<T> {
     private BufferLayout<T> layout;
+    private BufferLoader<T> loader;
 
     /**
      * A {@link InputBufferStateListener listener} is notified of the internal
@@ -18,12 +19,12 @@ public class BufferController<T> {
 
 
     /**
-     * A moving window buffer of the data being scanned. We keep adding
-     * to the buffer while there's data in the input source.
+     * A moving window buffer of the buffer being scanned. We keep adding
+     * to the buffer while there's buffer in the input source.
      * When {@link #consume(int) consume} occurs, characters starting after
      * limit position are shifted to index 0.
      */
-    private char[] data;
+    private char[] buffer;
 
     /**
      * Position of current char in active space
@@ -36,13 +37,16 @@ public class BufferController<T> {
 
     private NewLinesTracker newLinesTracker;
 
+    public BufferController(BufferLoader<T> loader) {
+        this.loader = loader;
+    }
 
     public BufferController<T> initBuffer(int size) {
         return initBuffer(new char[size]);
     }
 
     public BufferController<T> initBuffer(char[] data) {
-        this.data = data;
+        this.buffer = data;
         init();
 
         return this;
@@ -50,7 +54,6 @@ public class BufferController<T> {
 
     private void init() {
         position = -1;
-        //initNewLinePositions();
         initNewLineTracker();
         initSpaces();
     }
@@ -66,72 +69,75 @@ public class BufferController<T> {
     }
 
     private void initSpaces() {
-        layout = new BufferLayout(data.length);
+        layout = new BufferLayout(buffer.length);
     }
 
+    @Override // doit être déclenché par node uniquement ?
     public BufferController<T> include(T source) {
 
-        // split actual source data
+        // split actual source buffer
 
-        // append new source data in active space
-        layout.includeSource(source, position, data);
+        // append new source buffer in active space
+        layout.includeSource(source, position, buffer);
 
         return this;
     }
 
-    public boolean shouldLoadFromSource() {
-        //return position == layout.getActiveLength() - 1 && !endOfInputReached;
+    private boolean shouldLoadFromSource() {
         return layout.shouldLoadFromSource(position);
     }
 
-    // remaining data to read - ensure capacity
-    public char[] ensureCapacity() {
-        if (layout.getFreeSpaceSize() == 0) {
-            layout.increaseFreeSpace(data.length);
-            data = Arrays.copyOf(data, data.length * 2);
-            listener.visitData("increase", data, getUsedSize(), position, offset);
+    private void loadFromSource() {
+        try {
+            ensureCapacity();
+
+            int offset = layout.getFreeSpaceOffset();
+            int length = layout.getFreeSpaceSize();;
+
+            // fill buffer from input
+            int numRead = loader.load(layout.getCurrentSource(), buffer, offset, length);
+
+            // new buffer added to buffer
+            if (numRead != -1) {
+                layout.newDataAdded(numRead);
+            } else {
+                endOfInput();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return data;
     }
 
-    public int getFreeSpaceOffset() {
-        return layout.getFreeSpaceOffset();
+
+    // remaining buffer to read - ensure capacity
+    private void ensureCapacity() {
+        if (layout.getFreeSpaceSize() == 0) {
+            layout.increaseFreeSpace(buffer.length);
+            buffer = Arrays.copyOf(buffer, buffer.length * 2);
+            listener.visitData("increase", buffer, layout.getUsedSize(), position, offset);
+        }
     }
 
-    public int getFreeSpaceSize() {
-        return layout.getFreeSpaceSize();
-    }
-
-    /**
-     * The number of character currently in {@link #data data}.
-     */
-    private int getUsedSize() {
-        return layout.getUsedSize();
-    }
-
-    public void endOfInput() {
-        data[layout.getFreeSpaceOffset()] = EOI;
+    private void endOfInput() {
+        buffer[layout.getFreeSpaceOffset()] = EOI;
 
         layout.newDataAdded(1);
         layout.endOfInput();
-        layout.restoreLastSuspendedSegment(position, data);
+        layout.restoreLastSuspendedSegment(position, buffer);
     }
 
-    public void newDataAdded(int size) {
-        layout.newDataAdded(size);
-    }
-
-
-    public T getCurrentSource() {
-        return layout.getCurrentSource();
-    }
-
+    @Override
     public char getNextChar() {
+        // load chars from source if needed
+        if (shouldLoadFromSource()) {
+            loadFromSource();
+        }
+
         if (position < layout.getActiveLength() - 1) {
             position++;
         }
 
-        char c = data[position];
+        char c = buffer[position];
         if (c == '\n') {
             newLinesTracker.addNewLine(position);
         }
@@ -139,51 +145,61 @@ public class BufferController<T> {
         return c;
     }
 
-
+    @Override
     public int getPosition() {
         return position + offset;
     }
 
+    @Override
     public char[] extract(int start, int end) {
         if (end < start) return null;
 
-        char[] chars = Arrays.copyOfRange(data, start - offset, end - offset + 1);
+        char[] chars = Arrays.copyOfRange(buffer, start - offset, end - offset + 1);
 
         listener.visitExtract(chars, start, end);
 
+        if (end > lastExtracted) lastExtracted = end;
         return chars;
     }
 
+    private int lastExtracted;
+
+    @Override
     public void consume(int limit) {
         if (limit <= lastConsumeLimit) return;
 
         lastConsumeLimit = limit;
         int srcPos = limit - offset + 1;
+
+srcPos = lastExtracted - offset + 1;
         int length = layout.getActiveLength() - srcPos;
 
         layout.consume(srcPos);
 
 
-        System.arraycopy(data, srcPos, data, 0, length);
+if (length > 0)
+        System.arraycopy(buffer, srcPos, buffer, 0, length);
 
         offset += srcPos;
         position = position - srcPos;
 
-        //clearNewLinePositions();
         newLinesTracker.clear();
 
-        listener.visitData("consume", data, getUsedSize(), position, offset);
+lastExtracted = -1;
+
+        listener.visitData("consume", buffer, layout.getUsedSize(), position, offset);
     }
 
+    @Override
     public void reset(int marker) {
         int oldPos = position;
         position = marker - offset;
-        //syncNewLinePositions();
         newLinesTracker.sync(position);
 
         listener.visitReset(oldPos, marker);
     }
 
+    @Override
     public int getPositionInLine() {
         //return newLinesTracker.getPositionInLine(position, offset);
         return newLinesTracker.getPositionInLine(position);
