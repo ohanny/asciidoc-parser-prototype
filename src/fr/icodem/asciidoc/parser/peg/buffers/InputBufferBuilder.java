@@ -5,14 +5,19 @@ import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 
 import java.io.Reader;
 
+import static fr.icodem.asciidoc.parser.peg.buffers.InputBufferBuilder.BufferType.*;
+import static fr.icodem.asciidoc.parser.peg.buffers.InputBufferBuilder.BufferType.String;
+
 public class InputBufferBuilder {
+
+    public enum BufferType {String, Reader}
 
     private int bufferSize;
     private InputBufferStateListener listener;
     private Reader reader;
     private String text;
 
-    private InputBuffer instance;
+    private BufferType type;
 
     private InputBufferBuilder() {}
 
@@ -24,14 +29,14 @@ public class InputBufferBuilder {
         InputBufferBuilder builder = new InputBufferBuilder();
         builder.reader = reader;
         builder.bufferSize = 1024;
-        builder.instance = new ReaderInputBuffer();
+        builder.type = Reader;
         return builder;
     }
 
     public static InputBufferBuilder stringInputBuffer(String text) {
         InputBufferBuilder builder = new InputBufferBuilder();
         builder.text = text;
-        builder.instance = new StringInputBuffer();
+        builder.type = String;
         return builder;
     }
 
@@ -47,9 +52,8 @@ public class InputBufferBuilder {
     }
 
     public InputBuffer build() {
-        if (instance instanceof ReaderInputBuffer) {
+        if (Reader.equals(type)) {
             if (listener == null) listener = new DefaultInputBufferStateListener();
-            //((ReaderInputBuffer)instance).init(reader, bufferSize, listener);
             BufferController<Reader> inputBuffer =
                     new BufferController<>(new ReaderLoader())
                         .initBuffer(bufferSize)
@@ -58,10 +62,8 @@ public class InputBufferBuilder {
 
             return inputBuffer;
         }
-        else if (instance instanceof StringInputBuffer) {
+        else if (String.equals(type)) {
             if (listener == null) listener = new DefaultInputBufferStateListener();
-            ((StringInputBuffer)instance).init(text, listener);
-
 
             BufferController<StringHolder> inputBuffer =
                     new BufferController<>(new StringLoader())
@@ -72,7 +74,7 @@ public class InputBufferBuilder {
             return inputBuffer;
         }
 
-        return instance;
+        return null;
     }
 
 }

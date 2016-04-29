@@ -1,7 +1,6 @@
 package fr.icodem.asciidoc.parser.peg;
 
-import fr.icodem.asciidoc.parser.peg.buffers.ReaderInputBuffer;
-import fr.icodem.asciidoc.parser.peg.buffers.StringInputBuffer;
+import fr.icodem.asciidoc.parser.peg.buffers.InputBufferBuilder.BufferType;
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
@@ -12,16 +11,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 import org.junit.runners.Parameterized.Parameter;
-
+import org.junit.runners.Parameterized.Parameters;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 
 import java.io.StringReader;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static fr.icodem.asciidoc.parser.peg.buffers.InputBufferBuilder.BufferType.Reader;
+import static fr.icodem.asciidoc.parser.peg.buffers.InputBufferBuilder.BufferType.String;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(Parameterized.class)
@@ -32,12 +33,12 @@ public class FlushingTest extends BaseParser {
     private ArgumentCaptor<NodeContext> ac;
 
     @Parameter
-    public String bufferType;
+    public BufferType bufferType;
 
     @Parameters(name="{index}: {0}")
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { StringInputBuffer.class.getSimpleName()}, { ReaderInputBuffer.class.getSimpleName()}
+                {String}, { Reader}
         });
     }
 
@@ -51,10 +52,10 @@ public class FlushingTest extends BaseParser {
     private ParsingResult parse(Rule rule, String text, ParseTreeListener parseTreeListener,
                                 ParsingProcessListener parsingProcessListener, InputBufferStateListener bufferListener) {
 
-        if (StringInputBuffer.class.getSimpleName().equals(bufferType)) {
+        if (String.equals(bufferType)) {
             return new ParseRunner(this, () -> rule).parse(text, parseTreeListener, parsingProcessListener, bufferListener);
         }
-        else if (ReaderInputBuffer.class.getSimpleName().equals(bufferType)) {
+        else if (Reader.equals(bufferType)) {
             return new ParseRunner(this, () -> rule).parse(new StringReader(text), parseTreeListener, parsingProcessListener, bufferListener);
         }
 
