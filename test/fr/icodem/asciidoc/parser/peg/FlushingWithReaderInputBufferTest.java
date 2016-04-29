@@ -427,12 +427,12 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         Rule child2 = node("child2", sequence(ch('x'), optional('y'))); // optional child
         Rule rule = node("root", sequence(ch('a'), child1, child2));
 
-        ParsingResult result = parse(rule, "abxy", listener, null, inputBufferStateListener, 2);
+        ParsingResult result = parse(rule, "abxy", listener, null, inputBufferStateListener, 3);
 
         assertTrue("Did not match", result.matched);
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
-        inOrder.verify(inputBufferStateListener)
-               .visitData(eq("increase"), aryEq(new char[] {'a', 'b', '\u0000', '\u0000'}), eq(2), eq(1), eq(0));
+//        inOrder.verify(inputBufferStateListener)
+//               .visitData(eq("increase"), aryEq(new char[] {'a', 'b', '\u0000', '\u0000'}), eq(2), eq(1), eq(0));
 
         inOrder.verify(listener).enterNode(ac.capture());
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
@@ -449,16 +449,15 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         assertEquals("Node name incorrect", "child2", ac.getValue().getNodeName());
 
         inOrder.verify(inputBufferStateListener)
-               .visitData(eq("consume"), aryEq(new char[] {'x', 'y', 'x', 'y'}), eq(2), eq(0), eq(2));
+                .visitData(eq("consume"), aryEq("xbx".toCharArray()), eq(1), eq(0), eq(2));
+
         inOrder.verify(listener).characters(new char[]{'x', 'y'}, 2, 3);
         inOrder.verify(listener).exitNode("child2");
         inOrder.verify(inputBufferStateListener)
-               .visitData(eq("consume"), aryEq(new char[] {'x', 'y', 'x', 'y'}), eq(0), eq(-1), eq(4));
+                .visitData(eq("consume"), aryEq("xyx".toCharArray()), eq(0), eq(-1), eq(4));
         inOrder.verify(listener).exitNode("root");
-        //inOrder.verify(inputBufferStateListener)
-        //       .visitData(eq("consume"), aryEq(new char[] {'x', 'y', 'x', 'y'}), eq(0), eq(-1), eq(4));
 
-        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
