@@ -1,16 +1,15 @@
 package fr.icodem.asciidoc.parser.peg.buffers;
 
-import fr.icodem.asciidoc.parser.peg.listeners.DefaultInputBufferStateListener;
 import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 
-import java.io.Reader;
 import java.util.Arrays;
 
-import static fr.icodem.asciidoc.parser.peg.Chars.*;
+import static fr.icodem.asciidoc.parser.peg.Chars.EOI;
 
 /**
  * A buffer holding the input text to be parsed.
  */
+@Deprecated
 public class StringInputBuffer implements InputBuffer {
 
     /**
