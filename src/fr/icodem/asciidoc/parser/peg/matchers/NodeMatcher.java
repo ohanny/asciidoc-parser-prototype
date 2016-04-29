@@ -23,7 +23,7 @@ public class NodeMatcher implements Matcher {
 
         if (matched) {
             context.matched();
-            context.mark(); // mark to set flushing limit
+            //context.mark(); // mark to set flushing limit
             context.requestFlushing();
         }
 

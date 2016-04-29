@@ -51,8 +51,8 @@ public class ReaderInputBuffer implements InputBuffer<Reader> {
     }
 
     @Override
-    public void consume(int limit) {
-        bufferController.consume(limit);
+    public void consume() {
+        bufferController.consume();
     }
 
     @Override

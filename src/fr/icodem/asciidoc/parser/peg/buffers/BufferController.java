@@ -22,7 +22,7 @@ public class BufferController<T> implements InputBuffer<T> {
     /**
      * A moving window buffer of the buffer being scanned. We keep adding
      * to the buffer while there's buffer in the input source.
-     * When {@link #consume(int) consume} occurs, characters starting after
+     * When {@link #consume() consume} occurs, characters starting after
      * limit position are shifted to index 0.
      */
     private char[] buffer;
@@ -33,8 +33,6 @@ public class BufferController<T> implements InputBuffer<T> {
     private int position;
 
     private int offset;
-
-    private int lastConsumeLimit = -1;
 
     private NewLinesTracker newLinesTracker;
 
@@ -177,10 +175,9 @@ public class BufferController<T> implements InputBuffer<T> {
     private int lastConsumed;
 
     @Override
-    public void consume(int limit) {
+    public void consume() {
         if (lastExtracted <= lastConsumed) return;
 
-        lastConsumeLimit = limit;
         lastConsumed = lastExtracted;
 
         int srcPos = lastExtracted - offset + 1;

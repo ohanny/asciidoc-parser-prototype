@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MatcherContext {
-    private int marker; // used for reset and consume
+    private int marker; // used for reset
 
     private InputBuffer input;
     private MatcherContext root;// peut être pas utilisé
@@ -120,7 +120,7 @@ public class MatcherContext {
             MatcherContext ctx = findContextNodeToFlush();
             if (ctx != null) {
                 ctx.flush();
-                input.consume(marker);// marker = avant début séquence - après fin node
+                input.consume();// marker = avant début séquence - après fin node
             }
         }
     }

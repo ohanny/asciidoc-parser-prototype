@@ -125,7 +125,7 @@ public class InputBufferTest {
         buffer = bufferSuplier.apply("abcde");
         buffer.getNextChar();
         buffer.getNextChar();
-        buffer.consume(buffer.getPosition());
+        buffer.consume();
 
         final char nextChar1 = buffer.getNextChar();
         final char nextChar2 = buffer.getNextChar();

@@ -38,7 +38,7 @@ public interface InputBuffer<T> {
      * Characters from index 0 up to limit are removed from the buffer.
      * Characters starting at next position are shifted at index 0.
      */
-    default void consume(int limit) {}
+    default void consume() {}
 
     default InputBuffer<T> include(T source) {
         return this;
