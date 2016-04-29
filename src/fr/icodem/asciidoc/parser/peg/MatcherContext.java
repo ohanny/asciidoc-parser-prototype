@@ -57,9 +57,7 @@ public class MatcherContext {
     // un noeud enfant démarre : on extrait la partie déjà lue par le parent
     private void childFlushStartNode(int childPosition) {
         //extract and notify
-        if (listener != null) { // TODO remove listener ?
-            notifyCharacters(lastStartExtractPosition, childPosition - 1);
-        }
+        notifyCharacters(lastStartExtractPosition, childPosition - 1);
         lastStartExtractPosition = -1; // reset position début extraction car c'est l'enfant qui extrait maintenant
     }
 
@@ -152,8 +150,6 @@ public class MatcherContext {
 
     // émettre vers le listener ce qui n'a pas encore été émis
     private void flush() { // ne doit être invoqué que par node
-        //System.out.println("FLUSH : " + nodeName);
-
         if (flushed) {
             return;
         }
@@ -174,13 +170,11 @@ public class MatcherContext {
 
         // un noeud vient de matcher : on extrait + notif fin de noeud
         if (isNode() && matched) {
-            if (listener != null) { // TODO null to be checked ?
-                //extract and notify
-                notifyCharacters(lastStartExtractPosition, lastEndExtractPosition);
+            //extract and notify
+            notifyCharacters(lastStartExtractPosition, lastEndExtractPosition);
 
-                listener.exitNode(nodeName);
-                notifyParentFlushEndNode();
-            }
+            listener.exitNode(nodeName);
+            notifyParentFlushEndNode();
 
             flushed = true;
         }
