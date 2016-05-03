@@ -124,13 +124,24 @@ public class StringInputBuffer implements InputBuffer {
     }
 
     @Override
-    public char[] extract(int start, int end) {
+    public char[] extractSilently(int start, int end) {
         if (end < start) return null;
 
         char[] chars = Arrays.copyOfRange(data, start, end + 1);
-        if (end == data.length) {
-            chars[chars.length - 1] = EOI;
-        }
+
+        return chars;
+    }
+
+    @Override
+    public char[] extract(int start, int end) {
+//        if (end < start) return null;
+//
+//        char[] chars = Arrays.copyOfRange(data, start, end + 1);
+//        if (end == data.length) {
+//            chars[chars.length - 1] = EOI;
+//        }
+
+        char[] chars = extractSilently(start, end);
 
         listener.visitExtract(chars, start, end);
 

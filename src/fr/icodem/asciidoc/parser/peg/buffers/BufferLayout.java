@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.buffers;
 
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -73,7 +74,21 @@ public class BufferLayout<T> {
         return activeLength;
     }
 
-    public void increaseFreeSpace(int size) {
+    public char[] increaseFreeSpace(/*int size*/ char[] buffer) {
+        int size = buffer.length; // double size of buffer
+
+        // increase buffer
+        buffer = Arrays.copyOf(buffer, buffer.length * 2);
+
+        // actual suspended location
+        if (suspendedLength > 0) {
+            int suspendedOffset = suspendedSegments.peekLast().start;
+
+            // move suspended data to the end of the buffer
+            System.arraycopy(buffer, suspendedOffset, buffer, buffer.length - suspendedLength, suspendedLength);
+        }
+
+
         this.freeLength += size;
         this.size += size;
 
@@ -81,6 +96,8 @@ public class BufferLayout<T> {
             Segment<T> segment = it.next();
             segment.start += size;
         }
+
+        return buffer;
     }
 
     public void newDataAdded(int size) {
@@ -107,9 +124,65 @@ public class BufferLayout<T> {
             segment.length -= sizeToRemove;
             segment.start -= removed;
             removed += sizeToRemove;
+
+            if (segment.length == 0 && activeSegments.size() > 1) {
+                it.remove();
+            }
         }
 
     }
+
+    public void reset(int pos, char[] buffer) {
+        if (pos < 0 && activeSegments.size() == 1) {
+            return;
+        }
+
+        while (true) {
+            Segment<T> lastActiveSegment = activeSegments.peekLast();
+            if (pos < lastActiveSegment.start - 1) {
+                // segment is removed if root, and last suspended segment is merged
+                // with last active segment if it is the same source
+                if (lastActiveSegment.root) {
+                    activeSegments.removeLast();
+                    activeLength -= lastActiveSegment.length;
+                    freeLength += lastActiveSegment.length;
+
+                    lastActiveSegment = activeSegments.peekLast();
+                    Segment<T> lastSuspendedSegment = suspendedSegments.peekLast();
+                    if (lastSuspendedSegment != null &&
+                            lastSuspendedSegment.source.equals(lastActiveSegment.source)) {
+                        lastActiveSegment.length += lastSuspendedSegment.length;
+
+                        // move data in buffer : suspended space -> active space
+                        System.arraycopy(buffer, lastSuspendedSegment.start, buffer, activeLength, lastSuspendedSegment.length);
+
+                        suspendedSegments.removeLast();
+                        activeLength += lastSuspendedSegment.length;
+                        suspendedLength -= lastSuspendedSegment.length;
+
+                    }
+
+                    continue;
+                }
+
+                // segment is suspended if not root
+                activeSegments.removeLast();
+                suspendedSegments.addLast(lastActiveSegment);
+                int startInSuspendedSpace = size - suspendedLength - lastActiveSegment.length;
+
+                // move data in buffer : active space -> suspended space
+                System.arraycopy(buffer, lastActiveSegment.start, buffer, startInSuspendedSpace, lastActiveSegment.length);
+                lastActiveSegment.start = startInSuspendedSpace;
+
+                activeLength -= lastActiveSegment.length;
+                suspendedLength += lastActiveSegment.length;
+
+            } else {
+                break;
+            }
+        }
+    }
+
 
     // segment is divided into two segments :
     // the first one remains in active space, but its length is adjusted
@@ -164,8 +237,10 @@ public class BufferLayout<T> {
             System.arraycopy(buffer, lastSuspendedSegment.start, buffer, activeLength, lastSuspendedSegment.length);
 
             activeSegments.add(lastSuspendedSegment);
+            lastSuspendedSegment.start = activeLength;
             activeLength += lastSuspendedSegment.length;
             suspendedLength -= lastSuspendedSegment.length;
+
         }
     }
 

@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.rules;
 
+import fr.icodem.asciidoc.parser.peg.action.Action;
 import fr.icodem.asciidoc.parser.peg.matchers.*;
 
 /**
@@ -38,6 +39,11 @@ public class DefaultRulesFactory implements RulesFactory {
     public Rule proxy(String name) {
         String proxyName = "ProxyRule." + name;
         return cache.get(proxyName, () -> new ProxyRule(name, () -> cache.get(name)));
+    }
+
+    @Override
+    public Rule action(Rule rule, Action action) {
+        return new ActionRule(rule, action);
     }
 
     @Override

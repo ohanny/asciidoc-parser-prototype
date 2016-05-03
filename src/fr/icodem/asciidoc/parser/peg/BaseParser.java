@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.action.Action;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.DefaultRulesFactory;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
@@ -73,6 +74,10 @@ public class BaseParser {
      */
     protected Rule proxy(String name) {
         return factory.proxy(name);
+    }
+
+    protected Rule action(Rule rule, Action action) {
+        return factory.action(rule, action);
     }
 
     /**

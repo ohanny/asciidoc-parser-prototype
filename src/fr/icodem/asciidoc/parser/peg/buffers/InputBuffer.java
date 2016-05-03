@@ -28,6 +28,14 @@ public interface InputBuffer<T> {
     char[] extract(int start, int end);
 
     /**
+     * Perform an extract without marking the extraction
+     * @param start
+     * @param end
+     * @return
+     */
+    char[] extractSilently(int start, int end);
+
+    /**
      * Position of the next character comes back to the index
      * corresponding to the marker.
      * @param marker the marker used to reset the position

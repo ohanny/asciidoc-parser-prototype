@@ -93,7 +93,7 @@ public class BufferController<T> implements InputBuffer<T> {
             ensureCapacity();
 
             int offset = layout.getFreeSpaceOffset();
-            int length = layout.getFreeSpaceSize();;
+            int length = layout.getFreeSpaceSize();
 
             // fill buffer from input
             int numRead = loader.load(layout.getCurrentSource(), buffer, offset, length);
@@ -113,8 +113,9 @@ public class BufferController<T> implements InputBuffer<T> {
     // remaining buffer to read - ensure capacity
     private void ensureCapacity() {
         if (layout.getFreeSpaceSize() == 0) {
-            layout.increaseFreeSpace(buffer.length);
-            buffer = Arrays.copyOf(buffer, buffer.length * 2);
+            buffer = layout.increaseFreeSpace(buffer);
+//            layout.increaseFreeSpace(buffer.length);
+            //buffer = Arrays.copyOf(buffer, buffer.length * 2);
             listener.visitData("increase", buffer, layout.getUsedSize(), position, offset);
         }
     }
@@ -124,7 +125,7 @@ public class BufferController<T> implements InputBuffer<T> {
 
         layout.newDataAdded(1);
         layout.endOfInput();
-        layout.restoreLastSuspendedSegment(position, buffer);
+//        layout.restoreLastSuspendedSegment(position, buffer);
     }
 
     @Override
@@ -136,6 +137,11 @@ public class BufferController<T> implements InputBuffer<T> {
 
         if (position < layout.getActiveLength() - 1) {
             position++;
+        } else { // no more data in active space, check if some data remains in suspended area
+            layout.restoreLastSuspendedSegment(position, buffer);
+            if (position < layout.getActiveLength() - 1) {
+                position++;
+            }
         }
 
         // EOI has been consumed, it can't be read from the buffer
@@ -160,16 +166,25 @@ public class BufferController<T> implements InputBuffer<T> {
     }
 
     @Override
-    public char[] extract(int start, int end) {
+    public char[] extractSilently(int start, int end) {
         if (end < start) return null;
 
         char[] chars = Arrays.copyOfRange(buffer, start - offset, end - offset + 1);
+
+        return chars;
+    }
+
+    @Override
+    public char[] extract(int start, int end) {
+        char[] chars = extractSilently(start, end);
 
         listener.visitExtract(chars, start, end);
 
         if (end > lastExtracted) lastExtracted = end;
         return chars;
     }
+
+
 
     private int lastExtracted;
     private int lastConsumed;
@@ -204,6 +219,9 @@ public class BufferController<T> implements InputBuffer<T> {
         int oldPos = position;
         position = marker - offset;
         newLinesTracker.sync(position);
+
+        int pos = marker - offset;
+        layout.reset(pos, buffer);
 
         listener.visitReset(oldPos, marker);
     }

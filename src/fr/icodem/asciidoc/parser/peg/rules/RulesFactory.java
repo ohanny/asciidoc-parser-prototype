@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.rules;
 
+import fr.icodem.asciidoc.parser.peg.action.Action;
 import fr.icodem.asciidoc.parser.peg.matchers.*;
 
 /**
@@ -48,6 +49,8 @@ public interface RulesFactory {
      * @return the proxy rule
      */
     Rule proxy(String name);
+
+    Rule action(Rule rule, Action action);
 
     Rule wrap(Rule before, Rule inner, Rule after);
 

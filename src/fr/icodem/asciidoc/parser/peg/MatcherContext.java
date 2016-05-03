@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.peg.action.ActionContext;
 import fr.icodem.asciidoc.parser.peg.buffers.InputBuffer;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
@@ -148,6 +149,14 @@ public class MatcherContext {
         return nodeContext;
     }
 
+    private ActionContext actionContext;
+    public ActionContext getActionContext() {
+        if (actionContext == null) {
+            actionContext = new ActionContext(this);
+        }
+        return actionContext;
+    }
+
     // émettre vers le listener ce qui n'a pas encore été émis
     private void flush() { // ne doit être invoqué que par node
         if (flushed) {
@@ -186,6 +195,11 @@ public class MatcherContext {
         char[] extracted = input.extract(start, end);
         if (extracted == null) return;
         listener.characters(extracted, start, end);
+    }
+
+    // extract data from marker to actual position
+    public char[] extract() { // TODO marker + 1 semantic
+        return input.extractSilently(marker + 1, getPosition());
     }
 
     public MatcherContext(InputBuffer input,

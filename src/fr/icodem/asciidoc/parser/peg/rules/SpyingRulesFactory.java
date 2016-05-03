@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.rules;
 
+import fr.icodem.asciidoc.parser.peg.action.Action;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.matchers.SpyingMatcher;
 
@@ -41,6 +42,11 @@ public class SpyingRulesFactory extends DefaultRulesFactory {
     @Override
     public Rule proxy(String name) {
         return getSpyingRule(super.proxy(name));
+    }
+
+    @Override
+    public Rule action(Rule rule, Action action) {
+        return getSpyingRule(new ActionRule(rule, action));
     }
 
     @Override
