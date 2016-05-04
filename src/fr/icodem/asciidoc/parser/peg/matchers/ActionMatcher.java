@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.peg.matchers;
 
 import fr.icodem.asciidoc.parser.peg.MatcherContext;
 import fr.icodem.asciidoc.parser.peg.action.Action;
+import fr.icodem.asciidoc.parser.peg.action.ActionContext;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 public class ActionMatcher implements Matcher {
@@ -17,10 +18,12 @@ public class ActionMatcher implements Matcher {
 
     @Override
     public boolean match(MatcherContext context) {
-        context.mark();
+        ActionContext actionContext = context.getActionContext();
+        actionContext.markStart();
 
         if (getDelegate().match(context.getSubContext())) {
-            action.execute(context.getActionContext());
+            actionContext.markEnd();
+            action.execute(actionContext);
             return true;
         }
 

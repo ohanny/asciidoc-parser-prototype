@@ -197,9 +197,9 @@ public class MatcherContext {
         listener.characters(extracted, start, end);
     }
 
-    // extract data from marker to actual position
-    public char[] extract() { // TODO marker + 1 semantic
-        return input.extractSilently(marker + 1, getPosition());
+    // extract data silently
+    public char[] extract(int start, int end) {
+        return input.extractSilently(start, end);
     }
 
     public MatcherContext(InputBuffer input,
