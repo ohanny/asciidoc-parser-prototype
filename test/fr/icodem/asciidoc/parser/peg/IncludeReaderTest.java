@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.stubbing.Answer;
 
 import java.io.StringReader;
@@ -83,10 +84,12 @@ public class IncludeReaderTest extends BaseParser {
 
         ArgumentCaptor<NodeContext> ac = ArgumentCaptor.forClass(NodeContext.class);
         verify(listener, times(3)).enterNode(ac.capture());
-        verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
     }
 
     // ************************************
@@ -114,10 +117,12 @@ public class IncludeReaderTest extends BaseParser {
 
         ArgumentCaptor<NodeContext> ac = ArgumentCaptor.forClass(NodeContext.class);
         verify(listener, times(3)).enterNode(ac.capture());
-        verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
     }
 
     // one include, with reset inside second source (position back to second source)
@@ -145,10 +150,12 @@ public class IncludeReaderTest extends BaseParser {
 
         ArgumentCaptor<NodeContext> ac = ArgumentCaptor.forClass(NodeContext.class);
         verify(listener, times(3)).enterNode(ac.capture());
-        verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
+
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
@@ -182,10 +189,12 @@ public class IncludeReaderTest extends BaseParser {
 
         ArgumentCaptor<NodeContext> ac = ArgumentCaptor.forClass(NodeContext.class);
         verify(listener, times(3)).enterNode(ac.capture());
-        verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
+
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
@@ -202,7 +211,6 @@ public class IncludeReaderTest extends BaseParser {
         Rule include = node("include", sequence(string("inc:"), node("input",
                 action(oneOrMore(noneOf("abcdxyz*#&")), ctx -> {
                     String srcName = new String(ctx.extract());
-                    System.out.println(srcName);
                     if ("string".equals(bufferType)) {
                         if ("input1".equals(srcName)) {
                             ctx.include(new StringHolder(source2));
@@ -240,41 +248,208 @@ public class IncludeReaderTest extends BaseParser {
         assertTrue("Did not match", result.matched);
 
         ArgumentCaptor<NodeContext> ac = ArgumentCaptor.forClass(NodeContext.class);
-        verify(listener, times(3)).enterNode(ac.capture());
-        verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        verify(listener).characters(aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
+        verify(listener, times(5)).enterNode(ac.capture());
+
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
-    // two sequential includes, with reset
+    // two sequential includes, with reset inside second include
+    @Test
+    public void test6() throws Exception {
+        String source1 = "###inc:input1***inc:input2&&&";
+        String source2 = "abc";
+        String source3 = "xyw";
 
-    @Ignore
-    @Test // two includes, the second one is nested in the first one, no reset
-    public void testy() throws Exception {
-        Rule include = node("include", sequence(string("inc:"), node("input", oneOrMore(noneOf("*#&@")))));
-        Rule rule = node("root", sequence(string("###"), include, string("&&&"), include, string("@@@abc***")));
+        Rule include = node("include", sequence(string("inc:"), node("input",
+                action(oneOrMore(noneOf("abcdxyz*#&")), ctx -> {
+                    String srcName = new String(ctx.extract());
+                    if ("string".equals(bufferType)) {
+                        if ("input1".equals(srcName)) {
+                            ctx.include(new StringHolder(source2));
+                        }
+                        else if ("input2".equals(new String(ctx.extract()))) {
+                            ctx.include(new StringHolder(source3));
+                        }
+                    }
+                    else if ("reader".equals(bufferType)) {
+                        if ("input1".equals(srcName)) {
+                            ctx.include(new StringReader(source2));
+                        }
+                        else if ("input2".equals(new String(ctx.extract()))) {
+                            ctx.include(new StringReader(source3));
+                        }
+                    }
+                })
+        )));
+        Rule rule = node("root", sequence(
+                string("###"),
+                include,
+                string("abc"),
+                eoi(),
+                string("***"),
+                include,
+                firstOf(string("xyz"), string("xyw")),
+                eoi(),
+                string("&&&"),
+                eoi()
+                )
+        );
 
-        // ###inc:input1.txt&&&inc:input2.txt@@@abc***
-
-        String input = "###inc:input1.txt***";
-        String input1 = "&&&inc:input2.txt@@@";
-        String input2 = "abc";
-
-        ParsingResult result = parse(rule, input, listener, null, inputBufferStateListener);
+        ParsingResult result = parse(rule, source1, listener, null, inputBufferStateListener);
 
         assertTrue("Did not match", result.matched);
 
-//        ArgumentCaptor<NodeContext> ac = ArgumentCaptor.forClass(NodeContext.class);
-//        verify(listener, times(3)).enterNode(ac.capture());
-//        verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-//        verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-//        verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-//        verify(listener).characters(aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        ArgumentCaptor<NodeContext> ac = ArgumentCaptor.forClass(NodeContext.class);
+        verify(listener, times(5)).enterNode(ac.capture());
+
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("xyw\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+        if ("string".equals(bufferType)) {
+            verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        }
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
+
+    // two sequential includes, with reset just before second include
+    @Test
+    public void test7() throws Exception {
+        String source1 = "###inc:input1***inc:input2&&&";
+        String source2 = "abc";
+        String source3 = "xyz";
+
+        Rule include = node("include", sequence(string("inc:"), node("input",
+                action(oneOrMore(noneOf("abcdxyz*#&")), ctx -> {
+                    String srcName = new String(ctx.extract());
+                    if ("string".equals(bufferType)) {
+                        if ("input1".equals(srcName)) {
+                            ctx.include(new StringHolder(source2));
+                        }
+                        else if ("input2".equals(new String(ctx.extract()))) {
+                            ctx.include(new StringHolder(source3));
+                        }
+                    }
+                    else if ("reader".equals(bufferType)) {
+                        if ("input1".equals(srcName)) {
+                            ctx.include(new StringReader(source2));
+                        }
+                        else if ("input2".equals(new String(ctx.extract()))) {
+                            ctx.include(new StringReader(source3));
+                        }
+                    }
+                })
+        )));
+        Rule rule = node("root", sequence(
+                string("###"),
+                include,
+                string("abc"),
+                eoi(),
+                string("***"),
+                include,
+                firstOf(sequence(string("xyz"), eoi(), string("&#&")), sequence(string("xyz"), eoi(), string("&&&"))),
+                eoi()
+                )
+        );
+
+        ParsingResult result = parse(rule, source1, listener, null, inputBufferStateListener);
+
+        assertTrue("Did not match", result.matched);
+
+        ArgumentCaptor<NodeContext> ac = ArgumentCaptor.forClass(NodeContext.class);
+        verify(listener, times(5)).enterNode(ac.capture());
+
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+        if ("string".equals(bufferType)) {
+            verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        }
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+    }
+
+
+    @Test // two includes, the second one is nested in the first one, no reset
+    public void test8() throws Exception {
+        String source1 = "###inc:input1***";
+        String source2 = "&&&inc:input2@@@";
+        String source3 = "abc";
+
+        Rule include = node("include", sequence(string("inc:"), node("input",
+                action(oneOrMore(noneOf("abc*#&@")), ctx -> {
+                    String srcName = new String(ctx.extract());
+                    System.out.println(srcName);
+                    if ("string".equals(bufferType)) {
+                        if ("input1".equals(srcName)) {
+                            ctx.include(new StringHolder(source2));
+                        }
+                        else if ("input2".equals(new String(ctx.extract()))) {
+                            ctx.include(new StringHolder(source3));
+                        }
+                    }
+                    else if ("reader".equals(bufferType)) {
+                        if ("input1".equals(srcName)) {
+                            ctx.include(new StringReader(source2));
+                        }
+                        else if ("input2".equals(new String(ctx.extract()))) {
+                            ctx.include(new StringReader(source3));
+                        }
+                    }
+                })
+        )));
+        Rule rule = node("root", sequence(
+                string("###"),
+                include,
+                string("&&&"),
+                include,
+                string("abc"),
+                eoi(),
+                string("@@@"),
+                eoi(),
+                string("***"),
+                eoi()
+                )
+        );
+
+        ParsingResult result = parse(rule, source1, listener, null, inputBufferStateListener);
+
+        assertTrue("Did not match", result.matched);
+
+        ArgumentCaptor<NodeContext> ac = ArgumentCaptor.forClass(NodeContext.class);
+        verify(listener, times(5)).enterNode(ac.capture());
+
+        InOrder inOrder = inOrder(listener);
+        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("&&&".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        if ("string".equals(bufferType)) {
+            verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        }
+        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
     }
 
     // two includes, the second one is nested in the first one, with reset inside first source
@@ -282,19 +457,4 @@ public class IncludeReaderTest extends BaseParser {
     // two includes, the second one is nested in the first one, with reset inside third source
 
     //
-    public void testx() {
-        Rule include = node("include", sequence(string("inc:"), node("input", oneOrMore(noneOf("*#&@")))));
-        Rule rule = node("root", sequence(
-                                    string("START"), firstOf(
-                                        oneOrMore('*'),
-                                        oneOrMore('#'),
-                                        oneOrMore('&'),
-                                        oneOrMore('@'),
-                                        include
-                                        ),
-                                    string("END")
-                                 )
-                        );
-
-    }
 }
