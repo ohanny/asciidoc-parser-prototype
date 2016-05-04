@@ -83,6 +83,8 @@ public class FlushingTest extends BaseParser {
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("root");
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     @Test
@@ -106,6 +108,8 @@ public class FlushingTest extends BaseParser {
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).exitNode("root");
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
 }

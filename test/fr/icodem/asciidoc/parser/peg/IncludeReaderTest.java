@@ -90,6 +90,11 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(15, 16, 0);
+        verify(inputBufferStateListener).visitReset(18, 3, 16);
+        verify(inputBufferStateListener).visitReset(22, 7, 16);
+        verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // ************************************
@@ -123,6 +128,11 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(15, 16, 0);
+        verify(inputBufferStateListener).visitReset(18, 3, 16);
+        verify(inputBufferStateListener).visitReset(22, 7, 16);
+        verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // one include, with reset inside second source (position back to second source)
@@ -160,6 +170,10 @@ public class IncludeReaderTest extends BaseParser {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(15, 16, 0);
+        verify(inputBufferStateListener).visitReset(15, 18, 0);
+        verify(inputBufferStateListener, times(2)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // one include, with reset inside first source (position back to first source)
@@ -195,10 +209,15 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
+
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
         verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, times(2)).visitReset(15, 16, 0);
+        verify(inputBufferStateListener).visitReset(-1, 18, 0);
+        verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // two sequential includes, no reset
@@ -258,10 +277,15 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(12, 13, 0);
+        verify(inputBufferStateListener).visitReset(29, 30, 0);
+        verify(inputBufferStateListener, times(2)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // two sequential includes, with reset inside second include
@@ -321,10 +345,17 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("xyw\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
+
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(12, 13, 0);
+        verify(inputBufferStateListener).visitReset(29, 30, 0);
+        verify(inputBufferStateListener).visitReset(29, 32, 0);
+        verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // two sequential includes, with reset just before the third source
@@ -382,10 +413,17 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
+
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(12, 13, 0);
+        verify(inputBufferStateListener).visitReset(29, 30, 0);
+        verify(inputBufferStateListener).visitReset(29, 35, 0);
+        verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     @Test // two includes, the second one is nested in the first one, no reset
@@ -444,10 +482,16 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("abd\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(12, 13, 0);
+        verify(inputBufferStateListener).visitReset(25, 26, 0);
+        verify(inputBufferStateListener).visitReset(25, 28, 0);
+        verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // two includes, the second one is nested in the first one, with reset inside third source
@@ -507,10 +551,16 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
+
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(12, 13, 0);
+        verify(inputBufferStateListener).visitReset(25, 26, 0);
+        verify(inputBufferStateListener, times(2)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // two includes, the second one is nested in the first one, with reset just before the third source
@@ -568,10 +618,16 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(12, 13, 0);
+        verify(inputBufferStateListener).visitReset(25, 26, 0);
+        verify(inputBufferStateListener).visitReset(25, 31, 0);
+        verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // two includes, the second one is nested in the first one, with reset inside second source
@@ -628,10 +684,17 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(12, 13, 0);
+        verify(inputBufferStateListener, times(2)).visitReset(25, 26, 0);
+        verify(inputBufferStateListener).visitReset(15, 31, 0);
+        //verify(inputBufferStateListener).visitReset(25, 26, 0);
+        verify(inputBufferStateListener, times(4)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // two includes, the second one is nested in the first one, with reset just before the second source
@@ -687,10 +750,17 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(12, 13, 0);
+        verify(inputBufferStateListener, times(2)).visitReset(25, 26, 0);
+        verify(inputBufferStateListener).visitReset(12, 31, 0);
+        //verify(inputBufferStateListener).visitReset(25, 26, 0);
+        verify(inputBufferStateListener, times(4)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // two includes, the second one is nested in the first one, with reset inside first source
@@ -745,10 +815,18 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, times(2)).visitReset(12, 13, 0);
+        verify(inputBufferStateListener, times(2)).visitReset(25, 26, 0);
+        verify(inputBufferStateListener).visitReset(2, 31, 0);
+        //verify(inputBufferStateListener).visitReset(12, 13, 0);
+        //verify(inputBufferStateListener).visitReset(25, 26, 0);
+        verify(inputBufferStateListener, times(5)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // two includes, the second one is nested in the first one, with reset just before the first source
@@ -802,10 +880,18 @@ public class IncludeReaderTest extends BaseParser {
         inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, times(2)).visitReset(12, 13, 0);
+        verify(inputBufferStateListener, times(2)).visitReset(25, 26, 0);
+        verify(inputBufferStateListener).visitReset(-1, 31, 0);
+        //verify(inputBufferStateListener).visitReset(12, 13, 0);
+        //verify(inputBufferStateListener).visitReset(25, 26, 0);
+        verify(inputBufferStateListener, times(5)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
 }

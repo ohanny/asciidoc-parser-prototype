@@ -8,7 +8,7 @@ public class DefaultInputBufferStateListener implements InputBufferStateListener
     public void visitExtract(char[] chars, int start, int end) {}
 
     @Override
-    public void visitReset(int position, int marker) {}
+    public void visitReset(int marker, int position, int offset) {}
 
     @Override
     public void visitData(String event, char[] data, int numberOfCharacters, int position, int offset) {}

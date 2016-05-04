@@ -34,7 +34,7 @@ public class StringInputBuffer implements InputBuffer {
 
     /**
      * Constructs an input buffer given an input text.
-     * @param text the input text to be parsed
+     * //@param text the input text to be parsed
      */
 //    StringInputBuffer(String text) {
 //        data = text.toCharArray();
@@ -154,7 +154,7 @@ public class StringInputBuffer implements InputBuffer {
         position = marker;
         syncNewLinePositions();
 
-        listener.visitReset(oldPos, marker);
+        listener.visitReset(marker, oldPos, 0);
     }
 
 }

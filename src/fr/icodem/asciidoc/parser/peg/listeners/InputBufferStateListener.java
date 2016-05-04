@@ -10,7 +10,7 @@ public interface InputBufferStateListener {
 
     void visitExtract(char[] chars, int start, int end);
 
-    void visitReset(int position, int marker);
+    void visitReset(int marker, int position, int offset);
 
     /**
      *

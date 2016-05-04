@@ -106,6 +106,9 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
+
     }
 
     @Test // buffer smaller than input data : 1. check that buffer size is not increased 2. check that consumed data are removed from buffer
@@ -175,6 +178,9 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(5)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
+        verify(inputBufferStateListener).visitReset(4, 0, 5);
+        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
+
     }
 
     @Test // buffer smaller than input data : 1. check that buffer size is increased once 2. check that consumed data are removed regularly from buffer
@@ -186,6 +192,9 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         assertTrue("Did not match", result.matched);
         verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(3)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(4, 0, 5);
+        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     @Test // buffer smaller than input data : 1. check that buffer size is increased twice 2. check that data are consumed only once
@@ -197,6 +206,9 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
         assertTrue("Did not match", result.matched);
         verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(4, 5, 0);
+        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // ****** test intermediate flushings when optionals are detected ****** //
@@ -235,6 +247,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'empty' matcher should let flush preceeding nodes
@@ -270,6 +284,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'optional' matcher should let flush preceeding nodes
@@ -308,6 +324,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'zero or more' matcher should let flush preceeding nodes
@@ -344,6 +362,9 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(2, 1, 2);
+        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'named' matcher should let flush preceeding nodes if children are optional
@@ -380,6 +401,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'node' matcher should let flush preceeding nodes if children are optional
@@ -418,6 +441,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'sequence' matcher should let flush preceeding nodes if remaining children are optional
@@ -459,6 +484,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'spying' matcher should let flush preceeding nodes if children are optional
@@ -495,6 +522,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'wrapper' matcher should let flush preceeding nodes if children are optional
@@ -531,6 +560,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
 
@@ -549,6 +580,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'any of string' matcher should not let flush preceeding nodes
@@ -564,6 +597,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'char range' matcher should not let flush preceeding nodes
@@ -579,6 +614,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'none of' matcher should not let flush preceeding nodes
@@ -594,6 +631,8 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'one or more' matcher should not let flush preceeding nodes
@@ -609,6 +648,9 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(2, 3, 0);
+        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'test' matcher should not let flush preceeding nodes
@@ -624,6 +666,9 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(1, 2, 0);
+        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'test not' matcher should not let flush preceeding nodes
@@ -639,6 +684,9 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
         verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+
+        verify(inputBufferStateListener).visitReset(1, 2, 0);
+        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
 }

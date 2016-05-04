@@ -218,12 +218,17 @@ public class BufferController<T> implements InputBuffer<T> {
     public void reset(int marker) {
         int oldPos = position;
         position = marker - offset;
-        newLinesTracker.sync(position);
 
         int pos = marker - offset;
-        layout.reset(pos, buffer);
 
-        listener.visitReset(oldPos, marker);
+        if (position == oldPos) {
+            return;
+        }
+
+        layout.reset(pos, buffer);
+        newLinesTracker.sync(position);
+
+        listener.visitReset(marker, oldPos, offset);
     }
 
     @Override
