@@ -8,7 +8,7 @@ import java.util.List;
 
 class ListItemContext {
 
-    String text;
+    Text text;
     ListContext nestedList;
     List<Block> blocks;
 

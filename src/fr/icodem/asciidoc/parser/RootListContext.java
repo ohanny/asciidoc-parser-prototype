@@ -53,6 +53,10 @@ class RootListContext {
     }
 
     void addItem(String text, int times, int dots, AttributeList attList) {
+        addItem(Text.withValue(text), times, dots, attList);
+    }
+
+    void addItem(Text text, int times, int dots, AttributeList attList) {
         ListItemContext liCtx = new ListItemContext();
         liCtx.text = text;
 
@@ -79,6 +83,10 @@ class RootListContext {
 
         listContext.addItem(liCtx);
 
+    }
+
+    Text getLastItemText() {
+        return listContext.lastItem.text;
     }
 
     void addBlockToLastListItem(Block block) {

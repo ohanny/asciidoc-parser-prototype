@@ -1,22 +1,32 @@
 package fr.icodem.asciidoc.parser.peg;
 
-import java.io.Reader;
-
 public class NodeContext {
 
     private String nodeName;
-    private MatcherContext matcherContext;
+    private MatcherContext context;
 
-    public NodeContext(String nodeName, MatcherContext matcherContext) {
+    public NodeContext(String nodeName, MatcherContext context) {
         this.nodeName = nodeName;
-        this.matcherContext = matcherContext;
+        this.context = context;
     }
 
     public void include(Object source) {
-        matcherContext.include(source);
+        context.include(source);
     }
 
     public String getNodeName() {
         return nodeName;
+    }
+
+    public boolean getBooleanAttribute(String name) {
+        return context.getBooleanAttribute(name);
+    }
+
+    public int getIntAttribute(String name) {
+        return context.getIntAttribute(name);
+    }
+
+    public boolean isAttributePresent(String name) {
+        return context.isAttributePresent(name);
     }
 }

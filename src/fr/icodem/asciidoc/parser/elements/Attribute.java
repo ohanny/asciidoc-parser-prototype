@@ -1,27 +1,39 @@
 package fr.icodem.asciidoc.parser.elements;
 
+import fr.icodem.asciidoc.parser.Text;
+
 public class Attribute {
-    protected String name;
-    protected Object value;
+    protected Text name;
+    private Text text;
 
     public Attribute(String name, String value) {
+        this.name = Text.withValue(name);
+        this.text = Text.withValue(value);
+    }
+
+    public Attribute(String name, Text text) {
+        this.name = Text.withValue(name);
+        this.text = text;
+    }
+
+    public Attribute(Text name, Text text) {
         this.name = name;
-        this.value = value;
+        this.text = text;
     }
 
     public String getName() {
-        return name;
+        return name.getValue();
     }
 
     public Object getValue() {
-        return value;
+        return text.getValue();
     }
 
     @Override
     public String toString() {
         return "Attribute{" +
                 "name='" + name + '\'' +
-                ", value='" + value + '\'' +
+                ", value='" + text + '\'' +
                 '}';
     }
 }

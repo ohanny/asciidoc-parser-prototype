@@ -247,10 +247,10 @@ public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
         ListItem li = null;
         if (ctx.nestedList == null) { // leaf
-            li = ef.listItem(null, ctx.text, null, blocks);
+            li = ef.listItem(null, ctx.text.getValue(), null, blocks);
         }
         else {
-            li = ef.listItem(null, ctx.text, toList(ctx.nestedList), blocks);
+            li = ef.listItem(null, ctx.text.getValue(), toList(ctx.nestedList), blocks);
         }
         return li;
     }

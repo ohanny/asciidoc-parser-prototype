@@ -84,7 +84,7 @@ public class MatcherContext {
         }
     }
 
-    private MatcherContext findParentContextNode() {
+    public MatcherContext findParentContextNode() {
         if (parent != null) {
             if (parent.isNode()) {
                 return parent;
@@ -149,13 +149,6 @@ public class MatcherContext {
         return nodeContext;
     }
 
-    private ActionContext actionContext;
-    public ActionContext getActionContext() {
-        if (actionContext == null) {
-            actionContext = new ActionContext(this);
-        }
-        return actionContext;
-    }
 
     // émettre vers le listener ce qui n'a pas encore été émis
     private void flush() { // ne doit être invoqué que par node
@@ -296,6 +289,9 @@ public class MatcherContext {
         }
         attributes.put(name, value);
     }
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
     public Object getAttribute(String name) {
         if (attributes == null) {
             if (parent == null) return null;
@@ -305,6 +301,13 @@ public class MatcherContext {
     }
     public boolean getBooleanAttribute(String name) {
         return (Boolean)getAttribute(name);
+    }
+    public int getIntAttribute(String name) {
+        Integer value = (Integer) getAttribute(name);
+        return value == null?0:value;
+    }
+    public boolean isAttributePresent(String name) {
+        return attributes.containsKey(name);
     }
 
     public void include(Object source) {

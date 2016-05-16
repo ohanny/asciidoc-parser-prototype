@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example;
 
 import fr.icodem.asciidoc.parser.peg.BaseParser;
 import fr.icodem.asciidoc.parser.peg.Chars;
+import fr.icodem.asciidoc.parser.peg.action.ActionContext;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 public class AsciidocPegParser extends BaseParser {
@@ -286,7 +287,7 @@ public class AsciidocPegParser extends BaseParser {
 
     private Rule sectionTitle() {
         return node("sectionTitle", sequence(
-                oneOrMore('='), oneOrMore(blank()), title(),
+                action(oneOrMore('='), ctx -> ctx.exportAttributesToParentNode("eqs")), oneOrMore(blank()), title(),
                 zeroOrMore(blank()), firstOf(newLine(), eoi())
         ));
     }
@@ -349,10 +350,18 @@ public class AsciidocPegParser extends BaseParser {
 
     private Rule attributeEntry() {
         return node("attributeEntry", sequence(
-                ch(':'), optional('!'), attributeName(), optional('!'), ch(':'),
+                ch(':'), optional(attributeEntryDisabled()), attributeName(), optional(attributeEntryDisabled()), ch(':'),
+                //ch(':'), optional('!'), attributeName(), optional('!'), ch(':'),
                 zeroOrMore(blank()), optional(attributeValueParts()), zeroOrMore(blank()),
                 firstOf(newLine(), eoi())
         ));
+    }
+
+    private Rule attributeEntryDisabled() {
+        return action(ch('!'), ctx -> {
+                ctx.setAttribute("disabled", true);
+                ctx.exportAttributesToParentNode(null);
+        });
     }
 
     private Rule attributeValueParts() {
@@ -381,15 +390,17 @@ public class AsciidocPegParser extends BaseParser {
     }
 
     private Rule authors() {
-        return node("authors", sequence(author(), zeroOrMore(sequence(ch(';'), author())), optional(blank()), firstOf(newLine(), eoi())));
+        return node("authors", sequence(author(), zeroOrMore(sequence(ch(';'), optional(blank()), author())), optional(blank()), firstOf(newLine(), eoi())));
     }
 
     private Rule author() {
-        return node("author", sequence(authorName(), optional(sequence(ch('<'), authorAddress(), ch('>')))));
+//        return node("author", sequence(authorName(), optional(sequence(ch('<'), authorAddress(), ch('>')))));
+        return node("author", sequence(authorName(), zeroOrMore(' '), optional(sequence(ch('<'), authorAddress(), ch('>')))));
     }
 
     private Rule authorName() {
-        return node("authorName", oneOrMore(noneOf(";:<>{}[]=\r\n\t")));
+//        return node("authorName", oneOrMore(noneOf(";:<>{}[]=\r\n\t")));
+        return node("authorName", oneOrMore(firstOf(noneOf(" ;:<>{}[]=\r\n\t"), sequence(oneOrMore(' '), test(noneOf(";:<>{}[]=\r\n\t"))))));
     }
 
     private Rule authorAddress() {
@@ -437,7 +448,8 @@ public class AsciidocPegParser extends BaseParser {
 
     private Rule listItem() {
         return node("listItem", sequence(
-                firstOf(oneOrMore('*'), oneOrMore('.')),
+                firstOf(action(oneOrMore('*'), ctx -> ctx.exportAttributesToParentNode("times")),
+                        action(oneOrMore('.'), ctx -> ctx.exportAttributesToParentNode("dots"))),
                 ch(' '), // TODO replace with blank rule
                 listItemValue(),
                 firstOf(

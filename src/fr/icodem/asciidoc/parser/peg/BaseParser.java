@@ -230,6 +230,10 @@ public class BaseParser {
         return factory.zeroOrMore(rule);
     }
 
+    protected Rule zeroOrMore(char c) {
+        return zeroOrMore(ch(c));
+    }
+
     private Rule[] toRule(char[] chars) {
         Rule[] rules = new Rule[chars.length];
         for (int i = 0; i < chars.length; i++) {

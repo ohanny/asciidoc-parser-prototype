@@ -30,6 +30,7 @@ public class OneOrMoreMatcher implements Matcher {
             return false;
         }
 
+        int count = 1;
         while (true) {
             context.mark();
             if (!matcher.match(context.getSubContext())) {
@@ -37,7 +38,11 @@ public class OneOrMoreMatcher implements Matcher {
 
                 break;
             }
+
+            count++;
         }
+
+        context.setAttribute("count", count);
 
         return true;
     }

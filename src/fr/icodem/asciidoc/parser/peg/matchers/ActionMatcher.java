@@ -18,10 +18,11 @@ public class ActionMatcher implements Matcher {
 
     @Override
     public boolean match(MatcherContext context) {
-        ActionContext actionContext = context.getActionContext();
+        MatcherContext delegateContext = context.getSubContext();
+        ActionContext actionContext = new ActionContext(context, delegateContext);
         actionContext.markStart();
 
-        if (getDelegate().match(context.getSubContext())) {
+        if (getDelegate().match(delegateContext)) {
             actionContext.markEnd();
             action.execute(actionContext);
             return true;
@@ -29,6 +30,15 @@ public class ActionMatcher implements Matcher {
 
         return false;
     }
+
+//    private ActionContext actionContext;
+//    public ActionContext getActionContext() {
+//        if (actionContext == null) {
+//            actionContext = new ActionContext(this);
+//        }
+//        return actionContext;
+//    }
+
 
     private Matcher getDelegate() {
         if (delegate == null) {
