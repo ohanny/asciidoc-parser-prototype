@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public enum HtmlTag {
     DOCTYPE,
     HTML, BODY, HEAD,
-    META, TITLE,
+    META, TITLE, LINK,
     DIV, SECTION, P, UL, OL, LI,
     H1, H2, H3, H4, H5, H6,
     BR,
@@ -60,6 +60,9 @@ public enum HtmlTag {
             case DOCTYPE: return "<!DOCTYPE html>";
             case META: {
                 return buildStartTag("meta", attributes);
+            }
+            case LINK: {
+                return buildStartTag("link", attributes);
             }
             case BR: return "<br>";
             default: return null;

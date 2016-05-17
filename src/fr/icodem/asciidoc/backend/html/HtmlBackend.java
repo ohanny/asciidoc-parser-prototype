@@ -31,7 +31,8 @@ public class HtmlBackend extends HtmlBaseBackend {
                 .append(HEAD.start()).nl().incrementIndentLevel()
                 .indent().append(META.tag("charset", "UTF-8")).nl()
                 .indent().append(META.tag("name", "viewport", "content", "width=device-width, initial-scale=1.0")).nl()
-                .indent().append(META.tag("name", "generator", "content", "xxx")).nl();
+                .indent().append(META.tag("name", "generator", "content", "xxx")).nl()
+                .indent().append(LINK.tag("rel", "stylesheet", "href", "styles.css")).nl();
     }
 
     @Override
