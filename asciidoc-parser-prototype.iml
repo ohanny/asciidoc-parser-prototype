@@ -13,5 +13,6 @@
     <orderEntry type="library" name="junit:junit:4.11" level="project" />
     <orderEntry type="library" name="com.github.spullara.mustache.java:compiler:0.9.1" level="project" />
     <orderEntry type="library" name="org.mockito:mockito-all:1.10.19" level="project" />
+    <orderEntry type="library" name="org.spockframework:spock-core:1.0-groovy-2.4" level="project" />
   </component>
 </module>

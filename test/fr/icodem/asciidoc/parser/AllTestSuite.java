@@ -8,7 +8,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         GrammarTestSuite.class,
-        ParserTestSuite.class
+        ParserTestSuite.class,
+        BasicFormattedTextSpec.class
 })
 public class AllTestSuite {
 }
