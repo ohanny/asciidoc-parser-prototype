@@ -18,13 +18,13 @@ class BasicFormattedTextSpec extends Specification {
 
     def "it should return normal phrase"() {
         given:
-            String input = "*normal phrase*";
+            String input = "normal phrase";
 
         when:
             ParsingResult result = parse(input);
 
         then:
-            result.tree == "(formattedText (bold * (text n o r m a l   p h r a s e) *))";
+            result.tree == "(formattedText (text n o r m a l   p h r a s e))";
     }
 
     def "it should return bold phrase"() {
