@@ -15,7 +15,9 @@ public class FormattedTextParser extends BaseParser  {
                 oneOrMore(firstOf(
                     text(),
                     bold(),
-                    italic()
+                    italic(),
+                    subscript(),
+                    superscript()
                 )));
     }
 
@@ -24,7 +26,7 @@ public class FormattedTextParser extends BaseParser  {
                 oneOrMore(firstOf(
                         string("\\*"),
                         string("\\_"),
-                        noneOf("*_")
+                        noneOf("*_~^")
                 )));
     }
 
@@ -43,6 +45,24 @@ public class FormattedTextParser extends BaseParser  {
                     ch('_'),
                     oneOrMore(proxy("chunk")),
                     ch('_')
+                ));
+    }
+
+    private Rule subscript() {
+        return node("subscript",
+                sequence(
+                    ch('~'),
+                    oneOrMore(proxy("chunk")),
+                    ch('~')
+                ));
+    }
+
+    private Rule superscript() {
+        return node("superscript",
+                sequence(
+                    ch('^'),
+                    oneOrMore(proxy("chunk")),
+                    ch('^')
                 ));
     }
 

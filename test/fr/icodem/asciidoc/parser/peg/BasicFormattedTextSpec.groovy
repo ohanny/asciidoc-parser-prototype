@@ -137,4 +137,48 @@ class BasicFormattedTextSpec extends Specification {
         result.tree == "(formattedText (bold * (text 9) *) (text - t o -) (bold * (text 5) *))";
     }
 
+    def "subscript character"() {
+        given:
+        String input = "the H~2~O formula";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text t h e   H) (subscript ~ (text 2) ~) (text O   f o r m u l a))";
+    }
+
+    def "subscript word"() {
+        given:
+        String input = "the CO~2 (aq)~ formula";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text t h e   C O) (subscript ~ (text 2   ( a q )) ~) (text   f o r m u l a))";
+    }
+
+    def "superscript character"() {
+        given:
+        String input = "the E=MC^2^ formula";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text t h e   E = M C) (superscript ^ (text 2) ^) (text   f o r m u l a))";
+    }
+
+    def "superscript word"() {
+        given:
+        String input = "the 1^rst^ day";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text t h e   1) (superscript ^ (text r s t) ^) (text   d a y))";
+    }
+
 }
