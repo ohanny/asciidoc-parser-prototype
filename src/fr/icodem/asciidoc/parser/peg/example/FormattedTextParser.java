@@ -27,6 +27,11 @@ public class FormattedTextParser extends BaseParser  {
                 oneOrMore(firstOf(
                         string("\\*"),
                         string("\\_"),
+                        string("\\`"),
+                        openingSingleQuote(),
+                        closingSingleQuote(),
+                        openingDoubleQuote(),
+                        closingDoubleQuote(),
                         noneOf("*_~^`")
                 )));
     }
@@ -74,6 +79,22 @@ public class FormattedTextParser extends BaseParser  {
                     oneOrMore(proxy("chunk")),
                     ch('`')
                 ));
+    }
+
+    private Rule openingSingleQuote() {
+        return node("openingSingleQuote", string("'`"));
+    }
+
+    private Rule closingSingleQuote() {
+        return node("closingSingleQuote", string("`'"));
+    }
+
+    private Rule openingDoubleQuote() {
+        return node("openingDoubleQuote", string("\"`"));
+    }
+
+    private Rule closingDoubleQuote() {
+        return node("closingDoubleQuote", string("`\""));
     }
 
 }

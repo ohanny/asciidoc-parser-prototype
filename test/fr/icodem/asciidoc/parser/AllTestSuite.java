@@ -9,7 +9,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         GrammarTestSuite.class,
         ParserTestSuite.class,
-        BasicFormattedTextSpec.class
+        BasicFormattedTextSpec.class,
+        ReplacementTextSpec.class
 })
 public class AllTestSuite {
 }
