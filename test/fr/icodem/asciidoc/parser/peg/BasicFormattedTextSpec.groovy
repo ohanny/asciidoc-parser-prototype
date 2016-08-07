@@ -1,18 +1,8 @@
 package fr.icodem.asciidoc.parser.peg
 
-import fr.icodem.asciidoc.parser.peg.example.FormattedTextParser
-import fr.icodem.asciidoc.parser.peg.runner.ParseRunner
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
 
 class BasicFormattedTextSpec extends BaseSpecification {
-
-    ParsingResult parse(String input) {
-        FormattedTextParser parser = new FormattedTextParser();
-        new ParseRunner(parser, parser.&formattedText)
-                .generateStringTree()
-                //.trace()
-                .parse(new StringReader(input), null, null, null);
-    }
 
     def "normal phrase"() {
         given:
