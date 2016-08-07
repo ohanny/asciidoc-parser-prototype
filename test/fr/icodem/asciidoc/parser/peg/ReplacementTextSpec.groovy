@@ -59,4 +59,15 @@ class ReplacementTextSpec extends BaseSpecification {
         result.tree == "(formattedText (text (openingDoubleQuote \" `) T h a t ' s   a   (openingSingleQuote ' `) m a g i c (closingSingleQuote ` ')   s o c k . (closingDoubleQuote ` \")))";
     }
 
+    def "monospaced text inside quotes"() {
+        given:
+        String input = "\"``magic``\"";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text (openingDoubleQuote \" `)) (monospace ` (text m a g i c) `) (text (closingDoubleQuote ` \")))";
+    }
+
 }
