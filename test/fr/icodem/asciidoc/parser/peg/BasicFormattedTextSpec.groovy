@@ -49,4 +49,37 @@ class BasicFormattedTextSpec extends Specification {
             result.tree == "(formattedText (italic _ (text i t a l i c   p h r a s e) _))";
     }
 
+    def "it should return bold word within a phrase"() {
+        given:
+        String input = "a *bold* word";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text a  ) (bold * (text b o l d) *) (text   w o r d))";
+    }
+
+    def "it should return italic word within a phrase"() {
+        given:
+        String input = "a _bold_ word";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text a  ) (italic _ (text b o l d) _) (text   w o r d))";
+    }
+
+    def "it should return bold italic word within a phrase"() {
+        given:
+        String input = "a *_bold_* word";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text a  ) (bold * (italic _ (text b o l d) _) *) (text   w o r d))";
+    }
+
 }
