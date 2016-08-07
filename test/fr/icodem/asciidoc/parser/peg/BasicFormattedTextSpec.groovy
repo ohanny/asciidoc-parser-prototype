@@ -16,7 +16,7 @@ class BasicFormattedTextSpec extends Specification {
                 .parse(new StringReader(input), null, null, null);
     }
 
-    def "it should return normal phrase"() {
+    def "normal phrase"() {
         given:
             String input = "it's a nice day";
 
@@ -27,7 +27,7 @@ class BasicFormattedTextSpec extends Specification {
             result.tree == "(formattedText (text i t ' s   a   n i c e   d a y))";
     }
 
-    def "it should return bold phrase"() {
+    def "bold phrase"() {
         given:
             String input = "*it's a nice day*";
 
@@ -38,7 +38,7 @@ class BasicFormattedTextSpec extends Specification {
             result.tree == "(formattedText (bold * (text i t ' s   a   n i c e   d a y) *))";
     }
 
-    def "it should return italic phrase"() {
+    def "italic phrase"() {
         given:
             String input = "_it's a nice day_";
 
@@ -49,7 +49,7 @@ class BasicFormattedTextSpec extends Specification {
             result.tree == "(formattedText (italic _ (text i t ' s   a   n i c e   d a y) _))";
     }
 
-    def "it should return bold word within a phrase"() {
+    def "bold word within a phrase"() {
         given:
         String input = "it's a *nice* day";
 
@@ -60,7 +60,7 @@ class BasicFormattedTextSpec extends Specification {
         result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e) *) (text   d a y))";
     }
 
-    def "it should return italic word within a phrase"() {
+    def "italic word within a phrase"() {
         given:
         String input = "it's a _nice_ day";
 
@@ -71,7 +71,7 @@ class BasicFormattedTextSpec extends Specification {
         result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e) _) (text   d a y))";
     }
 
-    def "it should return bold italic word within a phrase"() {
+    def "bold italic word within a phrase"() {
         given:
         String input = "it's a *_nice_* day";
 
@@ -80,6 +80,61 @@ class BasicFormattedTextSpec extends Specification {
 
         then:
         result.tree == "(formattedText (text i t ' s   a  ) (bold * (italic _ (text n i c e) _) *) (text   d a y))";
+    }
+
+    def "first letter of 'day' should be bold"() {
+        given:
+        String input = "it's a nice *d*ay";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a   n i c e  ) (bold * (text d) *) (text a y))";
+    }
+
+    def "last letter of 'nice' should be bold"() {
+        given:
+        String input = "it's a nic*e* day";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a   n i c) (bold * (text e) *) (text   d a y))";
+    }
+
+    def "hyphen before bold word"() {
+        given:
+        String input = "-*2016*";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text -) (bold * (text 2 0 1 6) *))";
+    }
+
+    def "spaces inside formatting mark"() {
+        given:
+        String input = "*bold *";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (bold * (text b o l d  ) *))";
+    }
+
+    def "hyphen after and before formatting mark"() {
+        given:
+        String input = "*9*-to-*5*";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (bold * (text 9) *) (text - t o -) (bold * (text 5) *))";
     }
 
 }
