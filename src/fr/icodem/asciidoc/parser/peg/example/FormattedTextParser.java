@@ -17,7 +17,8 @@ public class FormattedTextParser extends BaseParser  {
                     bold(),
                     italic(),
                     subscript(),
-                    superscript()
+                    superscript(),
+                    monospace()
                 )));
     }
 
@@ -26,7 +27,7 @@ public class FormattedTextParser extends BaseParser  {
                 oneOrMore(firstOf(
                         string("\\*"),
                         string("\\_"),
-                        noneOf("*_~^")
+                        noneOf("*_~^`")
                 )));
     }
 
@@ -63,6 +64,15 @@ public class FormattedTextParser extends BaseParser  {
                     ch('^'),
                     oneOrMore(proxy("chunk")),
                     ch('^')
+                ));
+    }
+
+    private Rule monospace() {
+        return node("monospace",
+                sequence(
+                    ch('`'),
+                    oneOrMore(proxy("chunk")),
+                    ch('`')
                 ));
     }
 
