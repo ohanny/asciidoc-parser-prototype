@@ -26,17 +26,6 @@ class BasicFormattedTextSpec extends BaseSpecification {
             result.tree == "(formattedText (bold * (text i t ' s   a   n i c e   d a y) *))";
     }
 
-    def "italic phrase"() {
-        given:
-            String input = "_it's a nice day_";
-
-        when:
-            ParsingResult result = parse(input);
-
-        then:
-            result.tree == "(formattedText (italic _ (text i t ' s   a   n i c e   d a y) _))";
-    }
-
     def "bold word within a phrase"() {
         given:
             String input = "it's a *nice* day";
@@ -48,6 +37,50 @@ class BasicFormattedTextSpec extends BaseSpecification {
             result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e) *) (text   d a y))";
     }
 
+    def "two bold words within a phrase"() {
+        given:
+            String input = "it's a *nice* and *sunny* day";
+
+        when:
+            ParsingResult result = parse(input);
+
+        then:
+            result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e) *) (text   a n d  ) (bold * (text s u n n y) *) (text   d a y))";
+    }
+
+    def "bold word delimited with several asterix"() {
+        given:
+            String input = "it's a **nice*** day";
+
+        when:
+            ParsingResult result = parse(input);
+
+        then:
+            result.tree == "(formattedText (text i t ' s   a  ) (bold * * (text n i c e) * * *) (text   d a y))";
+    }
+
+    def "end of phrase should be bold"() {
+        given:
+            String input = "it's a *nice day";
+
+        when:
+            ParsingResult result = parse(input);
+
+        then:
+            result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e   d a y)))";
+    }
+
+    def "italic phrase"() {
+        given:
+            String input = "_it's a nice day_";
+
+        when:
+            ParsingResult result = parse(input);
+
+        then:
+            result.tree == "(formattedText (italic _ (text i t ' s   a   n i c e   d a y) _))";
+    }
+
     def "italic word within a phrase"() {
         given:
             String input = "it's a _nice_ day";
@@ -57,6 +90,39 @@ class BasicFormattedTextSpec extends BaseSpecification {
 
         then:
             result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e) _) (text   d a y))";
+    }
+
+    def "two italic words within a phrase"() {
+        given:
+        String input = "it's a _nice_ and _sunny_ day";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e) _) (text   a n d  ) (italic _ (text s u n n y) _) (text   d a y))";
+    }
+
+    def "italic word delimited with several underscore"() {
+        given:
+        String input = "it's a __nice___ day";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a  ) (italic _ _ (text n i c e) _ _ _) (text   d a y))";
+    }
+
+    def "end of phrase should be italic"() {
+        given:
+        String input = "it's a _nice day";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e   d a y)))";
     }
 
     def "bold italic word within a phrase"() {
@@ -189,6 +255,39 @@ class BasicFormattedTextSpec extends BaseSpecification {
 
         then:
         result.tree == "(formattedText (text i t ' s   a  ) (monospace ` (text n i c e) `) (text   d a y))";
+    }
+
+    def "two monospace words within a phrase"() {
+        given:
+        String input = "it's a `nice` and `sunny` day";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a  ) (monospace ` (text n i c e) `) (text   a n d  ) (monospace ` (text s u n n y) `) (text   d a y))";
+    }
+
+    def "end of phrase should be monospace"() {
+        given:
+        String input = "it's a `nice day";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a  ) (monospace ` (text n i c e   d a y)))";
+    }
+
+    def "monospace word delimited with several antiquote"() {
+        given:
+        String input = "it's a ``nice``` day";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a  ) (monospace ` ` (text n i c e) ` ` `) (text   d a y))";
     }
 
     def "monospace bold words within a phrase"() {
