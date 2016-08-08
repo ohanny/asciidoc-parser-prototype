@@ -5,15 +5,16 @@ import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 public class CommonRules extends BaseParser {
 
-    public Rule macro(boolean inline) {
-        if (isCached("macro")) return cached("macro");
+    public Rule macro(boolean fromInline) {
+        String nameInCache = "macro." + (fromInline?"inline":"block");
+        if (isCached(nameInCache)) return cached(nameInCache);
 
         return node("macro",
                 sequence(
                     name(),
                     ch(':'), // TODO should accept double and single : ?
                     optional(target()),
-                    attributeList(inline)
+                    attributeList(fromInline)
                 )
         );
     }
@@ -23,20 +24,6 @@ public class CommonRules extends BaseParser {
 
         return node("target", namePrototype());
     }
-
-    public Rule attributeList2() {
-        if (isCached("attributeList")) return cached("attributeList");
-
-        return node("attributeList", sequence(
-                ch('['),
-                firstOf(
-                        positionalAttribute()
-                ),
-                ch(']')
-                //firstOf(newLine(), eoi())// TODO replace
-        ));
-    }
-
 
     public Rule attributeList(boolean fromInline) {
 
