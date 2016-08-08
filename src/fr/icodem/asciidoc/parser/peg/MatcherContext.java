@@ -297,10 +297,16 @@ public class MatcherContext {
             if (parent == null) return null;
             return parent.getAttribute(name);
         }
-        return attributes.get(name);
+        //return attributes.get(name);
+        Object attr = attributes.get(name);
+        if (attr == null && parent != null) {
+            attr = parent.getAttribute(name);
+        }
+        return attr;
     }
     public boolean getBooleanAttribute(String name) {
-        return (Boolean)getAttribute(name);
+        final Boolean value = (Boolean) getAttribute(name);
+        return value == null?false:value;
     }
     public int getIntAttribute(String name) {
         Integer value = (Integer) getAttribute(name);
@@ -312,5 +318,9 @@ public class MatcherContext {
 
     public void include(Object source) {
         input.include(source);
+    }
+
+    public MatcherContext getParent() {
+        return parent;
     }
 }
