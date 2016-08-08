@@ -312,4 +312,72 @@ class BasicFormattedTextSpec extends BaseSpecification {
         result.tree == "(formattedText (text E n t e r   t h e  ) (monospace ` (italic _ (text a d b   d e v i c e s) _) `) (text   c o m m a n d))";
     }
 
+    def "marked phrase"() {
+        given:
+            String input = "#it's a nice day#";
+
+        when:
+            ParsingResult result = parse(input);
+
+        then:
+            result.tree == "(formattedText (mark # (text i t ' s   a   n i c e   d a y) #))";
+    }
+
+    def "marked word within a phrase"() {
+        given:
+            String input = "it's a #nice# day";
+
+        when:
+            ParsingResult result = parse(input);
+
+        then:
+            result.tree == "(formattedText (text i t ' s   a  ) (mark # (text n i c e) #) (text   d a y))";
+    }
+
+    def "two marked words within a phrase"() {
+        given:
+            String input = "it's a #nice# and #sunny# day";
+
+        when:
+            ParsingResult result = parse(input);
+
+        then:
+            result.tree == "(formattedText (text i t ' s   a  ) (mark # (text n i c e) #) (text   a n d  ) (mark # (text s u n n y) #) (text   d a y))";
+    }
+
+    def "end of phrase should be marked"() {
+        given:
+            String input = "it's a #nice day";
+
+        when:
+            ParsingResult result = parse(input);
+
+        then:
+            result.tree == "(formattedText (text i t ' s   a  ) (mark # (text n i c e   d a y)))";
+    }
+
+    def "marked word delimited with several hash"() {
+        given:
+        String input = "it's a ##nice### day";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a  ) (mark # # (text n i c e) # # #) (text   d a y))";
+    }
+
+    def "marked bold words within a phrase"() {
+        given:
+        String input = "Enter the #*adb devices*# command";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text E n t e r   t h e  ) (mark # (bold * (text a d b   d e v i c e s) *) #) (text   c o m m a n d))";
+    }
+
+
+
 }

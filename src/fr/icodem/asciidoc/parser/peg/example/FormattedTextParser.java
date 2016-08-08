@@ -18,7 +18,8 @@ public class FormattedTextParser extends BaseParser  {
                     italic(),
                     subscript(),
                     superscript(),
-                    monospace()
+                    monospace(),
+                    mark()
                 )));
     }
 
@@ -28,11 +29,12 @@ public class FormattedTextParser extends BaseParser  {
                         string("\\*"),
                         string("\\_"),
                         string("\\`"),
+                        string("\\#"),
                         openingSingleQuote(),
                         closingSingleQuote(),
                         openingDoubleQuote(),
                         closingDoubleQuote(),
-                        noneOf("*_~^`")
+                        noneOf("*_~^`#")
                 )));
     }
 
@@ -189,6 +191,37 @@ public class FormattedTextParser extends BaseParser  {
                         oneOrMore(proxy("chunk")),
                         zeroOrMore(sequence(testNot(string("`\"")), ch('`'))),
                         toggleInsideMonospace
+                ));
+
+    }
+
+    private Rule mark() {
+        /* strict rule
+        return node("mark",
+                sequence(
+                    ch('#'),
+                    oneOrMore(proxy("chunk")),
+                    ch('#')
+                ));
+                */
+
+        // permissive rule
+        Rule toggleInsideMark = () -> ctx -> {
+            boolean b = ctx.getParent().getBooleanAttribute("insideMark");
+            ctx.getParent().setAttribute("insideMark", !b);
+            return true;
+        };
+
+        Rule notInsideMark = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideMark");
+
+        return node("mark",
+                sequence(
+                        notInsideMark,
+                        oneOrMore(ch('#')),
+                        toggleInsideMark,
+                        oneOrMore(proxy("chunk")),
+                        zeroOrMore(ch('#')),
+                        toggleInsideMark
                 ));
 
     }
