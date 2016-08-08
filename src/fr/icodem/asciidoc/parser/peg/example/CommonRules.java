@@ -43,35 +43,65 @@ public class CommonRules extends BaseParser {
         String nameInCache = "attributeList." + (fromInline?"inline":"block");
         if (isCached(nameInCache)) return cached(nameInCache);
 
-        Rule inline = () -> ctx -> {
-            return fromInline;
-        };
-
-        return node("attributeList", nameInCache, sequence(
-                ch('['),
-                firstOf(
+        return node("attributeList", nameInCache,
+                sequence(
+                    ch('['),
+                    firstOf(
                         sequence(
-                                firstOf(
-                                        namedAttribute(),
-                                        sequence(positionalAttribute(), optional(idAttribute()), zeroOrMore(firstOf(roleAttribute(), optionAttribute()))),
-                                        sequence(idAttribute(), zeroOrMore(firstOf(roleAttribute(), optionAttribute()))),
-                                        oneOrMore(firstOf(roleAttribute(), optionAttribute()))
-
+                            firstOf(
+                                namedAttribute(),
+                                sequence(
+                                    positionalAttribute(),
+                                    optional(idAttribute()),
+                                    zeroOrMore(
+                                        firstOf(
+                                            roleAttribute(),
+                                            optionAttribute()
+                                        )
+                                    )
                                 ),
-                                optional(blank()),// TODO replace,
-                                zeroOrMore(sequence(
-                                        ch(','),
-                                        optional(blank()),// TODO replace,
-                                        firstOf(namedAttribute(), positionalAttribute()),
-                                        optional(blank())// TODO replace
-                                ))
+                                sequence(
+                                    idAttribute(),
+                                    zeroOrMore(
+                                        firstOf(
+                                            roleAttribute(),
+                                            optionAttribute()
+                                        )
+                                    )
+                                ),
+                                oneOrMore(
+                                    firstOf(
+                                        roleAttribute(),
+                                        optionAttribute()
+                                    )
+                                )
+                            ),
+                            optional(blank()),// TODO replace,
+                            zeroOrMore(
+                                sequence(
+                                    ch(','),
+                                    optional(blank()),// TODO replace,
+                                    firstOf(
+                                        namedAttribute(),
+                                        positionalAttribute()
+                                    ),
+                                    optional(blank())// TODO replace
+                                )
+                            )
                         ),
                         empty() // TODO replace with optional(sequence) ?
-                ),
-                ch(']'),
-                optional(blank()),// TODO replace
-                firstOf(inline, firstOf(newLine(), eoi()))// TODO replace
-        ));
+                    ),
+                    ch(']'),
+                    optional(blank()),// TODO replace
+                    firstOf(
+                        () -> ctx -> fromInline,
+                        firstOf(
+                            newLine(),
+                            eoi()
+                        )
+                    )// TODO replace
+                )
+        );
     }
 
     private Rule namedAttribute() {
