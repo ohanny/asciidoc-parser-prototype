@@ -4,7 +4,7 @@ import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.Chars;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
-public class BlockRules extends BaseRules { // TODO rename class to BlockRules
+public class BlockRules extends BaseRules {
 
     // rules
     public Rule document() {
