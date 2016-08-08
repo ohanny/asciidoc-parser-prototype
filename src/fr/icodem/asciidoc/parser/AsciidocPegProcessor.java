@@ -367,7 +367,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
     public void exitSectionTitle() {
         //int level = min(ctx.EQ().size(), 6);
         NodeContext ctx = contextSectionTitle;
-        int level = min(ctx.getIntAttribute("eqs.count"), 6);
+        int level = min(ctx.getIntAttribute("eqs.count", -1), 6);
         SectionTitle sectionTitle = ef.sectionTitle(level, currentTitle.getValue());
 
         if (headerContext.documentTitleUndefined) {
@@ -462,7 +462,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
         textObjects.push(Text.dummy());
 
         rootListContext.addItem(text,
-                ctx.getIntAttribute("times.count"), ctx.getIntAttribute("dots.count"), attList);
+                ctx.getIntAttribute("times.count", -1), ctx.getIntAttribute("dots.count", -1), attList);
 //        rootListContext.addItem(ctx.listItemValue().getText(),
 //                ctx.TIMES().size(), ctx.DOT().size(), attList);
     }

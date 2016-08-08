@@ -9,14 +9,14 @@ import fr.icodem.asciidoc.parser.peg.rules.SpyingRulesFactory;
 /**
  * Base class for parsers. Defines the basic rule creation methods.
  */
-public class BaseParser {
+public class BaseParser { // TODO rename to BaseRules
     /**
      * Rules instantiation is delegated to a factory
      */
-    private RulesFactory factory = RulesFactory.defaultRulesFactory();
+    private RulesFactory factory = RulesFactory.defaultRulesFactory(); // TODO use same factory object when multiple 'Rules' classes are used
 
     public void useSpyingRulesFactory() {
-        factory = RulesFactory.spyingRulesFactory();
+        factory = RulesFactory.spyingRulesFactory();// TODO use same factory object when multiple 'Rules' classes are used
     }
 
     /**
@@ -35,6 +35,10 @@ public class BaseParser {
         return factory.node(name, delegate);
     }
 
+    protected Rule node(String name, String nameInCache, Rule delegate) {
+        return factory.node(name, nameInCache, delegate);
+    }
+
     /**
      * Creates a cached rule.
      * @see DefaultRulesFactory#cached(String, Rule)
@@ -43,7 +47,7 @@ public class BaseParser {
         return factory.cached(name, delegate);
     }
 
-    protected Rule cached(String name) {
+    protected Rule cached(String name) {// TODO same as named() ?
         return factory.cached(name);
     }
 

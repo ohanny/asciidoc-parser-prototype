@@ -5,7 +5,7 @@ import fr.icodem.asciidoc.parser.peg.Chars;
 import fr.icodem.asciidoc.parser.peg.action.ActionContext;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
-public class AsciidocPegParser extends BaseParser {
+public class AsciidocPegParser extends BaseParser { // TODO rename class to BlockRules
 
     // rules
     public Rule document() {
@@ -43,7 +43,7 @@ public class AsciidocPegParser extends BaseParser {
         ));
     }
 
-    private Rule blockMacro() {
+    private Rule blockMacro() {// TODO factorize with inline
         return node("blockMacro", sequence(
                 macroName(),
                 string("::"), // TODO should accept single : ?
@@ -52,7 +52,7 @@ public class AsciidocPegParser extends BaseParser {
         ));
     }
 
-    private Rule macroName() {
+    private Rule macroName() {// TODO factorize with inline
         return node("macroName", oneOrMore(firstOf(
                 charRange('A', 'Z'),
                 charRange('a', 'z'),
@@ -60,7 +60,7 @@ public class AsciidocPegParser extends BaseParser {
         )));
     }
 
-    private Rule macroTarget() {
+    private Rule macroTarget() {// TODO factorize with inline
         return node("macroTarget", oneOrMore(firstOf(
                 charRange('A', 'Z'),
                 charRange('a', 'z'),
@@ -170,7 +170,7 @@ public class AsciidocPegParser extends BaseParser {
         )));
     }
 
-    private Rule namedAttribute() {
+    private Rule namedAttribute() {// TODO factorize
         return node("namedAttribute", sequence(
                 attributeName(),
                 ch('='),

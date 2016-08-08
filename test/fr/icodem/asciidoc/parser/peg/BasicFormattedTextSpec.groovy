@@ -379,5 +379,18 @@ class BasicFormattedTextSpec extends BaseSpecification {
     }
 
 
+    // TODO dans un autre fichier
+    def "marked phrase with css style"() {
+        given:
+        String input = "[yellow]#It's a nice day#";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (mark (attributeList [ (positionalAttribute (attributeValue y e l l o w)) ]) # (text I t ' s   a   n i c e   d a y) #))";
+    }
+
+
 
 }

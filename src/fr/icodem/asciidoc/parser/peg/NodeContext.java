@@ -22,8 +22,8 @@ public class NodeContext {
         return context.getBooleanAttribute(name);
     }
 
-    public int getIntAttribute(String name) {
-        return context.getIntAttribute(name);
+    public int getIntAttribute(String name, int defaultValue) {
+        return context.getIntAttribute(name, defaultValue);
     }
 
     public boolean isAttributePresent(String name) {

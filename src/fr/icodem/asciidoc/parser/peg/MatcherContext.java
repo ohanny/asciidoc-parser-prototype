@@ -308,9 +308,9 @@ public class MatcherContext {
         final Boolean value = (Boolean) getAttribute(name);
         return value == null?false:value;
     }
-    public int getIntAttribute(String name) {
+    public int getIntAttribute(String name, int defaultValue) {
         Integer value = (Integer) getAttribute(name);
-        return value == null?0:value;
+        return value == null?defaultValue:value;
     }
     public boolean isAttributePresent(String name) {
         return attributes.containsKey(name);

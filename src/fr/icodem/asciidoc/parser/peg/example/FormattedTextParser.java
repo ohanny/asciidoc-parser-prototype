@@ -3,7 +3,7 @@ package fr.icodem.asciidoc.parser.peg.example;
 import fr.icodem.asciidoc.parser.peg.BaseParser;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
-public class FormattedTextParser extends BaseParser  {
+public class FormattedTextParser extends BaseParser  { // TODO rename classe to FormattedTextRules
     public Rule formattedText() {
         return node("formattedText",
                 zeroOrMore(chunk())
@@ -13,13 +13,13 @@ public class FormattedTextParser extends BaseParser  {
     private Rule chunk() {
         return named("chunk",
                 oneOrMore(firstOf(
+                    mark(),
                     text(),
                     bold(),
                     italic(),
                     subscript(),
                     superscript(),
-                    monospace(),
-                    mark()
+                    monospace()
                 )));
     }
 
@@ -216,12 +216,13 @@ public class FormattedTextParser extends BaseParser  {
 
         return node("mark",
                 sequence(
-                        notInsideMark,
-                        oneOrMore(ch('#')),
-                        toggleInsideMark,
-                        oneOrMore(proxy("chunk")),
-                        zeroOrMore(ch('#')),
-                        toggleInsideMark
+                    optional(new CommonRules().attributeList(true)),
+                    notInsideMark,
+                    oneOrMore(ch('#')),
+                    toggleInsideMark,
+                    oneOrMore(proxy("chunk")),
+                    zeroOrMore(ch('#')),
+                    toggleInsideMark
                 ));
 
     }

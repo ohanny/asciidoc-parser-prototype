@@ -9,11 +9,11 @@ import fr.icodem.asciidoc.parser.peg.matchers.*;
 public interface RulesFactory {
 
     // factory methods
-    public static RulesFactory defaultRulesFactory() {
+    static RulesFactory defaultRulesFactory() {
         return new DefaultRulesFactory();
     }
 
-    public static RulesFactory spyingRulesFactory() {
+    static RulesFactory spyingRulesFactory() {
         return new SpyingRulesFactory();
     }
 
@@ -42,6 +42,8 @@ public interface RulesFactory {
      * @return the node rule
      */
     Rule node(String name, Rule delegate);
+
+    Rule node(String name, String nameInCache, Rule delegate);
 
     /**
      * Creates and store a {@link ProxyRule proxy rule}
