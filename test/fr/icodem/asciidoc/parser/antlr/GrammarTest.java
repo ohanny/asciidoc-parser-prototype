@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.antlr;
 
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
-import fr.icodem.asciidoc.parser.peg.example.AsciidocPegParser;
+import fr.icodem.asciidoc.parser.peg.example.BlockRules;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -24,7 +24,7 @@ public abstract class GrammarTest {
             assertEquals(message, expected, tree.toStringTree(parser));
         }
         else {
-            AsciidocPegParser parser = new AsciidocPegParser();
+            BlockRules parser = new BlockRules();
             parser.useFactory(defaultRulesFactory());
             ParsingResult result = new ParseRunner(parser, parser::document)
                     .generateStringTree()

@@ -1,11 +1,10 @@
 package fr.icodem.asciidoc.parser.peg.example;
 
-import fr.icodem.asciidoc.parser.peg.BaseParser;
+import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.Chars;
-import fr.icodem.asciidoc.parser.peg.action.ActionContext;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
-public class AsciidocPegParser extends BaseParser { // TODO rename class to BlockRules
+public class BlockRules extends BaseRules { // TODO rename class to BlockRules
 
     // rules
     public Rule document() {

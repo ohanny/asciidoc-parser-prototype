@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.runner;
 
-import fr.icodem.asciidoc.parser.peg.BaseParser;
+import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.buffers.InputBuffer;
 import fr.icodem.asciidoc.parser.peg.MatcherContext;
 import fr.icodem.asciidoc.parser.peg.buffers.InputBufferBuilder;
@@ -8,7 +8,6 @@ import fr.icodem.asciidoc.parser.peg.listeners.*;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RuleSupplier;
-import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 
 import java.io.Reader;
 
@@ -19,13 +18,13 @@ import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.*;
  */
 public class ParseRunner {
 
-    private BaseParser parser;
+    private BaseRules parser;
     private RuleSupplier ruleSupplier;
     private boolean generateStringTree;
     private boolean trace;
     private int bufferSize; // initial buffer size used with ReaderInputBuffer
 
-    public ParseRunner(BaseParser parser, RuleSupplier ruleSupplier) {
+    public ParseRunner(BaseRules parser, RuleSupplier ruleSupplier) {
         this.parser = parser;
         this.ruleSupplier = ruleSupplier;
 

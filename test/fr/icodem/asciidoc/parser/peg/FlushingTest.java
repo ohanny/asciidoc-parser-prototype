@@ -27,7 +27,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(Parameterized.class)
-public class FlushingTest extends BaseParser {
+public class FlushingTest extends BaseRules {
     private ParseTreeListener listener;
     private InputBufferStateListener inputBufferStateListener;
 

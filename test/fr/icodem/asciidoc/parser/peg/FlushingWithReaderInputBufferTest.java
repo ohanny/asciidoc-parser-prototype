@@ -9,20 +9,10 @@ import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
-import org.mockito.AdditionalMatchers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
-import org.mockito.Matchers;
-import org.mockito.internal.stubbing.answers.ClonesArguments;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.io.StringReader;
 import java.util.Arrays;
@@ -36,7 +26,7 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
-public class FlushingWithReaderInputBufferTest extends BaseParser {
+public class FlushingWithReaderInputBufferTest extends BaseRules {
     private ParseTreeListener listener;
     private InputBufferStateListener inputBufferStateListener;
 

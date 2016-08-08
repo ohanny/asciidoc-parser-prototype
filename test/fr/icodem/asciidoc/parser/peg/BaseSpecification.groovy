@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg
 
-import fr.icodem.asciidoc.parser.peg.example.FormattedTextParser
+import fr.icodem.asciidoc.parser.peg.example.FormattedTextRules
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
@@ -14,7 +14,7 @@ class BaseSpecification extends Specification {
     protected RulesFactory factory = defaultRulesFactory()
 
     ParsingResult parse(String input) {
-        FormattedTextParser parser = new FormattedTextParser();
+        FormattedTextRules parser = new FormattedTextRules();
         parser.useFactory(factory);
         new ParseRunner(parser, parser.&formattedText)
                 .generateStringTree()

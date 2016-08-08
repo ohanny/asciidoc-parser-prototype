@@ -3,9 +3,8 @@ package fr.icodem.asciidoc.parser;
 import fr.icodem.asciidoc.parser.elements.*;
 import fr.icodem.asciidoc.parser.elements.AbstractList;
 import fr.icodem.asciidoc.parser.peg.NodeContext;
-import fr.icodem.asciidoc.parser.peg.example.AsciidocPegParser;
+import fr.icodem.asciidoc.parser.peg.example.BlockRules;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
-import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
@@ -203,7 +202,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
     }
 
     public void parse(String text) {
-        AsciidocPegParser parser = new AsciidocPegParser();
+        BlockRules parser = new BlockRules();
         parser.useFactory(defaultRulesFactory());
         ParsingResult result = new ParseRunner(parser, parser::document)
                 //.trace()

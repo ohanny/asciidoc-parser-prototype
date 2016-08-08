@@ -1,8 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example;
 
-import fr.icodem.asciidoc.parser.peg.BaseParser;
+import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.NodeContext;
-import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
@@ -13,7 +12,7 @@ import java.util.LinkedList;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 
-public class Calculator extends BaseParser implements ParseTreeListener {
+public class Calculator extends BaseRules implements ParseTreeListener {
 
     private Deque<Integer> stack = new LinkedList<>();
     private String currentText;

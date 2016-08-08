@@ -9,7 +9,6 @@ import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -26,7 +25,7 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
 @RunWith(Parameterized.class)
-public class IncludeReaderTest extends BaseParser {
+public class IncludeReaderTest extends BaseRules {
 
     private ParseTreeListener listener;
     private InputBufferStateListener inputBufferStateListener;

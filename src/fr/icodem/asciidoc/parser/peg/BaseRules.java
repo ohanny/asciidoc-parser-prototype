@@ -7,9 +7,9 @@ import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.rules.SpyingRulesFactory;
 
 /**
- * Base class for parsers. Defines the basic rule creation methods.
+ * Base class for parser rules definition. Defines the basic rule creation methods.
  */
-public class BaseParser { // TODO rename to BaseRules
+public class BaseRules {
     /**
      * Rules instantiation is delegated to a factory
      */

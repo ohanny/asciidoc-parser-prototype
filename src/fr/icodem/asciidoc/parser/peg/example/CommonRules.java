@@ -1,9 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example;
 
-import fr.icodem.asciidoc.parser.peg.BaseParser;
+import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
-public class CommonRules extends BaseParser {
+public class CommonRules extends BaseRules {
 
     public Rule macro(boolean fromInline) {
         String nameInCache = "macro." + (fromInline?"inline":"block");

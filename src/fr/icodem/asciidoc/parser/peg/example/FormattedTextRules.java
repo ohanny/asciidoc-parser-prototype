@@ -1,10 +1,10 @@
 package fr.icodem.asciidoc.parser.peg.example;
 
-import fr.icodem.asciidoc.parser.peg.BaseParser;
+import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 
-public class FormattedTextParser extends BaseParser  { // TODO rename classe to FormattedTextRules
+public class FormattedTextRules extends BaseRules { // TODO rename classe to FormattedTextRules
 
     private CommonRules commonRules = new CommonRules();
 
