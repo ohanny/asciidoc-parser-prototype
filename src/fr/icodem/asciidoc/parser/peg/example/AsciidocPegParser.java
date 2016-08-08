@@ -46,7 +46,7 @@ public class AsciidocPegParser extends BaseParser {
     private Rule blockMacro() {
         return node("blockMacro", sequence(
                 macroName(),
-                string("::"),
+                string("::"), // TODO should accept single : ?
                 optional(macroTarget()),
                 attributeList()
         ));
