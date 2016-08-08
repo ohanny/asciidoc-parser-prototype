@@ -2,8 +2,18 @@ package fr.icodem.asciidoc.parser.peg.example;
 
 import fr.icodem.asciidoc.parser.peg.BaseParser;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
+import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 
 public class FormattedTextParser extends BaseParser  { // TODO rename classe to FormattedTextRules
+
+    private CommonRules commonRules = new CommonRules();
+
+    @Override
+    public void useFactory(RulesFactory factory) {
+        super.useFactory(factory);
+        commonRules.useFactory(factory);
+    }
+
     public Rule formattedText() {
         return node("formattedText",
                 zeroOrMore(chunk())
@@ -216,7 +226,7 @@ public class FormattedTextParser extends BaseParser  { // TODO rename classe to 
 
         return node("mark",
                 sequence(
-                    optional(new CommonRules().attributeList(true)),
+                    optional(commonRules.attributeList(true)),
                     notInsideMark,
                     oneOrMore(ch('#')),
                     toggleInsideMark,

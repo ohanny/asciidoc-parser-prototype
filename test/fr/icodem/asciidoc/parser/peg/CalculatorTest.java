@@ -1,13 +1,21 @@
 package fr.icodem.asciidoc.parser.peg;
 
 import fr.icodem.asciidoc.parser.peg.example.Calculator;
+import org.junit.Before;
 import org.junit.Test;
 
+import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 import static org.junit.Assert.assertEquals;
 
 public class CalculatorTest {
 
-    private Calculator calculator = new Calculator();
+    private Calculator calculator;
+
+    @Before
+    public void init() {
+        calculator = new Calculator();
+        calculator.useFactory(defaultRulesFactory());
+    }
 
     @Test
     public void test1() throws Exception {

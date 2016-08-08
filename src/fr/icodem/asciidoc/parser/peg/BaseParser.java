@@ -13,10 +13,10 @@ public class BaseParser { // TODO rename to BaseRules
     /**
      * Rules instantiation is delegated to a factory
      */
-    private RulesFactory factory = RulesFactory.defaultRulesFactory(); // TODO use same factory object when multiple 'Rules' classes are used
+    private RulesFactory factory;
 
-    public void useSpyingRulesFactory() {
-        factory = RulesFactory.spyingRulesFactory();// TODO use same factory object when multiple 'Rules' classes are used
+    public void useFactory(RulesFactory factory) {
+        this.factory = factory;
     }
 
     /**

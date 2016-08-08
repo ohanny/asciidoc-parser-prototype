@@ -8,8 +8,11 @@ import fr.icodem.asciidoc.parser.peg.listeners.*;
 import fr.icodem.asciidoc.parser.peg.matchers.Matcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RuleSupplier;
+import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 
 import java.io.Reader;
+
+import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.*;
 
 /**
  * A ParseRunner performs the actual parsing run of a given parser rule on a given input text.
@@ -127,7 +130,10 @@ public class ParseRunner {
         }
         if (trace) {
             parsingProcessListener = new ToStringAnalysisBuilder();
-            parser.useSpyingRulesFactory();
+            //parser.useSpyingRulesFactory();
+            parser.useFactory(spyingRulesFactory());
+        } else {
+            //parser.useFactory(defaultRulesFactory());
         }
 
 

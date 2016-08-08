@@ -5,6 +5,7 @@ import fr.icodem.asciidoc.parser.elements.AbstractList;
 import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.example.AsciidocPegParser;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
+import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
@@ -13,6 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.parser.ActionRequest.ActionRequestType.*;
+import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.*;
 import static java.lang.Math.min;
 
 public class AsciidocPegProcessor implements ParseTreeListener {
@@ -202,6 +204,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
 
     public void parse(String text) {
         AsciidocPegParser parser = new AsciidocPegParser();
+        parser.useFactory(defaultRulesFactory());
         ParsingResult result = new ParseRunner(parser, parser::document)
                 //.trace()
                 .parse(new StringReader(text), this, null, null);

@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example;
 
 import fr.icodem.asciidoc.parser.peg.BaseParser;
 import fr.icodem.asciidoc.parser.peg.NodeContext;
+import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
@@ -9,6 +10,8 @@ import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 import java.util.Deque;
 import java.util.LinkedList;
+
+import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 
 public class Calculator extends BaseParser implements ParseTreeListener {
 
@@ -18,6 +21,7 @@ public class Calculator extends BaseParser implements ParseTreeListener {
     public static void main(String[] args) {
 
         Calculator calculator = new Calculator();
+        calculator.useFactory(defaultRulesFactory());
 
         calculator.print("15+2");
         calculator.print("15-2");

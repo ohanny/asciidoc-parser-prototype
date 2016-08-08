@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.peg;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ToStringTreeBuilder;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
+import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import org.junit.Before;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 
+import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.spyingRulesFactory;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -31,7 +33,8 @@ public class ParserTest extends BaseParser {
     public void init() {
         listener = mock(ParseTreeListener.class);
         ac = ArgumentCaptor.forClass(NodeContext.class);
-        useSpyingRulesFactory();
+        //useSpyingRulesFactory();
+        useFactory(spyingRulesFactory());
     }
 
     @Test

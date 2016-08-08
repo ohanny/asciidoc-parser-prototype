@@ -5,6 +5,7 @@ import fr.icodem.asciidoc.parser.peg.listeners.InputBufferStateListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
+import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import org.junit.Before;
@@ -44,6 +45,7 @@ public class FlushingTest extends BaseParser {
 
     @Before
     public void init() {
+        useFactory(RulesFactory.defaultRulesFactory());
         listener = mock(ParseTreeListener.class);
         inputBufferStateListener = mock(InputBufferStateListener.class);
         ac = ArgumentCaptor.forClass(NodeContext.class);

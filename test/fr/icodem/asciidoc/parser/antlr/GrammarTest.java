@@ -10,6 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.StringReader;
 
+import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 import static org.junit.Assert.assertEquals;
 
 public abstract class GrammarTest {
@@ -24,6 +25,7 @@ public abstract class GrammarTest {
         }
         else {
             AsciidocPegParser parser = new AsciidocPegParser();
+            parser.useFactory(defaultRulesFactory());
             ParsingResult result = new ParseRunner(parser, parser::document)
                     .generateStringTree()
                     //.trace()

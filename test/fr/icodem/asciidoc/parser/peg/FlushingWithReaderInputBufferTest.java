@@ -6,6 +6,7 @@ import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
 import fr.icodem.asciidoc.parser.peg.matchers.OptionalMatcher;
 import fr.icodem.asciidoc.parser.peg.matchers.SpyingMatcher;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
+import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import org.hamcrest.Matcher;
@@ -43,6 +44,7 @@ public class FlushingWithReaderInputBufferTest extends BaseParser {
 
     @Before
     public void init() {
+        useFactory(RulesFactory.defaultRulesFactory());
         listener = mock(ParseTreeListener.class);
         inputBufferStateListener = mock(InputBufferStateListener.class);
 
