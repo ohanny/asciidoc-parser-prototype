@@ -15,6 +15,28 @@ class QuotedTextSpec extends BaseSpecification {
         result.tree == "(formattedText (text i t ' s   a   n i c e   d a y))";
     }
 
+    def "normal phrase with [ character"() {
+        given:
+        String input = "it's a nice [day";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a   n i c e   [ d a y))";
+    }
+
+    def "normal phrase with [ and ] characters"() {
+        given:
+        String input = "it's a [nice] day";
+
+        when:
+        ParsingResult result = parse(input);
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a   [ n i c e ]   d a y))";
+    }
+
     def "bold phrase"() {
         given:
         String input = "*it's a nice day*";

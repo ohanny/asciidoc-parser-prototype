@@ -34,7 +34,7 @@ class CustomStylingWithAttributeSpec extends BaseSpecification {
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(formattedText (text I t ' s   a   ) (mark (attributeList [ (positionalAttribute (attributeValue y e l l o w)) ]) # (text n i c e) #) (text  d a y))";
+        result.tree == "(formattedText (text I t ' s   a  ) (mark (attributeList [ (positionalAttribute (attributeValue y e l l o w)) ]) # (text n i c e) #) (text   d a y))";
     }
 
     def "marked word within phrase with two custom css classes"() {
@@ -45,7 +45,7 @@ class CustomStylingWithAttributeSpec extends BaseSpecification {
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(formattedText (text I t ' s   a   ) (mark (attributeList [ (positionalAttribute (attributeValue y e l l o w   s h i n y)) ]) # (text n i c e) #) (text  d a y))";
+        result.tree == "(formattedText (text I t ' s   a  ) (mark (attributeList [ (positionalAttribute (attributeValue y e l l o w   s h i n y)) ]) # (text n i c e) #) (text   d a y))";
     }
 
 

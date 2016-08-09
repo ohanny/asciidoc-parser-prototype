@@ -14,6 +14,10 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
         commonRules.useFactory(factory);
     }
 
+    private Rule attributeList() {
+        return commonRules.attributeList(true);
+    }
+
     public Rule formattedText() {
         return node("formattedText",
                 zeroOrMore(chunk())
@@ -40,11 +44,16 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
                         string("\\_"),
                         string("\\`"),
                         string("\\#"),
+                        sequence(
+                            test(ch('[')),
+                            testNot(mark()),
+                            ch('[')
+                        ),
                         openingSingleQuote(),
                         closingSingleQuote(),
                         openingDoubleQuote(),
                         closingDoubleQuote(),
-                        noneOf("*_~^`#")
+                        noneOf("*_~^`#[")
                 )));
     }
 
@@ -226,7 +235,7 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
 
         return node("mark",
                 sequence(
-                    optional(commonRules.attributeList(true)),
+                    optional(attributeList()),
                     notInsideMark,
                     oneOrMore(ch('#')),
                     toggleInsideMark,
