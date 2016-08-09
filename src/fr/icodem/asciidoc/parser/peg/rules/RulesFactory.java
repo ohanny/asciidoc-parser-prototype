@@ -151,4 +151,6 @@ public interface RulesFactory {
      * @return the zero or more rule
      */
     Rule zeroOrMore(Rule rule);
+
+    Rule limitTo(Rule rule, int limit);
 }

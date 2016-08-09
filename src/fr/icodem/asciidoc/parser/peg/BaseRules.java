@@ -238,6 +238,10 @@ public class BaseRules {
         return zeroOrMore(ch(c));
     }
 
+    protected Rule limitTo(Rule rule, int limit) {
+        return factory.limitTo(rule, limit);
+    }
+
     private Rule[] toRule(char[] chars) {
         Rule[] rules = new Rule[chars.length];
         for (int i = 0; i < chars.length; i++) {

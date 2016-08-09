@@ -148,4 +148,9 @@ public class DefaultRulesFactory implements RulesFactory {
         return () -> new ZeroOrMoreMatcher(rule);
     }
 
+    @Override
+    public Rule limitTo(Rule rule, int limit) {
+        return () -> new LimitToMatcher(rule, limit);
+    }
+
 }

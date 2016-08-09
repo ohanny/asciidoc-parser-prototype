@@ -84,7 +84,6 @@ public class ToStringAnalysisBuilder implements ParsingProcessListener {
     public void matcherEnd(Matcher matcher, boolean match) {
         TreeNode node = stack.pop();
         node.match = match;
-
         if (node.level == 0) {
             print(node);
         }

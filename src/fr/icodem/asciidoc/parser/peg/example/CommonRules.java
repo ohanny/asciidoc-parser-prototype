@@ -30,64 +30,69 @@ public class CommonRules extends BaseRules {
         String nameInCache = "attributeList." + (fromInline?"inline":"block");
         if (isCached(nameInCache)) return cached(nameInCache);
 
+        int limit = fromInline?100:-1; // no limit when parsing attribute from block rules
+
         return node("attributeList", nameInCache,
-                sequence(
-                    ch('['),
-                    firstOf(
-                        sequence(
-                            firstOf(
-                                namedAttribute(),
-                                sequence(
-                                    positionalAttribute(),
-                                    optional(idAttribute()),
-                                    zeroOrMore(
+                limitTo(
+                    sequence(
+                        ch('['),
+                        firstOf(
+                            sequence(
+                                firstOf(
+                                    namedAttribute(),
+                                    sequence(
+                                        positionalAttribute(),
+                                        optional(idAttribute()),
+                                        zeroOrMore(
+                                            firstOf(
+                                                roleAttribute(),
+                                                optionAttribute()
+                                            )
+                                        )
+                                    ),
+                                    sequence(
+                                        idAttribute(),
+                                        zeroOrMore(
+                                            firstOf(
+                                                roleAttribute(),
+                                                optionAttribute()
+                                            )
+                                        )
+                                    ),
+                                    oneOrMore(
                                         firstOf(
                                             roleAttribute(),
                                             optionAttribute()
                                         )
                                     )
                                 ),
-                                sequence(
-                                    idAttribute(),
-                                    zeroOrMore(
+                                optional(blank()),// TODO replace,
+                                zeroOrMore(
+                                    sequence(
+                                        ch(','),
+                                        optional(blank()),// TODO replace,
                                         firstOf(
-                                            roleAttribute(),
-                                            optionAttribute()
-                                        )
-                                    )
-                                ),
-                                oneOrMore(
-                                    firstOf(
-                                        roleAttribute(),
-                                        optionAttribute()
+                                            namedAttribute(),
+                                            positionalAttribute()
+                                        ),
+                                        optional(blank())// TODO replace
                                     )
                                 )
                             ),
-                            optional(blank()),// TODO replace,
-                            zeroOrMore(
-                                sequence(
-                                    ch(','),
-                                    optional(blank()),// TODO replace,
-                                    firstOf(
-                                        namedAttribute(),
-                                        positionalAttribute()
-                                    ),
-                                    optional(blank())// TODO replace
-                                )
-                            )
+                            empty() // TODO replace with optional(sequence) ?
                         ),
-                        empty() // TODO replace with optional(sequence) ?
-                    ),
-                    ch(']'),
-                    optional(blank()),// TODO replace
-                    firstOf(
-                        () -> ctx -> fromInline,
+                        ch(']'),
+                        optional(blank()),// TODO replace
                         firstOf(
-                            newLine(),
-                            eoi()
-                        )
-                    )// TODO replace
-                )
+                            () -> ctx -> fromInline,
+                            firstOf(
+                                newLine(),
+                                eoi()
+                            )
+                        )// TODO replace
+                    ),
+                limit)
+
         );
     }
 

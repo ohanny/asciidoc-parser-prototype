@@ -129,10 +129,7 @@ public class ParseRunner {
         }
         if (trace) {
             parsingProcessListener = new ToStringAnalysisBuilder();
-            //parser.useSpyingRulesFactory();
             parser.useFactory(spyingRulesFactory());
-        } else {
-            //parser.useFactory(defaultRulesFactory());
         }
 
 

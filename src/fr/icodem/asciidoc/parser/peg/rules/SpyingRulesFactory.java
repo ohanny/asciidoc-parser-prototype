@@ -133,4 +133,9 @@ public class SpyingRulesFactory extends DefaultRulesFactory {
     public Rule zeroOrMore(Rule rule) {
         return getSpyingRule(super.zeroOrMore(rule));
     }
+
+    @Override
+    public Rule limitTo(Rule rule, int limit) {
+        return getSpyingRule(super.limitTo(rule, limit));
+    }
 }

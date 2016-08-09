@@ -1,11 +1,9 @@
 package fr.icodem.asciidoc.parser.peg;
 
-import fr.icodem.asciidoc.parser.peg.action.ActionContext;
 import fr.icodem.asciidoc.parser.peg.buffers.InputBuffer;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.listeners.ParsingProcessListener;
 
-import java.io.Reader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +17,17 @@ public class MatcherContext {
     // The level is mainly useful when analyzing the context at debug time.
     // It is not used during the normal process.
     private int level;
+
+    // number of characters that a matcher should not exceed when reading from buffer
+    private LimitContext limitContext;
+
+    public void limitTo(int limit) {
+        if (limitContext == null) {
+            limitContext = LimitContext.newLimitContext(limit);
+        } else { // actual limit context is parent one
+            limitContext = LimitContext.withParent(limit, parent.limitContext);
+        }
+    }
 
     // children
     private MatcherContext subContext; // first child
@@ -226,6 +235,10 @@ public class MatcherContext {
             ctx.prevContext = subContext.lastContext;
             subContext.lastContext = ctx;
         }
+
+        // propagate limit context to child
+        subContext.lastContext.limitContext = this.limitContext;
+
         return subContext.lastContext;
     }
 
@@ -242,7 +255,12 @@ public class MatcherContext {
     }
 
     public char getNextChar() {
+        if (limitContext != null) {
+            limitContext.increment();
+        }
+
         char c = input.getNextChar();
+        if (limitContext != null)
         parsingProcessListener.nextChar(c);
         return c;
     }
@@ -252,6 +270,11 @@ public class MatcherContext {
     }
 
     public void reset() {
+        if (limitContext != null) {
+            int decChar = input.getPosition() - marker;
+            limitContext.decrement(decChar);
+        }
+
         input.reset(marker);
         removeLastSubContext();
     }
