@@ -242,6 +242,16 @@ public class BaseRules {
         return factory.limitTo(rule, limit);
     }
 
+    protected Rule trace(String message) {
+        String nameInCache = "trace [" + message +"]";
+        if (isCached(nameInCache)) return cached(nameInCache);
+
+        return cached(nameInCache,() -> ctx -> {
+            System.out.println(message);
+            return true;
+        });
+    }
+
     private Rule[] toRule(char[] chars) {
         Rule[] rules = new Rule[chars.length];
         for (int i = 0; i < chars.length; i++) {

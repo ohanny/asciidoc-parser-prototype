@@ -9,12 +9,16 @@ public class CommonRules extends BaseRules {
         String nameInCache = "macro." + (fromInline?"inline":"block");
         if (isCached(nameInCache)) return cached(nameInCache);
 
-        return node("macro",
-                sequence(
-                    name(),
-                    ch(':'), // TODO should accept double and single : ?
-                    optional(target()),
-                    attributeList(fromInline)
+        return node("macro", nameInCache,
+                firstOf(
+                    sequence(
+                        markNodePosition(),
+                        name(),
+                        ch(':'), optional(':'),
+                        optional(target()),
+                        attributeList(fromInline)
+                    ),
+                    markAsNotAMacro()
                 )
         );
     }
@@ -22,7 +26,17 @@ public class CommonRules extends BaseRules {
     private Rule target() {
         if (isCached("target")) return cached("target");
 
-        return node("target", namePrototype());
+        return node("target",
+                oneOrMore(noneOf(" \r\n\t["))
+        );
+    }
+
+    private Rule markAsNotAMacro() {
+        return () -> ctx -> {
+            int position = ctx.getIntAttribute("position", -1);
+            ctx.findParentContextNode().getParent().setAttribute(position + ".not-a-macro", true);
+            return false;
+        };
     }
 
     public Rule attributeList(boolean fromInline) {
@@ -92,7 +106,6 @@ public class CommonRules extends BaseRules {
                         )// TODO replace
                     ),
                 limit)
-
         );
     }
 
@@ -112,7 +125,15 @@ public class CommonRules extends BaseRules {
         if (isCached("positionalAttribute")) return cached("positionalAttribute");
 
         return node("positionalAttribute",
-                attributeValue()
+                sequence(
+                    testNot(
+                      sequence(
+                          zeroOrMore(blank()),
+                          ch(']')
+                      )
+                    ),
+                    attributeValue()
+                )
         );
     }
 

@@ -236,7 +236,7 @@ public class BlockRules extends BaseRules {
                     blank(),
                     sequence(isBlankInParagraph(), newLine()),
                     sequence(isNotStartOfComment(), ch('/')),
-                    sequence(test(() -> ctx -> ctx.getBooleanAttribute("fromList")), testNot(listContinuation()), ch('+')), // TODO optimize
+                    sequence(test(() -> ctx -> ctx.getBooleanAttribute("fromList", false)), testNot(listContinuation()), ch('+')), // TODO optimize
                     ch('=')
                 )),
                 optional(eoi())
@@ -301,7 +301,7 @@ public class BlockRules extends BaseRules {
     }
     private Rule bl() {
         if (isCached("bl")) return cached("bl");
-        Rule checkWithEOI = () -> ctx -> ctx.getBooleanAttribute("withEOI");
+        Rule checkWithEOI = () -> ctx -> ctx.getBooleanAttribute("withEOI", false);
         return node("bl", sequence(
                 isNextCharAtBeginningOfLine(),
                 optional(blank()),

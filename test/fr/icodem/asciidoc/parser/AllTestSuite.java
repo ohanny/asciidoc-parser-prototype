@@ -11,7 +11,8 @@ import org.junit.runners.Suite;
         ParserTestSuite.class,
         QuotedTextSpec.class,
         CustomStylingWithAttributeSpec.class,
-        ReplacementTextSpec.class
+        ReplacementTextSpec.class,
+        InlineMacroSpec.class
 })
 public class AllTestSuite {
 }

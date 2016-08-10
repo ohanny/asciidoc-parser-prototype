@@ -14,32 +14,41 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
         commonRules.useFactory(factory);
     }
 
-    private Rule attributeList() {
-        return commonRules.attributeList(true);
-    }
-
     public Rule formattedText() {
         return node("formattedText",
                 zeroOrMore(chunk())
         );
     }
 
+    private Rule attributeList() {
+        return commonRules.attributeList(true);
+    }
+
+    private Rule macro() {
+        return commonRules.macro(true);
+    }
+
     private Rule chunk() {
         return named("chunk",
-                oneOrMore(firstOf(
-                    mark(),
-                    text(),
-                    bold(),
-                    italic(),
-                    subscript(),
-                    superscript(),
-                    monospace()
-                )));
+                oneOrMore(
+                    firstOf(
+                        mark(),
+                        macro(),
+                        text(),
+                        bold(),
+                        italic(),
+                        subscript(),
+                        superscript(),
+                        monospace()
+                    )
+                )
+        );
     }
 
     private Rule text() {
         return node("text",
-                oneOrMore(firstOf(
+                oneOrMore(
+                    firstOf(
                         string("\\*"),
                         string("\\_"),
                         string("\\`"),
@@ -53,8 +62,47 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
                         closingSingleQuote(),
                         openingDoubleQuote(),
                         closingDoubleQuote(),
-                        noneOf("*_~^`#[")
-                )));
+                        sequence(
+                            markPositionInParent(),
+                            string("image:"),
+                            firstOf(
+                                hasBeenCheckedAsNotAMacro(),
+                                breakTextRequest()
+                            )
+                        ),
+                        sequence(
+                            textShouldNotBreak(),
+                            noneOf("*_~^`#[")
+                        )
+                    )
+                )
+        );
+    }
+
+    private Rule markPositionInParent() {
+        return () -> ctx -> {
+            ctx.getParent().setAttribute("position", ctx.getPosition());
+            return true;
+        };
+    }
+
+    private Rule hasBeenCheckedAsNotAMacro() {
+        return () -> ctx -> {
+            int position = ctx.getIntAttribute("position", -1);
+            boolean result = ctx.getBooleanAttribute(position + ".not-a-macro", false);
+            return result;
+        };
+    }
+
+    private Rule breakTextRequest() {
+        return () -> ctx -> {
+            ctx.findParentContextNode().setAttribute("break", true);
+            return false;
+        };
+    }
+
+    private Rule textShouldNotBreak() {
+        return () -> ctx -> !ctx.getBooleanAttribute("break", false);
     }
 
     private Rule bold() {
@@ -73,12 +121,12 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
 
         // permissive rule
         Rule toggleInsideBold = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideBold");
+            boolean b = ctx.getParent().getBooleanAttribute("insideBold", false);
             ctx.getParent().setAttribute("insideBold", !b);
             return true;
         };
 
-        Rule notInsideBold = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideBold");
+        Rule notInsideBold = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideBold", false);
 
         return node("bold",
                 sequence(
@@ -103,12 +151,12 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
 
         // permissive rule
         Rule toggleInsideItalic = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideItalic");
+            boolean b = ctx.getParent().getBooleanAttribute("insideItalic", false);
             ctx.getParent().setAttribute("insideItalic", !b);
             return true;
         };
 
-        Rule notInsideItalic = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideItalic");
+        Rule notInsideItalic = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideItalic", false);
 
         return node("italic",
                 sequence(
@@ -133,12 +181,12 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
 
         // permissive rule
         Rule toggleInsideSubscript = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideSubscript");
+            boolean b = ctx.getParent().getBooleanAttribute("insideSubscript", false);
             ctx.getParent().setAttribute("insideSubscript", !b);
             return true;
         };
 
-        Rule notInsideSubscript = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideSubscript");
+        Rule notInsideSubscript = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideSubscript", false);
 
         return node("subscript",
                 sequence(
@@ -164,12 +212,12 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
 
         // permissive rule
         Rule toggleInsideSuperscript = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideSuperscript");
+            boolean b = ctx.getParent().getBooleanAttribute("insideSuperscript", false);
             ctx.getParent().setAttribute("insideSuperscript", !b);
             return true;
         };
 
-        Rule notInsideSuperscript = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideSuperscript");
+        Rule notInsideSuperscript = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideSuperscript", false);
 
         return node("superscript",
                 sequence(
@@ -195,12 +243,12 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
 
         // permissive rule
         Rule toggleInsideMonospace = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideMonospace");
+            boolean b = ctx.getParent().getBooleanAttribute("insideMonospace", false);
             ctx.getParent().setAttribute("insideMonospace", !b);
             return true;
         };
 
-        Rule notInsideMonospace = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideMonospace");
+        Rule notInsideMonospace = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideMonospace", false);
 
         return node("monospace",
                 sequence(
@@ -226,12 +274,12 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
 
         // permissive rule
         Rule toggleInsideMark = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideMark");
+            boolean b = ctx.getParent().getBooleanAttribute("insideMark", false);
             ctx.getParent().setAttribute("insideMark", !b);
             return true;
         };
 
-        Rule notInsideMark = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideMark");
+        Rule notInsideMark = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideMark", false);
 
         return node("mark",
                 sequence(

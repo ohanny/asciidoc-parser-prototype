@@ -18,8 +18,8 @@ public class NodeContext {
         return nodeName;
     }
 
-    public boolean getBooleanAttribute(String name) {
-        return context.getBooleanAttribute(name);
+    public boolean getBooleanAttribute(String name, boolean defaultValue) {
+        return context.getBooleanAttribute(name, defaultValue);
     }
 
     public int getIntAttribute(String name, int defaultValue) {

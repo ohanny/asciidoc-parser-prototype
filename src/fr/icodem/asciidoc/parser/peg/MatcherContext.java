@@ -327,9 +327,9 @@ public class MatcherContext {
         }
         return attr;
     }
-    public boolean getBooleanAttribute(String name) {
+    public boolean getBooleanAttribute(String name, boolean defaultValue) {
         final Boolean value = (Boolean) getAttribute(name);
-        return value == null?false:value;
+        return value == null?defaultValue:value;
     }
     public int getIntAttribute(String name, int defaultValue) {
         Integer value = (Integer) getAttribute(name);

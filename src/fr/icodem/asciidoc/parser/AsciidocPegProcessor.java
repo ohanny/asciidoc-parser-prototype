@@ -123,7 +123,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
                 enterAttributeEntry(context);
                 break;
             case "block" :
-                enterBlock(context.getBooleanAttribute("fromList"));
+                enterBlock(context.getBooleanAttribute("fromList", false));
                 break;
             case "nl" :
             case "bl" :
