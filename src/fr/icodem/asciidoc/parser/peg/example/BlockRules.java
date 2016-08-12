@@ -3,10 +3,40 @@ package fr.icodem.asciidoc.parser.peg.example;
 import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.Chars;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
+import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 
 public class BlockRules extends BaseRules {
 
-    // rules
+    private CommonRules commonRules = new CommonRules();
+
+    @Override
+    public void useFactory(RulesFactory factory) {
+        super.useFactory(factory);
+        commonRules.useFactory(factory);
+    }
+
+    // imported rules from common
+    private Rule attributeList() {
+        return commonRules.attributeList(false);
+    }
+
+    private Rule macro() {
+        return commonRules.macro(false);
+    }
+
+    private Rule blank() {
+        return commonRules.blank();
+    }
+
+    private Rule newLine() {
+        return commonRules.newLine();
+    }
+
+    private Rule digits() {
+        return commonRules.digit();
+    }
+
+    // block rules
     public Rule document() {
         return node("document",
                 sequence(
@@ -42,6 +72,7 @@ public class BlockRules extends BaseRules {
         ));
     }
 
+    /*
     private Rule blockMacro() {// TODO factorize with inline
         return node("blockMacro", sequence(
                 macroName(),
@@ -67,6 +98,7 @@ public class BlockRules extends BaseRules {
                 ch('.')
         )));
     }
+    */
 
 //    public static void main(String[] args) {
 ////        for (char c = 'A'; c < 'z'; c++) {
@@ -83,34 +115,7 @@ public class BlockRules extends BaseRules {
 //
 //    }
 
-    private Rule attributeList() {
-        return node("attributeList", sequence(
-                ch('['),
-                firstOf(
-                    sequence(
-                        firstOf(
-                            namedAttribute(),
-                            sequence(positionalAttribute(), optional(idAttribute()), zeroOrMore(firstOf(roleAttribute(), optionAttribute()))),
-                            sequence(idAttribute(), zeroOrMore(firstOf(roleAttribute(), optionAttribute()))),
-                            oneOrMore(firstOf(roleAttribute(), optionAttribute()))
-
-                        ),
-                        optional(blank()),// TODO replace,
-                        zeroOrMore(sequence(
-                            ch(','),
-                            optional(blank()),// TODO replace,
-                            firstOf(namedAttribute(), positionalAttribute()),
-                            optional(blank())// TODO replace
-                        ))
-                    ),
-                    empty() // TODO replace with optional(sequence) ?
-                ),
-                ch(']'),
-                optional(blank()),// TODO replace
-                firstOf(newLine(), eoi())// TODO replace
-        ));
-    }
-
+/*
     private Rule positionalAttribute() {
         return node("positionalAttribute", attributeValue());
     }
@@ -175,7 +180,7 @@ public class BlockRules extends BaseRules {
                 ch('='),
                 attributeValue()
         ));
-    }
+    }*/
 
     private Rule preamble() {
         return node("preamble", sequence(
@@ -255,7 +260,8 @@ public class BlockRules extends BaseRules {
                 attributeList(),
                 anchor(),
                 blockTitle(),
-                blockMacro(),
+                //blockMacro(),
+                macro(),
                 section(),
                 block(false),
                 nl()
@@ -613,22 +619,22 @@ public class BlockRules extends BaseRules {
     }
 
     // utils rules
-    private Rule blank() {
-        return oneOrMore(firstOf(' ', '\t'));
-    }
+//    private Rule blank() {
+//        return oneOrMore(firstOf(' ', '\t'));
+//    }
+//
+//    private Rule newLine() {
+//        if (isCached("newLine")) return cached("newLine");
+//        return cached("newLine", sequence(optional('\r'), ch('\n')));
+//    }
 
-    private Rule newLine() {
-        if (isCached("newLine")) return cached("newLine");
-        return cached("newLine", sequence(optional('\r'), ch('\n')));
-    }
+//    private Rule digits() {
+//        return oneOrMore(charRange('0', '9'));
+//    }
 
-    private Rule digits() {
-        return oneOrMore(charRange('0', '9'));
-    }
-
-    private Rule digit() {
-        return charRange('0', '9');
-    }
+//    private Rule digit() {
+//        return charRange('0', '9');
+//    }
 
     private Rule isFirstCharInLine() {// TODO store rule in cache
         return () -> ctx -> ctx.getPositionInLine() == 0;

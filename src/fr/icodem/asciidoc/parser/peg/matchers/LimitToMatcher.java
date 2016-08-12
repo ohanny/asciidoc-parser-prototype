@@ -19,21 +19,24 @@ public class LimitToMatcher implements Matcher {
 
     @Override
     public boolean match(MatcherContext context) {
-        if (matcher == null) {
-            matcher = rule.getMatcher();
-        }
-
         context.limitTo(limit);
 
         boolean result = false;
 
         try {
-            result = matcher.match(context);
+            result = getMatcher().match(context);
         } catch (LimitException le) {
             // match fails
         }
 
         return result;
+    }
+
+    private Matcher getMatcher() { // TODO add a compile phase so that matcher is instanciated before use
+        if (matcher == null) {
+            matcher = rule.getMatcher();
+        }
+        return matcher;
     }
 
     @Override
@@ -43,6 +46,6 @@ public class LimitToMatcher implements Matcher {
 
     @Override
     public boolean isOptional() {
-        return matcher.isOptional();
+        return getMatcher().isOptional();
     }
 }

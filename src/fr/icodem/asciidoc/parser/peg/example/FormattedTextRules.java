@@ -14,18 +14,20 @@ public class FormattedTextRules extends BaseRules { // TODO rename classe to For
         commonRules.useFactory(factory);
     }
 
-    public Rule formattedText() {
-        return node("formattedText",
-                zeroOrMore(chunk())
-        );
-    }
-
+    // imported rules from common
     private Rule attributeList() {
         return commonRules.attributeList(true);
     }
 
     private Rule macro() {
         return commonRules.macro(true);
+    }
+
+    // formatted text rules
+    public Rule formattedText() {
+        return node("formattedText",
+                zeroOrMore(chunk())
+        );
     }
 
     private Rule chunk() {

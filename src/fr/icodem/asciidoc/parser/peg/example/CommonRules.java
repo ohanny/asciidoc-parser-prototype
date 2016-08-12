@@ -116,7 +116,7 @@ public class CommonRules extends BaseRules {
                 sequence(
                     name(),
                     ch('='),
-                    attributeValue()
+                    attributeValue(true)
                 )
         );
     }
@@ -132,7 +132,7 @@ public class CommonRules extends BaseRules {
                           ch(']')
                       )
                     ),
-                    attributeValue()
+                    attributeValue(false)
                 )
         );
     }
@@ -197,12 +197,24 @@ public class CommonRules extends BaseRules {
         );
     }
 
-    private Rule attributeValue() {
-        if (isCached("attributeValue")) return cached("attributeValue");
+    private Rule attributeValue(boolean withDot) {
+        String name = "attributeValue" + (withDot?".withDot":"");
 
-        return node("attributeValue",
-                zeroOrMore(
-                    noneOf("[],")
+        if (isCached(name)) return cached(name);
+
+        if (withDot) {
+            return node("attributeValue", name,
+                    oneOrMore(
+                            //noneOf("[],")
+                            noneOf("[]#%,") // TODO how to deal with #.%, characters ?
+                    )
+            );
+        }
+
+        return node("attributeValue", name,
+                oneOrMore(
+                        //noneOf("[],")
+                        noneOf("[]#.%,") // TODO how to deal with #.%, characters ?
                 )
         );
     }
@@ -249,6 +261,11 @@ public class CommonRules extends BaseRules {
                 oneOrMore(charRange('0', '9'))
         );
     }
+
+    private Rule digits() {
+        return oneOrMore(charRange('0', '9'));
+    }
+
 
     public Rule letter() {
         if (isCached("letter")) return cached("letter");

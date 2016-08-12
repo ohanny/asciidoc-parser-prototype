@@ -39,7 +39,7 @@ public class BlockMacroTest extends GrammarTest {
                 "toc::[]",
 
                 /* expected */
-                "(document (content (blockMacro (macroName t o c) : : (attributeList [ ] <EOF>))))"
+                "(document (content (macro (name t o c) : : (attributeList [ ] <EOF>))))"
             },
             {
                 /* message */
@@ -49,7 +49,7 @@ public class BlockMacroTest extends GrammarTest {
                 "image::sunset.jpg[]",
 
                 /* expected */
-                "(document (content (blockMacro (macroName i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ ] <EOF>))))"
+                "(document (content (macro (name i m a g e) : : (target s u n s e t . j p g) (attributeList [ ] <EOF>))))"
             },
             {
                 /* message */
@@ -59,7 +59,7 @@ public class BlockMacroTest extends GrammarTest {
                 "image::sunset.jpg[Sunset]",
 
                 /* expected */
-                "(document (content (blockMacro (macroName i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeValue S u n s e t)) ] <EOF>))))"
+                "(document (content (macro (name i m a g e) : : (target s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeValue S u n s e t)) ] <EOF>))))"
             }
         });
 
