@@ -189,7 +189,7 @@ public class CommonRules extends BaseRules {
                                 isGreaterThanMarkedNodePosition(),
                                 ch('-')
                             ),
-                            digitOrLetter()
+                            digitsOrLetters()
                         )
                     ),
                     optional(blank())
@@ -254,23 +254,18 @@ public class CommonRules extends BaseRules {
                 });
     }
 
-    public Rule digit() {
-        if (isCached("digit")) return cached("digit");
+    public Rule digits() {
+        if (isCached("digits")) return cached("digits");
 
-        return cached("digit",
+        return cached("digits",
                 oneOrMore(charRange('0', '9'))
         );
     }
 
-    private Rule digits() {
-        return oneOrMore(charRange('0', '9'));
-    }
+    public Rule letters() {
+        if (isCached("letters")) return cached("letters");
 
-
-    public Rule letter() {
-        if (isCached("letter")) return cached("letter");
-
-        return cached("letter",
+        return cached("letters",
                 firstOf(
                     charRange('a', 'z'),
                     charRange('A', 'Z')
@@ -278,13 +273,13 @@ public class CommonRules extends BaseRules {
         );
     }
 
-    public Rule digitOrLetter() {
-        if (isCached("digitOrLetter")) return cached("digitOrLetter");
+    public Rule digitsOrLetters() {
+        if (isCached("digitsOrLetters")) return cached("digitsOrLetters");
 
-        return cached("digitOrLetter",
+        return cached("digitsOrLetters",
                 firstOf(
-                    digit(),
-                    letter()
+                    digits(),
+                    letters()
                 )
         );
     }

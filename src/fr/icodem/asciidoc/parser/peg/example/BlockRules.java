@@ -33,7 +33,7 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule digits() {
-        return commonRules.digit();
+        return commonRules.digits();
     }
 
     // block rules
