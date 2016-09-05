@@ -11,7 +11,7 @@ class HeadingsSpec extends BackendBaseSpecification {
         String input = "= A title";
 
         when:
-        Document doc = convert(input);
+        Document doc = transform(input);
 
         then:
         Elements elements = doc.select("body");

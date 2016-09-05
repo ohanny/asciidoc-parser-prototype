@@ -9,11 +9,11 @@ import spock.lang.Specification
 
 class BackendBaseSpecification extends Specification {
 
-    Document convert(String input) {
-        convert(input, Collections.emptyList());
+    Document transform(String input) {
+        transform(input, Collections.emptyList());
     }
 
-    Document convert(String input, List<AttributeEntry> attributes) {
+    Document transform(String input, List<AttributeEntry> attributes) {
         StringWriter writer = new StringWriter();
         new AsciidocPegProcessor(new HtmlBackend(writer), attributes).parse(input);
         println writer.toString();
