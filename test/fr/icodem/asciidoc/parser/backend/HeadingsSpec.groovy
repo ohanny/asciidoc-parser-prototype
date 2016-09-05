@@ -19,6 +19,8 @@ class HeadingsSpec extends BackendBaseSpecification {
 
         Element header = elements.first().child(0);
         header != null;
+        header.tagName() == "div";
+        header.attr("id") == "header";
         header.children().size() == 1;
         header.child(0).tagName() == "h1";
         header.child(0).text() == "A title";
