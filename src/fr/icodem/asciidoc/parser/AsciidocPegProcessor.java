@@ -50,13 +50,13 @@ public class AsciidocPegProcessor implements ParseTreeListener {
 
     @Override
     public void characters(char[] chars, int startIndex, int endIndex) {
-        System.out.println("CHARACTERS => " + textObjects.size() + " xxx: " + new String(chars));
+        //System.out.println("CHARACTERS => " + textObjects.size() + " xxx: " + new String(chars));
         textObjects.peek().offer(new String(chars));
     }
 
     @Override
     public void enterNode(NodeContext context) {
-        System.out.println("ENTER => " + context.getNodeName() + " : " + textObjects.size());
+        //System.out.println("ENTER => " + context.getNodeName() + " : " + textObjects.size());
 
         switch (context.getNodeName()) {
             case "document" :
@@ -180,7 +180,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
                 break;
         }
 
-        System.out.println("EXIT => " + nodeName + " : " + textObjects.size());
+        //System.out.println("EXIT => " + nodeName + " : " + textObjects.size());
     }
 
 
