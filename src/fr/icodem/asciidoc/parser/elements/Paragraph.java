@@ -1,9 +1,7 @@
 package fr.icodem.asciidoc.parser.elements;
 
-import fr.icodem.asciidoc.parser.Text;
-
 public class Paragraph extends Block {
-    private Text text;
+    private Text text; // TODO revoir
 
     public Paragraph(AttributeList attList, String text) {
         super(attList);
@@ -17,5 +15,9 @@ public class Paragraph extends Block {
 
     public String getText() {
         return text.getValue();
+    }
+
+    public Text.FormattedText getFormattedText() {// TODO oliv
+        return (Text.FormattedText) text;
     }
 }

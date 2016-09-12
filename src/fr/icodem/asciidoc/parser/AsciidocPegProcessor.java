@@ -18,6 +18,10 @@ import static java.lang.Math.min;
 
 public class AsciidocPegProcessor implements ParseTreeListener {
 
+    private FormattedTextPegProcessor textProcessor;
+
+    private BlockRules rules = new BlockRules();
+
     private HeaderContext headerContext;
     private RootListContext rootListContext;
 
@@ -46,12 +50,19 @@ public class AsciidocPegProcessor implements ParseTreeListener {
 
         emitter = new HandlerNotificationsEmitter();
         textObjects = new LinkedList<>();
+
+        rules.useFactory(defaultRulesFactory());
+        textProcessor = new FormattedTextPegProcessor();
     }
 
     @Override
     public void characters(char[] chars, int startIndex, int endIndex) {
         //System.out.println("CHARACTERS => " + textObjects.size() + " xxx: " + new String(chars));
-        textObjects.peek().offer(new String(chars));
+        final Text text = textObjects.peek();
+        text.offer(new String(chars));
+        if (text instanceof Text.FormattedText) { // TODO remplacer par isFormattedText ?
+            textProcessor.parse((Text.FormattedText) text);
+        }
     }
 
     @Override
@@ -202,9 +213,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
     }
 
     public void parse(String text) {
-        BlockRules parser = new BlockRules();
-        parser.useFactory(defaultRulesFactory());
-        ParsingResult result = new ParseRunner(parser, parser::document)
+        ParsingResult result = new ParseRunner(rules, rules::document)
                 //.trace()
                 .parse(new StringReader(text), this, null, null);
     }
@@ -352,6 +361,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
     private void enterSection() {
         Section section = ef.section();
         emitter.addActionRequest(StartSection, () -> handler.startSection(section), true);
+        emitter.addActionRequest(StartSection, () -> handler.startSection(section), true);
     }
 
     private void exitSection() {
@@ -394,7 +404,8 @@ public class AsciidocPegProcessor implements ParseTreeListener {
     }
 
     private void enterParagraph() {
-        Text text = Text.empty();
+        //Text text = Text.empty();
+        Text text = Text.formattedText();
         Paragraph p = new Paragraph(consumeAttList(), text);
         if (!blockNestedInList) {
             emitter.addActionRequest(StartParagraph, () -> handler.startParagraph(p), true);

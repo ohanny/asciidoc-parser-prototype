@@ -1,7 +1,5 @@
 package fr.icodem.asciidoc.parser.elements;
 
-import fr.icodem.asciidoc.parser.Text;
-
 public class Attribute {
     protected Text name;
     private Text text;

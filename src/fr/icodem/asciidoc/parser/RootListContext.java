@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser;
 
 import fr.icodem.asciidoc.parser.elements.AttributeList;
 import fr.icodem.asciidoc.parser.elements.Block;
+import fr.icodem.asciidoc.parser.elements.Text;
 
 import java.util.stream.Collectors;
 

@@ -38,6 +38,11 @@ public class HtmlBaseBackend extends AsciidocParserBaseHandler {
         return this;
     }
 
+    protected <T> HtmlBaseBackend include(Runnable r) {
+        r.run();
+        return this;
+    }
+
     protected HtmlBaseBackend nl() {
         append(NL);
         return this;

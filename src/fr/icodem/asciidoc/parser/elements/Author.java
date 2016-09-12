@@ -1,7 +1,5 @@
 package fr.icodem.asciidoc.parser.elements;
 
-import fr.icodem.asciidoc.parser.Text;
-
 public class Author extends Element {
     private Text name;
     private Text address;

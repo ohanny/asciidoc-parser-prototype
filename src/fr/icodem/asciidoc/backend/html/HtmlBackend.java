@@ -99,11 +99,43 @@ public class HtmlBackend extends HtmlBaseBackend {
         indent().append(DIV.start("class", "paragraph")).nl()
                 .incrementIndentLevel()
                 .indent().append(P.start())
-                .append(p.getText())
+                //.append(p.getText())
+                .include(() -> addFormattedText(p.getFormattedText()))
                 .append(P.end()).nl()
                 .decrementIndentLevel()
                 .indent().append(DIV.end())
                 .nl();
+    }
+
+    private void addFormattedText(Text.FormattedText text) {
+        //Text.TextItem item = text.getFirstItem();
+        //while (item != null) { // TODO PERF : remettre while ?
+        for (Text.FormattedTextIterator it = text.iterator(); it.hasNext();) {
+            Text.TextItem item = it.next();
+            System.out.println(item + " => " + item.getText() + " - head : " + item.getHead());
+            if (item instanceof Text.TextItem && false) {
+
+            }
+            else if (item instanceof Text.BoldTextItem) { // TODO PERF : utiliser map ?
+                append("<strong>");
+            }
+            else if (item instanceof Text.ItalicTextItem) {
+                append("<em>");
+            }
+
+            append(item.getText());
+
+            //if (it.isTail()) {
+            if (item.isTail()) {
+                Text.TextItem head = item.getHead();
+                if (head instanceof Text.BoldTextItem) { // TODO PERF : utiliser map ?
+                    append("</strong>");
+                } else if (head instanceof Text.ItalicTextItem) {
+                    append("</em>");
+                }
+            }
+            //item = item.getNext();
+        }
     }
 
     private void addList(AbstractList list) {

@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser;
 
 import fr.icodem.asciidoc.parser.antlr.GrammarTestSuite;
+import fr.icodem.asciidoc.parser.backend.FormattedTextSpec;
 import fr.icodem.asciidoc.parser.backend.HeadingsSpec;
 import fr.icodem.asciidoc.parser.backend.UnorderedListSpec;
 import fr.icodem.asciidoc.parser.peg.*;
@@ -16,7 +17,8 @@ import org.junit.runners.Suite;
         ReplacementTextSpec.class,
         InlineMacroSpec.class,
         HeadingsSpec.class,
-        UnorderedListSpec.class
+        UnorderedListSpec.class,
+        FormattedTextSpec.class
 })
 public class AllTestSuite {
 }
