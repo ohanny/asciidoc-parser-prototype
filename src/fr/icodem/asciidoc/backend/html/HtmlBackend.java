@@ -112,7 +112,7 @@ public class HtmlBackend extends HtmlBaseBackend {
         //while (item != null) { // TODO PERF : remettre while ?
         for (Text.FormattedTextIterator it = text.iterator(); it.hasNext();) {
             Text.TextItem item = it.next();
-            System.out.println(item + " => " + item.getText() + " - head : " + item.getHead());
+            //System.out.println(item + " => " + item.getText() + " - head : " + item.getHead());
             if (item instanceof Text.TextItem && false) {
 
             }
@@ -123,7 +123,7 @@ public class HtmlBackend extends HtmlBaseBackend {
                 append("<em>");
             }
 
-            append(item.getText());
+            if (item.getText() != null) append(item.getText());
 
             //if (it.isTail()) {
             if (item.isTail()) {
