@@ -18,8 +18,6 @@ public class FormattedTextPegProcessor implements ParseTreeListener {
     private FormattedTextRules rules = new FormattedTextRules();
 
     private Text.FormattedText formattedText;//TODO pas champs instance ici
-    //private Text.TextItem nextItem;
-    //private Text.TextItem lastItem;
 
     private Text.TextItem currentItem;
 
@@ -87,22 +85,12 @@ public class FormattedTextPegProcessor implements ParseTreeListener {
         //nextItem.setText(new String(chars));
     }
 
-//    @Override
-//    public void characters(char[] chars, int startIndex, int endIndex) {
-//        if (skip) return;
-//        System.out.println("CHARS => " + new String(chars) + " : " + nextItem);
-//        nextItem.setText(new String(chars));
-//    }
-//
-
     private void addItem() {
 
     }
 
     @Override
     public void enterNode(NodeContext context) {
-        System.out.println("NODE => " + context.getNodeName());
-
         Text.TextItem item = null;
         switch (context.getNodeName()) {
             case "text":
@@ -131,96 +119,10 @@ public class FormattedTextPegProcessor implements ParseTreeListener {
                 currentItem = item;
                 break;
         }
-
-
-
-//        Text.TextItem nextItem = null;
-//        switch (context.getNodeName()) {
-//            case "text":
-//                skip = false;
-//                if (this.nextItem == null) {
-//                    nextItem = new Text.TextItem();// TODO
-//                    if (!(lastItem instanceof Text.TextItem)) {
-//                        nextItem.setParent(lastItem);
-//                    }
-//                }
-//                break;
-//            case "bold":
-//                nextItem = new Text.BoldTextItem();// TODO
-//                if (!(lastItem instanceof Text.TextItem)) {
-//                    nextItem.setParent(lastItem);
-//                }
-//                break;
-//            case "italic":
-//                nextItem = new Text.ItalicTextItem();// TODO
-//                if (lastItem instanceof Text.BoldTextItem || lastItem instanceof Text.ItalicTextItem) {
-//                    nextItem.setParent(lastItem);
-//                }
-//                break;
-//        }
-
-        // set first item
-//        if (formattedText.getFirstItem() == null) {
-//            formattedText.setFirstItem(nextItem);
-//        }
-
-        // chain
-//        if (this.lastItem != null) {
-//            this.lastItem.setNext(nextItem);
-//        }
-//        if (nextItem != null) {
-//            System.out.println("NODE => " + nextItem);
-//            this.nextItem = nextItem;
-//            this.lastItem = nextItem;
-//        }
     }
-//    @Override
-//    public void enterNode(NodeContext context) {
-//        System.out.println("NODE => " + context.getNodeName());
-//        Text.TextItem nextItem = null;
-//        switch (context.getNodeName()) {
-//            case "text":
-//                skip = false;
-//                if (this.nextItem == null) {
-//                    nextItem = new Text.TextItem();// TODO
-//                    if (!(lastItem instanceof Text.TextItem)) {
-//                        nextItem.setParent(lastItem);
-//                    }
-//                }
-//                break;
-//            case "bold":
-//                nextItem = new Text.BoldTextItem();// TODO
-//                if (!(lastItem instanceof Text.TextItem)) {
-//                    nextItem.setParent(lastItem);
-//                }
-//                break;
-//            case "italic":
-//                nextItem = new Text.ItalicTextItem();// TODO
-//                if (lastItem instanceof Text.BoldTextItem || lastItem instanceof Text.ItalicTextItem) {
-//                    nextItem.setParent(lastItem);
-//                }
-//                break;
-//        }
-//
-//        // set first item
-//        if (formattedText.getFirstItem() == null) {
-//            formattedText.setFirstItem(nextItem);
-//        }
-//
-//        // chain
-//        if (this.lastItem != null) {
-//            this.lastItem.setNext(nextItem);
-//        }
-//        if (nextItem != null) {
-//            System.out.println("NODE => " + nextItem);
-//            this.nextItem = nextItem;
-//            this.lastItem = nextItem;
-//        }
-//    }
 
     @Override
     public void exitNode(String nodeName) {
-        System.out.println("EXIT => " + nodeName);
         skip = true;
 
         switch (nodeName) {
@@ -239,15 +141,4 @@ public class FormattedTextPegProcessor implements ParseTreeListener {
                 break;
         }
     }
-//    @Override
-//    public void exitNode(String nodeName) {
-//        System.out.println("EXIT => " + nodeName);
-//                skip = true;
-//        switch (nodeName) {
-//            case "text":
-//                break;
-//            default:
-//                nextItem = null;
-//        }
-//    }
 }
