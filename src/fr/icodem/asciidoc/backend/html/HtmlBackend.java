@@ -108,10 +108,10 @@ public class HtmlBackend extends HtmlBaseBackend {
     }
 
     private void addFormattedText(Text.FormattedText text) {
-        //Text.TextItem item = text.getFirstItem();
-        //while (item != null) { // TODO PERF : remettre while ?
-        for (Text.FormattedTextIterator it = text.iterator(); it.hasNext();) {
-            Text.TextItem item = it.next();
+        Text.TextItem item = text.getFirstItem();
+        while (item != null) { // TODO PERF : remettre while ?
+        //for (Text.FormattedTextIterator it = text.iterator(); it.hasNext();) {
+        //    Text.TextItem item = it.next();
             //System.out.println(item + " => " + item.getText() + " - head : " + item.getHead());
             if (item instanceof Text.TextItem && false) {
 
@@ -134,7 +134,7 @@ public class HtmlBackend extends HtmlBaseBackend {
                     append("</em>");
                 }
             }
-            //item = item.getNext();
+            item = item.getNext();
         }
     }
 
