@@ -96,7 +96,7 @@ class FormattedTextSpec extends BackendBaseSpecification {
 
     def "nested italic word within bold words"() {
         given:
-        String input = "A *very _sunny_ nice* day";
+        String input = "A *nice _and_ sunny* day";
 
         when:
         Document doc = transform(input);
@@ -104,15 +104,15 @@ class FormattedTextSpec extends BackendBaseSpecification {
         then:
         Element paragraph = doc.select("div[class=paragraph] > p").first();
         paragraph != null;
-        paragraph.text() == "A very sunny nice day";
+        paragraph.text() == "A nice and sunny day";
 
         Element bold = paragraph.select("strong").first();
         bold != null;
-        bold.text() == "very sunny nice";
+        bold.text() == "nice and sunny";
 
         Element italic = bold.select("em").first();
         italic != null;
-        italic.text() == "sunny";
+        italic.text() == "and";
     }
 
     def "bold and italic letters within word"() {
