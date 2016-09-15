@@ -1,5 +1,6 @@
-package fr.icodem.asciidoc.parser.peg
+package fr.icodem.asciidoc.parser.antlr
 
+import fr.icodem.asciidoc.parser.peg.BaseSpecification
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
 
 class CustomStylingWithAttributeSpec extends BaseSpecification {

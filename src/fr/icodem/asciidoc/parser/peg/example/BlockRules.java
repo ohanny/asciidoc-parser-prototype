@@ -236,6 +236,7 @@ public class BlockRules extends BaseRules {
     private Rule paragraph() {
         return node("paragraph", sequence(
                 testNot(sectionTitle()),
+                optional(admonition()),
                 oneOrMore(firstOf(
                     noneOf("= \t/+\r\n"),
                     blank(),
@@ -246,6 +247,18 @@ public class BlockRules extends BaseRules {
                 )),
                 optional(eoi())
         ));
+    }
+
+    private Rule admonition() {
+        return node("admonition",
+                    firstOf(
+                        string("NOTE: "),
+                        string("TIP: "),
+                        string("IMPORTANT: "),
+                        string("CAUTION: "),
+                        string("WARNING: ")
+                    )
+                );
     }
 
     private Rule isBlankInParagraph() {

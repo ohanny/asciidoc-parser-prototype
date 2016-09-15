@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+    AdmonitionSpec.class,
     SectionTitleTest.class,
     HeaderTest.class,
     HeaderAndOneSectionWithContentTest.class,
@@ -29,7 +30,11 @@ import org.junit.runners.Suite;
     SimpleTableTest.class,
     CellFormatingTableTest.class,
     AuthorLineTest.class,
-    PreambleTest.class
+    PreambleTest.class,
+    QuotedTextSpec.class,
+    CustomStylingWithAttributeSpec.class,
+    ReplacementTextSpec.class,
+    InlineMacroSpec.class
 })
 public class GrammarTestSuite {
 }
