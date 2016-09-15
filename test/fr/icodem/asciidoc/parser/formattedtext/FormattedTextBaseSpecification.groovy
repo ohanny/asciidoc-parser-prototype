@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.formattedtext
 
-import fr.icodem.asciidoc.parser.peg.example.FormattedTextRules
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.FormattedTextRules
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult

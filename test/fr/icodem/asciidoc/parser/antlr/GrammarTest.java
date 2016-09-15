@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.antlr;
 
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
-import fr.icodem.asciidoc.parser.peg.example.BlockRules;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.BlockRules;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;

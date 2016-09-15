@@ -3,7 +3,7 @@ package fr.icodem.asciidoc.parser;
 import fr.icodem.asciidoc.parser.elements.*;
 import fr.icodem.asciidoc.parser.elements.AbstractList;
 import fr.icodem.asciidoc.parser.peg.NodeContext;
-import fr.icodem.asciidoc.parser.peg.example.BlockRules;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.BlockRules;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;

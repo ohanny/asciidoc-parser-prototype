@@ -2,15 +2,11 @@ package fr.icodem.asciidoc.parser;
 
 import fr.icodem.asciidoc.parser.elements.Text;
 import fr.icodem.asciidoc.parser.peg.FormattedTextListener;
-import fr.icodem.asciidoc.parser.peg.NodeContext;
-import fr.icodem.asciidoc.parser.peg.example.FormattedTextRules;
-import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.FormattedTextRules;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
 import java.io.StringReader;
-import java.util.Deque;
-import java.util.LinkedList;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 

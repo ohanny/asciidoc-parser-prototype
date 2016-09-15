@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.block
 
-import fr.icodem.asciidoc.parser.peg.example.BlockRules
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.BlockRules
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult

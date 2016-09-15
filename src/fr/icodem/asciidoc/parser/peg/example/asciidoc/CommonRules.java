@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.peg.example;
+package fr.icodem.asciidoc.parser.peg.example.asciidoc;
 
 import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
