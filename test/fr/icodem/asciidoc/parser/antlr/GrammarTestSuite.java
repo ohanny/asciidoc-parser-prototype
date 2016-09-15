@@ -1,11 +1,12 @@
 package fr.icodem.asciidoc.parser.antlr;
 
+import fr.icodem.asciidoc.parser.block.BlockGrammarTestSuite;
+import fr.icodem.asciidoc.parser.formattedtext.FormattedTextGrammarTestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    AdmonitionSpec.class,
     SectionTitleTest.class,
     HeaderTest.class,
     HeaderAndOneSectionWithContentTest.class,
@@ -31,10 +32,8 @@ import org.junit.runners.Suite;
     CellFormatingTableTest.class,
     AuthorLineTest.class,
     PreambleTest.class,
-    QuotedTextSpec.class,
-    CustomStylingWithAttributeSpec.class,
-    ReplacementTextSpec.class,
-    InlineMacroSpec.class
+    BlockGrammarTestSuite.class,
+    FormattedTextGrammarTestSuite.class
 })
 public class GrammarTestSuite {
 }

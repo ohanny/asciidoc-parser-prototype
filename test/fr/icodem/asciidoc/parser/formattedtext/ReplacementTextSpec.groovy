@@ -1,9 +1,9 @@
-package fr.icodem.asciidoc.parser.antlr
+package fr.icodem.asciidoc.parser.formattedtext
 
-import fr.icodem.asciidoc.parser.peg.BaseSpecification
+import fr.icodem.asciidoc.parser.formattedtext.FormattedTextBaseSpecification
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
 
-class ReplacementTextSpec extends BaseSpecification {
+class ReplacementTextSpec extends FormattedTextBaseSpecification {
 
     def "straight single quotes"() {
         given:

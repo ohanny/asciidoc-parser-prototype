@@ -1,9 +1,8 @@
-package fr.icodem.asciidoc.parser.antlr
+package fr.icodem.asciidoc.parser.formattedtext
 
-import fr.icodem.asciidoc.parser.peg.BaseSpecification
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
 
-class CustomStylingWithAttributeSpec extends BaseSpecification {
+class CustomStylingWithAttributeSpec extends FormattedTextBaseSpecification {
 
     def "marked phrase with custom css class"() {
         given:
