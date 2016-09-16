@@ -452,7 +452,6 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
 
         inOrder.verify(listener).characters(new char[]{'x'}, 2, 2);
         inOrder.verify(listener, times(3)).exitNode(ac.capture());
-        ac.getAllValues().stream().forEach(n -> System.out.println(n.getNodeName()));
         assertEquals("Node name incorrect", "child3", ac.getAllValues().get(5).getNodeName());
         assertEquals("Node name incorrect", "child2", ac.getAllValues().get(6).getNodeName());
         assertEquals("Node name incorrect", "root", ac.getAllValues().get(7).getNodeName());
