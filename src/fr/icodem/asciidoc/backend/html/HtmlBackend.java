@@ -3,11 +3,6 @@ package fr.icodem.asciidoc.backend.html;
 import fr.icodem.asciidoc.parser.elements.*;
 
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
