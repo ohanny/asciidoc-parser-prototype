@@ -101,10 +101,10 @@ public class FormattedTextListener implements ParseTreeListener {
     }
 
     @Override
-    public void exitNode(String nodeName) {
+    public void exitNode(NodeContext context) {
         skip = true;
 
-        switch (nodeName) {
+        switch (context.getNodeName()) {
             case "bold":
             case "italic":
                 Text.TextItem head = items.removeLast();

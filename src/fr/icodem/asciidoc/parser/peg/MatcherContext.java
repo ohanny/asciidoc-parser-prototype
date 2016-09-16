@@ -184,7 +184,7 @@ public class MatcherContext {
             //extract and notify
             notifyCharacters(lastStartExtractPosition, lastEndExtractPosition);
 
-            listener.exitNode(nodeName);
+            listener.exitNode(nodeContext);
             notifyParentFlushEndNode();
 
             flushed = true;

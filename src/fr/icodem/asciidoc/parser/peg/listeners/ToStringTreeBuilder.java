@@ -22,7 +22,7 @@ public class ToStringTreeBuilder implements ParseTreeListener {
     }
 
     @Override
-    public void exitNode(String nodeName) {
+    public void exitNode(NodeContext context) {
         sb.append(")");
     }
 

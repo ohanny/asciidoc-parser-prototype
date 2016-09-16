@@ -66,7 +66,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
-        inOrder.verify(listener).exitNode("root");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -89,9 +90,9 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'c', 'd'}, 2, 3);
-        inOrder.verify(listener).exitNode("child");
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener, times(2)).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "child", ac.getAllValues().get(2).getNodeName());
+        assertEquals("Node name incorrect", "root", ac.getAllValues().get(3).getNodeName());
     }
 
     @Test
@@ -108,8 +109,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -126,7 +127,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
-        inOrder.verify(listener).exitNode("root");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
     }
 
@@ -144,7 +146,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'b'}, 0, 0);
-        inOrder.verify(listener).exitNode("root");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
     }
 
@@ -167,9 +170,11 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 1, 2);
-        inOrder.verify(listener).exitNode("expression");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
         inOrder.verify(listener).characters(new char[] {'b'}, 3, 3);
-        inOrder.verify(listener).exitNode("expression");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
 
     }
 
@@ -192,15 +197,18 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 1, 2);
-        inOrder.verify(listener).exitNode("expression");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
 
         inOrder.verify(listener).enterNode(ac.capture());
         assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 3, 4);
-        inOrder.verify(listener).exitNode("expression");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
         inOrder.verify(listener).characters(new char[] {'b'}, 5, 5);
-        inOrder.verify(listener).exitNode("expression");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "expression", ac.getValue().getNodeName());
 
     }
 
@@ -231,7 +239,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
-        inOrder.verify(listener).exitNode("root");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
     }
 
@@ -249,8 +258,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'b'}, 0, 0);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -267,8 +276,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a'}, 0, 0);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -285,8 +294,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'a', 'a'}, 0, 2);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -313,8 +322,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -331,8 +340,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'c', 'd'}, 0, 1);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -351,8 +360,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'b', 'd', 'd', 'd'}, 0, 4);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -371,8 +380,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'b'}, 0, 1);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -391,8 +400,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'c', 'c', 'c', 'd'}, 0, 3);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -409,8 +418,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'b', 'c', 'd'}, 0, 3);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -429,8 +438,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'c', 'c', 'c', 'd'}, 0, 3);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -477,8 +486,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'z'}, 0, 1);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -495,8 +504,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'b', 'z'}, 0, 1);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -554,8 +563,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", ac.getValue().getNodeName(), "root");
 
         inOrder.verify(listener).characters(new char[] {'y', 'z'}, 0, 1);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -572,8 +581,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'m', 'z'}, 0, 1);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -621,8 +630,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'a', 'b', 'c', 'z'}, 0, 3);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test
@@ -669,8 +678,8 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(new char[] {'d', 'e', 'f', 'z'}, 0, 3);
-        inOrder.verify(listener).exitNode("root");
-
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
     }
 
     @Test

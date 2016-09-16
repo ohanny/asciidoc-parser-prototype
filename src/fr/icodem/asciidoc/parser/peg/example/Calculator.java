@@ -64,8 +64,8 @@ public class Calculator extends BaseRules implements ParseTreeListener {
     public void enterNode(NodeContext context) {}
 
     @Override
-    public void exitNode(String nodeName) {
-        switch (nodeName) {
+    public void exitNode(NodeContext context) {
+        switch (context.getNodeName()) {
             case "number":
                 stack.push(Integer.parseInt(currentText));
                 break;

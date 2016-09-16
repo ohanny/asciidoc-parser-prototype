@@ -10,5 +10,5 @@ public class DefaultParseTreeListener implements ParseTreeListener {
     public void enterNode(NodeContext context) {}
 
     @Override
-    public void exitNode(String nodeName) {}
+    public void exitNode(NodeContext context) {}
 }

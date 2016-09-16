@@ -146,8 +146,8 @@ public class AsciidocPegProcessor implements ParseTreeListener {
     }
 
     @Override
-    public void exitNode(String nodeName) {
-        switch (nodeName) {
+    public void exitNode(NodeContext context) {
+        switch (context.getNodeName()) {
             case "document" :
                 exitDocument();
                 break;

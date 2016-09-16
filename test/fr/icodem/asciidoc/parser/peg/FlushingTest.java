@@ -81,10 +81,12 @@ public class FlushingTest extends BaseRules {
 
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'a'}, 0, 0);
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).exitNode("child");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
-        inOrder.verify(listener).exitNode("root");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -105,11 +107,13 @@ public class FlushingTest extends BaseRules {
 
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'a'}, 0, 0);
         inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).exitNode("child");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
         inOrder.verify(inputBufferStateListener).visitNextChar(1, 'b');
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'b'}, 1, 1);
         inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
-        inOrder.verify(listener).exitNode("root");
+        inOrder.verify(listener).exitNode(ac.capture());
+        assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
