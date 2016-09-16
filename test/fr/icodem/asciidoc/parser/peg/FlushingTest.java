@@ -24,6 +24,7 @@ import static fr.icodem.asciidoc.parser.peg.buffers.InputBufferBuilder.BufferTyp
 import static fr.icodem.asciidoc.parser.peg.buffers.InputBufferBuilder.BufferType.String;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.AdditionalMatchers.aryEq;
 import static org.mockito.Mockito.*;
 
 @RunWith(Parameterized.class)
@@ -80,11 +81,11 @@ public class FlushingTest extends BaseRules {
         assertEquals("Node name incorrect", "child", ac.getAllValues().get(1).getNodeName());
 
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
+        inOrder.verify(listener).characters(ac.capture(), aryEq(new char[]{'a'}), eq(0), eq(0));
         inOrder.verify(listener).exitNode(ac.capture());
         assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'b'}, 1, 1);
-        inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
+        inOrder.verify(listener).characters(ac.capture(), aryEq(new char[]{'b'}), eq(1), eq(1));
         inOrder.verify(listener).exitNode(ac.capture());
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
@@ -106,12 +107,12 @@ public class FlushingTest extends BaseRules {
         assertEquals("Node name incorrect", "child", ac.getAllValues().get(1).getNodeName());
 
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'a'}, 0, 0);
-        inOrder.verify(listener).characters(new char[]{'a'}, 0, 0);
+        inOrder.verify(listener).characters(ac.capture(), aryEq(new char[]{'a'}), eq(0), eq(0));
         inOrder.verify(listener).exitNode(ac.capture());
         assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
         inOrder.verify(inputBufferStateListener).visitNextChar(1, 'b');
         inOrder.verify(inputBufferStateListener).visitExtract(new char[]{'b'}, 1, 1);
-        inOrder.verify(listener).characters(new char[]{'b'}, 1, 1);
+        inOrder.verify(listener).characters(ac.capture(), aryEq(new char[]{'b'}), eq(1), eq(1));
         inOrder.verify(listener).exitNode(ac.capture());
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 

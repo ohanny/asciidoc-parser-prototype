@@ -1,11 +1,17 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 public interface AsciidocHandler {
+    void writeText(String text);
+
     void startDocument();
     void endDocument();
 
     void startHeader();
     void endHeader();
+
+    void startDocumentTitle();
+    void endDocumentTitle();
+
     /*
         void startDocument();
     void endDocument();

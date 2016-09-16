@@ -1,11 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
-import fr.icodem.asciidoc.parser.elements.Text;
 import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
-
-import java.util.Deque;
-import java.util.LinkedList;
 
 /**
  * PEG listener
@@ -16,23 +12,23 @@ public class AsciidocListener implements ParseTreeListener {
 
     private AsciidocHandler handler;
 
-    private Deque<Text> textObjects;
+    //private Deque<Text> textObjects;
 
     public AsciidocListener(AsciidocHandler handler) {
         this.handler = handler;
-        this.textObjects = new LinkedList<>();
+        //this.textObjects = new LinkedList<>();
     }
 
     @Override
-    public void characters(char[] chars, int startIndex, int endIndex) {
+    public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {
         System.out.println("CHARS => " + new String(chars));
-        final Text text = textObjects.peek();
-        text.offer(new String(chars));
-        if (text instanceof Text.FormattedText) { // TODO remplacer par isFormattedText ?
+        //final Text text = textObjects.peek();
+        //text.offer(new String(chars));
+        //if (text instanceof Text.FormattedText) { // TODO remplacer par isFormattedText ?
             //textProcessor.parse((Text.FormattedText) text);
-        }
+        //}
 
-
+        handler.writeText(new String(chars));
     }
 
     @Override
@@ -46,7 +42,8 @@ public class AsciidocListener implements ParseTreeListener {
                 handler.startHeader();
                 break;
             case "documentTitle" :
-                textObjects.push(Text.dummy());
+                handler.startDocumentTitle();
+                //textObjects.push(Text.dummy());
                 break;
             case "title" :
 //                enterTitle();
@@ -129,7 +126,8 @@ public class AsciidocListener implements ParseTreeListener {
                 handler.endHeader();
                 break;
             case "documentTitle" :
-                Text text = textObjects.pop();
+                handler.endDocumentTitle();
+                //Text text = textObjects.pop();
 
                 break;
             case "preamble" :

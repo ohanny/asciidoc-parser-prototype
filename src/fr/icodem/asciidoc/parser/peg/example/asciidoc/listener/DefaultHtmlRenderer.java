@@ -76,6 +76,11 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
+    public void writeText(String text) {
+        append(text);
+    }
+
+    @Override
     public void startDocument() {
         append(DOCTYPE.tag()).nl()
                 .append(HTML.start()).nl();
@@ -101,5 +106,15 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void endHeader() {
         append(HEAD.end()).nl().decrementIndentLevel();
+    }
+
+    @Override
+    public void startDocumentTitle() {
+        indent().append(H1.start());
+    }
+
+    @Override
+    public void endDocumentTitle() {
+        append(H1.end()).nl();
     }
 }

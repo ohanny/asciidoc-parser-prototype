@@ -56,7 +56,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
     }
 
     @Override
-    public void characters(char[] chars, int startIndex, int endIndex) {
+    public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {
         //System.out.println("CHARACTERS => " + textObjects.size() + " xxx: " + new String(chars));
         final Text text = textObjects.peek();
         text.offer(new String(chars));

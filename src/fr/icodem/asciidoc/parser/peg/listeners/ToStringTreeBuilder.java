@@ -8,7 +8,7 @@ public class ToStringTreeBuilder implements ParseTreeListener {
     private StringBuilder sb = new StringBuilder();
 
     @Override
-    public void characters(char[] characters, int startIndex, int endIndex) {
+    public void characters(NodeContext context, char[] characters, int startIndex, int endIndex) {
         for (char c: characters) {
             sb.append(' ');
             Chars.append(c, sb);

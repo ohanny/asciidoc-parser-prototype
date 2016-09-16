@@ -197,7 +197,7 @@ public class MatcherContext {
         if (end < start) return;
         char[] extracted = input.extract(start, end);
         if (extracted == null || skipText) return;
-        listener.characters(extracted, start, end);
+        listener.characters(nodeContext, extracted, start, end);
     }
 
     // extract data silently

@@ -23,7 +23,7 @@ public class FormattedTextListener implements ParseTreeListener {
     }
 
     @Override
-    public void characters(char[] chars, int startIndex, int endIndex) {
+    public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {
         if (skip) return;
 
         String str = new String(chars);

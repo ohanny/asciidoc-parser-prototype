@@ -56,7 +56,7 @@ public class Calculator extends BaseRules implements ParseTreeListener {
 
     // parse tree listener
     @Override
-    public void characters(char[] chars, int startIndex, int endIndex) {
+    public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {
         currentText = new String(chars);
     }
 

@@ -87,10 +87,10 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(3)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input.txt".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(15, 16, 0);
         verify(inputBufferStateListener).visitReset(18, 3, 16);
@@ -125,10 +125,10 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(3)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input.txt".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(15, 16, 0);
         verify(inputBufferStateListener).visitReset(18, 3, 16);
@@ -163,10 +163,10 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(3)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input.txt".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
@@ -206,10 +206,10 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(3)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input.txt".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -271,13 +271,13 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(5)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -339,13 +339,13 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(5)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("xyw\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("xyw\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -407,13 +407,13 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(5)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -476,13 +476,13 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(5)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("&&&".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abd\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abd\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -545,13 +545,13 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(5)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("&&&".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -612,13 +612,13 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(5)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("&&&".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -678,13 +678,13 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(5)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("&&&".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -744,13 +744,13 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(5)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("&&&".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -809,13 +809,13 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(5)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("&&&".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -874,13 +874,13 @@ public class IncludeReaderTest extends BaseRules {
         verify(listener, times(5)).enterNode(ac.capture());
 
         InOrder inOrder = inOrder(listener);
-        inOrder.verify(listener).characters(aryEq("###".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("&&&".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("inc:".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
