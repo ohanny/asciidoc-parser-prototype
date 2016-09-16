@@ -282,7 +282,7 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule documentTitle() {
-        return node("documentTitle",
+        return node("documentTitle", true,
                 sequence(ch('='), ch(' '), optional(title()), optional(blank()), firstOf(newLine(), eoi())));
     }
 

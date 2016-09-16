@@ -43,7 +43,7 @@ public class HeaderWithMultiCommentTest extends GrammarTest {
                 "////\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t . . . \\n . . . o n   t w o   l i n e s \\n (multiCommentDelimiter / / / / \\n))) (bl <EOF>))"
+                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t . . . \\n . . . o n   t w o   l i n e s \\n (multiCommentDelimiter / / / / \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -57,7 +57,7 @@ public class HeaderWithMultiCommentTest extends GrammarTest {
                 "////",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t . . . \\n . . . o n   t w o   l i n e s \\n (multiCommentDelimiter / / / / <EOF>))))"
+                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t . . . \\n . . . o n   t w o   l i n e s \\n (multiCommentDelimiter / / / / <EOF>))))"
             },
             {
                 /* message */
@@ -71,7 +71,7 @@ public class HeaderWithMultiCommentTest extends GrammarTest {
                 "////\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   / /   a n d   / / /   . . . \\n a n d   / / /   a n d   / / / /   a n d   t h a t ' s   a l l \\n (multiCommentDelimiter / / / / \\n))) (bl <EOF>))"
+                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   / /   a n d   / / /   . . . \\n a n d   / / /   a n d   / / / /   a n d   t h a t ' s   a l l \\n (multiCommentDelimiter / / / / \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -87,7 +87,7 @@ public class HeaderWithMultiCommentTest extends GrammarTest {
                 "////\n",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (multiComment (multiCommentDelimiter / / / / \\n) /   o n e   l e a d i n g   s l a s h \\n / /   t w o   l e a d i n g   s l a s h e s \\n / / /   t h r e e   l e a d i n g   s l a s h e s \\n / / / /   f o u r   l e a d i n g   s l a s h e s \\n (multiCommentDelimiter / / / / \\n))) (bl <EOF>))"
+                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (multiComment (multiCommentDelimiter / / / / \\n) /   o n e   l e a d i n g   s l a s h \\n / /   t w o   l e a d i n g   s l a s h e s \\n / / /   t h r e e   l e a d i n g   s l a s h e s \\n / / / /   f o u r   l e a d i n g   s l a s h e s \\n (multiCommentDelimiter / / / / \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -103,7 +103,7 @@ public class HeaderWithMultiCommentTest extends GrammarTest {
                 "////",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   1 \\n (multiCommentDelimiter / / / / \\n)) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   2 \\n (multiCommentDelimiter / / / / <EOF>))))"
+                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   1 \\n (multiCommentDelimiter / / / / \\n)) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   2 \\n (multiCommentDelimiter / / / / <EOF>))))"
             },
             {
                 /* message */
@@ -120,7 +120,7 @@ public class HeaderWithMultiCommentTest extends GrammarTest {
                 "////",
 
                 /* expected */
-                "(document (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   1 \\n (multiCommentDelimiter / / / / \\n)) (authors (author (authorName J o h n   D o e)) \\n) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   2 \\n (multiCommentDelimiter / / / / <EOF>))))"
+                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   1 \\n (multiCommentDelimiter / / / / \\n)) (authors (author (authorName J o h n   D o e)) \\n) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   2 \\n (multiCommentDelimiter / / / / <EOF>))))"
             },
             {
                 /* message */
@@ -133,7 +133,7 @@ public class HeaderWithMultiCommentTest extends GrammarTest {
                 "= Hello, AsciiDoc!\n",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   \\n (multiCommentDelimiter / / / / \\n)) (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl <EOF>))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   \\n (multiCommentDelimiter / / / / \\n)) (header (documentTitle (title H e l l o ,   A s c i i D o c !))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -149,7 +149,7 @@ public class HeaderWithMultiCommentTest extends GrammarTest {
                 "= Hello, AsciiDoc!\n",
 
                 /* expected */
-                "(document (bl \\n) (bl \\n) (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   \\n (multiCommentDelimiter / / / / \\n)) (bl \\n) (header (documentTitle =   (title H e l l o ,   A s c i i D o c !) \\n)) (bl <EOF>))"
+                "(document (bl \\n) (bl \\n) (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   \\n (multiCommentDelimiter / / / / \\n)) (bl \\n) (header (documentTitle (title H e l l o ,   A s c i i D o c !))) (bl <EOF>))"
             }
         });
 

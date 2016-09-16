@@ -43,6 +43,8 @@ public interface RulesFactory {
      */
     Rule node(String name, Rule delegate);
 
+    Rule node(String name, boolean skipText, Rule delegate);
+
     Rule node(String name, String nameInCache, Rule delegate);
 
     /**

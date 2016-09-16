@@ -35,6 +35,11 @@ public class DefaultRulesFactory implements RulesFactory {
     }
 
     @Override
+    public Rule node(String name, boolean skipText, Rule delegate) {// TODO throw exception if name is empty or already used
+        return cache.get(name, () -> new NodeRule(name, skipText, delegate));
+    }
+
+    @Override
     public Rule node(String name, String nameInCache, Rule delegate) {// TODO throw exception if name is empty or already used
         return cache.get(nameInCache, () -> new NodeRule(name, delegate));
     }

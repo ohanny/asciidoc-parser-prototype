@@ -35,6 +35,10 @@ public class BaseRules {
         return factory.node(name, delegate);
     }
 
+    protected Rule node(String name, boolean skipText, Rule delegate) {
+        return factory.node(name, skipText, delegate);
+    }
+
     protected Rule node(String name, String nameInCache, Rule delegate) {
         return factory.node(name, nameInCache, delegate);
     }

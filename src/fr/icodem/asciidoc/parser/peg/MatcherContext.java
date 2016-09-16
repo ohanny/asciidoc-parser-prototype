@@ -51,6 +51,7 @@ public class MatcherContext {
     private ParsingProcessListener parsingProcessListener;
 
     private String nodeName;
+    private boolean skipText; // node only
     private boolean requestFlushingDone;
     private boolean flushed;// node only
     private boolean matched;// node only - utile ???
@@ -195,7 +196,7 @@ public class MatcherContext {
     private void notifyCharacters(int start, int end) {
         if (end < start) return;
         char[] extracted = input.extract(start, end);
-        if (extracted == null) return;
+        if (extracted == null || skipText) return;
         listener.characters(extracted, start, end);
     }
 
@@ -282,6 +283,10 @@ public class MatcherContext {
     public void setNodeName(String nodeName) {
         this.nodeName = nodeName;
         this.lastStartExtractPosition = input.getPosition() + 1;
+    }
+
+    public void setSkipText(boolean skipText) {
+        this.skipText = skipText;
     }
 
     public boolean isNode() {

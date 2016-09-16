@@ -40,6 +40,11 @@ public class SpyingRulesFactory extends DefaultRulesFactory {
     }
 
     @Override
+    public Rule node(String name, boolean skipText, Rule delegate) {
+        return getSpyingRule(super.node(name, skipText, delegate));
+    }
+
+    @Override
     public Rule node(String name, String nameInCache, Rule delegate) {
         return getSpyingRule(super.node(name, nameInCache, delegate));
     }
