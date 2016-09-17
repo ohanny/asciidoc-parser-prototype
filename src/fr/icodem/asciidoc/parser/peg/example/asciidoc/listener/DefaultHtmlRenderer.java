@@ -75,37 +75,54 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         return new DefaultHtmlRenderer(writer);
     }
 
+    private String title;
+
     @Override
-    public void writeText(String text) {
+    public void writeText(String node, String text) {
+        switch (node) {
+            case DOCUMENT_TITLE:
+                title = text;
+                break;
+        }
+
         append(text);
     }
 
     @Override
     public void startDocument() {
         append(DOCTYPE.tag()).nl()
-                .append(HTML.start()).nl();
+                .append(HTML.start()).nl()
+                .append(HEAD.start()).nl().incrementIndentLevel()
+                .indent().append(META.tag("charset", "UTF-8")).nl()
+                .indent().append(META.tag("name", "viewport", "content", "width=device-width, initial-scale=1.0")).nl()
+                .indent().append(META.tag("name", "generator", "content", "xxx")).nl()
+                .bufferOn()
+                .indent().append(LINK.tag("rel", "stylesheet", "href", "styles.css")).nl()
+                .mark("title")
+                .append(HEAD.end()).nl().decrementIndentLevel()
+                .append(BODY.start("class", getAttributeValue("doctype"))).nl().incrementIndentLevel();
     }
 
     @Override
     public void endDocument() {
         //decrementIndentLevel().indent().append(DIV.end()).nl() // content end
-        //decrementIndentLevel().indent()
-                //.append(BODY.end()).nl()
-        decrementIndentLevel().append(HTML.end());
+        decrementIndentLevel().indent()
+                .append(BODY.end()).nl()
+                .decrementIndentLevel().append(HTML.end());
     }
 
     @Override
     public void startHeader() {
-        append(HEAD.start()).nl().incrementIndentLevel()
-            .indent().append(META.tag("charset", "UTF-8")).nl()
-            .indent().append(META.tag("name", "viewport", "content", "width=device-width, initial-scale=1.0")).nl()
-            .indent().append(META.tag("name", "generator", "content", "xxx")).nl()
-            .indent().append(LINK.tag("rel", "stylesheet", "href", "styles.css")).nl();
+        indent().append(DIV.start("id", "header")).nl().incrementIndentLevel();
     }
 
     @Override
     public void endHeader() {
-        append(HEAD.end()).nl().decrementIndentLevel();
+        decrementIndentLevel().indent().append(DIV.end()).nl()
+                //.insertAt("title", TITLE.start() + title + TITLE.end())
+                .moveTo("title")
+                .indent().append(TITLE.start()).append(title).append(TITLE.end()).nl()
+                .bufferOff();
     }
 
     @Override

@@ -3,6 +3,11 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 
+import java.util.Deque;
+import java.util.LinkedList;
+
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler.DOCUMENT_TITLE;
+
 /**
  * PEG listener
  * New approach : no use of AST
@@ -13,9 +18,12 @@ public class AsciidocListener implements ParseTreeListener {
     private AsciidocHandler handler;
 
     //private Deque<Text> textObjects;
+    private Deque<String> nodes; // TODO rename variable
 
     public AsciidocListener(AsciidocHandler handler) {
         this.handler = handler;
+        this.nodes = new LinkedList<>();
+        this.nodes.add("");
         //this.textObjects = new LinkedList<>();
     }
 
@@ -28,7 +36,12 @@ public class AsciidocListener implements ParseTreeListener {
             //textProcessor.parse((Text.FormattedText) text);
         //}
 
-        handler.writeText(new String(chars));
+        switch (context.getNodeName()) {
+            case "title":
+                handler.writeText(nodes.peekLast(), new String(chars));
+                break;
+        }
+
     }
 
     @Override
@@ -43,6 +56,7 @@ public class AsciidocListener implements ParseTreeListener {
                 break;
             case "documentTitle" :
                 handler.startDocumentTitle();
+                nodes.addLast(DOCUMENT_TITLE);
                 //textObjects.push(Text.dummy());
                 break;
             case "title" :
@@ -127,6 +141,7 @@ public class AsciidocListener implements ParseTreeListener {
                 break;
             case "documentTitle" :
                 handler.endDocumentTitle();
+                nodes.removeLast();
                 //Text text = textObjects.pop();
 
                 break;

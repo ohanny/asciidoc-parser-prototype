@@ -1,7 +1,10 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 public interface AsciidocHandler {
-    void writeText(String text);
+
+    String DOCUMENT_TITLE = "DOCUMENT_TITLE";
+
+    void writeText(String node, String text);
 
     void startDocument();
     void endDocument();
@@ -13,8 +16,6 @@ public interface AsciidocHandler {
     void endDocumentTitle();
 
     /*
-        void startDocument();
-    void endDocument();
     void documentHeader(DocumentHeader header);
     void startPreamble();
     void endPreamble();
