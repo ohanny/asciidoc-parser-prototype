@@ -408,12 +408,12 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule authors() {
-        return node("authors", sequence(author(), zeroOrMore(sequence(ch(';'), optional(blank()), author())), optional(blank()), firstOf(newLine(), eoi())));
+        return node("authors", true, sequence(author(), zeroOrMore(sequence(ch(';'), optional(blank()), author())), optional(blank()), firstOf(newLine(), eoi())));
     }
 
     private Rule author() {
 //        return node("author", sequence(authorName(), optional(sequence(ch('<'), authorAddress(), ch('>')))));
-        return node("author", sequence(authorName(), zeroOrMore(' '), optional(sequence(ch('<'), authorAddress(), ch('>')))));
+        return node("author", true, sequence(authorName(), zeroOrMore(' '), optional(sequence(ch('<'), authorAddress(), ch('>')))));
     }
 
     private Rule authorName() {
