@@ -88,6 +88,17 @@ public class AuthorLineTest extends GrammarTest {
             },
             {
                 /* message */
+                "a header with one author name and author address + address label ended by EOF",
+
+                /* input */
+                "= Hello, AsciiDoc!\n" +
+                "John Doe <jd@mail.com[John]>",
+
+                /* expected */
+                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m) (authorAddressLabel J o h n)))))"
+            },
+            {
+                /* message */
                 "a header with two authors name",
 
                 /* input */

@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 public interface AsciidocHandler {
 
     String DOCUMENT_TITLE = "DOCUMENT_TITLE";
+    String AUTHOR_ADDRESS = "AUTHOR_ADDRESS";
 
     void writeText(String node, String text);
 
@@ -14,6 +15,22 @@ public interface AsciidocHandler {
 
     void startDocumentTitle();
     void endDocumentTitle();
+
+    void startAuthors();
+    void endAuthors();
+
+    void startAuthor();
+    void endAuthor();
+
+    //void startAuthorName();
+    //void endAuthorName();
+
+    //void startAuthorAddress();
+    //void endAuthorAddress();
+
+    void writeAuthorName(String name);
+    void writeAuthorAddress(String address);
+    void writeAuthorAddressLabel(String label);
 
     /*
     void documentHeader(DocumentHeader header);

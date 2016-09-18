@@ -413,7 +413,26 @@ public class BlockRules extends BaseRules {
 
     private Rule author() {
 //        return node("author", sequence(authorName(), optional(sequence(ch('<'), authorAddress(), ch('>')))));
-        return node("author", true, sequence(authorName(), zeroOrMore(' '), optional(sequence(ch('<'), authorAddress(), ch('>')))));
+        return node("author", true,
+                   sequence(
+                       authorName(),
+                       zeroOrMore(' '),
+                       optional(
+                           sequence(
+                               ch('<'),
+                               authorAddress(),
+                               optional(
+                                   sequence(
+                                       ch('['),
+                                       authorAddressLabel(),
+                                       ch(']')
+                                   )
+                               ),
+                               ch('>')
+                           )
+                       )
+                   )
+               );
     }
 
     private Rule authorName() {
@@ -423,6 +442,10 @@ public class BlockRules extends BaseRules {
 
     private Rule authorAddress() {
         return node("authorAddress", oneOrMore(noneOf("<>{}[]=\r\n\t")));
+    }
+
+    private Rule authorAddressLabel() {
+        return node("authorAddressLabel", oneOrMore(noneOf("<>{}[]=\r\n\t")));
     }
 
     private Rule singleComment() {

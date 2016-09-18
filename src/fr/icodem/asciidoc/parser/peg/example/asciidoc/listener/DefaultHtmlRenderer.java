@@ -7,6 +7,8 @@ import fr.icodem.asciidoc.parser.elements.AttributeEntry;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
@@ -15,7 +17,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     public static void main(String[] args) {
         String text = "= Hello\n" +
-                "John Doe; Roger Rabbit <roger@mail.com>\n" +
+                "John Doe; Roger Rabbit <roger@mail.com>; François Pignon <fp@mail.com[@françois]>\n" +
                 //":fruit: kiwi\n" +
                 //":fruit2!:\n" +
                 //":!fruit3:\n" +
@@ -77,11 +79,34 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     private String title;
 
+    private static class AuthorContext {// TODO move class ?
+
+        private AuthorContext(int position) {
+            this.position = position;
+        }
+
+        public static AuthorContext withPosition(int position) {
+            return new AuthorContext(position);
+        }
+
+        int position;
+        String name;
+        String address;
+        String addressLabel;
+    }
+
+    private Deque<AuthorContext> authors;
+
     @Override
     public void writeText(String node, String text) {
         switch (node) {
             case DOCUMENT_TITLE:
                 title = text;
+                break;
+            case AUTHOR_ADDRESS:
+                append(A.start("href", "mailto:" + text))
+                        .append(text).append(A.end())
+                        .append(SPAN.end()).append(BR.tag()).nl();
                 break;
         }
 
@@ -98,6 +123,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 .indent().append(META.tag("name", "generator", "content", "xxx")).nl()
                 .bufferOn()
                 .indent().append(LINK.tag("rel", "stylesheet", "href", "styles.css")).nl()
+                .mark("authors")
                 .mark("title")
                 .append(HEAD.end()).nl().decrementIndentLevel()
                 .append(BODY.start("class", getAttributeValue("doctype"))).nl().incrementIndentLevel();
@@ -134,4 +160,88 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     public void endDocumentTitle() {
         append(H1.end()).nl();
     }
+
+    @Override
+    public void startAuthors() {
+        indent().append(DIV.start("class", "details")).nl().incrementIndentLevel();
+        authors = new LinkedList<>();
+    }
+
+    @Override
+    public void endAuthors() {
+        decrementIndentLevel().indent().append(DIV.end()).nl();
+    }
+
+    @Override
+    public void startAuthor() {
+        authors.add(AuthorContext.withPosition(authors.size() + 1));
+        /*
+                .forEach(header.getAuthors(), a -> {
+            String index = "" + ((a.getPosition() == 1) ? "" : "" + a.getPosition());
+            indent().append(SPAN.start("id", "author" + index, "class", "author"))
+                    .append(a.getName()).append(SPAN.end()).append(BR.tag()).nl()
+                    .runIf(a.getAddress() != null, () -> {
+                        indent().append(SPAN.start("id", "email" + index, "class", "email"))
+                                .append(A.start("href", "mailto:" + a.getAddress()))
+                                .append(a.getAddress()).append(A.end())
+                                .append(SPAN.end()).append(BR.tag()).nl();
+                    });
+        })
+        */
+
+    }
+
+    @Override
+    public void endAuthor() {
+        AuthorContext author = authors.peekLast();
+        String index = author.position == 1?"":"" + author.position;
+        indent().append(SPAN.start("id", "author" + index, "class", "author"));
+        append(SPAN.end()).append(BR.tag()).nl();
+
+        if (author.address != null) {
+            indent().append(SPAN.start("id", "email" + index, "class", "email"))
+                    .append(A.start("href", "mailto:" + author.address))
+                    .append(author.addressLabel != null ? author.addressLabel : author.address).append(A.end());
+            append(SPAN.end()).append(BR.tag()).nl();
+        }
+    }
+
+    @Override
+    public void writeAuthorName(String name) {
+        authors.peekLast().name = name;
+    }
+
+    @Override
+    public void writeAuthorAddress(String address) {
+        authors.peekLast().address = address;
+    }
+
+    @Override
+    public void writeAuthorAddressLabel(String label) {
+        authors.peekLast().addressLabel = label;
+    }
+
+//    @Override
+//    public void startAuthorName() {//OK
+//        String index = "";
+//        indent().append(SPAN.start("id", "author" + index, "class", "author"));
+//    }
+//
+//    @Override
+//    public void endAuthorName() {//OK
+//        append(SPAN.end()).append(BR.tag()).nl();
+//    }
+//
+//    @Override
+//    public void startAuthorAddress() {
+//        String index = "";
+//        indent().append(SPAN.start("id", "email" + index, "class", "email"));
+//                //.append(A.start("href", "mailto:" + a.getAddress()))
+//                //.append(a.getAddress()).append(A.end());
+//    }
+//
+//    @Override
+//    public void endAuthorAddress() {//OK
+//        append(SPAN.end()).append(BR.tag()).nl();
+//    }
 }

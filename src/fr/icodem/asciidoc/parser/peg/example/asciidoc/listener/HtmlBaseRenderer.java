@@ -32,11 +32,14 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
     private int positionInBuffer;
     private Marker marker; // current marker in use
 
+    private static int markersCount;
     private class Marker {
+        int id;
         int position;
         Indenter indenter;
 
         public Marker(int position, int indentLevel) {
+            this.id = ++markersCount;
             this.position = position;
             this.indenter = new Indenter(indentLevel);
         }
@@ -210,13 +213,14 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
     }
 
     protected HtmlBaseRenderer moveLast() {
+
         int pos = marker.position; // position when moveTo() was called
         int delta = positionInBuffer - marker.position; // number of chars added after moveTo()
 
         markers.values()
                .stream()
-               .filter(m -> m.position >= pos)
-               .forEach(m -> m.position += delta);
+               .filter(m -> m.id >= marker.id && m.position >= pos)
+               .forEach(m -> m.position += delta); // à reprendre exemple auteurs avant title
 
         positionInBuffer = -1;
         indenter = rootIndenter;

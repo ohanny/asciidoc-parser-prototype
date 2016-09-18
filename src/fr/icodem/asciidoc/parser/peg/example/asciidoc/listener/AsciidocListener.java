@@ -40,6 +40,15 @@ public class AsciidocListener implements ParseTreeListener {
             case "title":
                 handler.writeText(nodes.peekLast(), new String(chars));
                 break;
+            case "authorName":
+                handler.writeAuthorName(new String(chars));
+                break;
+            case "authorAddress":
+                handler.writeAuthorAddress(new String(chars));
+                break;
+            case "authorAddressLabel":
+                handler.writeAuthorAddressLabel(new String(chars));
+                break;
         }
 
     }
@@ -59,6 +68,20 @@ public class AsciidocListener implements ParseTreeListener {
                 nodes.addLast(DOCUMENT_TITLE);
                 //textObjects.push(Text.dummy());
                 break;
+            case "authors" :
+                handler.startAuthors();
+                break;
+            case "author" :
+                handler.startAuthor();
+                break;
+//            case "authorName" :
+//                handler.startAuthorName();
+//                break;
+//            case "authorAddress" :
+//                handler.startAuthorAddress();
+//                break;
+
+
             case "title" :
 //                enterTitle();
                 break;
@@ -87,15 +110,6 @@ public class AsciidocListener implements ParseTreeListener {
             case "listItemValue" :
 //                enterListItemValue();
                 break;
-            case "author" :
-//                enterAuthor();
-                break;
-            case "authorAddress" :
-//                enterAuthorAddress();
-                break;
-            case "authorName" :
-//                enterAuthorName();
-                break;
             case "idName" :
 //                enterIdName();
                 break;
@@ -122,7 +136,6 @@ public class AsciidocListener implements ParseTreeListener {
                 break;
             case "nl" :
             case "bl" :
-            case "authors" :
             case "listContinuation" :
 //                textObjects.push(Text.dummy());
                 break;
@@ -145,6 +158,21 @@ public class AsciidocListener implements ParseTreeListener {
                 //Text text = textObjects.pop();
 
                 break;
+            case "authors" :
+                handler.endAuthors();
+                break;
+            case "author" :
+                handler.endAuthor();
+                break;
+//            case "authorName" :
+//                handler.endAuthorName();
+//                break;
+//            case "authorAddress" :
+//                handler.endAuthorAddress();
+//                break;
+
+
+
             case "preamble" :
 //                exitPreamble();
                 break;
@@ -157,9 +185,6 @@ public class AsciidocListener implements ParseTreeListener {
             case "list" :
 //                exitList();
                 break;
-            case "authors" :
-            case "authorName" :
-            case "authorAddress" :
             case "idName" :
             case "roleName" :
             case "optionName" :
