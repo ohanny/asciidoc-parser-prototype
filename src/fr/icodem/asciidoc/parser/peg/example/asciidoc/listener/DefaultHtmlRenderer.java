@@ -104,14 +104,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             case DOCUMENT_TITLE:
                 title = text;
                 break;
-            case AUTHOR_ADDRESS:
-                append(A.start("href", "mailto:" + text))
-                    .append(text)
-                    .append(A.end())
-                    .append(SPAN.end())
-                    .append(BR.tag())
-                    .nl();
-                break;
         }
 
         append(text);
