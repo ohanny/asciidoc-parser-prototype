@@ -108,6 +108,9 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             case DOCUMENT_TITLE:
                 title = text;
                 break;
+            case PARAGRAPH:
+                //include(() -> addFormattedText(p.getFormattedText()));
+                break;
         }
 
         append(text);
@@ -243,10 +246,12 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                     href = "mailto:" + href;
                 }
 
+                String label = author.addressLabel != null ? author.addressLabel : author.address;
+
                 indent()
                     .append(SPAN.start("id", "email" + index, "class", "email"))
                     .append(A.start("href", href))
-                    .append(author.addressLabel != null ? author.addressLabel : author.address)
+                    .append(label)
                     .append(A.end())
                     .append(SPAN.end())
                     .append(BR.tag())
@@ -301,6 +306,26 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void endContent() {
         decrementIndentLevel()
+            .indent()
+            .append(DIV.end())
+            .nl();
+    }
+
+    @Override
+    public void startParagraph() {
+        indent()
+            .append(DIV.start("class", "paragraph"))
+            .nl()
+            .incrementIndentLevel()
+            .indent()
+            .append(P.start());
+    }
+
+    @Override
+    public void endParagraph() {
+        append(P.end())
+            .nl()
+            .decrementIndentLevel()
             .indent()
             .append(DIV.end())
             .nl();

@@ -7,6 +7,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler.DOCUMENT_TITLE;
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler.PARAGRAPH;
 
 /**
  * PEG listener
@@ -38,6 +39,7 @@ public class AsciidocListener implements ParseTreeListener {
 
         switch (context.getNodeName()) {
             case "title":
+            case "paragraph":
                 handler.writeText(nodes.peekLast(), new String(chars));
                 break;
             case "authorName":
@@ -81,6 +83,11 @@ public class AsciidocListener implements ParseTreeListener {
                 handler.startContent();
                 break;
 
+            case "paragraph" :
+                handler.startParagraph();
+                nodes.addLast(PARAGRAPH);
+                break;
+
 
             case "title" :
 //                enterTitle();
@@ -112,9 +119,6 @@ public class AsciidocListener implements ParseTreeListener {
                 break;
             case "optionName" :
 //                enterOptionName();
-                break;
-            case "paragraph" :
-//                enterParagraph();
                 break;
             case "positionalAttribute" :
 //                enterPositionalAttribute();
@@ -163,6 +167,10 @@ public class AsciidocListener implements ParseTreeListener {
                 handler.endContent();
                 break;
 
+            case "paragraph" :
+                handler.endParagraph();
+                nodes.removeLast();
+                break;
 
             case "section" :
 //                exitSection();
@@ -176,7 +184,6 @@ public class AsciidocListener implements ParseTreeListener {
             case "idName" :
             case "roleName" :
             case "optionName" :
-            case "paragraph" :
             case "attributeEntry" :
                 //case "attributeName" :
                 //case "attributeValue" :

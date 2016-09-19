@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 public interface AsciidocHandler {
 
     String DOCUMENT_TITLE = "DOCUMENT_TITLE";
+    String PARAGRAPH = "PARAGRAPH";
 
     void writeText(String node, String text);
 
@@ -30,6 +31,9 @@ public interface AsciidocHandler {
 
     void startContent();
     void endContent();
+
+    void startParagraph();
+    void endParagraph();
 
     /*
     void startPreamble();
