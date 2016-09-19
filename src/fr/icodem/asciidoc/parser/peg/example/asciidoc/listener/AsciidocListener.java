@@ -74,12 +74,12 @@ public class AsciidocListener implements ParseTreeListener {
             case "author" :
                 handler.startAuthor();
                 break;
-//            case "authorName" :
-//                handler.startAuthorName();
-//                break;
-//            case "authorAddress" :
-//                handler.startAuthorAddress();
-//                break;
+            case "preamble" :
+                handler.startPreamble();
+                break;
+            case "content" :
+                handler.startContent();
+                break;
 
 
             case "title" :
@@ -88,12 +88,6 @@ public class AsciidocListener implements ParseTreeListener {
 //                enterDocumentTitle();
             case "attributeList" :
 //                enterAttributeList();
-                break;
-            case "preamble" :
-//                enterPreamble();
-                break;
-            case "content" :
-//                enterContent();
                 break;
             case "section" :
 //                enterSection();
@@ -155,8 +149,6 @@ public class AsciidocListener implements ParseTreeListener {
             case "documentTitle" :
                 handler.endDocumentTitle();
                 nodes.removeLast();
-                //Text text = textObjects.pop();
-
                 break;
             case "authors" :
                 handler.endAuthors();
@@ -164,18 +156,14 @@ public class AsciidocListener implements ParseTreeListener {
             case "author" :
                 handler.endAuthor();
                 break;
-//            case "authorName" :
-//                handler.endAuthorName();
-//                break;
-//            case "authorAddress" :
-//                handler.endAuthorAddress();
-//                break;
-
-
-
             case "preamble" :
-//                exitPreamble();
+                handler.endPreamble();
                 break;
+            case "content" :
+                handler.endContent();
+                break;
+
+
             case "section" :
 //                exitSection();
                 break;

@@ -25,6 +25,12 @@ public interface AsciidocHandler {
     void writeAuthorAddress(String address);
     void writeAuthorAddressLabel(String label);
 
+    void startPreamble();
+    void endPreamble();
+
+    void startContent();
+    void endContent();
+
     /*
     void startPreamble();
     void endPreamble();

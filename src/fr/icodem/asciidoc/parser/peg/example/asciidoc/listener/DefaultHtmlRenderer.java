@@ -17,7 +17,8 @@ import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     public static void main(String[] args) {
-        String text = "= Hello\n" +
+        String text =
+                "= Hello\n" +
                 "John Doe; Roger Rabbit <roger@mail.com>; François Pignon <fp@mail.com[@françois]>; Alice <http://www.gutenberg.org/cache/epub/11/pg11.txt[@alice]>\n" +
                 //":fruit: kiwi\n" +
                 //":fruit2!:\n" +
@@ -98,6 +99,9 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     private Deque<AuthorContext> authors;
 
+    private boolean hasHeader;
+    private boolean hasPreamble;
+
     @Override
     public void writeText(String node, String text) {
         switch (node) {
@@ -153,6 +157,8 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     @Override
     public void startHeader() {
+        hasHeader = true;
+
         indent()
             .append(DIV.start("id", "header"))
             .nl()
@@ -172,6 +178,8 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .append(TITLE.end())
             .nl()
             .bufferOff();
+
+        startContent();
     }
 
     @Override
@@ -259,6 +267,43 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void writeAuthorAddressLabel(String label) {
         authors.peekLast().addressLabel = label;
+    }
+
+    @Override
+    public void startPreamble() {
+        hasPreamble = true;
+
+        indent()
+            .append(DIV.start("id", "preamble"))
+            .incrementIndentLevel()
+            .nl();
+    }
+
+    @Override
+    public void endPreamble() {
+        decrementIndentLevel()
+            .indent()
+            .append(DIV.end())
+            .nl();
+    }
+
+    @Override
+    public void startContent() {
+        runIf(!hasHeader, () -> bufferOff())
+            .runIf(!hasPreamble, () ->
+                indent()
+                .append(DIV.start("id", "content"))
+                .incrementIndentLevel()
+                .nl()
+            );
+    }
+
+    @Override
+    public void endContent() {
+        decrementIndentLevel()
+            .indent()
+            .append(DIV.end())
+            .nl();
     }
 
 }
