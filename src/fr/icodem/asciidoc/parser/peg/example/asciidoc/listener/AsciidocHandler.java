@@ -21,12 +21,6 @@ public interface AsciidocHandler {
     void startAuthor();
     void endAuthor();
 
-    //void startAuthorName();
-    //void endAuthorName();
-
-    //void startAuthorAddress();
-    //void endAuthorAddress();
-
     void writeAuthorName(String name);
     void writeAuthorAddress(String address);
     void writeAuthorAddressLabel(String label);
