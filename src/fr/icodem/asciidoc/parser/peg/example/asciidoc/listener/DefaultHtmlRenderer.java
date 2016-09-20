@@ -24,7 +24,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 //":fruit2!:\n" +
                 //":!fruit3:\n" +
                 "\n" +
-                "The sun, the earth and the sea.\n" +
+                "The sun, *the earth* and _the_ sea.\n" +
                 "\n" +
                 "== About fruits\n" +
                 "\n" +
@@ -107,9 +107,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         switch (node) {
             case DOCUMENT_TITLE:
                 title = text;
-                break;
-            case PARAGRAPH:
-                //include(() -> addFormattedText(p.getFormattedText()));
                 break;
         }
 
@@ -329,6 +326,28 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .indent()
             .append(DIV.end())
             .nl();
+    }
+
+    // Formatted text
+
+    @Override
+    public void startBold() {
+        append(STRONG.start());
+    }
+
+    @Override
+    public void endBold() {
+        append(STRONG.end());
+    }
+
+    @Override
+    public void startItalic() {
+        append(EM.start());
+    }
+
+    @Override
+    public void endItalic() {
+        append(EM.end());
     }
 
 }

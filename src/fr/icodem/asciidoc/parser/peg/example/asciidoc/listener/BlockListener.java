@@ -1,31 +1,46 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 import fr.icodem.asciidoc.parser.peg.NodeContext;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.FormattedTextRules;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
+import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
+import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
+import java.io.StringReader;
 import java.util.Deque;
 import java.util.LinkedList;
 
 import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler.DOCUMENT_TITLE;
-import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler.PARAGRAPH;
+import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 
 /**
  * PEG listener
  * New approach : no use of AST
  * Runs in main thread.
  */
-public class AsciidocListener implements ParseTreeListener {
+public class BlockListener implements ParseTreeListener {
 
     private AsciidocHandler handler;
 
     //private Deque<Text> textObjects;
     private Deque<String> nodes; // TODO rename variable
 
-    public AsciidocListener(AsciidocHandler handler) {
+    public BlockListener(AsciidocHandler handler) {
         this.handler = handler;
         this.nodes = new LinkedList<>();
         this.nodes.add("");
         //this.textObjects = new LinkedList<>();
+    }
+
+    private void parseFormattedText(char[] chars) {
+        //System.out.println("parseFormattedText() => " + new String(chars));
+        FormattedTextRules rules = new FormattedTextRules();// TODO inject rules
+        rules.useFactory(defaultRulesFactory());
+        ParsingResult result = new ParseRunner(rules, rules::formattedText)
+                //.trace()
+                .parse(new StringReader(new String(chars)), new FormattedTextListener(handler), null, null);
+        // TODO optimize new StringReader(new String(chars))
+
     }
 
     @Override
@@ -39,8 +54,11 @@ public class AsciidocListener implements ParseTreeListener {
 
         switch (context.getNodeName()) {
             case "title":
-            case "paragraph":
                 handler.writeText(nodes.peekLast(), new String(chars));
+                break;
+            case "paragraph":
+                //handler.writeText(nodes.peekLast(), new String(chars));
+                parseFormattedText(chars);
                 break;
             case "authorName":
                 handler.writeAuthorName(new String(chars));
@@ -85,7 +103,6 @@ public class AsciidocListener implements ParseTreeListener {
 
             case "paragraph" :
                 handler.startParagraph();
-                nodes.addLast(PARAGRAPH);
                 break;
 
 
@@ -169,7 +186,6 @@ public class AsciidocListener implements ParseTreeListener {
 
             case "paragraph" :
                 handler.endParagraph();
-                nodes.removeLast();
                 break;
 
             case "section" :

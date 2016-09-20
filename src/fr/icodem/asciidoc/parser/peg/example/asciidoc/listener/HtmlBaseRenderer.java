@@ -97,7 +97,7 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
     public void render(String text) {
         ParsingResult result = new ParseRunner(rules, rules::document)
                 //.trace()
-                .parse(new StringReader(text), new AsciidocListener(this), null, null);
+                .parse(new StringReader(text), new BlockListener(this), null, null);
 
         closeWriter();
     }

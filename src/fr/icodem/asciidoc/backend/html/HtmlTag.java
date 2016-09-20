@@ -10,7 +10,7 @@ public enum HtmlTag {
     DIV, SECTION, P, UL, OL, LI,
     H1, H2, H3, H4, H5, H6,
     BR,
-    A, SPAN;
+    A, SPAN, STRONG, EM;
 
     public static HtmlTag getTitleHeader(int level) {
         switch (level) {
@@ -89,6 +89,8 @@ public enum HtmlTag {
             case H6: return "<h6>";
             case A: return buildStartTag("a", attributes);
             case SPAN: return buildStartTag("span", attributes);
+            case STRONG: return "<strong>";
+            case EM: return "<em>";
             default: return null;
         }
     }
@@ -113,6 +115,8 @@ public enum HtmlTag {
             case H6: return "</h6>";
             case SPAN: return "</span>";
             case A: return "</a>";
+            case STRONG: return "</strong>";
+            case EM: return "</em>";
             default: return null;
         }
     }
