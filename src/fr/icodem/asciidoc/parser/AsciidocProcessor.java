@@ -7,6 +7,7 @@ import fr.icodem.asciidoc.parser.elements.ElementFactory;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public abstract class AsciidocProcessor extends AsciidocBaseListener {
     protected AsciidocParserHandler handler;
     protected ElementFactory ef;

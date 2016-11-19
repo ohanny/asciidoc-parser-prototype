@@ -4,6 +4,7 @@ import fr.icodem.asciidoc.parser.elements.*;
 
 import java.util.List;
 
+@Deprecated
 public interface AsciidocParserHandler {
     void startDocument();
     void endDocument();

@@ -16,6 +16,7 @@ import static fr.icodem.asciidoc.parser.ActionRequest.ActionRequestType.*;
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.*;
 import static java.lang.Math.min;
 
+@Deprecated
 public class AsciidocPegProcessor implements ParseTreeListener {
 
     private FormattedTextPegProcessor textProcessor;
@@ -361,7 +362,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
     private void enterSection() {
         Section section = ef.section();
         emitter.addActionRequest(StartSection, () -> handler.startSection(section), true);
-        emitter.addActionRequest(StartSection, () -> handler.startSection(section), true);
+        //emitter.addActionRequest(StartSection, () -> handler.startSection(section), true);
     }
 
     private void exitSection() {

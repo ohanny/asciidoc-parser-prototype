@@ -32,6 +32,9 @@ public interface AsciidocHandler {
     void startContent();
     void endContent();
 
+    void startSection();
+    void endSection();
+
     void startParagraph();
     void endParagraph();
 

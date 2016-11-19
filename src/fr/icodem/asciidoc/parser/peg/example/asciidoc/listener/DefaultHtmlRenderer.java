@@ -113,6 +113,10 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         append(text);
     }
 
+    /* **********************************************/
+    // Block
+    /* **********************************************/
+
     @Override
     public void startDocument() {
         append(DOCTYPE.tag())
@@ -190,8 +194,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     @Override
     public void endDocumentTitle() {
-        append(H1.end())
-            .nl();
+        append(H1.end()).nl();
     }
 
     @Override
@@ -309,6 +312,22 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
+    public void startSection() {
+        indent()
+            .append(SECTION.start())
+            .nl()
+            .incrementIndentLevel();
+    }
+
+    @Override
+    public void endSection() {
+        decrementIndentLevel()
+            .indent()
+            .append(SECTION.end())
+            .nl();
+    }
+
+    @Override
     public void startParagraph() {
         indent()
             .append(DIV.start("class", "paragraph"))
@@ -328,7 +347,9 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .nl();
     }
 
+    /* **********************************************/
     // Formatted text
+    /* **********************************************/
 
     @Override
     public void startBold() {

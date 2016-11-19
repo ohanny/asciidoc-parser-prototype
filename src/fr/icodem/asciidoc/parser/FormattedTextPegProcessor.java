@@ -10,6 +10,7 @@ import java.io.StringReader;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 
+@Deprecated
 public class FormattedTextPegProcessor {
 
     private FormattedTextRules rules = new FormattedTextRules();

@@ -44,7 +44,7 @@ public class BlockListener implements ParseTreeListener {
     }
 
     @Override
-    public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {
+    public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {// TODO recycle char tab => add offset + length (cf SAX)
         System.out.println("CHARS => " + new String(chars));
         //final Text text = textObjects.peek();
         //text.offer(new String(chars));
@@ -100,6 +100,9 @@ public class BlockListener implements ParseTreeListener {
             case "content" :
                 handler.startContent();
                 break;
+            case "section" :
+                handler.startSection();
+                break;
 
             case "paragraph" :
                 handler.startParagraph();
@@ -112,9 +115,6 @@ public class BlockListener implements ParseTreeListener {
 //                enterDocumentTitle();
             case "attributeList" :
 //                enterAttributeList();
-                break;
-            case "section" :
-//                enterSection();
                 break;
             case "sectionTitle" :
 //                enterSectionTitle(context);
@@ -183,14 +183,14 @@ public class BlockListener implements ParseTreeListener {
             case "content" :
                 handler.endContent();
                 break;
+            case "section" :
+                handler.endSection();
+                break;
 
             case "paragraph" :
                 handler.endParagraph();
                 break;
 
-            case "section" :
-//                exitSection();
-                break;
             case "sectionTitle" :
 //                exitSectionTitle();
                 break;

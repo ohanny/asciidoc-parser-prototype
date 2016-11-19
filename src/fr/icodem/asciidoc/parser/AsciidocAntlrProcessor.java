@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import static fr.icodem.asciidoc.parser.ActionRequest.ActionRequestType.*;
 import static java.lang.Math.min;
 
+@Deprecated
 public class AsciidocAntlrProcessor extends AsciidocProcessor {
 
     private HeaderContext headerContext;
