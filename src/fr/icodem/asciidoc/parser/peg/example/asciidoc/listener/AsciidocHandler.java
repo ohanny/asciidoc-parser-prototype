@@ -35,8 +35,14 @@ public interface AsciidocHandler {
     void startSection();
     void endSection();
 
+    void startSectionTitle(int level);
+    void endSectionTitle(int level);
+
     void startParagraph();
     void endParagraph();
+
+    void startList();
+    void endList();
 
 
     // Formatted text

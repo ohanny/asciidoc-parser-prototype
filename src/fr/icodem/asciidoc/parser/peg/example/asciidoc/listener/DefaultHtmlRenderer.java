@@ -328,6 +328,17 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
+    public void startSectionTitle(int level) {
+        indent().append(getTitleHeader(level).start());
+    }
+
+    @Override
+    public void endSectionTitle(int level) {
+        append(getTitleHeader(level).end())
+            .nl();
+    }
+
+    @Override
     public void startParagraph() {
         indent()
             .append(DIV.start("class", "paragraph"))

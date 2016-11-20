@@ -12,6 +12,7 @@ import java.util.LinkedList;
 
 import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler.DOCUMENT_TITLE;
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
+import static java.lang.Math.min;
 
 /**
  * PEG listener
@@ -103,9 +104,15 @@ public class BlockListener implements ParseTreeListener {
             case "section" :
                 handler.startSection();
                 break;
+            case "sectionTitle" :
+                int level = min(context.getIntAttribute("eqs.count", -1), 6);
+                handler.startSectionTitle(level);
+                break;
 
             case "paragraph" :
                 handler.startParagraph();
+                break;
+            case "list" :
                 break;
 
 
@@ -115,12 +122,6 @@ public class BlockListener implements ParseTreeListener {
 //                enterDocumentTitle();
             case "attributeList" :
 //                enterAttributeList();
-                break;
-            case "sectionTitle" :
-//                enterSectionTitle(context);
-                break;
-            case "list" :
-//                enterList();
                 break;
             case "listItem" :
 //                enterListItem(context);
@@ -186,17 +187,17 @@ public class BlockListener implements ParseTreeListener {
             case "section" :
                 handler.endSection();
                 break;
+            case "sectionTitle" :
+                int level = min(context.getIntAttribute("eqs.count", -1), 6);
+                handler.endSectionTitle(level);
+                break;
 
             case "paragraph" :
                 handler.endParagraph();
                 break;
-
-            case "sectionTitle" :
-//                exitSectionTitle();
-                break;
             case "list" :
-//                exitList();
                 break;
+
             case "idName" :
             case "roleName" :
             case "optionName" :
