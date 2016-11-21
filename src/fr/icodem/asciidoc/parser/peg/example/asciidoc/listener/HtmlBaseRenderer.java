@@ -180,7 +180,9 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
     }
 
     public HtmlBaseRenderer mark(String key) {
-        markers.put(key, new Marker(buffer.length(), indenter.level));
+        int markPos = positionInBuffer != -1?positionInBuffer:buffer.length();
+        markers.put(key, new Marker(markPos, indenter.level));
+        //markers.put(key, new Marker(buffer.length(), indenter.level));
         return this;
     }
 
@@ -202,10 +204,13 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
     }
 
     protected HtmlBaseRenderer moveTo(String key) {
+        //updateMarkers();
+
         marker = markers.get(key);
         if (marker != null) {
             positionInBuffer = marker.position;
             indenter = marker.indenter;
+            System.out.println("MOVETO="+positionInBuffer);
         } else {
             throw new IllegalStateException("No marker found for key : " + key);
         }
@@ -214,18 +219,26 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
 
     protected HtmlBaseRenderer moveLast() {
 
-        int pos = marker.position; // position when moveTo() was called
+        updateMarkers();
+
+        positionInBuffer = -1;
+        indenter = rootIndenter;
+        marker = null;
+
+        return this;
+    }
+
+    private void updateMarkers() {
+        if (marker == null) return;
+
+        //int pos = marker.position; // position when moveTo() was called
         int delta = positionInBuffer - marker.position; // number of chars added after moveTo()
 
         markers.values()
                .stream()
-               .filter(m -> m.id >= marker.id && m.position >= pos)
+               .filter(m -> m.position > marker.position)
+               //.filter(m -> m.id >= marker.id && m.position >= pos)
                .forEach(m -> m.position += delta); // à reprendre exemple auteurs avant title
-
-        positionInBuffer = -1;
-        indenter = rootIndenter;
-
-        return this;
     }
 
 }

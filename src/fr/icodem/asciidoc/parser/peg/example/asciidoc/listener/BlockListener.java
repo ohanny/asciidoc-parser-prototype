@@ -26,6 +26,35 @@ public class BlockListener implements ParseTreeListener {
     //private Deque<Text> textObjects;
     private Deque<String> nodes; // TODO rename variable
 
+    private enum ListType {Ordered, Unordered};
+    private static class ListContext {
+        int level;
+        int bullets;
+        ListType type;
+        ListContext parent;
+        ListContext root;
+
+        static ListContext empty() {
+            ListContext ctx = new ListContext();
+            ctx.level = 1;
+            ctx.root = ctx;
+            return ctx;
+        }
+
+        static ListContext withParent(ListContext parent) {
+            ListContext context = new ListContext();
+            if (parent != null) {
+                context.parent = parent;
+                context.level = parent.level + 1;
+            } else {
+                context.level = 1;
+            }
+            return context;
+        }
+    }
+    private ListContext currentList;
+
+
     public BlockListener(AsciidocHandler handler) {
         this.handler = handler;
         this.nodes = new LinkedList<>();
@@ -58,6 +87,7 @@ public class BlockListener implements ParseTreeListener {
                 handler.writeText(nodes.peekLast(), new String(chars));
                 break;
             case "paragraph":
+            case "listItemValue":
                 //handler.writeText(nodes.peekLast(), new String(chars));
                 parseFormattedText(chars);
                 break;
@@ -113,6 +143,54 @@ public class BlockListener implements ParseTreeListener {
                 handler.startParagraph();
                 break;
             case "list" :
+                currentList = ListContext.empty();
+                handler.startList();
+//                currentList = ListContext.withParent(currentList);
+                break;
+            case "listItem" :
+                int times = context.getIntAttribute("times.count", -1);
+                if (times > 0) {
+                    if (currentList.type == ListType.Unordered) {
+                        if (currentList.bullets == times) {
+
+                        } else if (currentList.bullets < times) {
+                            currentList = ListContext.withParent(currentList);
+                            currentList.bullets = times;
+                        } else if (currentList.bullets > times) {
+                            handler.endUnorderedList(currentList.level);
+                            currentList = currentList.parent;
+                        }
+                    }
+                } else {
+                    int dots = context.getIntAttribute("dots.count", -1);
+                    if (dots > 0) {
+
+                    }
+                }
+
+
+                // cas root identifié
+                //if (currentList.)
+
+                // case new root list
+                //System.out.println("CURRENT="+currentList);
+                if (currentList.type == null) {
+                    if (times > 0) {
+                        currentList.type = ListType.Unordered;
+                        currentList.bullets = times;
+                        handler.startUnorderedList(currentList.level);
+                    } else {
+                        int dots = context.getIntAttribute("dots.count", -1);
+                        if (dots > 0) {
+                            currentList.type = ListType.Ordered;
+                            handler.startOrderedList(currentList.level);
+                        }
+                    }
+                }
+                handler.startListItem(currentList.level);
+                break;
+            case "listItemValue" :
+                handler.startListItemValue();
                 break;
 
 
@@ -122,12 +200,6 @@ public class BlockListener implements ParseTreeListener {
 //                enterDocumentTitle();
             case "attributeList" :
 //                enterAttributeList();
-                break;
-            case "listItem" :
-//                enterListItem(context);
-                break;
-            case "listItemValue" :
-//                enterListItemValue();
                 break;
             case "idName" :
 //                enterIdName();
@@ -196,6 +268,23 @@ public class BlockListener implements ParseTreeListener {
                 handler.endParagraph();
                 break;
             case "list" :
+                if (currentList.type == ListType.Unordered) {
+                    handler.endUnorderedList(currentList.level);
+                }
+                else if (currentList.type == ListType.Ordered) {
+                    handler.endOrderedList(currentList.level);
+                }
+                //currentList = currentList.parent;
+                currentList = null;
+                handler.endList();
+                break;
+            case "listItem" :
+                handler.endListItem(currentList.level);
+                break;
+            case "listItemValue" :
+                handler.endListItemValue();
+                break;
+            case "listContinuation" :
                 break;
 
             case "idName" :
@@ -207,9 +296,6 @@ public class BlockListener implements ParseTreeListener {
             case "positionalAttribute" :
             case "nl" :
             case "bl" :
-            case "listItem" :
-            case "listItemValue" :
-            case "listContinuation" :
             case "title" :
             case "attributeList" :
 //                textObjects.pop();

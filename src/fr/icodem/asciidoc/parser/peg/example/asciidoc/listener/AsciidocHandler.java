@@ -44,6 +44,18 @@ public interface AsciidocHandler {
     void startList();
     void endList();
 
+    void startOrderedList(int level);
+    void endOrderedList(int level);
+
+    void startUnorderedList(int level);
+    void endUnorderedList(int level);
+
+    void startListItem(int level);
+    void endListItem(int level);
+
+    void startListItemValue();
+    void endListItemValue();
+
 
     // Formatted text
     void startBold();

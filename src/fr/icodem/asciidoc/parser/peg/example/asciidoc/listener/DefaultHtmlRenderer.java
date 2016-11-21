@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
+import fr.icodem.asciidoc.backend.html.CssElement;
 import fr.icodem.asciidoc.backend.html.HtmlBackend;
 import fr.icodem.asciidoc.parser.AsciidocPegProcessor;
 import fr.icodem.asciidoc.parser.elements.AttributeEntry;
@@ -17,6 +18,12 @@ import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     public static void main(String[] args) {
+
+        final StringWriter writer2 = new StringWriter();
+        DefaultHtmlRenderer.withWriter(writer2).test();
+        System.out.println(writer2);
+
+        if (false) return;
         String text =
                 "= Hello\n" +
                 "John Doe; Roger Rabbit <roger@mail.com>; François Pignon <fp@mail.com[@françois]>; Alice <http://www.gutenberg.org/cache/epub/11/pg11.txt[@alice]>\n" +
@@ -45,9 +52,12 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "\n" +
                 "** Un\n" +
                 "** Deux\n" +
+                "*** Trois\n" +
+                "*** Quatre\n" +
                 "\n" +
                 "[lowerroman.summary.incremental%header%footer,xxx=yyy,xxx=zzz]\n" +
-                ". Apple\n" +
+                "** Apple\n" +
+                //". Apple\n" +
                 "** Kiwi\n" +
                 "** Cherry\n" +
                 "* Banana\n" +
@@ -69,6 +79,24 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         DefaultHtmlRenderer.withWriter(writer1).render(text);
         System.out.println(writer1);
 
+    }
+
+    private void test() {
+        bufferOn()
+            .append("ab")
+            .mark("1")
+            .append("cd")
+            .moveTo("1")
+            .append("ef")
+            .mark("2")
+            .append("gh")
+            .moveTo("2")
+            .append("ij")
+                .moveTo("1")
+                .append("kl")
+                .moveLast()
+                .append("mn")
+        .bufferOff();
     }
 
     private DefaultHtmlRenderer(Writer writer) {
@@ -355,6 +383,120 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .decrementIndentLevel()
             .indent()
             .append(DIV.end())
+            .nl();
+    }
+
+    @Override
+    public void startList() {
+        bufferOn();
+    }
+
+    @Override
+    public void endList() {
+        bufferOff();
+    }
+
+    @Override
+    public void startOrderedList(int level) {
+        indent()
+            .append(DIV.start("class", "ulist"))
+            .nl()
+            .incrementIndentLevel()
+            .indent()
+            .append(OL.start())
+            .nl()
+            .incrementIndentLevel();
+
+
+        /*
+        CssElement css = CssElement.getOrderedListNumerationStyle(list.getFirstPositionalAttribute());
+        if (css == null) {
+            css = CssElement.getOrderedListNumerationStyle(list.getLevel());
+        }
+
+        String divStyles = "olist " + css.getOrderedListNumerationStyleName();
+        String olStyle = css.getOrderedListNumerationStyleName();
+        String olType = css.getOrderedListNumerationType();
+
+        indent().append(DIV.start("class", divStyles)).nl().incrementIndentLevel()
+                .runIf(olType == null, () -> indent().append(OL.start("class", olStyle)).nl().incrementIndentLevel())
+                .runIf(olType != null, () -> indent().append(OL.start("class", olStyle, "type", olType)).nl().incrementIndentLevel())
+                .forEach(list.getItems(), this::addListItem)
+                .decrementIndentLevel().indent().append(OL.end()).nl()
+                .decrementIndentLevel().indent().append(DIV.end()).nl();
+                 */
+
+    }
+
+    @Override
+    public void endOrderedList(int level) {
+        decrementIndentLevel()
+            .indent()
+            .append(OL.end())
+            .nl()
+            .decrementIndentLevel()
+            .indent()
+            .append(DIV.end())
+            .nl()
+            .moveLast();
+    }
+
+    @Override
+    public void startUnorderedList(int level) {
+        runIf(level > 1, () -> moveTo("EndLI" + (level-1)))
+            .indent()
+            .append(DIV.start("class", "ulist"))
+            .nl()
+            .incrementIndentLevel()
+            .indent()
+            .append(UL.start())
+            .nl()
+            .incrementIndentLevel();
+    }
+
+    @Override
+    public void endUnorderedList(int level) {
+        decrementIndentLevel()
+            .indent()
+            .append(UL.end())
+            .nl()
+            .decrementIndentLevel()
+            .indent()
+            .append(DIV.end())
+            .nl()
+            .moveLast().append("XXX");// plutôt move after li
+    }
+
+    @Override
+    public void startListItem(int level) {
+        indent()
+            .append(LI.start())
+            .nl()
+            .incrementIndentLevel();
+//                .indent().append(P.start()).append(li.getText())
+//                .append(P.end()).nl()
+//                .runIf(li.hasNestedList(), () -> addList(li.getNestedList()))
+//                .forEach(li.getBlocks(), this::addBlock)
+    }
+
+    @Override
+    public void endListItem(int level) {
+        mark("EndLI" + level)
+            .decrementIndentLevel()
+            .indent()
+            .append(LI.end())
+            .nl();// mark after end
+    }
+
+    @Override
+    public void startListItemValue() {
+        indent()
+            .append(P.start());
+    }
+
+    @Override
+    public void endListItemValue() {
+        append(P.end())
             .nl();
     }
 
