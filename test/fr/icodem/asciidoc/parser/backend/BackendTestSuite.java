@@ -8,7 +8,8 @@ import org.junit.runners.Suite;
         HeadingsSpec.class,
         UnorderedListSpec.class,
         FormattedTextSpec.class,
-        ParagraphSpec.class
+        ParagraphSpec.class,
+        TextOutputterSpec.class
 })
 public class BackendTestSuite {
 }
