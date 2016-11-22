@@ -31,7 +31,7 @@ class TextOutputterSpec extends Specification {
         writer.toString() == "abc\r\n";
     }
 
-    def "indent once after new line"() {
+    def "indent level 1 on second line"() {
         given:
         StringWriter writer = new StringWriter();
         TextOutputter outputter = new TextOutputter(writer);
@@ -41,13 +41,13 @@ class TextOutputterSpec extends Specification {
         outputter.nl();
         outputter.incrementIndentLevel();
         outputter.indent();
-        outputter.append("cde")
+        outputter.append("def")
 
         then:
-        writer.toString() == "abc\r\n  cde";
+        writer.toString() == "abc\r\n  def";
     }
 
-    def "indent twice after new line"() {
+    def "indent level 1 on second line and level 2 on third line"() {
         given:
         StringWriter writer = new StringWriter();
         TextOutputter outputter = new TextOutputter(writer);
@@ -57,11 +57,125 @@ class TextOutputterSpec extends Specification {
         outputter.nl();
         outputter.incrementIndentLevel();
         outputter.indent();
+        outputter.append("def")
+        outputter.nl();
+        outputter.incrementIndentLevel();
         outputter.indent();
-        outputter.append("cde")
+        outputter.append("ghi")
 
         then:
-        writer.toString() == "abc\r\n    cde";
+        writer.toString() == "abc\r\n  def\r\n    ghi";
+    }
+
+    def "data after buffer on are not outputted if buffer off is not requested"() {
+        given:
+        StringWriter writer = new StringWriter();
+        TextOutputter outputter = new TextOutputter(writer);
+
+        when:
+        outputter.append("abc");
+        outputter.bufferOn();
+        outputter.append("def")
+
+        then:
+        writer.toString() == "abc";
+    }
+
+    def "data after buffer on are outputted if buffer off is requested"() {
+        given:
+        StringWriter writer = new StringWriter();
+        TextOutputter outputter = new TextOutputter(writer);
+
+        when:
+        outputter.append("abc");
+        outputter.bufferOn();
+        outputter.append("def")
+        outputter.bufferOff();
+
+        then:
+        writer.toString() == "abcdef";
+    }
+
+    def "insert data using a mark"() {
+        given:
+        StringWriter writer = new StringWriter();
+        TextOutputter outputter = new TextOutputter(writer);
+
+        when:
+        outputter.bufferOn();
+        outputter.append("abc");
+        outputter.mark("1");
+        outputter.append("def")
+        outputter.moveTo("1")
+        outputter.append("ghi")
+        outputter.bufferOff();
+
+        then:
+        writer.toString() == "abcghidef";
+    }
+
+    def "insert data using a mark, then append data at the end"() {
+        given:
+        StringWriter writer = new StringWriter();
+        TextOutputter outputter = new TextOutputter(writer);
+
+        when:
+        outputter.bufferOn();
+        outputter.append("abc");
+        outputter.mark("1");
+        outputter.append("def")
+        outputter.moveTo("1")
+        outputter.append("ghi")
+        outputter.moveEnd();
+        outputter.append("jkl")
+        outputter.bufferOff();
+
+        then:
+        writer.toString() == "abcghidefjkl";
+    }
+
+    def "insert data using two marks"() {
+        given:
+        StringWriter writer = new StringWriter();
+        TextOutputter outputter = new TextOutputter(writer);
+
+        when:
+        outputter.bufferOn();
+        outputter.append("abc");
+        outputter.mark("1");
+        outputter.append("def")
+        outputter.moveTo("1")
+        outputter.append("ghi")
+        outputter.mark("2");
+        outputter.append("jkl")
+        outputter.moveTo("2")
+        outputter.append("mno")
+        outputter.bufferOff();
+
+        then:
+        writer.toString() == "abcghimnojkldef";
+    }
+
+    def "two marks before move"() {
+        given:
+        StringWriter writer = new StringWriter();
+        TextOutputter outputter = new TextOutputter(writer);
+
+        when:
+        outputter.bufferOn();
+        outputter.append("abc");
+        outputter.mark("1");
+        outputter.append("def")
+        outputter.mark("2")
+        outputter.append("ghi")
+        outputter.moveTo("1");
+        outputter.append("jkl")
+        outputter.moveTo("2")
+        outputter.append("mno")
+        outputter.bufferOff();
+
+        then:
+        writer.toString() == "abcjkldefmnoghi"; //abcjkldefghi
     }
 
 }

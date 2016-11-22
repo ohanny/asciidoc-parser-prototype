@@ -6,7 +6,6 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.BlockRules;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.Writer;
 import java.util.*;
@@ -110,7 +109,7 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
     }
 
     protected HtmlBaseRenderer moveLast() {
-        outputter.moveLast();
+        outputter.moveEnd();
         return this;
     }
 

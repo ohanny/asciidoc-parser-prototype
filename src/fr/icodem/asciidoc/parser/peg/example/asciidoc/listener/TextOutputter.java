@@ -148,19 +148,17 @@ public class TextOutputter {
     }
 
     public void moveTo(String key) {
-        //updateMarkers();
 
         marker = markers.get(key);
         if (marker != null) {
             positionInBuffer = marker.position;
             indenter = marker.indenter;
-            System.out.println("MOVETO="+positionInBuffer);
         } else {
             throw new IllegalStateException("No marker found for key : " + key);
         }
     }
 
-    public void moveLast() {
+    public void moveEnd() {
 
         updateMarkers();
 
