@@ -19,11 +19,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     public static void main(String[] args) {
 
-        final StringWriter writer2 = new StringWriter();
-        DefaultHtmlRenderer.withWriter(writer2).test();
-        System.out.println(writer2);
-
-        if (false) return;
         String text =
                 "= Hello\n" +
                 "John Doe; Roger Rabbit <roger@mail.com>; François Pignon <fp@mail.com[@françois]>; Alice <http://www.gutenberg.org/cache/epub/11/pg11.txt[@alice]>\n" +
@@ -64,8 +59,8 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "[lowergreek]\n" +
                 ". Lemon\n" +
                 ". Strawberry\n" +
-                ".. Un\n" +
-                ".. Deux\n";
+                ".. Kaki\n" +
+                ".. Kiwai\n";
 
         List<AttributeEntry> attributes = new ArrayList<>();
 
@@ -79,24 +74,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         DefaultHtmlRenderer.withWriter(writer1).render(text);
         System.out.println(writer1);
 
-    }
-
-    private void test() {
-        bufferOn()
-            .append("ab")
-            .mark("1")
-            .append("cd")
-            .moveTo("1")
-            .append("ef")
-            .mark("2")
-            .append("gh")
-            .moveTo("2")
-            .append("ij")
-                .moveTo("1")
-                .append("kl")
-                .moveLast()
-                .append("mn")
-        .bufferOff();
     }
 
     private DefaultHtmlRenderer(Writer writer) {
@@ -443,7 +420,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     @Override
     public void startUnorderedList(int level) {
-        runIf(level > 1, () -> moveTo("EndLI" + (level-1)))
+        runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
             .indent()
             .append(DIV.start("class", "ulist"))
             .nl()
@@ -464,7 +441,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .indent()
             .append(DIV.end())
             .nl()
-            .moveLast().append("XXX");// plutôt move after li
+            .runIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
     }
 
     @Override
@@ -481,11 +458,12 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     @Override
     public void endListItem(int level) {
-        mark("EndLI" + level)
+        mark("BeforeEndLI" + level)
             .decrementIndentLevel()
             .indent()
             .append(LI.end())
-            .nl();// mark after end
+            .nl()
+            .mark("AfterEndLI" + level);
     }
 
     @Override

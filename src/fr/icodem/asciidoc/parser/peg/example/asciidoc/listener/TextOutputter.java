@@ -18,24 +18,27 @@ public class TextOutputter {
     private Consumer<String> appender;
 
     private int positionInBuffer;
-    private Marker marker; // current marker in use
+    private Marker marker; // current marker
+    private Marker head; // first marker
+    private Marker tail; // last marker
 
-    private static int markersCount;
-    private class Marker {
-        int id;
+    private static class Marker {
+        Marker next;
         int position;
         Indenter indenter;
 
-        public Marker(int position, int indentLevel) {
-            this.id = ++markersCount;
-            this.position = position;
-            this.indenter = new Indenter(indentLevel);
+        public static Marker of(int position, int indentLevel) {
+            Marker marker = new Marker();
+            marker.position = position;
+            marker.indenter = new Indenter(indentLevel);
+
+            return marker;
         }
     }
 
     private Map<String, Marker> markers;
 
-    private class Indenter {
+    private static class Indenter {
         int level;
 
         public Indenter() {}
@@ -53,7 +56,6 @@ public class TextOutputter {
         }
     }
     private Indenter rootIndenter;
-    //private Indenter markerIndenter; // when buffer is used
     private Indenter indenter;
 
     public TextOutputter(Writer writer) {
@@ -96,7 +98,9 @@ public class TextOutputter {
             buffer.append(str);
         } else {
             buffer.insert(positionInBuffer, str);
-            positionInBuffer += str.length();
+            final int length = str.length();
+            updateMarkers(length);
+            positionInBuffer += length;
         }
     }
 
@@ -128,8 +132,26 @@ public class TextOutputter {
 
     public void mark(String key) {
         int markPos = positionInBuffer != -1?positionInBuffer:buffer.length();
-        markers.put(key, new Marker(markPos, indenter.level));
-        //markers.put(key, new Marker(buffer.length(), indenter.level));
+        final Marker marker = Marker.of(markPos, indenter.level);
+        markers.put(key, marker);
+
+        if (head == null) {
+            head = marker;
+            tail = marker;
+        } else if (this.marker == null) { // append marker at the end
+            tail.next = marker;
+            tail = marker;
+        } else { // insert marker after current one
+
+            // find where to insert
+            Marker m = this.marker;
+            while (m.next != null && m.next.position <= markPos) {
+                m = m.next;
+            }
+
+            marker.next = m.next;
+            m.next = marker;
+        }
     }
 
     public void bufferOn() {
@@ -145,10 +167,11 @@ public class TextOutputter {
         positionInBuffer = -1;
         indenter = rootIndenter;
         markers.clear();
+        head = null;
+        tail = null;
     }
 
     public void moveTo(String key) {
-
         marker = markers.get(key);
         if (marker != null) {
             positionInBuffer = marker.position;
@@ -159,25 +182,21 @@ public class TextOutputter {
     }
 
     public void moveEnd() {
-
-        updateMarkers();
-
         positionInBuffer = -1;
         indenter = rootIndenter;
         marker = null;
     }
 
-    private void updateMarkers() {
+    private void updateMarkers(int delta) {
         if (marker == null) return;
 
-        //int pos = marker.position; // position when moveTo() was called
-        int delta = positionInBuffer - marker.position; // number of chars added after moveTo()
-
-        markers.values()
-                .stream()
-                .filter(m -> m.position > marker.position)
-                //.filter(m -> m.id >= marker.id && m.position >= pos)
-                .forEach(m -> m.position += delta); // à reprendre exemple auteurs avant title
+        Marker m = marker.next;
+        while (m != null) {
+            if (m.position > positionInBuffer) {
+                m.position += delta;
+            }
+            m = m.next;
+        }
     }
 
 }
