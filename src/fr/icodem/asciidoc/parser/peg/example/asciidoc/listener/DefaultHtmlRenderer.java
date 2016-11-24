@@ -129,7 +129,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .nl()
             .append(HEAD.start())
             .nl()
-            .incrementIndentLevel()
+            .incIndent()
             .indent()
             .append(META.tag("charset", "UTF-8"))
             .nl()
@@ -147,19 +147,19 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .mark("title")
             .append(HEAD.end())
             .nl()
-            .decrementIndentLevel()
+            .decIndent()
             .append(BODY.start("class", getAttributeValue("doctype")))
             .nl()
-            .incrementIndentLevel();
+            .incIndent();
     }
 
     @Override
     public void endDocument() {
-        decrementIndentLevel()
+        decIndent()
             .indent()
             .append(BODY.end())
             .nl()
-            .decrementIndentLevel()
+            .decIndent()
             .append(HTML.end());
     }
 
@@ -170,12 +170,12 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         indent()
             .append(DIV.start("id", "header"))
             .nl()
-            .incrementIndentLevel();
+            .incIndent();
     }
 
     @Override
     public void endHeader() {
-        decrementIndentLevel()
+        decIndent()
             .indent()
             .append(DIV.end())
             .nl()
@@ -206,7 +206,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         indent()
             .append(DIV.start("class", "details"))
             .nl()
-            .incrementIndentLevel();
+            .incIndent();
         authors = new LinkedList<>();
     }
 
@@ -218,7 +218,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                     .map(a -> a.name)
                     .collect(Collectors.joining(", "));
 
-        decrementIndentLevel()
+        decIndent()
             .indent()
             .append(DIV.end())
             .nl()
@@ -284,13 +284,13 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
         indent()
             .append(DIV.start("id", "preamble"))
-            .incrementIndentLevel()
+            .incIndent()
             .nl();
     }
 
     @Override
     public void endPreamble() {
-        decrementIndentLevel()
+        decIndent()
             .indent()
             .append(DIV.end())
             .nl();
@@ -302,14 +302,14 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .runIf(!hasPreamble, () ->
                 indent()
                 .append(DIV.start("id", "content"))
-                .incrementIndentLevel()
+                .incIndent()
                 .nl()
             );
     }
 
     @Override
     public void endContent() {
-        decrementIndentLevel()
+        decIndent()
             .indent()
             .append(DIV.end())
             .nl();
@@ -320,12 +320,12 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         indent()
             .append(SECTION.start())
             .nl()
-            .incrementIndentLevel();
+            .incIndent();
     }
 
     @Override
     public void endSection() {
-        decrementIndentLevel()
+        decIndent()
             .indent()
             .append(SECTION.end())
             .nl();
@@ -347,7 +347,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         indent()
             .append(DIV.start("class", "paragraph"))
             .nl()
-            .incrementIndentLevel()
+            .incIndent()
             .indent()
             .append(P.start());
     }
@@ -356,7 +356,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     public void endParagraph() {
         append(P.end())
             .nl()
-            .decrementIndentLevel()
+            .decIndent()
             .indent()
             .append(DIV.end())
             .nl();
@@ -377,11 +377,11 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         indent()
             .append(DIV.start("class", "ulist"))
             .nl()
-            .incrementIndentLevel()
+            .incIndent()
             .indent()
             .append(OL.start())
             .nl()
-            .incrementIndentLevel();
+            .incIndent();
 
 
         /*
@@ -394,23 +394,23 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         String olStyle = css.getOrderedListNumerationStyleName();
         String olType = css.getOrderedListNumerationType();
 
-        indent().append(DIV.start("class", divStyles)).nl().incrementIndentLevel()
-                .runIf(olType == null, () -> indent().append(OL.start("class", olStyle)).nl().incrementIndentLevel())
-                .runIf(olType != null, () -> indent().append(OL.start("class", olStyle, "type", olType)).nl().incrementIndentLevel())
+        indent().append(DIV.start("class", divStyles)).nl().incIndent()
+                .runIf(olType == null, () -> indent().append(OL.start("class", olStyle)).nl().incIndent())
+                .runIf(olType != null, () -> indent().append(OL.start("class", olStyle, "type", olType)).nl().incIndent())
                 .forEach(list.getItems(), this::addListItem)
-                .decrementIndentLevel().indent().append(OL.end()).nl()
-                .decrementIndentLevel().indent().append(DIV.end()).nl();
+                .decIndent().indent().append(OL.end()).nl()
+                .decIndent().indent().append(DIV.end()).nl();
                  */
 
     }
 
     @Override
     public void endOrderedList(int level) {
-        decrementIndentLevel()
+        decIndent()
             .indent()
             .append(OL.end())
             .nl()
-            .decrementIndentLevel()
+            .decIndent()
             .indent()
             .append(DIV.end())
             .nl()
@@ -423,20 +423,20 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .indent()
             .append(DIV.start("class", "ulist"))
             .nl()
-            .incrementIndentLevel()
+            .incIndent()
             .indent()
             .append(UL.start())
             .nl()
-            .incrementIndentLevel();
+            .incIndent();
     }
 
     @Override
     public void endUnorderedList(int level) {
-        decrementIndentLevel()
+        decIndent()
             .indent()
             .append(UL.end())
             .nl()
-            .decrementIndentLevel()
+            .decIndent()
             .indent()
             .append(DIV.end())
             .nl()
@@ -448,7 +448,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         indent()
             .append(LI.start())
             .nl()
-            .incrementIndentLevel();
+            .incIndent();
 //                .indent().append(P.start()).append(li.getText())
 //                .append(P.end()).nl()
 //                .runIf(li.hasNestedList(), () -> addList(li.getNestedList()))
@@ -458,7 +458,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void endListItem(int level) {
         mark("BeforeEndLI" + level)
-            .decrementIndentLevel()
+            .decIndent()
             .indent()
             .append(LI.end())
             .nl()

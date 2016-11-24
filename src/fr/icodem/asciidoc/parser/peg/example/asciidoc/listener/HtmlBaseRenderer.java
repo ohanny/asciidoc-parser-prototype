@@ -68,13 +68,13 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
         return this;
     }
 
-    protected HtmlBaseRenderer incrementIndentLevel() {// TODO rename method (shorter name) ?
-        outputter.incrementIndentLevel();
+    protected HtmlBaseRenderer incIndent() {// TODO rename method (shorter name) ?
+        outputter.incIndent();
         return this;
     }
 
-    protected HtmlBaseRenderer decrementIndentLevel() {// TODO rename method (shorter name) ?
-        outputter.decrementIndentLevel();
+    protected HtmlBaseRenderer decIndent() {// TODO rename method (shorter name) ?
+        outputter.decIndent();
         return this;
     }
 

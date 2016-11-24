@@ -123,11 +123,11 @@ public class TextOutputter {
         }
     }
 
-    public void incrementIndentLevel() {// TODO rename method (shorter name) ?
+    public void incIndent() {// TODO rename method (shorter name) ?
         indenter.increment();
     }
 
-    public void decrementIndentLevel() {// TODO rename method (shorter name) ?
+    public void decIndent() {// TODO rename method (shorter name) ?
         indenter.decrement();
     }
 

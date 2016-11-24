@@ -38,7 +38,7 @@ class TextOutputterSpec extends Specification {
         when:
         outputter.append("abc")
         outputter.nl()
-        outputter.incrementIndentLevel()
+        outputter.incIndent()
         outputter.indent()
         outputter.append("def")
 
@@ -54,11 +54,11 @@ class TextOutputterSpec extends Specification {
         when:
         outputter.append("abc")
         outputter.nl()
-        outputter.incrementIndentLevel()
+        outputter.incIndent()
         outputter.indent()
         outputter.append("def")
         outputter.nl()
-        outputter.incrementIndentLevel()
+        outputter.incIndent()
         outputter.indent()
         outputter.append("ghi")
 
