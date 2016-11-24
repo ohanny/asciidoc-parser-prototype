@@ -108,7 +108,7 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
         return this;
     }
 
-    protected HtmlBaseRenderer moveLast() {
+    protected HtmlBaseRenderer moveEnd() {
         outputter.moveEnd();
         return this;
     }

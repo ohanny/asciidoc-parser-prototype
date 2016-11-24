@@ -1,6 +1,5 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
-import fr.icodem.asciidoc.backend.html.CssElement;
 import fr.icodem.asciidoc.backend.html.HtmlBackend;
 import fr.icodem.asciidoc.parser.AsciidocPegProcessor;
 import fr.icodem.asciidoc.parser.elements.AttributeEntry;
@@ -227,7 +226,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .indent()
             .append(META.tag("name", "author", "content", authors))
             .nl()
-            .moveLast();
+            .moveEnd();
     }
 
     @Override
@@ -415,7 +414,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .indent()
             .append(DIV.end())
             .nl()
-            .moveLast();
+            .moveEnd();
     }
 
     @Override
