@@ -23,6 +23,7 @@ public class TextOutputter {
     private Marker tail; // last marker
 
     private static class Marker {
+        Marker previous;
         Marker next;
         int position;
         Indenter indenter;
@@ -133,12 +134,21 @@ public class TextOutputter {
     public void mark(String key) {
         int markPos = positionInBuffer != -1?positionInBuffer:buffer.length();
         final Marker marker = Marker.of(markPos, indenter.level);
-        markers.put(key, marker);
+        Marker oldMarker = markers.put(key, marker);
+        if (oldMarker != null) {
+            if (oldMarker.previous != null) {
+                oldMarker.previous.next = oldMarker.next;
+            }
+            if (oldMarker.next != null) {
+                oldMarker.next.previous = oldMarker.previous;
+            }
+        }
 
         if (head == null) {
             head = marker;
             tail = marker;
         } else if (this.marker == null) { // append marker at the end
+            marker.previous = tail;
             tail.next = marker;
             tail = marker;
         } else { // insert marker after current one
@@ -149,6 +159,7 @@ public class TextOutputter {
                 m = m.next;
             }
 
+            marker.previous = m;
             marker.next = m.next;
             m.next = marker;
         }
