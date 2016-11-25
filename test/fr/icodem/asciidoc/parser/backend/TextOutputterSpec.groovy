@@ -3,6 +3,19 @@ package fr.icodem.asciidoc.parser.backend
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.TextOutputter
 import spock.lang.Specification
 
+import static fr.icodem.asciidoc.backend.html.HtmlTag.DIV
+import static fr.icodem.asciidoc.backend.html.HtmlTag.DIV
+import static fr.icodem.asciidoc.backend.html.HtmlTag.DIV
+import static fr.icodem.asciidoc.backend.html.HtmlTag.DIV
+import static fr.icodem.asciidoc.backend.html.HtmlTag.LI
+import static fr.icodem.asciidoc.backend.html.HtmlTag.LI
+import static fr.icodem.asciidoc.backend.html.HtmlTag.OL
+import static fr.icodem.asciidoc.backend.html.HtmlTag.OL
+import static fr.icodem.asciidoc.backend.html.HtmlTag.P
+import static fr.icodem.asciidoc.backend.html.HtmlTag.P
+import static fr.icodem.asciidoc.backend.html.HtmlTag.UL
+import static fr.icodem.asciidoc.backend.html.HtmlTag.UL
+
 class TextOutputterSpec extends Specification {
 
     def "append abc"() {

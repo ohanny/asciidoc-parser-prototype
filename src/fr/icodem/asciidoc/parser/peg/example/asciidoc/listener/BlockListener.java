@@ -26,7 +26,7 @@ public class BlockListener implements ParseTreeListener {
     //private Deque<Text> textObjects;
     private Deque<String> nodes; // TODO rename variable
 
-    private enum ListType {Ordered, Unordered};
+    private enum ListType {Ordered, Unordered}
     private static class ListContext {
         int level;
         int bullets;
@@ -268,14 +268,14 @@ public class BlockListener implements ParseTreeListener {
                 handler.endParagraph();
                 break;
             case "list" :
-                if (currentList.type == ListType.Unordered) {
-                    handler.endUnorderedList(currentList.level);
+                while (currentList != null) {
+                    if (currentList.type == ListType.Unordered) {
+                        handler.endUnorderedList(currentList.level);
+                    } else if (currentList.type == ListType.Ordered) {
+                        handler.endOrderedList(currentList.level);
+                    }
+                    currentList = currentList.parent;
                 }
-                else if (currentList.type == ListType.Ordered) {
-                    handler.endOrderedList(currentList.level);
-                }
-                //currentList = currentList.parent;
-                currentList = null;
                 handler.endList();
                 break;
             case "listItem" :

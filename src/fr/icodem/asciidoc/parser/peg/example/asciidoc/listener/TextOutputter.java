@@ -123,12 +123,18 @@ public class TextOutputter {
         }
     }
 
-    public void incIndent() {// TODO rename method (shorter name) ?
+    public void incIndent() {
         indenter.increment();
+        if (positionInBuffer == buffer.length()) {
+            rootIndenter.increment();
+        }
     }
 
-    public void decIndent() {// TODO rename method (shorter name) ?
+    public void decIndent() {
         indenter.decrement();
+        if (positionInBuffer == buffer.length()) {
+            rootIndenter.decrement();
+        }
     }
 
     public void mark(String key) {
@@ -178,6 +184,7 @@ public class TextOutputter {
         positionInBuffer = -1;
         indenter = rootIndenter;
         markers.clear();
+        marker = null;
         head = null;
         tail = null;
     }
