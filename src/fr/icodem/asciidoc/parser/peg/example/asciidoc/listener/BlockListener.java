@@ -148,8 +148,8 @@ public class BlockListener implements ParseTreeListener {
 //                currentList = ListContext.withParent(currentList);
                 break;
             case "listItem" :
-                int times = context.getIntAttribute("times.count", -1);
-                if (times > 0) {
+                int times, dots = 0;
+                if ((times = context.getIntAttribute("times.count", -1)) > 0) {
                     if (currentList.type == ListType.Unordered) {
                         if (currentList.bullets == times) {
 
@@ -160,11 +160,24 @@ public class BlockListener implements ParseTreeListener {
                             handler.endUnorderedList(currentList.level);
                             currentList = currentList.parent;
                         }
+                    } else if (currentList.type == ListType.Ordered) {
+                        currentList = ListContext.withParent(currentList);
+                        currentList.bullets = times;
                     }
-                } else {
-                    int dots = context.getIntAttribute("dots.count", -1);
-                    if (dots > 0) {
+                } else if ((dots = context.getIntAttribute("dots.count", -1)) > 0) {
+                    if (currentList.type == ListType.Ordered) {
+                        if (currentList.bullets == dots) {
 
+                        } else if (currentList.bullets < dots) {
+                            currentList = ListContext.withParent(currentList);
+                            currentList.bullets = dots;
+                        } else if (currentList.bullets > dots) {
+                            handler.endOrderedList(currentList.level);
+                            currentList = currentList.parent;
+                        }
+                    } else if (currentList.type == ListType.Unordered) {
+                        currentList = ListContext.withParent(currentList);
+                        currentList.bullets = dots;
                     }
                 }
 
@@ -179,12 +192,13 @@ public class BlockListener implements ParseTreeListener {
                         currentList.type = ListType.Unordered;
                         currentList.bullets = times;
                         handler.startUnorderedList(currentList.level);
-                    } else {
-                        int dots = context.getIntAttribute("dots.count", -1);
-                        if (dots > 0) {
+                    } else if (dots > 0) {
+                        //int dots = context.getIntAttribute("dots.count", -1);
+                        //if (dots > 0) {
                             currentList.type = ListType.Ordered;
+                            currentList.bullets = dots;
                             handler.startOrderedList(currentList.level);
-                        }
+                        //}
                     }
                 }
                 handler.startListItem(currentList.level);

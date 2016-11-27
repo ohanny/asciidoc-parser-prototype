@@ -29,11 +29,17 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "\n" +
                 "== About fruits\n" +
                 "\n" +
+                ". Pomme\n" +
+                ". Poire\n" +
+                ".. Cerise\n" +
+                ".. Kiwi\n" +
+                "* Mangue\n" +
+                "* Kiwai\n" +
+                "\n" +
                 ":fruit: banana\n" +
                 ":fruit2!:\n" +
                 ":!fruit3:\n" +
                 "\n" +
-                //"[quote#think, Donald Trump]\n" +
                 "I love fruits\n" +
                 "\n" +
                 "* One\n" +
@@ -375,8 +381,9 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     @Override
     public void startOrderedList(int level) {
-        indent()
-            .append(DIV.start("class", "ulist"))
+        runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
+            .indent()
+            .append(DIV.start("class", "olist"))
             .nl()
             .incIndent()
             .indent()
@@ -415,7 +422,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .indent()
             .append(DIV.end())
             .nl()
-            .moveEnd();
+            .runIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
     }
 
     @Override
@@ -450,10 +457,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .append(LI.start())
             .nl()
             .incIndent();
-//                .indent().append(P.start()).append(li.getText())
-//                .append(P.end()).nl()
-//                .runIf(li.hasNestedList(), () -> addList(li.getNestedList()))
-//                .forEach(li.getBlocks(), this::addBlock)
     }
 
     @Override
