@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.elements;
 
+@Deprecated
 public class Title extends Element {
     private String text;
 

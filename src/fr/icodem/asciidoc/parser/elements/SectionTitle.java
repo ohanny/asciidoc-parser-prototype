@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.elements;
 
+@Deprecated
 public class SectionTitle extends Element {
     private int level;
     private String text;

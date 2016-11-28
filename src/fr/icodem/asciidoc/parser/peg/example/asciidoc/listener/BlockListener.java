@@ -9,6 +9,7 @@ import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import java.io.StringReader;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 
 import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler.DOCUMENT_TITLE;
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
@@ -23,8 +24,9 @@ public class BlockListener implements ParseTreeListener {
 
     private AsciidocHandler handler;
 
-    //private Deque<Text> textObjects;
+    private Deque<Text> textObjects;
     private Deque<String> nodes; // TODO rename variable
+    private List<Attribute> attList;
 
     private enum ListType {Ordered, Unordered}
     private static class ListContext {
@@ -59,7 +61,8 @@ public class BlockListener implements ParseTreeListener {
         this.handler = handler;
         this.nodes = new LinkedList<>();
         this.nodes.add("");
-        //this.textObjects = new LinkedList<>();
+        this.textObjects = new LinkedList<>();
+        this.attList = new LinkedList<>();
     }
 
     private void parseFormattedText(char[] chars) {
@@ -73,9 +76,21 @@ public class BlockListener implements ParseTreeListener {
 
     }
 
+    private AttributeList consumeAttList() {
+        if (this.attList.isEmpty()) return null;
+        System.out.println(attList);
+        AttributeList attList = AttributeList.of(this.attList);
+        clearAttList();
+        return attList;
+    }
+
+    private void clearAttList() {
+        attList.clear();
+    }
+
     @Override
     public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {// TODO recycle char tab => add offset + length (cf SAX)
-        System.out.println("CHARS => " + new String(chars));
+        //System.out.println("CHARS => " + new String(chars));
         //final Text text = textObjects.peek();
         //text.offer(new String(chars));
         //if (text instanceof Text.FormattedText) { // TODO remplacer par isFormattedText ?
@@ -100,14 +115,56 @@ public class BlockListener implements ParseTreeListener {
             case "authorAddressLabel":
                 handler.writeAuthorAddressLabel(new String(chars));
                 break;
+            case "name":
+            case "attributeValue":
+                textObjects.pop()
+                           .setValue(new String(chars));
+                break;
         }
 
     }
 
     @Override
     public void enterNode(NodeContext context) {
-        System.out.println(context.getNodeName());
+        //System.out.println(context.getNodeName());
         switch (context.getNodeName()) {
+            // attributes
+            case "attributeList" :
+//                enterAttributeList();
+                break;
+            case "idAttribute" :
+                Text text = Text.empty();
+                attList.add(Attribute.of("id", text));
+                textObjects.push(text);
+                break;
+            case "roleAttribute" :
+                text = Text.empty();
+                attList.add(Attribute.of("role", text));
+                textObjects.push(text);
+                break;
+            case "optionAttribute" :
+                text = Text.empty();
+                attList.add(Attribute.of("options", text));
+                textObjects.push(text);
+                break;
+            case "positionalAttribute" :
+                Text value = Text.empty();
+                attList.add(Attribute.of((String)null, value));
+                textObjects.push(value);
+                break;
+            case "namedAttribute" :
+                Text name = Text.empty();
+                value = Text.empty();
+                attList.add(Attribute.of(name, value));
+
+                textObjects.push(value);
+                textObjects.push(name);
+                break;
+            case "attributeEntry" :
+//                enterAttributeEntry(context);
+                break;
+
+            // document and header
             case "document" :
                 handler.startDocument();
                 break;
@@ -117,7 +174,6 @@ public class BlockListener implements ParseTreeListener {
             case "documentTitle" :
                 handler.startDocumentTitle();
                 nodes.addLast(DOCUMENT_TITLE);
-                //textObjects.push(Text.dummy());
                 break;
             case "authors" :
                 handler.startAuthors();
@@ -128,6 +184,8 @@ public class BlockListener implements ParseTreeListener {
             case "preamble" :
                 handler.startPreamble();
                 break;
+
+            // content and sections
             case "content" :
                 handler.startContent();
                 break;
@@ -139,13 +197,13 @@ public class BlockListener implements ParseTreeListener {
                 handler.startSectionTitle(level);
                 break;
 
+            // blocks
             case "paragraph" :
                 handler.startParagraph();
                 break;
             case "list" :
                 currentList = ListContext.empty();
                 handler.startList();
-//                currentList = ListContext.withParent(currentList);
                 break;
             case "listItem" :
                 int times, dots = 0;
@@ -182,26 +240,19 @@ public class BlockListener implements ParseTreeListener {
                 }
 
 
-                // cas root identifié
-                //if (currentList.)
-
-                // case new root list
-                //System.out.println("CURRENT="+currentList);
                 if (currentList.type == null) {
                     if (times > 0) {
                         currentList.type = ListType.Unordered;
                         currentList.bullets = times;
-                        handler.startUnorderedList(currentList.level);
+                        handler.startUnorderedList(currentList.level, consumeAttList());
                     } else if (dots > 0) {
-                        //int dots = context.getIntAttribute("dots.count", -1);
-                        //if (dots > 0) {
-                            currentList.type = ListType.Ordered;
-                            currentList.bullets = dots;
-                            handler.startOrderedList(currentList.level);
-                        //}
+                        currentList.type = ListType.Ordered;
+                        currentList.bullets = dots;
+                        handler.startOrderedList(currentList.level, consumeAttList());
                     }
                 }
                 handler.startListItem(currentList.level);
+                clearAttList();
                 break;
             case "listItemValue" :
                 handler.startListItemValue();
@@ -212,27 +263,8 @@ public class BlockListener implements ParseTreeListener {
 //                enterTitle();
                 break;
 //                enterDocumentTitle();
-            case "attributeList" :
-//                enterAttributeList();
-                break;
-            case "idName" :
-//                enterIdName();
-                break;
-            case "roleName" :
-//                enterRoleName();
-                break;
-            case "optionName" :
-//                enterOptionName();
-                break;
-            case "positionalAttribute" :
-//                enterPositionalAttribute();
-                break;
-            case "namedAttribute" :
-//                enterNamedAttribute();
-                break;
-            case "attributeEntry" :
-//                enterAttributeEntry(context);
-                break;
+
+
             case "block" :
 //                enterBlock(context.getBooleanAttribute("fromList", false));
                 break;
@@ -248,6 +280,23 @@ public class BlockListener implements ParseTreeListener {
     @Override
     public void exitNode(NodeContext context) {
         switch (context.getNodeName()) {
+            // attributes
+            case "attributeList" :
+                break;
+            case "idName" :
+                break;
+            case "roleName" :
+                break;
+            case "optionName" :
+                break;
+            case "positionalAttribute" :
+                break;
+            case "namedAttribute" :
+                break;
+            case "attributeEntry" :
+                break;
+
+            // document and header
             case "document" :
                 handler.endDocument();
                 break;
@@ -267,6 +316,8 @@ public class BlockListener implements ParseTreeListener {
             case "preamble" :
                 handler.endPreamble();
                 break;
+
+            // content and sections
             case "content" :
                 handler.endContent();
                 break;
@@ -278,6 +329,7 @@ public class BlockListener implements ParseTreeListener {
                 handler.endSectionTitle(level);
                 break;
 
+            // blocks
             case "paragraph" :
                 handler.endParagraph();
                 break;
@@ -301,18 +353,9 @@ public class BlockListener implements ParseTreeListener {
             case "listContinuation" :
                 break;
 
-            case "idName" :
-            case "roleName" :
-            case "optionName" :
-            case "attributeEntry" :
-                //case "attributeName" :
-                //case "attributeValue" :
-            case "positionalAttribute" :
             case "nl" :
             case "bl" :
             case "title" :
-            case "attributeList" :
-//                textObjects.pop();
                 break;
         }
     }

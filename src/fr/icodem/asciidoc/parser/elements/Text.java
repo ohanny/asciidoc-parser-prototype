@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.elements;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
+@Deprecated
 public interface Text {
 
     static Text dummy() {

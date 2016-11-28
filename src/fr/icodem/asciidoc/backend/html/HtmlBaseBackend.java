@@ -7,6 +7,7 @@ import java.io.Writer;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 public class HtmlBaseBackend extends AsciidocParserBaseHandler {
     private final static String NL = "\r\n";
     private final static String INDENT = "  ";

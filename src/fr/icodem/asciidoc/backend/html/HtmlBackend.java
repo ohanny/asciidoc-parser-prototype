@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 
+@Deprecated
 public class HtmlBackend extends HtmlBaseBackend {
 
     public HtmlBackend(Writer writer) {

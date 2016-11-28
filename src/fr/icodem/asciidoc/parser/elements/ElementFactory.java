@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.elements;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class ElementFactory {
 
     public DocumentHeader documentHeader(Title title, List<Author> authors,

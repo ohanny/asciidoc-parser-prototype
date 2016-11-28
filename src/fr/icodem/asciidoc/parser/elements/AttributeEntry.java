@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.elements;
 
+@Deprecated
 public class AttributeEntry {
     private String name;
     private String value;

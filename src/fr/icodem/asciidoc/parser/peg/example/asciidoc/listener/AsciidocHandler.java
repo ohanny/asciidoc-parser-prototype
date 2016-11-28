@@ -44,10 +44,10 @@ public interface AsciidocHandler {
     void startList();
     void endList();
 
-    void startOrderedList(int level);
+    void startOrderedList(int level, AttributeList attList);
     void endOrderedList(int level);
 
-    void startUnorderedList(int level);
+    void startUnorderedList(int level, AttributeList attList);
     void endUnorderedList(int level);
 
     void startListItem(int level);

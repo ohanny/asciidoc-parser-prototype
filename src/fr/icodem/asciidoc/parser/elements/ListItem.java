@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.elements;
 
 import java.util.List;
 
+@Deprecated
 public class ListItem extends Element {
     protected String text;
     protected AbstractList nestedList;

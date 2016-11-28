@@ -1,6 +1,5 @@
-package fr.icodem.asciidoc.backend.html;
+package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
-@Deprecated
 public enum CssElement {
     Arabic, Decimal, LowerAlpha, UpperAlpha, LowerRoman, UpperRoman, LowerGreek; // ordered list
 

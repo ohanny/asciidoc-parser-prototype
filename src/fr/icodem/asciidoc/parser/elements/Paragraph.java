@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.elements;
 
+@Deprecated
 public class Paragraph extends Block {
     private Text text; // TODO revoir
 

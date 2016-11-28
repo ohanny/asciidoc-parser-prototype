@@ -380,28 +380,34 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
-    public void startOrderedList(int level) {
-        runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
-            .indent()
-            .append(DIV.start("class", "olist"))
-            .nl()
-            .incIndent()
-            .indent()
-            .append(OL.start())
-            .nl()
-            .incIndent();
-
-
-        /*
-        CssElement css = CssElement.getOrderedListNumerationStyle(list.getFirstPositionalAttribute());
+    public void startOrderedList(int level, AttributeList atts) {
+        CssElement css = null;
+        if (atts != null) {
+            css = CssElement.getOrderedListNumerationStyle(atts.getFirstPositionalAttribute());
+        }
         if (css == null) {
-            css = CssElement.getOrderedListNumerationStyle(list.getLevel());
+            css = CssElement.getOrderedListNumerationStyle(level);
         }
 
         String divStyles = "olist " + css.getOrderedListNumerationStyleName();
         String olStyle = css.getOrderedListNumerationStyleName();
         String olType = css.getOrderedListNumerationType();
 
+        runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
+            .indent()
+            .append(DIV.start("class", divStyles))
+            .nl()
+            .incIndent()
+            .indent()
+            .runIf(olType == null, () -> append(OL.start("class", olStyle)))
+            .runIf(olType != null, () -> append(OL.start("class", olStyle, "type", olType)))
+            .nl()
+            .incIndent();
+
+
+
+
+        /*
         indent().append(DIV.start("class", divStyles)).nl().incIndent()
                 .runIf(olType == null, () -> indent().append(OL.start("class", olStyle)).nl().incIndent())
                 .runIf(olType != null, () -> indent().append(OL.start("class", olStyle, "type", olType)).nl().incIndent())
@@ -426,7 +432,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
-    public void startUnorderedList(int level) {
+    public void startUnorderedList(int level, AttributeList attList) {
         runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
             .indent()
             .append(DIV.start("class", "ulist"))

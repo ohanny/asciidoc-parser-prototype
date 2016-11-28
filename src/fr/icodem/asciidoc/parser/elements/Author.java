@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.elements;
 
+@Deprecated
 public class Author extends Element {
     private Text name;
     private Text address;

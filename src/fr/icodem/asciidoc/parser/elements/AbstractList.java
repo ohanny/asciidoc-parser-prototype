@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.elements;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class AbstractList extends Block {
     protected List<ListItem> items;
     protected int level;

@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.elements;
+package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-@Deprecated
 public class AttributeList {
 
     private String id;
@@ -15,8 +14,11 @@ public class AttributeList {
     private List<String> positionalAttributes;
     private Map<String, Attribute> attributes;
 
-    public AttributeList(List<Attribute> attList) {
-        if (attList == null) attList = new ArrayList<>();
+    public static AttributeList of(List<Attribute> attList) {
+        return new AttributeList(attList);
+    }
+
+    private AttributeList(List<Attribute> attList) {
 
         // collect positional attributes
         positionalAttributes = attList.stream()
@@ -60,10 +62,10 @@ public class AttributeList {
 
         // add roles and options
         if (roles != null && !roles.isEmpty()) {
-            attributes.put("role", new Attribute("role", roles));
+            attributes.put("role", Attribute.of("role", roles));
         }
         if (options != null && !options.isEmpty()) {
-            attributes.put("options", new Attribute("options", options));
+            attributes.put("options", Attribute.of("options", options));
         }
 
     }

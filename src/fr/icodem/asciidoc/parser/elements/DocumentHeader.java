@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.elements;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class DocumentHeader {
     private Title title;
     private List<Author> authors;
