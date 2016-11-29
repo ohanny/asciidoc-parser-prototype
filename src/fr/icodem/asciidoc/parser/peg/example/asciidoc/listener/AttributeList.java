@@ -1,6 +1,5 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -83,8 +82,6 @@ public class AttributeList {
     }
 
     public String getId() {
-        //if (!existsAttribute("id")) return null;
-        //return (String)getAttribute("id").getValue();
         return id;
     }
 

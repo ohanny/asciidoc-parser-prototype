@@ -67,4 +67,51 @@ class UnorderedListSpec extends BackendBaseSpecification {
 
         ul2.select("li > p")*.text() == ["Golden", "Granny Smith"]
     }
+
+    def "three levels of nesting"() {
+        given:
+        String input = "* Fruit\r\n" +
+                       "** Apple\r\n" +
+                       "*** Granny Smith"
+
+        when:
+        Document doc = transform(input)
+
+        then:
+        Elements elements = doc.select("div#content")
+        elements.first() != null
+
+        Element list1 = elements.first().child(0)
+        list1 != null
+        list1.attr("class") == "ulist"
+
+        Element ul1 = list1.child(0)
+        ul1 != null
+        ul1.tagName() == "ul"
+        ul1.children() != null
+        ul1.children().size() == 1
+        ul1.select("li > p").take(1)*.text() == ["Fruit"]
+
+        Element list2 = ul1.select("li > p + div").first()
+        list2.attr("class") == "ulist"
+
+        Element ul2 = list2.child(0)
+        ul2 != null
+        ul2.tagName() == "ul"
+        ul2.children() != null
+        ul2.children().size() == 1
+
+        ul2.select("li > p").take(1)*.text() == ["Apple"]
+
+        Element list3 = ul2.select("li > p + div").first()
+        list3.attr("class") == "ulist"
+
+        Element ul3 = list3.child(0)
+        ul3 != null
+        ul3.tagName() == "ul"
+        ul3.children() != null
+        ul3.children().size() == 1
+
+        ul3.select("li > p")*.text() == ["Granny Smith"]
+    }
 }
