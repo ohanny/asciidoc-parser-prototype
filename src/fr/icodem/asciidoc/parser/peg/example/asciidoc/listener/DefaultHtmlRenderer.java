@@ -54,6 +54,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "** Deux\n" +
                 "*** Trois\n" +
                 "*** Quatre\n" +
+                "* Zéro\n" +
                 "\n" +
                 "[lowerroman.summary.incremental%header%footer,xxx=yyy,xxx=zzz]\n" +
                 "** Apple\n" +

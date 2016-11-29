@@ -10,130 +10,105 @@ class FormattedTextSpec extends BackendBaseSpecification {
 
     def "bold phrase"() {
         given:
-        String input = "*A very nice day*";
+        String input = "*A very nice day*"
 
         when:
-        Document doc = transform(input);
+        Document doc = transform(input)
 
         then:
-        Element paragraph = doc.select("div[class=paragraph] > p").first();
-        paragraph != null;
-        paragraph.text() == "A very nice day";
-
-        Element bold = paragraph.select("strong").first();
-        bold != null;
-        bold.text() == "A very nice day";
+        doc.select("div[class=paragraph] > p > strong").size() == 1
+        doc.select("div[class=paragraph] > p > strong").text() == "A very nice day"
     }
 
     def "two bold words within phrase"() {
         given:
-        String input = "A *very nice* day";
+        String input = "A *very nice* day"
 
         when:
-        Document doc = transform(input);
+        Document doc = transform(input)
 
         then:
-        Element paragraph = doc.select("div[class=paragraph] > p").first();
-        paragraph != null;
-        paragraph.text() == "A very nice day";
+        doc.select("div[class=paragraph] > p").size() == 1
+        doc.select("div[class=paragraph] > p").text() == "A very nice day"
 
-        Element bold = paragraph.select("strong").first();
-        bold != null;
-        bold.text() == "very nice";
+        doc.select("div[class=paragraph] > p > strong").size() == 1
+        doc.select("div[class=paragraph] > p > strong").text() == "very nice"
     }
 
     def "italic phrase"() {
         given:
-        String input = "_A very nice day_";
+        String input = "_A very nice day_"
 
         when:
-        Document doc = transform(input);
+        Document doc = transform(input)
 
         then:
-        Element paragraph = doc.select("div[class=paragraph] > p").first();
-        paragraph != null;
-        paragraph.text() == "A very nice day";
-
-        Element italic = paragraph.select("em").first();
-        italic != null;
-        italic.text() == "A very nice day";
+        doc.select("div[class=paragraph] > p > em").size() == 1
+        doc.select("div[class=paragraph] > p > em").text() == "A very nice day"
     }
 
     def "two italic words within phrase"() {
         given:
-        String input = "A _very nice_ day";
+        String input = "A _very nice_ day"
 
         when:
         Document doc = transform(input);
 
         then:
-        Element paragraph = doc.select("div[class=paragraph] > p").first();
-        paragraph != null;
-        paragraph.text() == "A very nice day";
+        doc.select("div[class=paragraph] > p").size() == 1
+        doc.select("div[class=paragraph] > p").text() == "A very nice day"
 
-        Element bold = paragraph.select("em").first();
-        bold != null;
-        bold.text() == "very nice";
+        doc.select("div[class=paragraph] > p > em").size() == 1
+        doc.select("div[class=paragraph] > p > em").text() == "very nice"
     }
 
     def "bold italic phrase"() {
         given:
-        String input = "*_A very nice day_*";
+        String input = "*_A very nice day_*"
 
         when:
-        Document doc = transform(input);
+        Document doc = transform(input)
 
         then:
-        Element paragraph = doc.select("div[class=paragraph] > p").first();
-        paragraph != null;
-        paragraph.text() == "A very nice day";
-
-        Element boldItalic = paragraph.select("strong > em").first();
-        boldItalic != null;
-        boldItalic.text() == "A very nice day";
+        doc.select("div[class=paragraph] > p > strong > em").size() == 1
+        doc.select("div[class=paragraph] > p > strong > em").text() == "A very nice day"
     }
 
 
     def "nested italic word within bold words"() {
         given:
-        String input = "A *nice _and_ sunny* day";
+        String input = "A *nice _and_ sunny* day"
 
         when:
-        Document doc = transform(input);
+        Document doc = transform(input)
 
         then:
-        Element paragraph = doc.select("div[class=paragraph] > p").first();
-        paragraph != null;
-        paragraph.text() == "A nice and sunny day";
+        doc.select("div[class=paragraph] > p").size() == 1
+        doc.select("div[class=paragraph] > p").text() == "A nice and sunny day"
 
-        Element bold = paragraph.select("strong").first();
-        bold != null;
-        bold.text() == "nice and sunny";
+        doc.select("div[class=paragraph] > p > strong").size() == 1
+        doc.select("div[class=paragraph] > p > strong").text() == "nice and sunny"
 
-        Element italic = bold.select("em").first();
-        italic != null;
-        italic.text() == "and";
+        doc.select("div[class=paragraph] > p > strong > em").size() == 1
+        doc.select("div[class=paragraph] > p > strong > em").text() == "and"
     }
 
     def "bold and italic letters within word"() {
         given:
-        String input = "A ve*r*y n_ic_e day";
+        String input = "A ve*r*y n_ic_e day"
 
         when:
         Document doc = transform(input);
 
         then:
-        Element paragraph = doc.select("div[class=paragraph] > p").first();
-        paragraph != null;
-        paragraph.text() == "A very nice day";
+        doc.select("div[class=paragraph] > p").size() == 1
+        doc.select("div[class=paragraph] > p").text() == "A very nice day"
 
-        Element bold = paragraph.select("strong").first();
-        bold != null;
-        bold.text() == "r";
+        doc.select("div[class=paragraph] > p > strong").size() == 1
+        doc.select("div[class=paragraph] > p > strong").text() == "r"
 
-        Element italic = paragraph.select("em").first();
-        italic != null;
-        italic.text() == "ic";
+        doc.select("div[class=paragraph] > p > em").size() == 1
+        doc.select("div[class=paragraph] > p > em").text() == "ic"
     }
 
 

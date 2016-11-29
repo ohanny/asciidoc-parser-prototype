@@ -8,21 +8,14 @@ class HeadingsSpec extends BackendBaseSpecification {
 
     def "document title"() {
         given:
-        String input = "= A title";
+        String input = "= A title"
 
         when:
-        Document doc = transform(input);
+        Document doc = transform(input)
 
         then:
-        Elements elements = doc.select("body");
-        elements.first() != null;
-
-        Element header = elements.first().child(0);
-        header != null;
-        header.tagName() == "div";
-        header.attr("id") == "header";
-        header.children().size() == 1;
-        header.child(0).tagName() == "h1";
-        header.child(0).text() == "A title";
+        doc.select("body > div#header").size() == 1
+        doc.select("body > div#header > h1").size() == 1
+        doc.select("body > div#header > h1").text() == "A title"
     }
 }

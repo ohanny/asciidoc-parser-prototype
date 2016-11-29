@@ -215,8 +215,10 @@ public class BlockListener implements ParseTreeListener {
                             currentList = ListContext.withParent(currentList);
                             currentList.bullets = times;
                         } else if (currentList.bullets > times) {
-                            handler.endUnorderedList(currentList.level);
-                            currentList = currentList.parent;
+                            while (currentList.bullets > times && currentList.level > 1) {
+                                handler.endUnorderedList(currentList.level);
+                                currentList = currentList.parent;
+                            }
                         }
                     } else if (currentList.type == ListType.Ordered) {
                         currentList = ListContext.withParent(currentList);
@@ -230,8 +232,10 @@ public class BlockListener implements ParseTreeListener {
                             currentList = ListContext.withParent(currentList);
                             currentList.bullets = dots;
                         } else if (currentList.bullets > dots) {
-                            handler.endOrderedList(currentList.level);
-                            currentList = currentList.parent;
+                            while (currentList.bullets > times && currentList.level > 1) {
+                                handler.endOrderedList(currentList.level);
+                                currentList = currentList.parent;
+                            }
                         }
                     } else if (currentList.type == ListType.Unordered) {
                         currentList = ListContext.withParent(currentList);
