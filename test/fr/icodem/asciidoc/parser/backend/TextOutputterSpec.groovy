@@ -218,7 +218,6 @@ class TextOutputterSpec extends Specification {
         outputter.bufferOff()
 
         then:
-        println writer;
         writer.toString() == "abefijklghmncdop"
     }
 

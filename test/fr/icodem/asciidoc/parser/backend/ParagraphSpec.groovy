@@ -41,8 +41,6 @@ New York.
         doc.select("div#content > div[class=paragraph]").size() == 2
         doc.select("div#content > div[class=paragraph] > p").size() == 2
 
-        println doc.select("div#content > div[class=paragraph]:nth-child(1) > p").first().text()
-
         String text1 = '''\
 Three hours before the Abraham Lincoln left Brooklyn pier, I received a letter worded as follows:\
 '''
