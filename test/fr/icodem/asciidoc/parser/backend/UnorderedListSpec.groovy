@@ -13,7 +13,6 @@ class UnorderedListSpec extends BackendBaseSpecification {
 * Boo
 * Blech
 '''
-
         when:
         Document doc = transform(input)
 
@@ -31,7 +30,6 @@ class UnorderedListSpec extends BackendBaseSpecification {
 ** Boo
 * Blech
 '''
-
         when:
         Document doc = transform(input)
 
@@ -52,7 +50,6 @@ class UnorderedListSpec extends BackendBaseSpecification {
 *** Snoo
 * Blech
 '''
-
         when:
         Document doc = transform(input)
 
@@ -77,7 +74,6 @@ class UnorderedListSpec extends BackendBaseSpecification {
 **** Froo
 * Blech
 '''
-
         when:
         Document doc = transform(input)
 
@@ -104,7 +100,6 @@ class UnorderedListSpec extends BackendBaseSpecification {
 ***** Groo
 * Blech
 '''
-
         when:
         Document doc = transform(input)
 

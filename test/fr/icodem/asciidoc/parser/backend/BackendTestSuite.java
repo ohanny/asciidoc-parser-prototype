@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         HeadingsSpec.class,
         UnorderedListSpec.class,
+        OrderedListSpec.class,
         FormattedTextSpec.class,
         ParagraphSpec.class,
         TextOutputterSpec.class
