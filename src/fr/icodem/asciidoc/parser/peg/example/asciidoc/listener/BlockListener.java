@@ -1,18 +1,8 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 import fr.icodem.asciidoc.parser.peg.NodeContext;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.FormattedTextRules;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
-import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
-import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
-import java.io.StringReader;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
-
-import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler.DOCUMENT_TITLE;
-import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 import static java.lang.Math.min;
 
 /**
@@ -22,70 +12,10 @@ import static java.lang.Math.min;
  */
 public class BlockListener implements ParseTreeListener {
 
-    private AsciidocHandler handler;
-
-    private Deque<Text> textObjects;
-    private Deque<String> nodes; // TODO rename variable
-    private List<Attribute> attList;
-
-    private enum ListType {Ordered, Unordered}
-    private static class ListContext {
-        int level;
-        int bullets;
-        ListType type;
-        ListContext parent;
-        ListContext root;
-
-        static ListContext empty() {
-            ListContext ctx = new ListContext();
-            ctx.level = 1;
-            ctx.root = ctx;
-            return ctx;
-        }
-
-        static ListContext withParent(ListContext parent) {
-            ListContext context = new ListContext();
-            if (parent != null) {
-                context.parent = parent;
-                context.level = parent.level + 1;
-            } else {
-                context.level = 1;
-            }
-            return context;
-        }
-    }
-    private ListContext currentList;
-
+    private BlockListenerDelegate delegate;
 
     public BlockListener(AsciidocHandler handler) {
-        this.handler = handler;
-        this.nodes = new LinkedList<>();
-        this.nodes.add("");
-        this.textObjects = new LinkedList<>();
-        this.attList = new LinkedList<>();
-    }
-
-    private void parseFormattedText(char[] chars) {
-        //System.out.println("parseFormattedText() => " + new String(chars));
-        FormattedTextRules rules = new FormattedTextRules();// TODO inject rules
-        rules.useFactory(defaultRulesFactory());
-        ParsingResult result = new ParseRunner(rules, rules::formattedText)
-                //.trace()
-                .parse(new StringReader(new String(chars)), new FormattedTextListener(handler), null, null);
-        // TODO optimize new StringReader(new String(chars))
-
-    }
-
-    private AttributeList consumeAttList() {
-        if (this.attList.isEmpty()) return null;
-        System.out.println(attList);
-        AttributeList attList = AttributeList.of(this.attList);
-        clearAttList();
-        return attList;
-    }
-
-    private void clearAttList() {
-        attList.clear();
+        this.delegate = new BlockListenerDelegate(handler);
     }
 
     @Override
@@ -99,26 +29,24 @@ public class BlockListener implements ParseTreeListener {
 
         switch (context.getNodeName()) {
             case "title":
-                handler.writeText(nodes.peekLast(), new String(chars));
+                delegate.text(new String(chars));
                 break;
             case "paragraph":
             case "listItemValue":
-                //handler.writeText(nodes.peekLast(), new String(chars));
-                parseFormattedText(chars);
+                delegate.formattedText(chars);
                 break;
             case "authorName":
-                handler.writeAuthorName(new String(chars));
+                delegate.authorName(new String(chars));
                 break;
             case "authorAddress":
-                handler.writeAuthorAddress(new String(chars));
+                delegate.authorAddress(new String(chars));
                 break;
             case "authorAddressLabel":
-                handler.writeAuthorAddressLabel(new String(chars));
+                delegate.authorAddressLabel(new String(chars));
                 break;
             case "name":
             case "attributeValue":
-                textObjects.pop()
-                           .setValue(new String(chars));
+                delegate.attibuteValue(new String(chars));
                 break;
         }
 
@@ -133,32 +61,19 @@ public class BlockListener implements ParseTreeListener {
 //                enterAttributeList();
                 break;
             case "idAttribute" :
-                Text text = Text.empty();
-                attList.add(Attribute.of("id", text));
-                textObjects.push(text);
+                delegate.enterIdAttribute();
                 break;
             case "roleAttribute" :
-                text = Text.empty();
-                attList.add(Attribute.of("role", text));
-                textObjects.push(text);
+                delegate.enterRoleAttribute();
                 break;
             case "optionAttribute" :
-                text = Text.empty();
-                attList.add(Attribute.of("options", text));
-                textObjects.push(text);
+                delegate.enterOptionAttribute();
                 break;
             case "positionalAttribute" :
-                Text value = Text.empty();
-                attList.add(Attribute.of((String)null, value));
-                textObjects.push(value);
+                delegate.enterPositionalAttribute();
                 break;
             case "namedAttribute" :
-                Text name = Text.empty();
-                value = Text.empty();
-                attList.add(Attribute.of(name, value));
-
-                textObjects.push(value);
-                textObjects.push(name);
+                delegate.enterNamedAttribute();
                 break;
             case "attributeEntry" :
 //                enterAttributeEntry(context);
@@ -166,100 +81,47 @@ public class BlockListener implements ParseTreeListener {
 
             // document and header
             case "document" :
-                handler.startDocument();
+                delegate.enterDocument();
                 break;
             case "header" :
-                handler.startHeader();
+                delegate.enterHeader();
                 break;
             case "documentTitle" :
-                handler.startDocumentTitle();
-                nodes.addLast(DOCUMENT_TITLE);
+                delegate.enterDocumentTitle();
                 break;
             case "authors" :
-                handler.startAuthors();
+                delegate.enterAuthors();
                 break;
             case "author" :
-                handler.startAuthor();
+                delegate.enterAuthor();
                 break;
             case "preamble" :
-                handler.startPreamble();
+                delegate.enterPreamble();
                 break;
 
             // content and sections
             case "content" :
-                handler.startContent();
+                delegate.enterContent();
                 break;
             case "section" :
-                handler.startSection();
+                delegate.enterSection();
                 break;
             case "sectionTitle" :
-                int level = min(context.getIntAttribute("eqs.count", -1), 6);
-                handler.startSectionTitle(level);
+                delegate.enterSectionTitle(context);
                 break;
 
             // blocks
             case "paragraph" :
-                handler.startParagraph();
+                delegate.enterParagraph();
                 break;
             case "list" :
-                currentList = ListContext.empty();
-                handler.startList();
+                delegate.enterList();
                 break;
             case "listItem" :
-                int times, dots = 0;
-                if ((times = context.getIntAttribute("times.count", -1)) > 0) {
-                    if (currentList.type == ListType.Unordered) {
-                        if (currentList.bullets == times) {
-
-                        } else if (currentList.bullets < times) {
-                            currentList = ListContext.withParent(currentList);
-                            currentList.bullets = times;
-                        } else if (currentList.bullets > times) {
-                            while (currentList.bullets > times && currentList.level > 1) {
-                                handler.endUnorderedList(currentList.level);
-                                currentList = currentList.parent;
-                            }
-                        }
-                    } else if (currentList.type == ListType.Ordered) {
-                        currentList = ListContext.withParent(currentList);
-                        currentList.bullets = times;
-                    }
-                } else if ((dots = context.getIntAttribute("dots.count", -1)) > 0) {
-                    if (currentList.type == ListType.Ordered) {
-                        if (currentList.bullets == dots) {
-
-                        } else if (currentList.bullets < dots) {
-                            currentList = ListContext.withParent(currentList);
-                            currentList.bullets = dots;
-                        } else if (currentList.bullets > dots) {
-                            while (currentList.bullets > times && currentList.level > 1) {
-                                handler.endOrderedList(currentList.level);
-                                currentList = currentList.parent;
-                            }
-                        }
-                    } else if (currentList.type == ListType.Unordered) {
-                        currentList = ListContext.withParent(currentList);
-                        currentList.bullets = dots;
-                    }
-                }
-
-
-                if (currentList.type == null) {
-                    if (times > 0) {
-                        currentList.type = ListType.Unordered;
-                        currentList.bullets = times;
-                        handler.startUnorderedList(currentList.level, consumeAttList());
-                    } else if (dots > 0) {
-                        currentList.type = ListType.Ordered;
-                        currentList.bullets = dots;
-                        handler.startOrderedList(currentList.level, consumeAttList());
-                    }
-                }
-                handler.startListItem(currentList.level);
-                clearAttList();
+                delegate.enterListItem(context);
                 break;
             case "listItemValue" :
-                handler.startListItemValue();
+                delegate.enterListItemValue();
                 break;
 
 
@@ -302,57 +164,47 @@ public class BlockListener implements ParseTreeListener {
 
             // document and header
             case "document" :
-                handler.endDocument();
+                delegate.exitDocument();
                 break;
             case "header" :
-                handler.endHeader();
+                delegate.exitHeader();
                 break;
             case "documentTitle" :
-                handler.endDocumentTitle();
-                nodes.removeLast();
+                delegate.exitDocumentTitle();
                 break;
             case "authors" :
-                handler.endAuthors();
+                delegate.exitAuthors();
                 break;
             case "author" :
-                handler.endAuthor();
+                delegate.exitAuthor();
                 break;
             case "preamble" :
-                handler.endPreamble();
+                delegate.exitPreamble();
                 break;
 
             // content and sections
             case "content" :
-                handler.endContent();
+                delegate.exitContent();
                 break;
             case "section" :
-                handler.endSection();
+                delegate.exitSection();
                 break;
             case "sectionTitle" :
-                int level = min(context.getIntAttribute("eqs.count", -1), 6);
-                handler.endSectionTitle(level);
+                delegate.exitSectionTitle(context);
                 break;
 
             // blocks
             case "paragraph" :
-                handler.endParagraph();
+                delegate.exitParagraph();
                 break;
             case "list" :
-                while (currentList != null) {
-                    if (currentList.type == ListType.Unordered) {
-                        handler.endUnorderedList(currentList.level);
-                    } else if (currentList.type == ListType.Ordered) {
-                        handler.endOrderedList(currentList.level);
-                    }
-                    currentList = currentList.parent;
-                }
-                handler.endList();
+                delegate.exitList();
                 break;
             case "listItem" :
-                handler.endListItem(currentList.level);
+                delegate.exitListItem();
                 break;
             case "listItemValue" :
-                handler.endListItemValue();
+                delegate.exitListItemValue();
                 break;
             case "listContinuation" :
                 break;
