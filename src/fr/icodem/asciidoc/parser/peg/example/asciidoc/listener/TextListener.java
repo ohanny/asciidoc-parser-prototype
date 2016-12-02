@@ -3,11 +3,11 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 
-public class FormattedTextListener implements ParseTreeListener {
+public class TextListener implements ParseTreeListener {
 
     private AsciidocHandler handler;
 
-    public FormattedTextListener(AsciidocHandler handler) {
+    public TextListener(AsciidocHandler handler) {
         this.handler = handler;
     }
 

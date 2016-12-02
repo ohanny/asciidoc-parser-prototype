@@ -4,7 +4,7 @@ import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 
-public class FormattedTextRules extends BaseRules { // TODO rename classe to FormattedTextRules
+public class TextRules extends BaseRules { // TODO rename classe to FormattedTextRules
 
     private CommonRules commonRules = new CommonRules();
 

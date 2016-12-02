@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.text
 
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
 
-class CustomStylingWithAttributeSpec extends FormattedTextSpecification {
+class CustomStylingWithAttributeSpec extends TextSpecification {
 
     def "marked phrase with custom css class"() {
         given:

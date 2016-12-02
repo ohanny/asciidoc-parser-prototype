@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.text
 
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
 
-class ReplacementTextSpec extends FormattedTextSpecification {
+class ReplacementTextSpec extends TextSpecification {
 
     def "straight single quotes"() {
         given:

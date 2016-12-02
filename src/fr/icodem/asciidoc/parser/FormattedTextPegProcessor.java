@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser;
 
 import fr.icodem.asciidoc.parser.elements.Text;
 import fr.icodem.asciidoc.parser.peg.FormattedTextListener;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.FormattedTextRules;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.TextRules;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
@@ -13,7 +13,7 @@ import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFacto
 @Deprecated
 public class FormattedTextPegProcessor {
 
-    private FormattedTextRules rules = new FormattedTextRules();
+    private TextRules rules = new TextRules();
 
     public FormattedTextPegProcessor() {
         rules.useFactory(defaultRulesFactory());

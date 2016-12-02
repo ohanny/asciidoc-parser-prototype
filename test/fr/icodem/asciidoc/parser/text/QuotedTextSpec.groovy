@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.text
 
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
 
-class QuotedTextSpec extends FormattedTextSpecification {
+class QuotedTextSpec extends TextSpecification {
 
     def "normal phrase"() {
         given:

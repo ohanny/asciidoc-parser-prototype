@@ -10,5 +10,5 @@ import org.junit.runners.Suite;
     ReplacementTextSpec.class,
     InlineMacroSpec.class
 })
-public class FormattedTextGrammarTestSuite {
+public class TextGrammarTestSuite {
 }

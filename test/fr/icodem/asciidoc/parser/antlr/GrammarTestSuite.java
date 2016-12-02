@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.parser.antlr;
 
 import fr.icodem.asciidoc.parser.block.BlockGrammarTestSuite;
-import fr.icodem.asciidoc.parser.text.FormattedTextGrammarTestSuite;
+import fr.icodem.asciidoc.parser.text.TextGrammarTestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -33,7 +33,7 @@ import org.junit.runners.Suite;
     AuthorLineTest.class,
     PreambleTest.class,
     BlockGrammarTestSuite.class,
-    FormattedTextGrammarTestSuite.class
+    TextGrammarTestSuite.class
 })
 public class GrammarTestSuite {
 }

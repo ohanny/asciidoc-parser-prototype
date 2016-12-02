@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 import fr.icodem.asciidoc.parser.peg.NodeContext;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.FormattedTextRules;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.TextRules;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
@@ -59,11 +59,11 @@ public class BlockListenerDelegate {
 
     public void formattedText(char[] chars) {
         //System.out.println("formattedText() => " + new String(chars));
-        FormattedTextRules rules = new FormattedTextRules();// TODO inject rules
+        TextRules rules = new TextRules();// TODO inject rules
         rules.useFactory(defaultRulesFactory());
         ParsingResult result = new ParseRunner(rules, rules::formattedText)
                 //.trace()
-                .parse(new StringReader(new String(chars)), new FormattedTextListener(handler), null, null);
+                .parse(new StringReader(new String(chars)), new TextListener(handler), null, null);
         // TODO optimize new StringReader(new String(chars))
 
     }
