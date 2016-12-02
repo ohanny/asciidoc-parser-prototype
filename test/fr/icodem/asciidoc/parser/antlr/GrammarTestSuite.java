@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.parser.antlr;
 
 import fr.icodem.asciidoc.parser.block.BlockGrammarTestSuite;
-import fr.icodem.asciidoc.parser.formattedtext.FormattedTextGrammarTestSuite;
+import fr.icodem.asciidoc.parser.text.FormattedTextGrammarTestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

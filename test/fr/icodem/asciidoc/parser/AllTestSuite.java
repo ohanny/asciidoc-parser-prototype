@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.parser;
 
 import fr.icodem.asciidoc.parser.antlr.GrammarTestSuite;
-import fr.icodem.asciidoc.parser.backend.*;
+import fr.icodem.asciidoc.renderer.*;
 import fr.icodem.asciidoc.parser.peg.ParserTestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         GrammarTestSuite.class,
         ParserTestSuite.class,
-        BackendTestSuite.class
+        RendererTestSuite.class
 })
 public class AllTestSuite {
 }

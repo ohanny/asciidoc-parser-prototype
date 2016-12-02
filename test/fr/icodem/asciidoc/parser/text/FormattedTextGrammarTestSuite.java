@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.formattedtext;
+package fr.icodem.asciidoc.parser.text;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

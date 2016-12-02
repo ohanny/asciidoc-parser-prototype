@@ -116,7 +116,7 @@ public class OrderedListTest extends GrammarTest {
             },
             {
                 /* message */
-                "two lists separated by a comment",
+                "two list separated by a comment",
 
                 /* input */
                 ". Lemon\n" +

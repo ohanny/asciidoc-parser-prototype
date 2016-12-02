@@ -8,7 +8,7 @@ import spock.lang.Specification
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory
 
-class BlockBaseSpecification extends Specification {
+class BlockSpecification extends Specification {
 
     protected RulesFactory factory = defaultRulesFactory()
 

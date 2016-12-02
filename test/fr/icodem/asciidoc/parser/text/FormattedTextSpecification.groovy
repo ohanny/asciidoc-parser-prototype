@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.formattedtext
+package fr.icodem.asciidoc.parser.text
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.FormattedTextRules
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory
@@ -9,7 +9,7 @@ import spock.lang.Specification
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory
 
 
-class FormattedTextBaseSpecification extends Specification {
+class FormattedTextSpecification extends Specification {
 
     protected RulesFactory factory = defaultRulesFactory()
 

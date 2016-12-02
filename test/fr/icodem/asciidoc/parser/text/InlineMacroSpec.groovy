@@ -1,8 +1,8 @@
-package fr.icodem.asciidoc.parser.formattedtext
+package fr.icodem.asciidoc.parser.text
 
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
 
-class InlineMacroSpec extends FormattedTextBaseSpecification {
+class InlineMacroSpec extends FormattedTextSpecification {
 
     def "text with image macro"() {
         given:

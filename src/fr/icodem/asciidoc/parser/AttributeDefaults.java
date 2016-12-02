@@ -13,7 +13,7 @@ public enum AttributeDefaults {
     private Map<String, AttributeEntry> nameToAttributeMap = new HashMap<>();
 
     AttributeDefaults() {
-        addEntry("backend", "html");
+        addEntry("renderer", "html");
         addEntry("doctype", "article");
         addEntry("doctitle", "Untitled");
     }

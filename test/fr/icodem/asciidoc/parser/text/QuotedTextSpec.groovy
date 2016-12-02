@@ -1,8 +1,8 @@
-package fr.icodem.asciidoc.parser.formattedtext
+package fr.icodem.asciidoc.parser.text
 
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
 
-class QuotedTextSpec extends FormattedTextBaseSpecification {
+class QuotedTextSpec extends FormattedTextSpecification {
 
     def "normal phrase"() {
         given:
