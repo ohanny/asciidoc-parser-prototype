@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
+package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer;
 
 public interface AsciidocRenderer {
 

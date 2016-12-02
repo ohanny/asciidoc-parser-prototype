@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.renderer
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.TextOutputter
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.TextOutputter
 import spock.lang.Specification
 
 class TextOutputterSpec extends Specification {

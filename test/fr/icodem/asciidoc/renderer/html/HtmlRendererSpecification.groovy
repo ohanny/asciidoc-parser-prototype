@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.renderer.html
 
 import fr.icodem.asciidoc.parser.elements.AttributeEntry
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.DefaultHtmlRenderer
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html.DefaultHtmlRenderer
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import spock.lang.Specification

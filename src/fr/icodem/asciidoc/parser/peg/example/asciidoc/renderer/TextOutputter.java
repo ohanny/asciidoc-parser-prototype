@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
+package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer;
 
 import java.io.IOException;
 import java.io.Writer;
