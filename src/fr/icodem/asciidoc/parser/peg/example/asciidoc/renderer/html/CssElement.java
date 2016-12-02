@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
+package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html;
 
 public enum CssElement {
     Arabic, Decimal, LowerAlpha, UpperAlpha, LowerRoman, UpperRoman, LowerGreek; // ordered list
