@@ -78,6 +78,7 @@ public class BlockRules extends BaseRules {
                 zeroOrMore(firstOf(
                         sequence(isCurrentCharNotEOI(), bl(false)),
                         nl(),
+                        horizontalRule(),
                         block(false)
                 ))
         ));
@@ -186,6 +187,7 @@ public class BlockRules extends BaseRules {
                 zeroOrMore(firstOf(
                         sequence(isCurrentCharNotEOI(), bl(false)),
                         nl(),
+                        horizontalRule(),
                         attributeEntry(),
                         attributeList(),
                         block(false)

@@ -111,6 +111,9 @@ public class BlockListener implements ParseTreeListener {
                 break;
 
             // blocks
+            case "horizontalRule":
+                delegate.horizontalRule();
+                break;
             case "paragraph" :
                 delegate.enterParagraph();
                 break;

@@ -9,7 +9,7 @@ public enum HtmlTag {
     META, TITLE, LINK,
     DIV, SECTION, P, UL, OL, LI,
     H1, H2, H3, H4, H5, H6,
-    BR,
+    BR, HR,
     A, SPAN, STRONG, EM;
 
     public static HtmlTag getTitleHeader(int level) {
@@ -65,6 +65,7 @@ public enum HtmlTag {
                 return buildStartTag("link", attributes);
             }
             case BR: return "<br>";
+            case HR: return "<hr>";
             default: return null;
         }
     }

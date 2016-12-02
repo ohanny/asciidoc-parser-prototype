@@ -1,7 +1,5 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html;
 
-import fr.icodem.asciidoc.backend.html.HtmlBackend;
-import fr.icodem.asciidoc.parser.AsciidocPegProcessor;
 import fr.icodem.asciidoc.parser.elements.AttributeEntry;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
 
@@ -28,7 +26,15 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "\n" +
                 "The sun, *the earth* and _the_ sea.\n" +
                 "\n" +
+                "'''\n" +
+                "\n" +
                 "== About fruits\n" +
+                "\n" +
+                "Block before rule \n" +
+                "\n" +
+                "'''\n" +
+                "\n" +
+                "Block below rule\n" +
                 "\n" +
                 ". Pomme\n" +
                 ". Poire\n" +
@@ -69,13 +75,20 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 ".. Kaki\n" +
                 ".. Kiwai\n";
 
+        String text1 =                 "Block above\n" +
+                "\n" +
+                "'''\n" +
+                "\n" +
+                "Block below";
 
-        List<AttributeEntry> attributes = new ArrayList<>();
 
-        System.out.println("\r\nWITH PEG\r\n");
-        StringWriter writer = new StringWriter();
-        new AsciidocPegProcessor(new HtmlBackend(writer), attributes).parse(text);
-        System.out.println(writer);
+
+                List<AttributeEntry> attributes = new ArrayList<>();
+
+//        System.out.println("\r\nWITH PEG\r\n");
+//        StringWriter writer = new StringWriter();
+//        new AsciidocPegProcessor(new HtmlBackend(writer), attributes).parse(text);
+//        System.out.println(writer);
 
         System.out.println("\r\nWITH NEW PEG\r\n");
         StringWriter writer1 = new StringWriter();
@@ -348,6 +361,13 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void endSectionTitle(int level) {
         append(getTitleHeader(level).end())
+            .nl();
+    }
+
+    @Override
+    public void horizontalRule() {
+        indent()
+            .append(HR.tag())
             .nl();
     }
 

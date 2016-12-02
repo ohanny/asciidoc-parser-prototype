@@ -50,6 +50,20 @@ public class HorizontalRuleTest extends GrammarTest {
 
                 /* expected */
                 "(document (content (horizontalRule ' ' ' \\n)) (bl <EOF>))"
+            },
+            {
+                /* message */
+                "horizontal rule between blocks",
+
+                /* input */
+                "Block above\n" +
+                "\n" +
+                "'''\n" +
+                "\n" +
+                "Block below",
+
+                /* expected */
+                "(document (content (block (paragraph B l o c k   a b o v e) (nl \\n)) (bl \\n) (horizontalRule ' ' ' \\n) (bl \\n) (block (paragraph B l o c k   b e l o w <EOF>))))"
             }
         });
 

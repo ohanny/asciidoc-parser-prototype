@@ -38,6 +38,8 @@ public interface AsciidocHandler {
     void startSectionTitle(int level);
     void endSectionTitle(int level);
 
+    void horizontalRule();
+
     void startParagraph();
     void endParagraph();
 
@@ -63,6 +65,7 @@ public interface AsciidocHandler {
 
     void startItalic();
     void endItalic();
+
 
     /*
     void startPreamble();

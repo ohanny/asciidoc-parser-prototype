@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.renderer;
 
+import fr.icodem.asciidoc.renderer.html.block.HorizontalRuleSpec;
 import fr.icodem.asciidoc.renderer.html.block.ParagraphSpec;
 import fr.icodem.asciidoc.renderer.html.list.OrderedListSpec;
 import fr.icodem.asciidoc.renderer.html.list.UnorderedListSpec;
@@ -11,6 +12,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         HeadingsSpec.class,
+        HorizontalRuleSpec.class,
         UnorderedListSpec.class,
         OrderedListSpec.class,
         FormattedTextSpec.class,

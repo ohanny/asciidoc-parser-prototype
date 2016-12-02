@@ -215,6 +215,10 @@ public class BlockListenerDelegate {
     }
 
     // blocks methods
+    public void horizontalRule() {
+        handler.horizontalRule();
+    }
+
     public void enterParagraph() {
         handler.startParagraph();
     }
