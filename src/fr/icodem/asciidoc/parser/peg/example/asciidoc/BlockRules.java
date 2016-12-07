@@ -461,6 +461,7 @@ public class BlockRules extends BaseRules {
 
     private Rule table() {
         return node("table", sequence(
+                storeLineNumber(),
                 tableDelimiter(),
                 zeroOrMore(firstOf(
                     tableRow(),
@@ -486,6 +487,7 @@ public class BlockRules extends BaseRules {
 
     private Rule tableCell() {
         return node("tableCell", sequence(
+                storeLineNumber(),
                 optional(tableCellSpecifiers()),
                 testNot(tableDelimiter()),
                 ch('|'),
@@ -561,6 +563,13 @@ public class BlockRules extends BaseRules {
 
     private Rule isNotStartOfComment() {
         return testNot(sequence(test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), ch('/'), ch('/')));//TODO replace with ntimes
+    }
+
+    private Rule storeLineNumber() {
+        return () -> ctx -> {
+            ctx.findParentContextNode().setAttribute("lineNumber", ctx.getLineNumber());
+            return true;
+        };
     }
 
 }

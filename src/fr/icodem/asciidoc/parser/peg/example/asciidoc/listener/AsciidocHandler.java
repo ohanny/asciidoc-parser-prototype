@@ -58,8 +58,18 @@ public interface AsciidocHandler {
     void startListItemValue();
     void endListItemValue();
 
+    void startTable();
+    void endTable();
 
-    // Formatted text
+    void startTableRow();
+    void endTableRow();
+
+    void startTableCell();
+    void endTableCell();
+
+    void writeTableBlock(String text);
+
+    // Inline text
     void startBold();
     void endBold();
 

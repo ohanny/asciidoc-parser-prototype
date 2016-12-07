@@ -5,7 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    AdmonitionSpec.class
+    AdmonitionSpec.class,
+    TableSpec.class
 })
 public class BlockGrammarTestSuite {
 }

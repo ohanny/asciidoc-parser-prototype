@@ -6,6 +6,8 @@ public class NewLinesTracker {
     private int[] newLinePositions;
     private int lastNewLinePositionIndex;
 
+    private int lineNumber;
+
     public void init() {
         newLinePositions = new int[128];
         clear();
@@ -18,6 +20,7 @@ public class NewLinesTracker {
 
     public void addNewLine(int position) {
         newLinePositions[++lastNewLinePositionIndex] = position;
+        lineNumber++;
     }
 
     public void sync(int position) {
@@ -26,6 +29,7 @@ public class NewLinesTracker {
                 break;
             }
             else {
+                lineNumber--;
                 newLinePositions[lastNewLinePositionIndex--] = -1;
             }
         }
@@ -46,4 +50,7 @@ public class NewLinesTracker {
 //        return position + offset; TODO case when no new lines in buffer
     }
 
+    public int getLineNumber() {
+        return lineNumber;
+    }
 }

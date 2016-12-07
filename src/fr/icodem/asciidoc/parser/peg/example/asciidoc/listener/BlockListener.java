@@ -46,7 +46,10 @@ public class BlockListener implements ParseTreeListener {
                 break;
             case "name":
             case "attributeValue":
-                delegate.attibuteValue(new String(chars));
+                delegate.attributeValue(new String(chars));
+                break;
+            case "tableBlock":
+                delegate.tableBlock(new String(chars).trim());
                 break;
         }
 
@@ -126,6 +129,16 @@ public class BlockListener implements ParseTreeListener {
             case "listItemValue" :
                 delegate.enterListItemValue();
                 break;
+            case "table" :
+                delegate.enterTable(context.getIntAttribute("lineNumber", -1));
+                break;
+            case "tableRow" :
+                delegate.enterTableRow();
+                break;
+            case "tableCell" :
+                delegate.enterTableCell(context.getIntAttribute("lineNumber", -1));
+                break;
+
 
 
             case "title" :
@@ -209,6 +222,17 @@ public class BlockListener implements ParseTreeListener {
             case "listItemValue" :
                 delegate.exitListItemValue();
                 break;
+            case "table" :
+                delegate.exitTable();
+                break;
+            case "tableRow" :
+                delegate.exitTableRow();
+                break;
+            case "tableCell" :
+                delegate.exitTableCell();
+                break;
+
+
             case "listContinuation" :
                 break;
 

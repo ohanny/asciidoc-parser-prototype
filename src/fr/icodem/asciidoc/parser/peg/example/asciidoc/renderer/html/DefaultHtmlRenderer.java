@@ -509,8 +509,65 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .nl();
     }
 
+    @Override
+    public void startTable() {
+        indent()
+            .append(TABLE.start("class", "tableblock frame-all grid-all spread"))
+            .nl()
+            .incIndent();
+    }
+
+    @Override
+    public void endTable() {
+        decIndent()
+            .indent()
+            .append(TABLE.end())
+            .nl();
+    }
+
+    @Override
+    public void startTableRow() {
+        indent()
+            .append(TR.start())
+            .nl()
+            .incIndent();
+    }
+
+    @Override
+    public void endTableRow() {
+        decIndent().
+            indent()
+            .append(TR.end())
+            .nl();
+    }
+
+    @Override
+    public void startTableCell() {
+        indent()
+            .append(TD.start());
+//        indent()
+//            .append(TD.start())
+//            .nl()
+//            .incIndent();
+    }
+
+    @Override
+    public void endTableCell() {
+        append(TD.end())
+            .nl();
+//        decIndent()
+//            .indent()
+//            .append(TD.end())
+//            .nl();
+    }
+
+    @Override
+    public void writeTableBlock(String text) {
+        append(text);
+    }
+
     /* **********************************************/
-    // Formatted text
+    // Inline text
     /* **********************************************/
 
     @Override

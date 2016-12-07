@@ -49,6 +49,119 @@ public class BlockListenerDelegate {
     }
     private ListContext currentList;
 
+    private static class CellContext {
+        String text;
+        CellContext next;
+
+        static CellContext empty() {
+            CellContext cell = new CellContext();
+            return cell;
+        }
+
+        static CellContext withParent(CellContext parent) {
+            CellContext cell = CellContext.empty();
+            parent.next = cell;
+            return cell;
+        }
+    }
+
+    private static class ColumnContext {
+        ColumnContext next;
+
+        static ColumnContext empty() {
+            return new ColumnContext();
+        }
+
+        static ColumnContext withParent(ColumnContext parent) {
+            final ColumnContext column = new ColumnContext();
+            parent.next = column;
+            return column;
+        }
+    }
+
+    private static class ColumnsContext {
+        int count;
+        int lineNumberStart;
+
+        ColumnContext rootColumn;
+        ColumnContext currentColumn;
+        CellContext rootCell;
+        CellContext currentCell;
+
+        static ColumnsContext empty() {
+            return new ColumnsContext();
+        }
+
+        void addCell(String text, int lineNumber) { // line number relative to table
+            // add cell
+            if (rootCell == null) {
+                rootCell = CellContext.empty();
+                currentCell = rootCell;
+                lineNumberStart = lineNumber;
+            } else {
+                currentCell = CellContext.withParent(currentCell);
+            }
+
+            // add column
+            if (lineNumber == lineNumberStart) {
+                count++;
+                if (rootColumn == null) {
+                    rootColumn = ColumnContext.empty();
+                    currentColumn = rootColumn;
+                } else {
+                    currentColumn = ColumnContext.withParent(currentColumn);
+                }
+            }
+        }
+    }
+
+    private static class TableContext {
+        AttributeList attList;
+        int lineNumber; // absolute line number in input source
+
+        ColumnsContext columns;
+
+        AsciidocHandler handler;
+
+        void addCell(String text, int lineNumber) {
+            columns.addCell(text, lineNumber - this.lineNumber);
+        }
+
+        static TableContext of(AsciidocHandler handler, AttributeList attList) {
+            TableContext ctx = new TableContext();
+            ctx.handler = handler;
+            ctx.attList = attList;
+            ctx.columns = ColumnsContext.empty();
+            return ctx;
+        }
+
+        void flush() {
+            handler.startTable();
+            int fill = 0;
+            CellContext cell = columns.rootCell;
+            while (cell != null) {
+                if (fill == 0) {
+                    handler.startTableRow();
+                }
+
+                fill++;
+                handler.startTableCell();
+                handler.writeTableBlock(cell.text);
+                handler.endTableCell();
+
+                if (fill == columns.count) {
+                    handler.endTableRow();
+                    fill = 0;
+                }
+
+                cell = cell.next;
+            }
+
+            handler.endTable();
+        }
+    }
+    private TableContext currentTable;
+
     public BlockListenerDelegate(AsciidocHandler handler) {
         this.handler = handler;
         this.nodes = new LinkedList<>();
@@ -74,7 +187,6 @@ public class BlockListenerDelegate {
 
     private AttributeList consumeAttList() {
         if (this.attList.isEmpty()) return null;
-        System.out.println(attList);
         AttributeList attList = AttributeList.of(this.attList);
         clearAttList();
         return attList;
@@ -86,7 +198,7 @@ public class BlockListenerDelegate {
 
 
     // attributes methods
-    public void attibuteValue(String value) {
+    public void attributeValue(String value) {
         textObjects.pop()
                    .setValue(value);
     }
@@ -309,5 +421,38 @@ public class BlockListenerDelegate {
     public void exitListItemValue() {
         handler.endListItemValue();
     }
+
+    public void enterTable(int lineNumber) {
+        currentTable = TableContext.of(handler, consumeAttList());
+        //handler.startTable();
+    }
+
+    public void exitTable() {
+        //handler.endTable();
+        currentTable.flush();
+    }
+
+    public void enterTableRow() {
+        //handler.startTableRow();
+    }
+
+    public void exitTableRow() {
+        //handler.endTableRow();
+    }
+
+    public void enterTableCell(int lineNumber) {
+        currentTable.addCell(null, lineNumber);
+        //handler.startTableCell();
+    }
+
+    public void exitTableCell() {
+        //handler.endTableCell();
+    }
+
+    public void tableBlock(String text) {
+        currentTable.columns.currentCell.text = text;
+    }
+
+
 
 }

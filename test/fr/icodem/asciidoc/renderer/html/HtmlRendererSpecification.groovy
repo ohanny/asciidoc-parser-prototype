@@ -15,6 +15,7 @@ class HtmlRendererSpecification extends Specification {
     Document transform(String input, List<AttributeEntry> attributes) {
         StringWriter writer = new StringWriter()
         DefaultHtmlRenderer.withWriter(writer).render(input)
+        println(writer)
         Jsoup.parse(writer.toString(), "UTF-8")
     }
 

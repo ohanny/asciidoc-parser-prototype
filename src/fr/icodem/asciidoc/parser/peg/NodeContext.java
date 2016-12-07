@@ -29,4 +29,5 @@ public class NodeContext {
     public boolean isAttributePresent(String name) {
         return context.isAttributePresent(name);
     }
+
 }

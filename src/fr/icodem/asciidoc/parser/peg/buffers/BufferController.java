@@ -238,4 +238,8 @@ public class BufferController<T> implements InputBuffer<T> {
         return newLinesTracker.getPositionInLine(position);
     }
 
+    @Override
+    public int getLineNumber() {
+        return newLinesTracker.getLineNumber();
+    }
 }

@@ -25,6 +25,8 @@ public interface InputBuffer<T> {
 
     int getPosition();
 
+    int getLineNumber();
+
     char[] extract(int start, int end);
 
     /**

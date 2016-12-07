@@ -157,4 +157,9 @@ public class StringInputBuffer implements InputBuffer {
         listener.visitReset(marker, oldPos, 0);
     }
 
+    @Override
+    public int getLineNumber() {
+        return 0;
+    }
+
 }

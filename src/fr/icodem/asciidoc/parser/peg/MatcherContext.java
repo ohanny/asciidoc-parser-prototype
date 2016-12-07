@@ -309,6 +309,10 @@ public class MatcherContext {
         return input.getPositionInLine();
     }
 
+    public int getLineNumber() {
+        return input.getLineNumber();
+    }
+
     private Map<String, Object> attributes;
 
     public void setAttribute(String name, Object value) {
