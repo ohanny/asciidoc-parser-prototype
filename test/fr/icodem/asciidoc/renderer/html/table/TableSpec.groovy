@@ -6,7 +6,6 @@ import spock.lang.Ignore
 
 class TableSpec extends HtmlRendererSpecification {
 
-    //@Ignore("Until grammar is fixed")
     def "renders simple psv table"() {
         given:
         String input = '''\
@@ -20,13 +19,19 @@ class TableSpec extends HtmlRendererSpecification {
         Document doc = transform(input)
 
         then:
-        doc.select("div#content > div[class=paragraph]").size() == 1
-        doc.select("div#content > div[class=paragraph] > p").size() == 1
-        String text = '''\
-Alice was beginning to get very tired of sitting by her sister on the bank.\
-'''
-        doc.select("div#content > div[class=paragraph] > p").first().text() == text
+        doc.select("table.tableblock.frame-all.grid-all.spread").size() == 1
+        doc.select("table > colgroup > col[style*=\"width: 33.333333333333336%\"]").size() == 3
+        doc.select("table tr").size() == 3
+        doc.select("table > tbody > tr").size() == 3
+        doc.select("table td").size() == 9
+        doc.select("table > tbody > tr > td.tableblock.halign-left.valign-top > p.tableblock").size() == 9
+        1.upto(3, {
+            assert doc.select("table > tbody > tr:nth-child(${it}) > td").size() == 3
+            assert doc.select("table > tbody > tr:nth-child(${it}) > td > p").size() == 3
+        })
+        doc.select("table > tbody > tr:nth-child(1) > td > p")*.text() == ['A', 'B', 'C']
+        doc.select("table > tbody > tr:nth-child(2) > td > p")*.text() == ['a', 'b', 'c']
+        doc.select("table > tbody > tr:nth-child(3) > td > p")*.text() == ['1', '2', '3']
     }
-
 
 }
