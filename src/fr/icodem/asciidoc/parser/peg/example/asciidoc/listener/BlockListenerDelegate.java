@@ -139,6 +139,14 @@ public class BlockListenerDelegate {
 
         void flush() {
             handler.startTable();
+
+            handler.startColumnGroup();
+            for (int i = 0; i < columns.count; i++) {
+                handler.column();
+            }
+            handler.endColumnGroup();
+
+            handler.startTableBody();
             int fill = 0;
             CellContext cell = columns.rootCell;
             while (cell != null) {
@@ -148,7 +156,7 @@ public class BlockListenerDelegate {
 
                 fill++;
                 handler.startTableCell();
-                handler.writeTableBlock(cell.text);
+                handler.writeTableCellContent(cell.text);
                 handler.endTableCell();
 
                 if (fill == columns.count) {
@@ -159,6 +167,7 @@ public class BlockListenerDelegate {
                 cell = cell.next;
             }
 
+            handler.endTableBody();
             handler.endTable();
         }
     }

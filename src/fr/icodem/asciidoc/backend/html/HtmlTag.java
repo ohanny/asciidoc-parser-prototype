@@ -8,7 +8,7 @@ public enum HtmlTag {
     HTML, BODY, HEAD,
     META, TITLE, LINK,
     DIV, SECTION, P, UL, OL, LI,
-    TABLE, TR, TD,
+    TABLE, COLGROUP, COL, THEAD, TBODY, TFOOT, TR, TD,
     H1, H2, H3, H4, H5, H6,
     BR, HR,
     A, SPAN, STRONG, EM;
@@ -67,6 +67,9 @@ public enum HtmlTag {
             }
             case BR: return "<br>";
             case HR: return "<hr>";
+            case COL: {
+                return buildStartTag("col", attributes);
+            }
             default: return null;
         }
     }
@@ -79,11 +82,15 @@ public enum HtmlTag {
             case TITLE: return "<title>";
             case DIV: return buildStartTag("div", attributes);
             case SECTION: return "<section>";
-            case P: return "<p>";
+            case P: return buildStartTag("p", attributes);
             case UL: return buildStartTag("ul", attributes);
             case OL: return buildStartTag("ol", attributes);
             case LI: return buildStartTag("li", attributes);
             case TABLE: return buildStartTag("table", attributes);
+            case COLGROUP: return "<colgroup>";
+            case TBODY: return "<tbody>";
+            case THEAD: return "<thead>";
+            case TFOOT: return "<tfoot>";
             case TR: return "<tr>";
             case TD: return buildStartTag("td", attributes);
             case H1: return "<h1>";
@@ -113,6 +120,10 @@ public enum HtmlTag {
             case OL: return "</ol>";
             case LI: return "</li>";
             case TABLE: return "</table>";
+            case COLGROUP: return "</colgroup>";
+            case TBODY: return "</tbody>";
+            case THEAD: return "</thead>";
+            case TFOOT: return "</tfoot>";
             case TR: return "</tr>";
             case TD: return "</td>";
             case H1: return "</h1>";

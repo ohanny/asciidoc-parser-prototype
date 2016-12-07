@@ -526,6 +526,77 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
+    public void startColumnGroup() {
+        indent()
+            .append(COLGROUP.start())
+            .nl()
+            .incIndent();
+    }
+
+    @Override
+    public void endColumnGroup() {
+        decIndent()
+            .indent()
+            .append(COLGROUP.end())
+            .nl();
+    }
+
+    @Override
+    public void column() {
+        indent()
+            .append(COL.tag("style", "width: 33.3333%;"))
+            .nl();
+    }
+
+    @Override
+    public void startTableBody() {
+        indent()
+            .append(TBODY.start())
+            .nl()
+            .incIndent();
+    }
+
+    @Override
+    public void endTableBody() {
+        decIndent()
+            .indent()
+            .append(TBODY.end())
+            .nl();
+    }
+
+    @Override
+    public void startTableHeader() {
+        indent()
+            .append(THEAD.start())
+            .nl()
+            .incIndent();
+    }
+
+    @Override
+    public void endTableHeader() {
+        decIndent()
+            .indent()
+            .append(THEAD.end())
+            .nl();
+    }
+
+    @Override
+    public void startTableFooter() {
+        indent()
+            .append(TFOOT.start())
+            .nl()
+            .incIndent();
+    }
+
+    @Override
+    public void endTableFooter() {
+        decIndent()
+            .indent()
+            .append(TFOOT.end())
+            .nl();
+    }
+
+    @Override
     public void startTableRow() {
         indent()
             .append(TR.start())
@@ -544,11 +615,18 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void startTableCell() {
         indent()
-            .append(TD.start());
+            .append(TD.start("class", "tableblock halign-left valign-top"));
 //        indent()
 //            .append(TD.start())
 //            .nl()
 //            .incIndent();
+    }
+
+    @Override
+    public void writeTableCellContent(String text) {
+        append(P.start("class", "tableblock"))
+            .append(text)
+            .append(P.end());
     }
 
     @Override
@@ -559,11 +637,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 //            .indent()
 //            .append(TD.end())
 //            .nl();
-    }
-
-    @Override
-    public void writeTableBlock(String text) {
-        append(text);
     }
 
     /* **********************************************/

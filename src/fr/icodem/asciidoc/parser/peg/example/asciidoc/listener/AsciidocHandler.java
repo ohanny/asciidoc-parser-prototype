@@ -19,11 +19,10 @@ public interface AsciidocHandler {
     void endAuthors();
 
     void startAuthor();
-    void endAuthor();
-
     void writeAuthorName(String name);
     void writeAuthorAddress(String address);
     void writeAuthorAddressLabel(String label);
+    void endAuthor();
 
     void startPreamble();
     void endPreamble();
@@ -60,13 +59,27 @@ public interface AsciidocHandler {
     void startTable();
     void endTable();
 
+    void startColumnGroup();
+    void endColumnGroup();
+
+    void column();
+
+    void startTableHeader();
+    void endTableHeader();
+
+    void startTableBody();
+    void endTableBody();
+
+    void startTableFooter();
+    void endTableFooter();
+
     void startTableRow();
     void endTableRow();
 
     void startTableCell();
+    void writeTableCellContent(String text);
     void endTableCell();
 
-    void writeTableBlock(String text);
 
     // Inline text
     void startBold();
