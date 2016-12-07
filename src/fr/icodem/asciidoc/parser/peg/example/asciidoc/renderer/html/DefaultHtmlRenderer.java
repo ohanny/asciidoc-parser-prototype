@@ -542,9 +542,9 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
-    public void column() {
+    public void column(double width) {
         indent()
-            .append(COL.tag("style", "width: 33.3333%;"))
+            .append(COL.tag("style", "width: " + width + "%;"))
             .nl();
     }
 

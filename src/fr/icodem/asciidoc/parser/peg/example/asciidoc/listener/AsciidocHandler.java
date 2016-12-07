@@ -62,7 +62,7 @@ public interface AsciidocHandler {
     void startColumnGroup();
     void endColumnGroup();
 
-    void column();
+    void column(double width);
 
     void startTableHeader();
     void endTableHeader();

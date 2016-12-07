@@ -69,6 +69,7 @@ public class BlockListenerDelegate {
 
     private static class ColumnContext {
         ColumnContext next;
+        double width;
 
         static ColumnContext empty() {
             return new ColumnContext();
@@ -115,6 +116,16 @@ public class BlockListenerDelegate {
                 }
             }
         }
+
+        void commit() {
+            double width = 100.0 / count;
+            ColumnContext col = rootColumn;
+            for (int i = 0; i < count; i++) {
+                col.width = width;
+                col = col.next;
+            }
+        }
+
     }
 
     private static class TableContext {
@@ -138,11 +149,14 @@ public class BlockListenerDelegate {
         }
 
         void flush() {
+            columns.commit();
             handler.startTable();
 
             handler.startColumnGroup();
+            ColumnContext col = columns.rootColumn;
             for (int i = 0; i < columns.count; i++) {
-                handler.column();
+                handler.column(col.width);
+                col = col.next;
             }
             handler.endColumnGroup();
 
