@@ -129,13 +129,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     private boolean hasPreamble;
 
     @Override
-    public void writeText(String node, String text) {
-        switch (node) {
-            case DOCUMENT_TITLE:
-                title = text;
-                break;
-        }
-
+    public void writeText(String text) {
         append(text);
     }
 
@@ -166,7 +160,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .indent()
             .append(LINK.tag("rel", "stylesheet", "href", "styles.css"))
             .nl()
-            .mark("title")
+            .mark("text")
             .append(HEAD.end())
             .nl()
             .decIndent()
@@ -201,7 +195,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .indent()
             .append(DIV.end())
             .nl()
-            .moveTo("title")
+            .moveTo("text")
             .indent()
             .append(TITLE.start())
             .append(title)
@@ -216,6 +210,12 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     public void startDocumentTitle() {
         indent()
             .append(H1.start());
+    }
+
+    @Override
+    public void writeDocumentTitle(String title) {
+        this.title = title;
+        append(title);
     }
 
     @Override

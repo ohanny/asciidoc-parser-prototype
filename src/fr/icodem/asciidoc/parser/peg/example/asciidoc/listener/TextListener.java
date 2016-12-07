@@ -14,7 +14,7 @@ public class TextListener implements ParseTreeListener {
     @Override
     public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {
         if (context.getNodeName().equals("text")) {
-            handler.writeText("", new String(chars));
+            handler.writeText(new String(chars));
         }
     }
 

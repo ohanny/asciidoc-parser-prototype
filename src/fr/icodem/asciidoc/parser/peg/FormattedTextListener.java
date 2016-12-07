@@ -6,6 +6,7 @@ import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 import java.util.Deque;
 import java.util.LinkedList;
 
+@Deprecated
 public class FormattedTextListener implements ParseTreeListener {
 
     private Text.FormattedText formattedText;//TODO pas champs instance ici

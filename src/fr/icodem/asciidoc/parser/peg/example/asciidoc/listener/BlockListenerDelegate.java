@@ -10,11 +10,13 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler.DOCUMENT_TITLE;
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 import static java.lang.Math.min;
 
 public class BlockListenerDelegate {
+
+    private final static String DOCUMENT_TITLE = "DOCUMENT_TITLE";
+
     private AsciidocHandler handler;
 
     private Deque<Text> textObjects;
@@ -182,7 +184,13 @@ public class BlockListenerDelegate {
     }
 
     public void text(String text) {
-        handler.writeText(nodes.peekLast(), text);
+        switch (nodes.peekLast()) {
+            case DOCUMENT_TITLE:
+                handler.writeDocumentTitle(text);
+                break;
+
+            default:
+        }
     }
 
     private AttributeList consumeAttList() {
