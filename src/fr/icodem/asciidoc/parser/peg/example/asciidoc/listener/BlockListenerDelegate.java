@@ -91,11 +91,18 @@ public class BlockListenerDelegate {
         CellContext rootCell;
         CellContext currentCell;
 
+        enum Header {Undefined, NoHeader, Header}
+        Header header;
+
         static ColumnsContext empty() {
-            return new ColumnsContext();
+            ColumnsContext columns = new ColumnsContext();
+            columns.header = Header.Undefined;
+            return columns;
         }
 
-        void addCell(String text, int lineNumber) { // line number relative to table
+        void addCell(int lineNumber) { // line number relative to table
+            checkImplicitHeader(lineNumber);
+
             // add cell
             if (rootCell == null) {
                 rootCell = CellContext.empty();
@@ -114,6 +121,16 @@ public class BlockListenerDelegate {
                 } else {
                     currentColumn = ColumnContext.withParent(currentColumn);
                 }
+            }
+        }
+
+        void checkImplicitHeader(int lineNumber) {
+            if (!header.equals(Header.Undefined)) return;
+
+            if (lineNumberStart > 1 || lineNumber == 2) {
+                header = Header.NoHeader;
+            } else if (lineNumber > 2) {
+                header = Header.Header;
             }
         }
 
@@ -136,8 +153,8 @@ public class BlockListenerDelegate {
 
         AsciidocHandler handler;
 
-        void addCell(String text, int lineNumber) {
-            columns.addCell(text, lineNumber - this.lineNumber);
+        void addCell(int lineNumber) {
+            columns.addCell(lineNumber - this.lineNumber);
         }
 
         static TableContext of(AsciidocHandler handler, AttributeList attList) {
@@ -160,9 +177,26 @@ public class BlockListenerDelegate {
             }
             handler.endColumnGroup();
 
-            handler.startTableBody();
             int fill = 0;
             CellContext cell = columns.rootCell;
+            if (columns.header.equals(ColumnsContext.Header.Header)) {
+                handler.startTableHeader();
+                handler.startTableRow();
+                while (cell != null && fill < columns.count) {
+                    fill++;
+                    handler.startTableHeaderCell();
+                    handler.writeTableHeaderCellContent(cell.text);
+                    handler.endTableHeaderCell();
+
+                    cell = cell.next;
+                }
+                handler.endTableRow();
+                handler.endTableHeader();
+
+                fill = 0;
+            }
+
+            handler.startTableBody();
             while (cell != null) {
                 if (fill == 0) {
                     handler.startTableRow();
@@ -472,7 +506,7 @@ public class BlockListenerDelegate {
     }
 
     public void enterTableCell(int lineNumber) {
-        currentTable.addCell(null, lineNumber);
+        currentTable.addCell(lineNumber);
         //handler.startTableCell();
     }
 

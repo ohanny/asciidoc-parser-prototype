@@ -67,6 +67,10 @@ public interface AsciidocHandler {
     void startTableHeader();
     void endTableHeader();
 
+    void startTableHeaderCell();
+    void writeTableHeaderCellContent(String text);
+    void endTableHeaderCell();
+
     void startTableBody();
     void endTableBody();
 

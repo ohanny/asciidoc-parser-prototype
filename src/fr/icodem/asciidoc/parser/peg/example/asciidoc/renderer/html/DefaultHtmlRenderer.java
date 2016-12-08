@@ -581,6 +581,23 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
+    public void startTableHeaderCell() {
+        indent()
+            .append(TH.start("class", "tableblock halign-left valign-top"));
+    }
+
+    @Override
+    public void writeTableHeaderCellContent(String text) {
+        append(text);
+    }
+
+    @Override
+    public void endTableHeaderCell() {
+        append(TH.end())
+                .nl();
+    }
+
+    @Override
     public void startTableFooter() {
         indent()
             .append(TFOOT.start())
