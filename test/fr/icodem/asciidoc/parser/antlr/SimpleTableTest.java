@@ -43,7 +43,7 @@ public class SimpleTableTest extends GrammarTest {
                 "|===",
 
                 /* expected */
-                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock C e l l   1)) (tableCell | (tableBlock C e l l   2 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
+                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableCell | (tableBlock C e l l   1)) (tableCell | (tableBlock C e l l   2 (nl \\n))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
             },
             {
                 /* message */
@@ -58,8 +58,7 @@ public class SimpleTableTest extends GrammarTest {
                 "|===",
 
                 /* expected */
-                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock C e l l   1 \\n)) (tableCell | (tableBlock C e l l   2 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
-                //"(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock C e l l   1 (nl \\n))) (tableCell | (tableBlock C e l l   2 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
+                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableCell | (tableBlock C e l l   1 \\n)) (tableCell | (tableBlock C e l l   2 (nl \\n))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
             },
             {
                 /* message */
@@ -75,8 +74,7 @@ public class SimpleTableTest extends GrammarTest {
                 "|===",
 
                 /* expected */
-                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock C e l l   1)) (tableCell | (tableBlock C e l l   2 \\n)) (tableCell | (tableBlock C e l l   3 \\n)) (tableCell | (tableBlock C e l l   4 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
-                //"(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock C e l l   1)) (tableCell | (tableBlock C e l l   2 (nl \\n))) (tableCell | (tableBlock C e l l   3 (nl \\n))) (tableCell | (tableBlock C e l l   4 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
+                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableCell | (tableBlock C e l l   1)) (tableCell | (tableBlock C e l l   2 \\n)) (tableCell | (tableBlock C e l l   3 \\n)) (tableCell | (tableBlock C e l l   4 (nl \\n))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
             },
             {
                 /* message */
@@ -91,8 +89,7 @@ public class SimpleTableTest extends GrammarTest {
                 "|===",
 
                 /* expected */
-                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock (spaces        ) C e l l   1   \\t)) (tableCell | (tableBlock (spaces \\t    ) C e l l   2     \\n)) (tableCell | (tableBlock (spaces     \\t    ) C e l l   3       \\t (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
-                //"(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock (spaces        ) C e l l   1 (spaces   \\t))) (tableCell | (tableBlock (spaces \\t    ) C e l l   2 (spaces    ) (nl \\n))) (tableCell | (tableBlock (spaces     \\t    ) C e l l   3 (spaces       \\t) (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
+                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableCell | (tableBlock (spaces        ) C e l l   1   \\t)) (tableCell | (tableBlock (spaces \\t    ) C e l l   2     \\n)) (tableCell | (tableBlock (spaces     \\t    ) C e l l   3       \\t (nl \\n))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
             },
             {
                 /* message */
@@ -108,7 +105,7 @@ public class SimpleTableTest extends GrammarTest {
                 "|===",
 
                 /* expected */
-                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock C e l l   1 (nl \\n)))) (bl \\n) (tableRow (tableCell | (tableBlock C e l l   2 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
+                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableCell | (tableBlock C e l l   1 (nl \\n))) (bl \\n) (tableCell | (tableBlock C e l l   2 (nl \\n))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
             },
             {
                 /* message */
@@ -124,8 +121,7 @@ public class SimpleTableTest extends GrammarTest {
                 "|===",
 
                 /* expected */
-                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   1  )) (tableCell | (tableBlock (spaces  ) C e l l   2 (nl \\n)))) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   3  )) (tableCell | (tableBlock (spaces  ) C e l l   4 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
-                //"(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   1 (spaces  ))) (tableCell | (tableBlock (spaces  ) C e l l   2 (nl \\n)))) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   3 (spaces  ))) (tableCell | (tableBlock (spaces  ) C e l l   4 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
+                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableCell | (tableBlock (spaces  ) C e l l   1  )) (tableCell | (tableBlock (spaces  ) C e l l   2 (nl \\n))) (bl \\n) (tableCell | (tableBlock (spaces  ) C e l l   3  )) (tableCell | (tableBlock (spaces  ) C e l l   4 (nl \\n))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
             },
             {
                 /* message */
@@ -142,8 +138,7 @@ public class SimpleTableTest extends GrammarTest {
                 "|===",
 
                 /* expected */
-                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   1  )) (tableCell | (tableBlock (spaces  ) C e l l   2   \\n c o n t i n u e d (nl \\n)))) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   3  )) (tableCell | (tableBlock (spaces  ) C e l l   4 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
-                //"(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   1 (spaces  ))) (tableCell | (tableBlock (spaces  ) C e l l   2   \\n c o n t i n u e d (nl \\n)))) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   3 (spaces  ))) (tableCell | (tableBlock (spaces  ) C e l l   4 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
+                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableCell | (tableBlock (spaces  ) C e l l   1  )) (tableCell | (tableBlock (spaces  ) C e l l   2   \\n c o n t i n u e d (nl \\n))) (bl \\n) (tableCell | (tableBlock (spaces  ) C e l l   3  )) (tableCell | (tableBlock (spaces  ) C e l l   4 (nl \\n))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
             },
             {
                 /* message */
@@ -161,8 +156,7 @@ public class SimpleTableTest extends GrammarTest {
                 "|===",
 
                 /* expected */
-                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   1  )) (tableCell | (tableBlock (spaces  ) C e l l   2 (nl \\n)) (bl \\n) (tableBlock c o n t i n u e d (nl \\n)))) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   3  )) (tableCell | (tableBlock (spaces  ) C e l l   4 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
-                //"(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   1 (spaces  ))) (tableCell | (tableBlock (spaces  ) C e l l   2 (nl \\n)) (bl \\n) (tableBlock c o n t i n u e d (nl \\n)))) (bl \\n) (tableRow (tableCell | (tableBlock (spaces  ) C e l l   3 (spaces  ))) (tableCell | (tableBlock (spaces  ) C e l l   4 (nl \\n)))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
+                "(document (content (block (table (tableDelimiter | = = = \\n) (bl \\n) (tableCell | (tableBlock (spaces  ) C e l l   1  )) (tableCell | (tableBlock (spaces  ) C e l l   2 (nl \\n)) (bl \\n) (tableBlock c o n t i n u e d (nl \\n))) (bl \\n) (tableCell | (tableBlock (spaces  ) C e l l   3  )) (tableCell | (tableBlock (spaces  ) C e l l   4 (nl \\n))) (bl \\n) (tableDelimiter | = = = <EOF>)))))"
             }
         });
 

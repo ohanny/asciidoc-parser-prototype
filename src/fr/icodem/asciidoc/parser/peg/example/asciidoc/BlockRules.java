@@ -464,7 +464,7 @@ public class BlockRules extends BaseRules {
                 storeLineNumber(),
                 tableDelimiter(),
                 zeroOrMore(firstOf(
-                    tableRow(),
+                    tableCell(),
                     bl(false)
                 )),
                 tableDelimiter()
@@ -481,9 +481,9 @@ public class BlockRules extends BaseRules {
         ));
     }
 
-    private Rule tableRow() {
-        return node("tableRow", oneOrMore(tableCell()));
-    }
+//    private Rule tableRow() {
+//        return node("tableRow", oneOrMore(tableCell()));
+//    }
 
     private Rule tableCell() {
         return node("tableCell", sequence(
