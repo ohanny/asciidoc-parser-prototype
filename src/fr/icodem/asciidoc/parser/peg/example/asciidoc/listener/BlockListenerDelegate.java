@@ -138,7 +138,7 @@ public class BlockListenerDelegate {
         }
 
         void commit() {
-            if (!attList.hasOption("autowidth")) {
+            if (attList == null || !attList.hasOption("autowidth")) {
                 double width = 100.0 / count;
                 ColumnContext col = rootColumn;
                 for (int i = 0; i < count; i++) {

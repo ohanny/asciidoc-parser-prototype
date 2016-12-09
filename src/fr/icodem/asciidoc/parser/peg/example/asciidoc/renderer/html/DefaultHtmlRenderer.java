@@ -512,7 +512,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void startTable(AttributeList attList) {
         String cssClass = "tableblock frame-all grid-all";
-        if (!attList.hasOption("autowidth")) {
+        if (attList == null || !attList.hasOption("autowidth")) {
             cssClass += " spread";
         }
 
@@ -549,7 +549,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void column(AttributeList attList, double width) {
         StringBuilder sb = new StringBuilder();
-        if (!attList.hasOption("autowidth")) {
+        if (attList == null || !attList.hasOption("autowidth")) {
             sb.append("width: " + width + "%;");
         }
         String style = sb.toString();
