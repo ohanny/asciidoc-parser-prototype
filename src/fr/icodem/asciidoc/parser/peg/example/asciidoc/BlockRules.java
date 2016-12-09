@@ -475,7 +475,7 @@ public class BlockRules extends BaseRules {
         return node("tableDelimiter", sequence(
                 ch('|'),
                 isFirstCharInLine(),
-                string("==="),
+                atLeast('=', 3),
                 optional(blank()),// TODO replace
                 firstOf(newLine(), eoi())// TODO replace
         ));

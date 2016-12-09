@@ -95,6 +95,11 @@ public class SpyingRulesFactory extends DefaultRulesFactory {
     }
 
     @Override
+    public Rule atLeast(char c, int times) {
+        return getSpyingRule(super.atLeast(c, times));
+    }
+
+    @Override
     public Rule string(String string) {
         return getSpyingRule(super.string(string));
     }

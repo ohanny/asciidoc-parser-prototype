@@ -9,11 +9,11 @@ class TableSpec extends HtmlRendererSpecification {
     def "renders simple psv table"() {
         given:
         String input = '''\
-|===
+|=======
 |A |B |C
 |a |b |c
 |1 |2 |3
-|===
+|=======
 '''
         when:
         Document doc = transform(input)
@@ -74,11 +74,11 @@ class TableSpec extends HtmlRendererSpecification {
         given:
         String input = '''\
 [options="autowidth"]
-|===
+|=======
 |A |B |C
 |a |b |c
 |1 |2 |3
-|===
+|=======
 '''
         when:
         Document doc = transform(input)

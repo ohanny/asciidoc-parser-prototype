@@ -104,6 +104,12 @@ public class DefaultRulesFactory implements RulesFactory {
     }
 
     @Override
+    public Rule atLeast(char c, int times) {
+        String name = "AtLeastRule." + c + "." + times;
+        return cachedInternal(name, () -> new AtLeastMatcher(c, times));
+    }
+
+    @Override
     public Rule string(String string) {
         String name = "String." + string;
         return cachedInternal(name, () -> new StringMatcher(string));

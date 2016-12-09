@@ -141,6 +141,10 @@ public class BaseRules {
         return noneOf(charSet.toCharArray());
     }
 
+    protected Rule atLeast(char c, int times) {
+        return factory.atLeast(c, times);
+    }
+
     /**
      * Creates a string rule.
      * @see DefaultRulesFactory#string(String)
