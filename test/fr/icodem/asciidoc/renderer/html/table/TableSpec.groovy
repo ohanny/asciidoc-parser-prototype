@@ -69,4 +69,25 @@ class TableSpec extends HtmlRendererSpecification {
         doc.select("table > tbody > tr:nth-child(1) > td > p")*.text() == ['Data A1', 'Data B1']
         doc.select("table > tbody > tr:nth-child(2) > td > p")*.text() == ['Data A2', 'Data B2']
     }
+
+    def "table and col width not assigned when autowidth option is specified"() {
+        given:
+        String input = '''\
+[options="autowidth"]
+|===
+|A |B |C
+|a |b |c
+|1 |2 |3
+|===
+'''
+        when:
+        Document doc = transform(input)
+
+        then:
+        doc.select("table.tableblock.frame-all.grid-all").size() == 1
+        doc.select("table.tableblock.frame-all.grid-all.spread").size() == 0
+        doc.select("table[style*=\"width\"]").size() == 0
+        doc.select("table colgroup col").size() == 3
+        doc.select("table colgroup col[style*=\"width\"]").size() == 0
+    }
 }

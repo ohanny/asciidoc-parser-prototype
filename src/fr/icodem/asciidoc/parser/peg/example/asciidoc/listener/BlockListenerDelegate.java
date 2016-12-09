@@ -83,6 +83,8 @@ public class BlockListenerDelegate {
     }
 
     private static class ColumnsContext {
+        AttributeList attList;
+
         int count;
         int lineNumberStart;
 
@@ -94,8 +96,9 @@ public class BlockListenerDelegate {
         enum Header {Undefined, NoHeader, Header}
         Header header;
 
-        static ColumnsContext empty() {
+        static ColumnsContext empty(AttributeList attList) {
             ColumnsContext columns = new ColumnsContext();
+            columns.attList = attList;
             columns.header = Header.Undefined;
             return columns;
         }
@@ -135,11 +138,13 @@ public class BlockListenerDelegate {
         }
 
         void commit() {
-            double width = 100.0 / count;
-            ColumnContext col = rootColumn;
-            for (int i = 0; i < count; i++) {
-                col.width = width;
-                col = col.next;
+            if (!attList.hasOption("autowidth")) {
+                double width = 100.0 / count;
+                ColumnContext col = rootColumn;
+                for (int i = 0; i < count; i++) {
+                    col.width = width;
+                    col = col.next;
+                }
             }
         }
 
@@ -161,18 +166,18 @@ public class BlockListenerDelegate {
             TableContext ctx = new TableContext();
             ctx.handler = handler;
             ctx.attList = attList;
-            ctx.columns = ColumnsContext.empty();
+            ctx.columns = ColumnsContext.empty(attList);
             return ctx;
         }
 
         void flush() {
             columns.commit();
-            handler.startTable();
+            handler.startTable(attList);
 
             handler.startColumnGroup();
             ColumnContext col = columns.rootColumn;
             for (int i = 0; i < columns.count; i++) {
-                handler.column(col.width);
+                handler.column(attList, col.width);
                 col = col.next;
             }
             handler.endColumnGroup();

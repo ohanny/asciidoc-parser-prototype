@@ -510,9 +510,14 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
-    public void startTable() {
+    public void startTable(AttributeList attList) {
+        String cssClass = "tableblock frame-all grid-all";
+        if (!attList.hasOption("autowidth")) {
+            cssClass += " spread";
+        }
+
         indent()
-            .append(TABLE.start("class", "tableblock frame-all grid-all spread"))
+            .append(TABLE.start("class", cssClass))
             .nl()
             .incIndent();
     }
@@ -542,9 +547,16 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
-    public void column(double width) {
+    public void column(AttributeList attList, double width) {
+        StringBuilder sb = new StringBuilder();
+        if (!attList.hasOption("autowidth")) {
+            sb.append("width: " + width + "%;");
+        }
+        String style = sb.toString();
+
         indent()
-            .append(COL.tag("style", "width: " + width + "%;"))
+            .runIf(style.length() > 0, () -> append(COL.tag("style", style)))
+            .runIf(style.length() == 0, () -> append(COL.tag()))
             .nl();
     }
 

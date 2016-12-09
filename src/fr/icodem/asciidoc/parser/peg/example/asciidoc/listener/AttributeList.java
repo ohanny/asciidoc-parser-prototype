@@ -81,6 +81,14 @@ public class AttributeList {
         return getAttribute(name) != null;
     }
 
+    public boolean hasOption(String option) {
+        if (existsAttribute("options")) {
+            String options = getAttribute("options").getValue().toString();
+            if (options.contains(option)) return true;
+        }
+        return false;
+    }
+
     public String getId() {
         return id;
     }

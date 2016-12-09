@@ -56,13 +56,13 @@ public interface AsciidocHandler {
     void startListItemValue();
     void endListItemValue();
 
-    void startTable();
+    void startTable(AttributeList attList);
     void endTable();
 
     void startColumnGroup();
     void endColumnGroup();
 
-    void column(double width);
+    void column(AttributeList attList, double width);
 
     void startTableHeader();
     void endTableHeader();
