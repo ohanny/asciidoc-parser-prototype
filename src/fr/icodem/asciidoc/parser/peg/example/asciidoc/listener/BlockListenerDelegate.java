@@ -162,11 +162,12 @@ public class BlockListenerDelegate {
             columns.addCell(lineNumber - this.lineNumber);
         }
 
-        static TableContext of(AsciidocHandler handler, AttributeList attList) {
+        static TableContext of(AsciidocHandler handler, AttributeList attList, int lineNumber) {
             TableContext ctx = new TableContext();
             ctx.handler = handler;
             ctx.attList = attList;
             ctx.columns = ColumnsContext.empty(attList);
+            ctx.lineNumber = lineNumber;
             return ctx;
         }
 
@@ -493,7 +494,7 @@ public class BlockListenerDelegate {
     }
 
     public void enterTable(int lineNumber) {
-        currentTable = TableContext.of(handler, consumeAttList());
+        currentTable = TableContext.of(handler, consumeAttList(), lineNumber);
         //handler.startTable();
     }
 

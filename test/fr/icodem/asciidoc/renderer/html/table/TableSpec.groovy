@@ -90,4 +90,30 @@ class TableSpec extends HtmlRendererSpecification {
         doc.select("table colgroup col").size() == 3
         doc.select("table colgroup col[style*=\"width\"]").size() == 0
     }
+
+    def "table with implicit header row when other options set"() {
+        given:
+        String input = '''\
+[%autowidth]
+|===
+|Column 1 |Column 2
+
+|Data A1
+|Data B1
+|===
+'''
+        when:
+        Document doc = transform(input)
+
+        then:
+        doc.select("table.tableblock.frame-all.grid-all").size() == 1
+        doc.select("table.tableblock.frame-all.grid-all.spread").size() == 0
+        doc.select("table[style*=\"width\"]").size() == 0
+        doc.select("table colgroup col").size() == 2
+        doc.select("table > thead").size() == 1
+        doc.select("table > thead  > tr").size() == 1
+        doc.select("table > thead > tr > th").size() == 2
+        doc.select("table > tbody").size() == 1
+        doc.select("table > tbody > tr").size() == 1
+    }
 }
