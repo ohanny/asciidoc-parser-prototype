@@ -116,7 +116,14 @@ public class CommonRules extends BaseRules {
                 sequence(
                     name(),
                     ch('='),
-                    attributeValue(true)
+                    firstOf(
+                        sequence(
+                            optional('"'),
+                            attributeValue(true),
+                            optional('"')
+                        ),
+                        attributeValue(true)
+                    )
                 )
         );
     }
@@ -206,7 +213,7 @@ public class CommonRules extends BaseRules {
             return node("attributeValue", name,
                     oneOrMore(
                             //noneOf("[],")
-                            noneOf("[]#%,") // TODO how to deal with #.%, characters ?
+                            noneOf("[]#%,\"") // TODO how to deal with #.%, characters ?
                     )
             );
         }
@@ -214,7 +221,7 @@ public class CommonRules extends BaseRules {
         return node("attributeValue", name,
                 oneOrMore(
                         //noneOf("[],")
-                        noneOf("[]#.%,") // TODO how to deal with #.%, characters ?
+                        noneOf("[]#.%,\"") // TODO how to deal with #.%, characters ?
                 )
         );
     }

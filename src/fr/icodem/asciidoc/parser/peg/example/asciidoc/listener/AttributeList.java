@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -11,6 +12,10 @@ public class AttributeList {
 
     private String firstPositionalAttribute;
     private List<String> positionalAttributes;
+
+    private Set<String> options;
+    private Set<String> roles;
+
     private Map<String, Attribute> attributes;
 
     public static AttributeList of(List<Attribute> attList) {
@@ -37,20 +42,21 @@ public class AttributeList {
                 .ifPresent(value -> firstPositionalAttribute = value);
 
         // collect roles
-        String roles = attList.stream()
-                            .filter(att -> "role".equals(att.getName()))
-                            .map(att -> (String)att.getValue())
-                            .collect(Collectors.joining(","));
+        roles = attList.stream()
+                       .filter(att -> "role".equals(att.getName()))
+                       .map(att -> (String)att.getValue())
+                       .collect(Collectors.toSet());
 
         // collect options
-        String options = attList.stream()
-                            .filter(att -> "options".equals(att.getName()))
-                            .map(att -> (String)att.getValue())
-                            .collect(Collectors.joining(","));
+        options = attList.stream()
+                         .filter(att -> "options".equals(att.getName()))
+                         .map(att -> (String)att.getValue())
+                         .collect(Collectors.toSet());
 
         // attribute list to map
         Predicate<Attribute> attPredicate = att -> !"role".equals(att.getName())
                                                         && !"options".equals(att.getName())
+                                                        && !"id".equals(att.getName())
                                                         && att.getName() != null;
         attributes = attList.stream()
                             .filter(attPredicate)
@@ -58,15 +64,6 @@ public class AttributeList {
                                     Attribute::getName,
                                     att -> att,
                                     (att1, att2) -> att2));// merger : last wins
-
-        // add roles and options
-        if (roles != null && !roles.isEmpty()) {
-            attributes.put("role", Attribute.of("role", roles));
-        }
-        if (options != null && !options.isEmpty()) {
-            attributes.put("options", Attribute.of("options", options));
-        }
-
     }
 
     public String getFirstPositionalAttribute() {
@@ -77,16 +74,8 @@ public class AttributeList {
         return attributes.get(name);
     }
 
-    public boolean existsAttribute(String name) {
-        return getAttribute(name) != null;
-    }
-
     public boolean hasOption(String option) {
-        if (existsAttribute("options")) {
-            String options = getAttribute("options").getValue().toString();
-            if (options.contains(option)) return true;
-        }
-        return false;
+        return options.contains(option);
     }
 
     public String getId() {
@@ -99,6 +88,8 @@ public class AttributeList {
                 "id='" + id + '\'' +
                 ", firstPositionalAttribute='" + firstPositionalAttribute + '\'' +
                 ", positionalAttributes=" + positionalAttributes +
+                ", options=" + options +
+                ", roles=" + roles +
                 ", attributes=" + attributes +
                 '}';
     }
