@@ -77,6 +77,14 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "\n" +
                 "Titre 1:: contenu 1\n" +
                 "Titre 2:: contenu 2\n" +
+                "Titre 3::\n" +
+                "+\n" +
+                "contenu 3\n" +
+                "\n" +
+                "Titre 4::\n" +
+                "+\n" +
+                "* Item 1\n" +
+                "* Item 2\n" +
                 "\n" +
                 "\n";
 
@@ -517,6 +525,10 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void startLabeledList() {
         indent()
+            .append(DIV.start("class", "dlist"))
+            .nl()
+            .incIndent()
+            .indent()
             .append(DL.start())
             .nl()
             .incIndent();
@@ -527,6 +539,10 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         decIndent()
             .indent()
             .append(DL.end())
+            .nl()
+            .decIndent()
+            .indent()
+            .append(DIV.end())
             .nl();
     }
 
@@ -549,17 +565,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .nl()
             .incIndent();
     }
-
-
-
-//    //@Override
-//    public void writeLabeledListItemContent(String content) {
-//        indent()
-//            .append(P.start())
-//            .append(content)
-//            .append(P.end())
-//            .nl();
-//    }
 
     @Override
     public void endLabeledListItemContent() {
