@@ -481,6 +481,8 @@ public class BlockRules extends BaseRules {
                );
     }
 
+    // Could be greatly simplified if content was always considered as block
+    // => compatible with [horizontal] ?
     private Rule labeledListItemContent() {
         return node("labeledListItemContent",
                  firstOf(
