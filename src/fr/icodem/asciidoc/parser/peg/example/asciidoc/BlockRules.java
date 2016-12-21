@@ -101,6 +101,7 @@ public class BlockRules extends BaseRules {
                 sourceBlock(),
                 literalBlock(),
                 table(),
+                labeledList(),
                 sequence(paragraph(), optional(nl()))
         ));
     }
@@ -414,6 +415,75 @@ public class BlockRules extends BaseRules {
         return node("listContinuation", sequence(
                 ch('+'), optional(blank()), newLine(), wrap(setFromList, proxy("block"))
         ));
+    }
+
+    private Rule labeledList() {
+        return node("labeledList",
+                 sequence(
+                   labeledListItem(),
+                   zeroOrMore(
+                     sequence(
+                       zeroOrMore(
+                         firstOf(
+                           sequence(
+                             isCurrentCharNotEOI(),
+                             bl(false)
+                           ),
+                           attributeList()
+                         )
+                       ),
+                       labeledListItem()
+                     )
+                   )
+                 )
+               );
+    }
+
+    private Rule labeledListItem() {
+        return node("labeledListItem",
+                 sequence(
+                   optional(blank()),
+                   labeledListItemTitle(),
+                   atLeast(':', 2),
+                   blank(),
+                   zeroOrMore(bl()),
+                   labeledListItemContent()
+                 )
+               );
+    }
+
+    private Rule labeledListItemTitle() {
+        return node("labeledListItemTitle",
+                 zeroOrMore(
+                   sequence(
+                     testNot(
+                       sequence(
+                         atLeast(':', 2),
+                         blank()
+                       )
+                     ),
+                     noneOf("\r\n")
+                   )
+                 )
+               );
+    }
+
+    private Rule labeledListItemContent() {
+        return node("labeledListItemContent",
+                 zeroOrMore(
+                   sequence(
+                     testNot(
+                       sequence(
+                         isFirstCharInLine(),
+                         blank(),
+                         atLeast(':', 2),
+                         blank()
+                       )
+                     ),
+                     proxy("block")
+                   )
+                 )
+               );
     }
 
     private Rule sourceBlock() {
