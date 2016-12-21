@@ -73,7 +73,12 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 ". Lemon\n" +
                 ". Strawberry\n" +
                 ".. Kaki\n" +
-                ".. Kiwai\n";
+                ".. Kiwai\n" +
+                "\n" +
+                "Titre 1:: contenu 1\n" +
+                "Titre 2:: contenu 2\n" +
+                "\n" +
+                "\n";
 
         String text1 =                 "Block above\n" +
                 "\n" +
@@ -505,6 +510,73 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     @Override
     public void endListItemValue() {
+        append(P.end())
+            .nl();
+    }
+
+    @Override
+    public void startLabeledList() {
+        indent()
+            .append(DL.start())
+            .nl()
+            .incIndent();
+    }
+
+    @Override
+    public void endLabeledList() {
+        decIndent()
+            .indent()
+            .append(DL.end())
+            .nl();
+    }
+
+    @Override
+    public void startLabeledListItemTitle() {
+        indent()
+            .append(DT.start("class", "hdlist1"));
+    }
+
+    @Override
+    public void endLabeledListItemTitle() {
+        append(DT.end())
+            .nl();
+    }
+
+    @Override
+    public void startLabeledListItemContent() {
+        indent()
+            .append(DD.start())
+            .nl()
+            .incIndent();
+    }
+
+
+
+//    //@Override
+//    public void writeLabeledListItemContent(String content) {
+//        indent()
+//            .append(P.start())
+//            .append(content)
+//            .append(P.end())
+//            .nl();
+//    }
+
+    @Override
+    public void endLabeledListItemContent() {
+        decIndent()
+            .indent()
+            .append(DD.end())
+            .nl();
+    }
+
+    @Override
+    public void startLabeledListItemSimpleContent() {
+        indent()
+            .append(P.start());
+    }
+
+    @Override
+    public void endLabeledListItemSimpleContent() {
         append(P.end())
             .nl();
     }

@@ -56,6 +56,18 @@ public interface AsciidocHandler {
     void startListItemValue();
     void endListItemValue();
 
+    void startLabeledList();
+    void endLabeledList();
+
+    void startLabeledListItemTitle();
+    void endLabeledListItemTitle();
+
+    void startLabeledListItemContent();
+    void endLabeledListItemContent();
+
+    void startLabeledListItemSimpleContent();
+    void endLabeledListItemSimpleContent();
+
     void startTable(AttributeList attList);
     void endTable();
 

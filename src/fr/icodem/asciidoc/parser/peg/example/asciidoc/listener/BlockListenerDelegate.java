@@ -493,6 +493,38 @@ public class BlockListenerDelegate {
         handler.endListItemValue();
     }
 
+    public void enterLabeledList() {
+        handler.startLabeledList();
+    }
+
+    public void exitLabeledList() {
+        handler.endLabeledList();
+    }
+
+    public void enterLabeledListTitle() {
+        handler.startLabeledListItemTitle();
+    }
+
+    public void exitLabeledListTitle() {
+        handler.endLabeledListItemTitle();
+    }
+
+    public void enterLabeledListContent() {
+        handler.startLabeledListItemContent();
+    }
+
+    public void exitLabeledListContent() {
+        handler.endLabeledListItemContent();
+    }
+
+    public void enterLabeledListSimpleContent() {
+        handler.startLabeledListItemSimpleContent();
+    }
+
+    public void exitLabeledListSimpleContent() {
+        handler.endLabeledListItemSimpleContent();
+    }
+
     public void enterTable(int lineNumber) {
         currentTable = TableContext.of(handler, consumeAttList(), lineNumber);
         //handler.startTable();

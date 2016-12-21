@@ -13,7 +13,7 @@ title:: content
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(document (content (block (labeledList (labeledListItem (labeledListItemTitle t i t l e) : :   (labeledListItemContent c o n t e n t \\n))))) (bl <EOF>))"
+        result.tree == "(document (content (block (labeledList (labeledListItem (labeledListItemTitle t i t l e) : :   (labeledListItemContent c o n t e n t) (nl \\n))))) (bl <EOF>))"
     }
 
     def "two items"() {
@@ -27,7 +27,8 @@ title 2:: content 2
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(document (content (block (labeledList (labeledListItem (labeledListItemTitle t i t l e   1) : :   (labeledListItemContent c o n t e n t   1 \\n)) (labeledListItem (labeledListItemTitle t i t l e   2) : :   (labeledListItemContent c o n t e n t   2 \\n))))) (bl <EOF>))"
+        result.tree == "(document (content (block (labeledList (labeledListItem (labeledListItemTitle t i t l e   1) : :   (labeledListItemContent c o n t e n t   1) (nl \\n)) (labeledListItem (labeledListItemTitle t i t l e   2) : :   (labeledListItemContent c o n t e n t   2) (nl \\n))))) (bl <EOF>))"
+//        result.tree == "(document (content (block (labeledList (labeledListItem (labeledListItemTitle t i t l e   1) : :   (labeledListItemContent c o n t e n t   1) (nl \\n)) (labeledListItem (labeledListItemTitle t i t l e   2) : :   (labeledListItemContent c o n t e n t   2 \\n))))) (bl <EOF>))"
     }
 
     def "content below title"() {
@@ -44,7 +45,7 @@ content 2
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(document (content (block (labeledList (labeledListItem (labeledListItemTitle t i t l e   1) : : (nl \\n) (labeledListItemContent c o n t e n t   1 \\n)) (labeledListItem (labeledListItemTitle t i t l e   2) : : (nl \\n) (bl \\n) (labeledListItemContent c o n t e n t   2 \\n))))) (bl <EOF>))"
+        result.tree == "(document (content (block (labeledList (labeledListItem (labeledListItemTitle t i t l e   1) : : (nl \\n) (labeledListItemContent c o n t e n t   1) (nl \\n)) (labeledListItem (labeledListItemTitle t i t l e   2) : : (nl \\n) (bl \\n) (labeledListItemContent c o n t e n t   2) (nl \\n))))) (bl <EOF>))"
     }
 
 }

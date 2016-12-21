@@ -453,7 +453,8 @@ public class BlockRules extends BaseRules {
                      nl()
                    ),
                    zeroOrMore(bl()),
-                   labeledListItemContent()
+                   labeledListItemContent(),
+                   optional(nl())
                  )
                );
     }
@@ -504,7 +505,29 @@ public class BlockRules extends BaseRules {
                            )
                          )
                        ),
-                       any()
+                       firstOf(
+                         noneOf("\r\n"),
+                         sequence(
+                           anyOf("\r\n"),
+                           testNot(
+                             firstOf(
+                               bl(),
+                               bl(true),
+                               sequence(
+                                 labeledListItemTitle(),
+                                 atLeast(':', 2),
+                                 firstOf(
+                                   sequence(
+                                     blank(),
+                                     optional(nl())
+                                   ),
+                                   nl()
+                                 )
+                               )
+                             )
+                           )
+                         )
+                       )
                      )
                    )
                  )
