@@ -13,12 +13,12 @@ class BlockSpecification extends Specification {
     protected RulesFactory factory = defaultRulesFactory()
 
     ParsingResult parse(String input) {
-        BlockRules rules = new BlockRules();
-        rules.useFactory(factory);
+        BlockRules rules = new BlockRules()
+        rules.useFactory(factory)
         new ParseRunner(rules, rules.&document)
                 .generateStringTree()
                 //.trace()
-                .parse(new StringReader(input), null, null, null);
+                .parse(new StringReader(input), null, null, null)
     }
 
 }

@@ -446,6 +446,7 @@ public class BlockRules extends BaseRules {
                    labeledListItemTitle(),
                    atLeast(':', 2),
                    blank(),
+                   optional(nl()),
                    zeroOrMore(bl()),
                    labeledListItemContent()
                  )
@@ -470,17 +471,24 @@ public class BlockRules extends BaseRules {
 
     private Rule labeledListItemContent() {
         return node("labeledListItemContent",
-                 zeroOrMore(
+                 firstOf(
                    sequence(
-                     testNot(
-                       sequence(
-                         isFirstCharInLine(),
-                         blank(),
-                         atLeast(':', 2),
-                         blank()
-                       )
-                     ),
-                     proxy("block")
+                     isNextCharAtBeginningOfLine(),
+                     listContinuation()
+                   ),
+                   zeroOrMore(
+                     sequence(
+                       testNot(
+                         sequence(
+                           isNextCharAtBeginningOfLine(),
+                           optional(blank()),
+                           labeledListItemTitle(),
+                           atLeast(':', 2),
+                           blank()
+                         )
+                       ),
+                       any()
+                     )
                    )
                  )
                );
