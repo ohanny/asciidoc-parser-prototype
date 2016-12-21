@@ -445,8 +445,13 @@ public class BlockRules extends BaseRules {
                    optional(blank()),
                    labeledListItemTitle(),
                    atLeast(':', 2),
-                   blank(),
-                   optional(nl()),
+                   firstOf(
+                     sequence(
+                       blank(),
+                       optional(nl())
+                     ),
+                     nl()
+                   ),
                    zeroOrMore(bl()),
                    labeledListItemContent()
                  )
@@ -460,7 +465,13 @@ public class BlockRules extends BaseRules {
                      testNot(
                        sequence(
                          atLeast(':', 2),
-                         blank()
+                         firstOf(
+                           sequence(
+                             blank(),
+                             optional(nl())
+                           ),
+                           nl()
+                         )
                        )
                      ),
                      noneOf("\r\n")
@@ -484,7 +495,13 @@ public class BlockRules extends BaseRules {
                            optional(blank()),
                            labeledListItemTitle(),
                            atLeast(':', 2),
-                           blank()
+                           firstOf(
+                             sequence(
+                               blank(),
+                               optional(nl())
+                             ),
+                             nl()
+                           )
                          )
                        ),
                        any()
