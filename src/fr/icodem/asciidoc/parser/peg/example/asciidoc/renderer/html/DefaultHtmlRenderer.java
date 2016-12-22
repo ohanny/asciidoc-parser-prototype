@@ -88,6 +88,8 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "* Item 1\n" +
                 "* Item 2\n" +
                 "\n" +
+                "NOTE: this is a note\n" +
+                "\n" +
                 "\n";
 
         String text1 =                 "Block above\n" +

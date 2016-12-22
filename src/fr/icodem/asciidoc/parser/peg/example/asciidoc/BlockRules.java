@@ -85,12 +85,7 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule block(boolean fromList) {
-        Rule setFromList = () -> ctx -> {
-            ctx.setAttribute("fromList", fromList);// TODO create standard rule ?
-            return true;
-        };
-
-        return wrap(setFromList, block());
+        return wrap(setAttribute("fromList", fromList), block());
     }
 
     private Rule block() {
@@ -143,14 +138,14 @@ public class BlockRules extends BaseRules {
 
     private Rule admonition() {
         return node("admonition",
-                    firstOf(
-                        string("NOTE: "),
-                        string("TIP: "),
-                        string("IMPORTANT: "),
-                        string("CAUTION: "),
-                        string("WARNING: ")
-                    )
-                );
+                 firstOf(
+                   string("NOTE: "),
+                   string("TIP: "),
+                   string("IMPORTANT: "),
+                   string("CAUTION: "),
+                   string("WARNING: ")
+                 )
+               );
     }
 
     private Rule isBlankInParagraph() {
@@ -204,12 +199,7 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule bl(boolean withEOI) {
-        Rule setWithEOI = () -> ctx -> {
-            ctx.setAttribute("withEOI", withEOI);
-            return true;
-        };
-
-        return wrap(setWithEOI, bl());
+        return wrap(setAttribute("withEOI", withEOI), bl());
     }
     private Rule bl() {
         if (isCached("bl")) return cached("bl");
@@ -407,13 +397,8 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule listContinuation() {
-        Rule setFromList = () -> ctx -> {
-            ctx.setAttribute("fromList", true);// TODO create standard rule ?
-            return true;
-        };
-
         return node("listContinuation", sequence(
-                ch('+'), optional(blank()), newLine(), wrap(setFromList, proxy("block"))
+                ch('+'), optional(blank()), newLine(), wrap(setAttribute("fromList", true), proxy("block"))
         ));
     }
 

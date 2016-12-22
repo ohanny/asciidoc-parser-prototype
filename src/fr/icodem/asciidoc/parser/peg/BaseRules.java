@@ -268,4 +268,18 @@ public class BaseRules {
         return rules;
     }
 
+    protected Rule setAttribute(String name, Object value) {
+        return () -> ctx -> {
+            ctx.setAttribute(name, value);
+            return true;
+        };
+    }
+
+    protected Rule setAttributeOnParent(String name, Object value) {
+        return () -> ctx -> {
+            ctx.findParentContextNode().setAttribute(name, value);
+            return true;
+        };
+    }
+
 }
