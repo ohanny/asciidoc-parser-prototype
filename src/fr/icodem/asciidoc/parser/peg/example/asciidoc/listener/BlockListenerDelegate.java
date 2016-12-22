@@ -23,6 +23,15 @@ public class BlockListenerDelegate {
     private Deque<String> nodes; // TODO rename variable
     private List<Attribute> attList;
 
+    private MacroContext currentMacro;
+    private static class MacroContext {
+        String name;
+
+        static MacroContext empty() {
+            return new MacroContext();
+        }
+    }
+
     private enum ListType {Ordered, Unordered}
     private static class ListContext {
         int level;
@@ -311,6 +320,15 @@ public class BlockListenerDelegate {
 
         textObjects.push(value);
         textObjects.push(name);
+    }
+
+    // macro methods
+    public void enterMacro() {
+        currentMacro = MacroContext.empty();
+    }
+
+    public void exitMacro() {
+        currentMacro = null;
     }
 
     // document and header methods

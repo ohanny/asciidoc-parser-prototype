@@ -15,7 +15,7 @@ public class CommonRules extends BaseRules {
                         markNodePosition(),
                         macroName(),
                         ch(':'), optional(':'),
-                        optional(target()),
+                        optional(macroTarget()),
                         attributeList(fromInline)
                     ),
                     markAsNotAMacro()
@@ -23,10 +23,10 @@ public class CommonRules extends BaseRules {
         );
     }
 
-    private Rule target() {
-        if (isCached("target")) return cached("target");
+    private Rule macroTarget() {
+        if (isCached("macroTarget")) return cached("macroTarget");
 
-        return node("target",
+        return node("macroTarget",
                 oneOrMore(noneOf(" \r\n\t["))
         );
     }

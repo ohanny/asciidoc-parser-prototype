@@ -49,7 +49,7 @@ public class BlockMacroTest extends GrammarTest {
                 "image::sunset.jpg[]",
 
                 /* expected */
-                "(document (content (macro (macroName i m a g e) : : (target s u n s e t . j p g) (attributeList [ ] <EOF>))))"
+                "(document (content (macro (macroName i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ ] <EOF>))))"
             },
             {
                 /* message */
@@ -59,7 +59,7 @@ public class BlockMacroTest extends GrammarTest {
                 "image::sunset.jpg[Sunset]",
 
                 /* expected */
-                "(document (content (macro (macroName i m a g e) : : (target s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeValue S u n s e t)) ] <EOF>))))"
+                "(document (content (macro (macroName i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeValue S u n s e t)) ] <EOF>))))"
             },
             {
                 /* message */
@@ -73,7 +73,7 @@ public class BlockMacroTest extends GrammarTest {
                 "Block below",
 
                 /* expected */
-                "(document (content (block (paragraph B l o c k   a b o v e) (nl \\n)) (bl \\n) (macro (macroName   i m a g e) : : (target s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeValue S u n s e t)) ] \\n)) (bl \\n) (block (paragraph B l o c k   b e l o w <EOF>))))"
+                "(document (content (block (paragraph B l o c k   a b o v e) (nl \\n)) (bl \\n) (macro (macroName   i m a g e) : : (macroTarget s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeValue S u n s e t)) ] \\n)) (bl \\n) (block (paragraph B l o c k   b e l o w <EOF>))))"
             }
         });
 

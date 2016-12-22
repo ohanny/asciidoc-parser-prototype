@@ -56,6 +56,10 @@ public class BlockListener implements ParseTreeListener {
             case "attributeValue":
                 delegate.attributeValue(new String(chars));
                 break;
+
+            case "macroName":
+                break;
+
             case "tableBlock":
                 delegate.tableBlock(new String(chars).trim());
                 break;
@@ -88,6 +92,11 @@ public class BlockListener implements ParseTreeListener {
                 break;
             case "attributeEntry" :
 //                enterAttributeEntry(context);
+                break;
+
+            // macro
+            case "macro":
+                delegate.enterMacro();
                 break;
 
             // document and header
@@ -173,10 +182,6 @@ public class BlockListener implements ParseTreeListener {
 //                textObjects.push(Text.dummy());
                 break;
 
-            // macro
-            case "macro":
-                System.out.println("MACRO ENTER");
-                break;
         }
 
     }
@@ -198,6 +203,11 @@ public class BlockListener implements ParseTreeListener {
             case "namedAttribute" :
                 break;
             case "attributeEntry" :
+                break;
+
+            // macro
+            case "macro":
+                delegate.exitMacro();
                 break;
 
             // document and header
@@ -272,10 +282,6 @@ public class BlockListener implements ParseTreeListener {
             case "title" :
                 break;
 
-            // macro
-            case "macro":
-                System.out.println("MACRO");
-                break;
         }
     }
 }

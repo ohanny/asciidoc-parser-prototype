@@ -12,7 +12,7 @@ class InlineMacroSpec extends TextSpecification {
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text I t ' s   a   n i c e  ) (macro (macroName i m a g e) : (target s u n s e t . p n g) (attributeList [ ]  )) (text d a y  ))"
+        result.tree == "(formattedText (text I t ' s   a   n i c e  ) (macro (macroName i m a g e) : (macroTarget s u n s e t . p n g) (attributeList [ ]  )) (text d a y  ))"
     }
 
     def "positional attribute in image macro"() {
@@ -23,7 +23,7 @@ class InlineMacroSpec extends TextSpecification {
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text I t ' s   a   n i c e  ) (macro (macroName i m a g e) : (target s u n s e t . p n g) (attributeList [ (positionalAttribute (attributeValue T h e   S u n)) ]  )) (text d a y  ))"
+        result.tree == "(formattedText (text I t ' s   a   n i c e  ) (macro (macroName i m a g e) : (macroTarget s u n s e t . p n g) (attributeList [ (positionalAttribute (attributeValue T h e   S u n)) ]  )) (text d a y  ))"
     }
 
     def "several attributes in image macro"() {
@@ -34,7 +34,7 @@ class InlineMacroSpec extends TextSpecification {
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text I t ' s   a   n i c e  ) (macro (macroName i m a g e) : (target s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeValue S u n s e t)) ,   (positionalAttribute (attributeValue 3 0 0)) ,   (positionalAttribute (attributeValue 2 0 0)) ,   (namedAttribute (attributeName l i n k) = \" (attributeValue h t t p : / / w w w . f l i c k r . c o m / p h o t o s / j a v h / 5 4 4 8 3 3 6 6 5 5) \") ]  )) (text d a y))"
+        result.tree == "(formattedText (text I t ' s   a   n i c e  ) (macro (macroName i m a g e) : (macroTarget s u n s e t . j p g) (attributeList [ (positionalAttribute (attributeValue S u n s e t)) ,   (positionalAttribute (attributeValue 3 0 0)) ,   (positionalAttribute (attributeValue 2 0 0)) ,   (namedAttribute (attributeName l i n k) = \" (attributeValue h t t p : / / w w w . f l i c k r . c o m / p h o t o s / j a v h / 5 4 4 8 3 3 6 6 5 5) \") ]  )) (text d a y))"
     }
 
 
