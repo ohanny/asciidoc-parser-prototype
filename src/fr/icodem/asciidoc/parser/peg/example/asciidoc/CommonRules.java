@@ -13,7 +13,7 @@ public class CommonRules extends BaseRules {
                 firstOf(
                     sequence(
                         markNodePosition(),
-                        name(),
+                        macroName(),
                         ch(':'), optional(':'),
                         optional(target()),
                         attributeList(fromInline)
@@ -114,7 +114,7 @@ public class CommonRules extends BaseRules {
 
         return node("namedAttribute",
                 sequence(
-                    name(),
+                    attributeName(),
                     ch('='),
                     firstOf(
                         sequence(
@@ -150,7 +150,7 @@ public class CommonRules extends BaseRules {
         return node("idAttribute",
                 sequence(
                     ch('#'),
-                    name()
+                    attributeName()
                 )
         );
     }
@@ -161,7 +161,7 @@ public class CommonRules extends BaseRules {
         return node("roleAttribute",
                 sequence(
                     ch('.'),
-                    name()
+                    attributeName()
                 )
         );
     }
@@ -172,15 +172,21 @@ public class CommonRules extends BaseRules {
         return node("optionAttribute",
                 sequence(
                     ch('%'),
-                    name()
+                    attributeName()
                 )
         );
     }
 
-    private Rule name() {
-        if (isCached("name")) return cached("name");
+    private Rule macroName() {
+        if (isCached("macroName")) return cached("macroName");
 
-        return node("name", namePrototype());
+        return node("macroName", namePrototype());
+    }
+
+    private Rule attributeName() {
+        if (isCached("attributeName")) return cached("attributeName");
+
+        return node("attributeName", namePrototype());
     }
 
     private Rule namePrototype() {

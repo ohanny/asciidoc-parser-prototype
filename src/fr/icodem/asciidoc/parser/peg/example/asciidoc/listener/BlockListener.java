@@ -50,7 +50,9 @@ public class BlockListener implements ParseTreeListener {
             case "authorAddressLabel":
                 delegate.authorAddressLabel(new String(chars));
                 break;
-            case "name":
+            case "attributeName":
+                delegate.attributeName(new String(chars));
+                break;
             case "attributeValue":
                 delegate.attributeValue(new String(chars));
                 break;
@@ -170,6 +172,11 @@ public class BlockListener implements ParseTreeListener {
             case "listContinuation" :
 //                textObjects.push(Text.dummy());
                 break;
+
+            // macro
+            case "macro":
+                System.out.println("MACRO ENTER");
+                break;
         }
 
     }
@@ -263,6 +270,11 @@ public class BlockListener implements ParseTreeListener {
             case "nl" :
             case "bl" :
             case "title" :
+                break;
+
+            // macro
+            case "macro":
+                System.out.println("MACRO");
                 break;
         }
     }

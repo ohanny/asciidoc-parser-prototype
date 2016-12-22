@@ -92,17 +92,19 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "\n" +
                 "Paragraph #2\n" +
                 "\n" +
+                "\n" +
+                "image::sunset.jpg[Sunset]\n" +
                 "\n";
 
-        String text1 =                 "Block above\n" +
+        text =  "Block above\n" +
                 "\n" +
-                "'''\n" +
+                " image::sunset.jpg[Sunset]\n" +
                 "\n" +
                 "Block below";
 
 
 
-                List<AttributeEntry> attributes = new ArrayList<>();
+                //List<AttributeEntry> attributes = new ArrayList<>();
 
 //        System.out.println("\r\nWITH PEG\r\n");
 //        StringWriter writer = new StringWriter();
@@ -407,7 +409,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     @Override
     public void startParagraph(String admonition) {
-        System.out.println("ADMONITION: "+admonition);
         if (admonition == null) {
             indent()
               .append(DIV.start("class", "paragraph"))
@@ -417,7 +418,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
               .append(P.start());
         } else {
             indent()
-              .append(DIV.start("class", "admonitionblock note"))
+              .append(DIV.start("class", "admonitionblock " + admonition.toLowerCase()))
                 .nl()
                 .incIndent()
                 .indent()

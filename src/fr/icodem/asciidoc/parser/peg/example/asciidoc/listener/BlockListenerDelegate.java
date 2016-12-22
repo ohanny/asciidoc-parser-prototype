@@ -270,6 +270,11 @@ public class BlockListenerDelegate {
 
 
     // attributes methods
+    public void attributeName(String value) {
+        textObjects.pop()
+                   .setValue(value);
+    }
+
     public void attributeValue(String value) {
         textObjects.pop()
                    .setValue(value);

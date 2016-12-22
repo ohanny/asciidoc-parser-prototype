@@ -69,7 +69,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1=value]",
 
                 /* expected */
-                "(document (content (attributeList [ (namedAttribute (name a t t 1) = (attributeValue v a l u e)) ] <EOF>)))"
+                "(document (content (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValue v a l u e)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -79,7 +79,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1=value1,att2=value2]",
 
                 /* expected */
-                "(document (content (attributeList [ (namedAttribute (name a t t 1) = (attributeValue v a l u e 1)) , (namedAttribute (name a t t 2) = (attributeValue v a l u e 2)) ] <EOF>)))"
+                "(document (content (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValue v a l u e 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -89,7 +89,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1=value1, att2=value2]",
 
                 /* expected */
-                "(document (content (attributeList [ (namedAttribute (name a t t 1) = (attributeValue v a l u e 1)) ,   (namedAttribute (name a t t 2) = (attributeValue v a l u e 2)) ] <EOF>)))"
+                "(document (content (attributeList [ (namedAttribute (attributeName a t t 1) = (attributeValue v a l u e 1)) ,   (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -99,7 +99,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (name a t t 2) = (attributeValue v a l u e 2)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -109,7 +109,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]\n",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (name a t t 2) = (attributeValue v a l u e 2)) ] \\n)) (bl <EOF>))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -130,7 +130,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]\n",
 
                 /* expected */
-                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (name a t t 2) = (attributeValue v a l u e 2)) ] \\n))) (bl <EOF>))"
+                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] \\n))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -141,7 +141,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]",
 
                 /* expected */
-                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (name a t t 2) = (attributeValue v a l u e 2)) ] <EOF>))))"
+                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] <EOF>))))"
             },
             {
                 /* message */
@@ -154,7 +154,7 @@ public class AttributeListTest extends GrammarTest {
                 "A paragraph",
 
                 /* expected */
-                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (bl \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (name a t t 2) = (attributeValue v a l u e 2)) ] \\n) (block (paragraph A   p a r a g r a p h <EOF>)))))"
+                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (bl \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] \\n) (block (paragraph A   p a r a g r a p h <EOF>)))))"
             },
             {
                 /* message */
@@ -164,7 +164,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1#tiger]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (idAttribute # (name t i g e r)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (idAttribute # (attributeName t i g e r)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -174,7 +174,7 @@ public class AttributeListTest extends GrammarTest {
                 "[#tiger]",
 
                 /* expected */
-                "(document (content (attributeList [ (idAttribute # (name t i g e r)) ] <EOF>)))"
+                "(document (content (attributeList [ (idAttribute # (attributeName t i g e r)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -184,7 +184,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1.summary]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (roleAttribute . (name s u m m a r y)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (roleAttribute . (attributeName s u m m a r y)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -194,7 +194,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1.summary.incremental]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (roleAttribute . (name s u m m a r y)) (roleAttribute . (name i n c r e m e n t a l)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (roleAttribute . (attributeName s u m m a r y)) (roleAttribute . (attributeName i n c r e m e n t a l)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -204,7 +204,7 @@ public class AttributeListTest extends GrammarTest {
                 "[.summary.incremental]",
 
                 /* expected */
-                "(document (content (attributeList [ (roleAttribute . (name s u m m a r y)) (roleAttribute . (name i n c r e m e n t a l)) ] <EOF>)))"
+                "(document (content (attributeList [ (roleAttribute . (attributeName s u m m a r y)) (roleAttribute . (attributeName i n c r e m e n t a l)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -214,7 +214,7 @@ public class AttributeListTest extends GrammarTest {
                 "[#tiger.summary.incremental]",
 
                 /* expected */
-                "(document (content (attributeList [ (idAttribute # (name t i g e r)) (roleAttribute . (name s u m m a r y)) (roleAttribute . (name i n c r e m e n t a l)) ] <EOF>)))"
+                "(document (content (attributeList [ (idAttribute # (attributeName t i g e r)) (roleAttribute . (attributeName s u m m a r y)) (roleAttribute . (attributeName i n c r e m e n t a l)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -224,7 +224,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1#tiger.summary.incremental]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (idAttribute # (name t i g e r)) (roleAttribute . (name s u m m a r y)) (roleAttribute . (name i n c r e m e n t a l)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (idAttribute # (attributeName t i g e r)) (roleAttribute . (attributeName s u m m a r y)) (roleAttribute . (attributeName i n c r e m e n t a l)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -234,7 +234,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1%header]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (optionAttribute % (name h e a d e r)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (optionAttribute % (attributeName h e a d e r)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -244,7 +244,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1%header%footer]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (optionAttribute % (name h e a d e r)) (optionAttribute % (name f o o t e r)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (optionAttribute % (attributeName h e a d e r)) (optionAttribute % (attributeName f o o t e r)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -254,7 +254,7 @@ public class AttributeListTest extends GrammarTest {
                 "[%header%footer]",
 
                 /* expected */
-                "(document (content (attributeList [ (optionAttribute % (name h e a d e r)) (optionAttribute % (name f o o t e r)) ] <EOF>)))"
+                "(document (content (attributeList [ (optionAttribute % (attributeName h e a d e r)) (optionAttribute % (attributeName f o o t e r)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -264,7 +264,7 @@ public class AttributeListTest extends GrammarTest {
                 "[#tiger%header%footer]",
 
                 /* expected */
-                "(document (content (attributeList [ (idAttribute # (name t i g e r)) (optionAttribute % (name h e a d e r)) (optionAttribute % (name f o o t e r)) ] <EOF>)))"
+                "(document (content (attributeList [ (idAttribute # (attributeName t i g e r)) (optionAttribute % (attributeName h e a d e r)) (optionAttribute % (attributeName f o o t e r)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -274,7 +274,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1#tiger%header%footer]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (idAttribute # (name t i g e r)) (optionAttribute % (name h e a d e r)) (optionAttribute % (name f o o t e r)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (idAttribute # (attributeName t i g e r)) (optionAttribute % (attributeName h e a d e r)) (optionAttribute % (attributeName f o o t e r)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -284,7 +284,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1#tiger.summary.incremental%header%footer]",
 
                 /* expected */
-                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (idAttribute # (name t i g e r)) (roleAttribute . (name s u m m a r y)) (roleAttribute . (name i n c r e m e n t a l)) (optionAttribute % (name h e a d e r)) (optionAttribute % (name f o o t e r)) ] <EOF>)))"
+                "(document (content (attributeList [ (positionalAttribute (attributeValue a t t 1)) (idAttribute # (attributeName t i g e r)) (roleAttribute . (attributeName s u m m a r y)) (roleAttribute . (attributeName i n c r e m e n t a l)) (optionAttribute % (attributeName h e a d e r)) (optionAttribute % (attributeName f o o t e r)) ] <EOF>)))"
             },
             {
                 /* message */
@@ -294,7 +294,7 @@ public class AttributeListTest extends GrammarTest {
                 "[#tiger.summary.incremental%header%footer]",
 
                 /* expected */
-                "(document (content (attributeList [ (idAttribute # (name t i g e r)) (roleAttribute . (name s u m m a r y)) (roleAttribute . (name i n c r e m e n t a l)) (optionAttribute % (name h e a d e r)) (optionAttribute % (name f o o t e r)) ] <EOF>)))"
+                "(document (content (attributeList [ (idAttribute # (attributeName t i g e r)) (roleAttribute . (attributeName s u m m a r y)) (roleAttribute . (attributeName i n c r e m e n t a l)) (optionAttribute % (attributeName h e a d e r)) (optionAttribute % (attributeName f o o t e r)) ] <EOF>)))"
             }
         });
 
