@@ -255,8 +255,8 @@ public class BlockRules extends BaseRules {
         return node("horizontalRule", sequence(string("'''"), optional(blank()), firstOf(newLine(), eoi())));
     }
 
-    private Rule attributeName() {// TODO factorize ?
-        return node("attributeName", oneOrMore(firstOf(
+    private Rule attributeEntryName() {
+        return node("attributeEntryName", oneOrMore(firstOf(
                 charRange('A', 'Z'),
                 charRange('a', 'z'),
                 charRange('0', '9'),
@@ -266,7 +266,7 @@ public class BlockRules extends BaseRules {
 
     private Rule attributeEntry() {
         return node("attributeEntry", sequence(
-                ch(':'), optional(attributeEntryDisabled()), attributeName(), optional(attributeEntryDisabled()), ch(':'),
+                ch(':'), optional(attributeEntryDisabled()), attributeEntryName(), optional(attributeEntryDisabled()), ch(':'),
                 //ch(':'), optional('!'), attributeName(), optional('!'), ch(':'),
                 zeroOrMore(blank()), optional(attributeValueParts()), zeroOrMore(blank()),
                 firstOf(newLine(), eoi())

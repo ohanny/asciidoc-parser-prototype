@@ -41,7 +41,7 @@ public class HeaderTest extends GrammarTest {
                 ":fruit: kiwi",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (attributeEntry : (attributeName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) <EOF>)))"
+                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) <EOF>)))"
             },
             {
                 /* message */
@@ -53,7 +53,7 @@ public class HeaderTest extends GrammarTest {
                 ":fruit: kiwi\n",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (attributeEntry : (attributeName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n)) (bl <EOF>))"
+                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n)) (bl <EOF>))"
             },
             {
                 /* message */
@@ -64,7 +64,7 @@ public class HeaderTest extends GrammarTest {
                 ":fruit: kiwi",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (attributeEntry : (attributeName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) <EOF>)))"
+                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) <EOF>)))"
             },
             {
                 /* message */
@@ -75,7 +75,7 @@ public class HeaderTest extends GrammarTest {
                 ":fruit: kiwi\n",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (attributeEntry : (attributeName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n)) (bl <EOF>))"
+                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n)) (bl <EOF>))"
             }
         });
 

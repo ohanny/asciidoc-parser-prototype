@@ -26,6 +26,7 @@ public class BlockListenerDelegate {
     private MacroContext currentMacro;
     private static class MacroContext {
         String name;
+        String target;
 
         static MacroContext empty() {
             return new MacroContext();
@@ -328,7 +329,22 @@ public class BlockListenerDelegate {
     }
 
     public void exitMacro() {
+        switch (currentMacro.name) {
+            case "image":
+                ImageMacro image = Macro.image(currentMacro.name, currentMacro.target, consumeAttList());
+                handler.writeImage(image);
+                break;
+        }
+
         currentMacro = null;
+    }
+
+    public void macroName(String name) {
+        currentMacro.name = name;
+    }
+
+    public void macroTarget(String target) {
+        currentMacro.target = target;
     }
 
     // document and header methods

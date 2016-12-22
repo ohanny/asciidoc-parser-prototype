@@ -58,6 +58,10 @@ public class BlockListener implements ParseTreeListener {
                 break;
 
             case "macroName":
+                delegate.macroName(new String(chars));
+                break;
+            case "macroTarget":
+                delegate.macroTarget(new String(chars));
                 break;
 
             case "tableBlock":
@@ -69,7 +73,7 @@ public class BlockListener implements ParseTreeListener {
 
     @Override
     public void enterNode(NodeContext context) {
-        //System.out.println(context.getNodeName());
+        System.out.println(context.getNodeName());
         switch (context.getNodeName()) {
             // attributes
             case "attributeList" :

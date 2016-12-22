@@ -2,6 +2,8 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html;
 
 import fr.icodem.asciidoc.parser.elements.AttributeEntry;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.ImageMacro;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Macro;
 
 import java.io.StringWriter;
 import java.io.Writer;
@@ -96,9 +98,10 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "image::sunset.jpg[Sunset]\n" +
                 "\n";
 
-        text =  "Block above\n" +
+        String text1 =  "Block above\n" +
                 "\n" +
-                " image::sunset.jpg[Sunset]\n" +
+                "image::sunset.jpg[Sunset]\n" +
+                "image::sunset2.jpg[]\n" +
                 "\n" +
                 "Block below";
 
@@ -152,6 +155,35 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void writeText(String text) {
         append(text);
+    }
+
+
+    /* **********************************************/
+    // Macro
+    /* **********************************************/
+
+    @Override
+    public void writeImage(ImageMacro image) {
+        indent()
+          .append(DIV.start("class", "imageblock"))
+          .nl()
+          .incIndent()
+          .indent()
+          .append(DIV.start("class", "content"))
+          .nl()
+          .incIndent()
+          .indent()
+          .append(IMG.tag("src", image.getTarget(), "alt", image.getAlternateText()))
+          .nl()
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl()
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl()
+        ;
     }
 
     /* **********************************************/

@@ -4,6 +4,9 @@ public interface AsciidocHandler {
 
     void writeText(String text);
 
+    // Macro
+    void writeImage(ImageMacro macro);
+
     // Block
     void startDocument();
     void endDocument();
@@ -104,15 +107,4 @@ public interface AsciidocHandler {
     void startItalic();
     void endItalic();
 
-
-    /*
-    void startPreamble();
-    void endPreamble();
-    void startParagraph(Paragraph paragraph);
-    void startSection(Section section);
-    void endSection(Section section);
-    void startSectionTitle(SectionTitle sectionTitle);
-    void startAttributeEntry(AttributeEntry att);
-    void visitList(AbstractList list);
-     */
 }

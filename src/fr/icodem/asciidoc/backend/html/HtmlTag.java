@@ -11,7 +11,7 @@ public enum HtmlTag {
     TABLE, COLGROUP, COL, THEAD, TH, TBODY, TFOOT, TR, TD,
     H1, H2, H3, H4, H5, H6,
     BR, HR,
-    A, SPAN, STRONG, EM;
+    A, IMG, SPAN, STRONG, EM;
 
     public static HtmlTag getTitleHeader(int level) {
         switch (level) {
@@ -69,6 +69,9 @@ public enum HtmlTag {
             case HR: return "<hr>";
             case COL: {
                 return buildStartTag("col", attributes);
+            }
+            case IMG: {
+                return buildStartTag("img", attributes);
             }
             default: return null;
         }
