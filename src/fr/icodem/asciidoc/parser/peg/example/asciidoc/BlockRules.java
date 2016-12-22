@@ -74,11 +74,12 @@ public class BlockRules extends BaseRules {
 
     private Rule preamble() {
         return node("preamble", sequence(
-                block(false),
+                firstOf(macro(), block(false)),
                 zeroOrMore(firstOf(
                         sequence(isCurrentCharNotEOI(), bl(false)),
                         nl(),
                         horizontalRule(),
+                        macro(),
                         block(false)
                 ))
         ));
@@ -201,6 +202,7 @@ public class BlockRules extends BaseRules {
                         horizontalRule(),
                         attributeEntry(),
                         attributeList(),
+                        macro(),
                         block(false)
                 ))
         ));
