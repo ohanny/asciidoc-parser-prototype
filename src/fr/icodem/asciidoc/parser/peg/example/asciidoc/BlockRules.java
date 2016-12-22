@@ -139,11 +139,26 @@ public class BlockRules extends BaseRules {
     private Rule admonition() {
         return node("admonition",
                  firstOf(
-                   string("NOTE: "),
-                   string("TIP: "),
-                   string("IMPORTANT: "),
-                   string("CAUTION: "),
-                   string("WARNING: ")
+                   sequence(
+                     string("NOTE: "),
+                     setAttributeOnParent("paragraph", "admonition", "NOTE")
+                   ),
+                   sequence(
+                     string("TIP: "),
+                     setAttributeOnParent("paragraph", "admonition", "TIP")
+                   ),
+                   sequence(
+                     string("IMPORTANT: "),
+                     setAttributeOnParent("paragraph", "admonition", "IMPORTANT")
+                   ),
+                   sequence(
+                     string("CAUTION: "),
+                     setAttributeOnParent("paragraph","admonition", "CAUTION")
+                   ),
+                   sequence(
+                     string("WARNING: "),
+                     setAttributeOnParent("paragraph","admonition", "WARNING")
+                   )
                  )
                );
     }

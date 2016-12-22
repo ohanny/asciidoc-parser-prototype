@@ -38,8 +38,8 @@ public interface AsciidocHandler {
 
     void horizontalRule();
 
-    void startParagraph();
-    void endParagraph();
+    void startParagraph(String admonition);
+    void endParagraph(String admonition);
 
     void startList();
     void endList();

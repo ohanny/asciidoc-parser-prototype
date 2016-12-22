@@ -403,12 +403,12 @@ public class BlockListenerDelegate {
         handler.horizontalRule();
     }
 
-    public void enterParagraph() {
-        handler.startParagraph();
+    public void enterParagraph(String admonition) {
+        handler.startParagraph(admonition);
     }
 
-    public void exitParagraph() {
-        handler.endParagraph();
+    public void exitParagraph(String admonition) {
+        handler.endParagraph(admonition);
     }
 
     public void enterList() {

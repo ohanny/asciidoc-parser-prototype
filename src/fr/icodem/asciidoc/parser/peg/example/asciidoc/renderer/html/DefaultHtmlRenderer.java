@@ -90,6 +90,8 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "\n" +
                 "NOTE: this is a note\n" +
                 "\n" +
+                "Paragraph #2\n" +
+                "\n" +
                 "\n";
 
         String text1 =                 "Block above\n" +
@@ -388,24 +390,93 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .nl();
     }
 
+    /*
+    <div class="admonitionblock note">
+      <table>
+        <tr>
+          <td class="icon">
+            <div class="title">Note</div>
+          </td>
+          <td class="content">
+            une note
+          </td>
+        </tr>
+    </table>
+   </div>
+     */
+
     @Override
-    public void startParagraph() {
-        indent()
-            .append(DIV.start("class", "paragraph"))
-            .nl()
-            .incIndent()
-            .indent()
-            .append(P.start());
+    public void startParagraph(String admonition) {
+        System.out.println("ADMONITION: "+admonition);
+        if (admonition == null) {
+            indent()
+              .append(DIV.start("class", "paragraph"))
+              .nl()
+              .incIndent()
+              .indent()
+              .append(P.start());
+        } else {
+            indent()
+              .append(DIV.start("class", "admonitionblock note"))
+                .nl()
+                .incIndent()
+                .indent()
+                .append(TABLE.start())
+                .nl()
+                .incIndent()
+                .indent()
+                .append(TR.start())
+                .nl()
+                .incIndent()
+                .indent()
+                .append(TD.start("class", "icon"))
+                .nl()
+                .incIndent()
+                .indent()
+                .append(DIV.start("class", "title"))
+                .append("Note")
+                .append(DIV.end())
+                .nl()
+                .decIndent()
+                .indent()
+                .append(TD.end())
+                .nl()
+                .indent()
+                .append(TD.start("class", "content"))
+                .nl()
+                .incIndent()
+                .indent();
+        }
     }
 
     @Override
-    public void endParagraph() {
-        append(P.end())
-            .nl()
-            .decIndent()
-            .indent()
-            .append(DIV.end())
-            .nl();
+    public void endParagraph(String admonition) {
+        if (admonition == null) {
+            append(P.end())
+              .nl()
+              .decIndent()
+              .indent()
+              .append(DIV.end())
+              .nl();
+        } else {
+            nl()
+              .decIndent()
+              .indent()
+              .append(TD.end())
+              .nl()
+              .decIndent()
+              .indent()
+              .append(TR.end())
+              .nl()
+              .decIndent()
+              .indent()
+              .append(TABLE.end())
+              .nl()
+              .decIndent()
+              .indent()
+              .append(DIV.end())
+              .nl();
+        }
     }
 
     @Override

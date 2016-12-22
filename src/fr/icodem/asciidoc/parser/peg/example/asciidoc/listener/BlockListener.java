@@ -124,7 +124,7 @@ public class BlockListener implements ParseTreeListener {
                 delegate.horizontalRule();
                 break;
             case "paragraph" :
-                delegate.enterParagraph();
+                delegate.enterParagraph(context.getStringAttribute("admonition", null));
                 break;
             case "list" :
                 delegate.enterList();
@@ -226,7 +226,7 @@ public class BlockListener implements ParseTreeListener {
 
             // blocks
             case "paragraph" :
-                delegate.exitParagraph();
+                delegate.exitParagraph(context.getStringAttribute("admonition", null));
                 break;
             case "list" :
                 delegate.exitList();

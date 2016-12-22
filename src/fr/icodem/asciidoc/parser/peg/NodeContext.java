@@ -26,6 +26,10 @@ public class NodeContext {
         return context.getIntAttribute(name, defaultValue);
     }
 
+    public String getStringAttribute(String name, String defaultValue) {
+        return context.getStringAttribute(name, defaultValue);
+    }
+
     public boolean isAttributePresent(String name) {
         return context.isAttributePresent(name);
     }

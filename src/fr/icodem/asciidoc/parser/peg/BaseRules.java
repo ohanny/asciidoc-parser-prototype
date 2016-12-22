@@ -6,6 +6,8 @@ import fr.icodem.asciidoc.parser.peg.rules.DefaultRulesFactory;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 import fr.icodem.asciidoc.parser.peg.rules.SpyingRulesFactory;
 
+import java.lang.reflect.Field;
+
 /**
  * Base class for parser rules definition. Defines the basic rule creation methods.
  */
@@ -275,9 +277,13 @@ public class BaseRules {
         };
     }
 
-    protected Rule setAttributeOnParent(String name, Object value) {
+    protected Rule setAttributeOnParent(String parentName, String name, Object value) {
         return () -> ctx -> {
-            ctx.findParentContextNode().setAttribute(name, value);
+            MatcherContext parent = ctx.findParentContextNode();
+            while (parent != null &&  !parentName.equals(parent.getNodeName())) {
+                parent = parent.findParentContextNode();
+            }
+            if (parent != null) parent.setAttribute(name, value);
             return true;
         };
     }

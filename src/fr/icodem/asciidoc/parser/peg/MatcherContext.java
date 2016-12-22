@@ -106,6 +106,10 @@ public class MatcherContext {
         return null;
     }
 
+    public String getNodeName() {
+        return nodeName;
+    }
+
     public void requestFlushing() {
         if (requestFlushingDone) return;
         requestFlushingDone = true;
@@ -342,6 +346,10 @@ public class MatcherContext {
     }
     public int getIntAttribute(String name, int defaultValue) {
         Integer value = (Integer) getAttribute(name);
+        return value == null?defaultValue:value;
+    }
+    public String getStringAttribute(String name, String defaultValue) {
+        String value = (String) getAttribute(name);
         return value == null?defaultValue:value;
     }
     public boolean isAttributePresent(String name) {
