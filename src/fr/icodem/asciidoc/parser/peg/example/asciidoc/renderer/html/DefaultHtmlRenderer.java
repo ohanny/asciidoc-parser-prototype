@@ -47,6 +47,8 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 ":fruit2!:\n" +
                 ":!fruit3:\n" +
                 "\n" +
+                "== Other fruits\n" +
+                "\n" +
                 "I love fruits\n" +
                 "\n" +
                 "* One\n" +

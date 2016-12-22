@@ -253,6 +253,7 @@ public class BlockListenerDelegate {
                 break;
 
             default:
+                handler.writeText(text);
         }
     }
 
