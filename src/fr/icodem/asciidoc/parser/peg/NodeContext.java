@@ -10,6 +10,7 @@ public class NodeContext {
         this.context = context;
     }
 
+    @Deprecated //???
     public void include(Object source) {
         context.include(source);
     }

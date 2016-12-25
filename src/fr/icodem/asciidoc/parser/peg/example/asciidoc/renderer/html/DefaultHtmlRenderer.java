@@ -4,7 +4,9 @@ import fr.icodem.asciidoc.parser.elements.AttributeEntry;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.ImageMacro;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Macro;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.SourceResolver;
 
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 //":fruit: kiwi\n" +
                 //":fruit2!:\n" +
                 //":!fruit3:\n" +
+                "\n" +
+                "include::file1.adoc[]\n"  +
                 "\n" +
                 "The sun, *the earth* and _the_ sea.\n" +
                 "\n" +
@@ -94,18 +98,27 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "\n" +
                 "Paragraph #2\n" +
                 "\n" +
+                "include::file1.adoc[]\n" +
                 "\n" +
                 "image::sunset.jpg[Sunset]\n" +
                 "\n";
 
-        String text1 =  "Block above\n" +
+        if (false) text =  "Block above\n" +
                 "\n" +
-                "image::sunset.jpg[Sunset]\n" +
-                "image::sunset2.jpg[]\n" +
+                "include::file.adoc[]\n" +
                 "\n" +
                 "Block below";
 
+        if (true) text =  "* A\n" +
+                "\n" +
+                "include::f[]\n" +
+                "\n" +
+                "* B\n";
 
+
+        //String includedText = "\n\nLe *ciel* est bleu.\n\n";
+//        String includedText = "\n* Le *ciel* est bleu.";
+        String includedText = "\nX\n";
 
                 //List<AttributeEntry> attributes = new ArrayList<>();
 
@@ -114,10 +127,12 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 //        new AsciidocPegProcessor(new HtmlBackend(writer), attributes).parse(text);
 //        System.out.println(writer);
 
-        System.out.println("\r\nWITH NEW PEG\r\n");
-        StringWriter writer1 = new StringWriter();
-        DefaultHtmlRenderer.withWriter(writer1).render(text);
-        System.out.println(writer1);
+        //System.out.println("\r\nWITH NEW PEG\r\n");
+        StringWriter writer = new StringWriter();
+        DefaultHtmlRenderer.withWriter(writer)
+                           .withSourceResolver(name -> new StringReader(includedText))
+                           .render(text);
+        System.out.println(writer);
 
     }
 

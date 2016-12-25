@@ -73,7 +73,7 @@ public class BlockListener implements ParseTreeListener {
 
     @Override
     public void enterNode(NodeContext context) {
-        System.out.println(context.getNodeName());
+        //System.out.println(context.getNodeName());
         switch (context.getNodeName()) {
             // attributes
             case "attributeList" :
@@ -211,7 +211,7 @@ public class BlockListener implements ParseTreeListener {
 
             // macro
             case "macro":
-                delegate.exitMacro();
+                delegate.exitMacro(context);
                 break;
 
             // document and header

@@ -14,7 +14,7 @@ public class CalculatorTest {
     @Before
     public void init() {
         calculator = new Calculator();
-        calculator.useFactory(defaultRulesFactory());
+        calculator.withFactory(defaultRulesFactory());
     }
 
     @Test

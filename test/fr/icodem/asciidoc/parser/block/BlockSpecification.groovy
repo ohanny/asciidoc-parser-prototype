@@ -14,7 +14,7 @@ class BlockSpecification extends Specification {
 
     ParsingResult parse(String input) {
         BlockRules rules = new BlockRules()
-        rules.useFactory(factory)
+        rules.withFactory(factory)
         new ParseRunner(rules, rules.&document)
                 .generateStringTree()
                 //.trace()

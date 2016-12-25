@@ -121,9 +121,10 @@ public class BufferController<T> implements InputBuffer<T> {
     }
 
     private void endOfInput() {
-        buffer[layout.getFreeSpaceOffset()] = EOI;
-
-        layout.newDataAdded(1);
+        if (layout.isGlobalEOI()) {// TODO OLIV
+            buffer[layout.getFreeSpaceOffset()] = EOI;
+            layout.newDataAdded(1);
+        }
         layout.endOfInput();
 //        layout.restoreLastSuspendedSegment(position, buffer);
     }
@@ -138,7 +139,8 @@ public class BufferController<T> implements InputBuffer<T> {
         if (position < layout.getActiveLength() - 1) {
             position++;
         } else { // no more data in active space, check if some data remains in suspended area
-            layout.restoreLastSuspendedSegment(position, buffer);
+            //layout.restoreLastSuspendedSegment(position, buffer);
+            layout.restoreLastSuspendedSegment(buffer);// TODO OLIV
             if (position < layout.getActiveLength() - 1) {
                 position++;
             }

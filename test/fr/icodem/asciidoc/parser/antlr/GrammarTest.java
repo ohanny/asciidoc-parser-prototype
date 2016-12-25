@@ -25,7 +25,7 @@ public abstract class GrammarTest {
         }
         else {
             BlockRules parser = new BlockRules();
-            parser.useFactory(defaultRulesFactory());
+            parser.withFactory(defaultRulesFactory());
             ParsingResult result = new ParseRunner(parser, parser::document)
                     .generateStringTree()
                     //.trace()

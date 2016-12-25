@@ -9,9 +9,9 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
     private CommonRules commonRules = new CommonRules();
 
     @Override
-    public void useFactory(RulesFactory factory) {
-        super.useFactory(factory);
-        commonRules.useFactory(factory);
+    public void withFactory(RulesFactory factory) {
+        super.withFactory(factory);
+        commonRules.withFactory(factory);
     }
 
     // imported rules from common

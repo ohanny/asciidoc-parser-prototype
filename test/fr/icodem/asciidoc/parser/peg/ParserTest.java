@@ -34,7 +34,7 @@ public class ParserTest extends BaseRules {
         listener = mock(ParseTreeListener.class);
         ac = ArgumentCaptor.forClass(NodeContext.class);
         //useSpyingRulesFactory();
-        useFactory(spyingRulesFactory());
+        withFactory(spyingRulesFactory());
     }
 
     @Test

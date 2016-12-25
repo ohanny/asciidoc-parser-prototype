@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc;
 
 import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.Chars;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.SourceResolver;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 
@@ -9,10 +10,15 @@ public class BlockRules extends BaseRules {
 
     private CommonRules commonRules = new CommonRules();
 
+
     @Override
-    public void useFactory(RulesFactory factory) {
-        super.useFactory(factory);
-        commonRules.useFactory(factory);
+    public void withFactory(RulesFactory factory) {
+        super.withFactory(factory);
+        commonRules.withFactory(factory);
+    }
+
+    public void withSourceResolver(SourceResolver resolver) {
+        commonRules.withSourceResolver(resolver);
     }
 
     // imported rules from common

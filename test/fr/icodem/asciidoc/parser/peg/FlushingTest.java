@@ -46,7 +46,7 @@ public class FlushingTest extends BaseRules {
 
     @Before
     public void init() {
-        useFactory(RulesFactory.defaultRulesFactory());
+        withFactory(RulesFactory.defaultRulesFactory());
         listener = mock(ParseTreeListener.class);
         inputBufferStateListener = mock(InputBufferStateListener.class);
         ac = ArgumentCaptor.forClass(NodeContext.class);

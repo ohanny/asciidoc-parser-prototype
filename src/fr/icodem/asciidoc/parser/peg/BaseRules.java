@@ -17,7 +17,7 @@ public class BaseRules {
      */
     private RulesFactory factory;
 
-    public void useFactory(RulesFactory factory) {
+    public void withFactory(RulesFactory factory) {
         this.factory = factory;
     }
 
@@ -279,11 +279,7 @@ public class BaseRules {
 
     protected Rule setAttributeOnParent(String parentName, String name, Object value) {
         return () -> ctx -> {
-            MatcherContext parent = ctx.findParentContextNode();
-            while (parent != null &&  !parentName.equals(parent.getNodeName())) {
-                parent = parent.findParentContextNode();
-            }
-            if (parent != null) parent.setAttribute(name, value);
+            ctx.setAttributeOnParent(parentName, name, value);
             return true;
         };
     }

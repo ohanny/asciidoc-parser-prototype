@@ -15,7 +15,7 @@ class TextSpecification extends Specification {
 
     ParsingResult parse(String input) {
         TextRules rules = new TextRules();
-        rules.useFactory(factory);
+        rules.withFactory(factory);
         new ParseRunner(rules, rules.&formattedText)
                 .generateStringTree()
                 //.trace()

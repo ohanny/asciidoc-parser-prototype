@@ -5,6 +5,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.TextRules;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -248,7 +249,7 @@ public class BlockListenerDelegate {
     public void formattedText(char[] chars) {
         //System.out.println("formattedText() => " + new String(chars));
         TextRules rules = new TextRules();// TODO inject rules
-        rules.useFactory(defaultRulesFactory());
+        rules.withFactory(defaultRulesFactory());
         ParsingResult result = new ParseRunner(rules, rules::formattedText)
                 //.trace()
                 .parse(new StringReader(new String(chars)), new TextListener(handler), null, null);
@@ -328,11 +329,16 @@ public class BlockListenerDelegate {
         currentMacro = MacroContext.empty();
     }
 
-    public void exitMacro() {
+    public void exitMacro(NodeContext context) {
         switch (currentMacro.name) {
             case "image":
                 ImageMacro image = Macro.image(currentMacro.name, currentMacro.target, consumeAttList());
                 handler.writeImage(image);
+                break;
+            case "include":
+//    System.out.println("INCLUDE");
+//                Reader reader = sourceResolver.resolve(currentMacro.target);
+//                context.include(reader);
                 break;
         }
 

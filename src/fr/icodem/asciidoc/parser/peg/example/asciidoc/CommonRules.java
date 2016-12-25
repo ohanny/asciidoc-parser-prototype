@@ -1,34 +1,70 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc;
 
 import fr.icodem.asciidoc.parser.peg.BaseRules;
+import fr.icodem.asciidoc.parser.peg.action.ActionContext;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.SourceResolver;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
 public class CommonRules extends BaseRules {
+
+    private SourceResolver sourceResolver = SourceResolver.defaultResolver();
+
+    public void withSourceResolver(SourceResolver resolver) {
+        this.sourceResolver = resolver;
+    }
 
     public Rule macro(boolean fromInline) {
         String nameInCache = "macro." + (fromInline?"inline":"block");
         if (isCached(nameInCache)) return cached(nameInCache);
 
         return node("macro", nameInCache,
-                firstOf(
-                    sequence(
-                        markNodePosition(),
-                        macroName(),
-                        ch(':'), optional(':'),
-                        optional(macroTarget()),
-                        attributeList(fromInline)
-                    ),
-                    markAsNotAMacro()
-                )
-        );
+                 action(
+                   sequence(
+                     firstOf(
+                       sequence(
+                         markNodePosition(),
+                         macroName(),
+                         ch(':'), optional(':'),
+                         optional(macroTarget()),
+                         attributeList(fromInline)
+                       ),
+                       markAsNotAMacro()
+                     )
+                   ),
+                   this::checkInclude
+                 )
+               )
+        ;
+    }
+
+    private void checkInclude(ActionContext ctx) {
+        String name = ctx.getStringAttribute("macro", "name", null);
+        if ("include".equals(name)) {
+            String target = ctx.getStringAttribute("macro", "target", null);
+            ctx.include(sourceResolver.resolve(target));
+        }
+    }
+
+    private Rule macroName() {
+        if (isCached("macroName")) return cached("macroName");
+
+        return node("macroName",
+                 action(namePrototype(),
+                   ctx -> ctx.setAttributeOnParent("macro", "name", new String(ctx.extract()))
+                 )
+               )
+        ;
     }
 
     private Rule macroTarget() {
         if (isCached("macroTarget")) return cached("macroTarget");
 
         return node("macroTarget",
-                oneOrMore(noneOf(" \r\n\t["))
-        );
+                 action(oneOrMore(noneOf(" \r\n\t[")),
+                   ctx -> ctx.setAttributeOnParent("macro", "target", new String(ctx.extract()))
+                 )
+               )
+        ;
     }
 
     private Rule markAsNotAMacro() {
@@ -175,12 +211,6 @@ public class CommonRules extends BaseRules {
                     attributeName()
                 )
         );
-    }
-
-    private Rule macroName() {
-        if (isCached("macroName")) return cached("macroName");
-
-        return node("macroName", namePrototype());
     }
 
     private Rule attributeName() {

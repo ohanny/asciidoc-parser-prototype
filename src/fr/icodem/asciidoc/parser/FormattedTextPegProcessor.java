@@ -16,7 +16,7 @@ public class FormattedTextPegProcessor {
     private TextRules rules = new TextRules();
 
     public FormattedTextPegProcessor() {
-        rules.useFactory(defaultRulesFactory());
+        rules.withFactory(defaultRulesFactory());
     }
 
     public void parse(Text.FormattedText formattedText) {

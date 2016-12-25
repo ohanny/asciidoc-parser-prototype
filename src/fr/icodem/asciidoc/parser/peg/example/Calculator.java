@@ -20,7 +20,7 @@ public class Calculator extends BaseRules implements ParseTreeListener {
     public static void main(String[] args) {
 
         Calculator calculator = new Calculator();
-        calculator.useFactory(defaultRulesFactory());
+        calculator.withFactory(defaultRulesFactory());
 
         calculator.print("15+2");
         calculator.print("15-2");

@@ -231,7 +231,14 @@ public class BufferLayout<T> {
         activeSegments.peekLast().endOfInputReached = true;
     }
 
-    public void restoreLastSuspendedSegment(int position, char[] buffer) {
+    public boolean isGlobalEOI() {
+        //System.out.println(activeSegments.peekLast().source == activeSegments.peekFirst().source);
+        //return activeSegments.peekLast().source == activeSegments.peekFirst().source;
+//        return suspendedSegments.size() == 0 && activeSegments.peekLast().source == activeSegments.peekFirst().source;
+        return suspendedSegments.size() == 0;
+    }
+
+    public void restoreLastSuspendedSegment(char[] buffer) {
         Segment<T> lastSuspendedSegment = suspendedSegments.pollLast();
         if (lastSuspendedSegment != null) {
             System.arraycopy(buffer, lastSuspendedSegment.start, buffer, activeLength, lastSuspendedSegment.length);

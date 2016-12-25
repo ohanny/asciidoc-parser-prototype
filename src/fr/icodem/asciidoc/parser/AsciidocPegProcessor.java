@@ -52,7 +52,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
         emitter = new HandlerNotificationsEmitter();
         textObjects = new LinkedList<>();
 
-        rules.useFactory(defaultRulesFactory());
+        rules.withFactory(defaultRulesFactory());
         textProcessor = new FormattedTextPegProcessor();
     }
 

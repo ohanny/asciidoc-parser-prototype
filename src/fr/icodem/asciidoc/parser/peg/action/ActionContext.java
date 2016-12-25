@@ -32,6 +32,11 @@ public class ActionContext {
         context.include(source);
     }
 
+    public String getStringAttribute(String parentName, String name, String defaultValue) {
+        MatcherContext parent = context.findParentContextNode(parentName);
+        return parent != null?context.getStringAttribute(name, defaultValue):defaultValue;
+    }
+
     public void exportAttributesToParentNode(String prefix) {
         String realPrefix = (prefix == null || prefix.isEmpty())?"":prefix + ".";
         MatcherContext parentContext = context.findParentContextNode();
@@ -47,4 +52,7 @@ public class ActionContext {
         delegateContext.setAttribute(name, value);
     }
 
+    public void setAttributeOnParent(String parentName, String name, Object value) {
+        context.setAttributeOnParent(parentName, name, value);
+    }
 }

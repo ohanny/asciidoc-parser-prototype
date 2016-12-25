@@ -32,7 +32,8 @@ public class IncludeReaderTest extends BaseRules {
 
     @Before
     public void init() {
-        useFactory(RulesFactory.defaultRulesFactory());
+        //withFactory(RulesFactory.spyingRulesFactory());//TODO OLIV
+        withFactory(RulesFactory.defaultRulesFactory());
         listener = mock(ParseTreeListener.class);
         inputBufferStateListener = mock(InputBufferStateListener.class);
     }
@@ -59,6 +60,7 @@ public class IncludeReaderTest extends BaseRules {
         return null;
     }
 
+
     @Test // include made by listener : one include, no reset
     public void test1() throws Exception {
         Answer<?> answer = invocation -> {
@@ -74,10 +76,61 @@ public class IncludeReaderTest extends BaseRules {
             }
             return null;
         };
-        doAnswer(answer).when(listener).enterNode(anyObject());
+        //doAnswer(answer).when(listener).enterNode(anyObject());
 
-        Rule include = node("include", sequence(string("inc:"), node("input", oneOrMore(noneOf("&*")))));
-        Rule rule = node("root", sequence(string("###"), include, optional(sequence(oneOrMore(any()), eoi(), oneOrMore(any()), eoi()))));
+        Rule trace = () -> ctx -> {
+            ctx.mark();
+            char c;
+            String str = "";
+            while ((c = ctx.getNextChar()) != Chars.EOI) {
+                str += c;
+            }
+            str += "<EOI>";
+            ctx.reset();
+            System.out.println(str);
+            return true;
+        };
+
+        if (false) listener = new ParseTreeListener() {
+            @Override
+            public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {
+                System.out.println(chars.length + " => " + new String(chars));
+            }
+
+            @Override
+            public void enterNode(NodeContext ctx) {
+                if ("input".equals(ctx.getNodeName())) {
+                    if ("string".equals(bufferType)) {
+                        ctx.include(new StringHolder("abc"));
+                    }
+                    else if ("reader".equals(bufferType)) {
+                        ctx.include(new StringReader("abc"));
+                    }
+                }
+            }
+
+            @Override
+            public void exitNode(NodeContext context) {
+
+            }
+        };
+
+        Rule include = node("include", sequence(string("inc:"),
+                node("input",
+                  action(oneOrMore(noneOf("&*")), ctx -> {
+                      //if ("input".equals(ctx.getNodeName())) {
+                          if ("string".equals(bufferType)) {
+                              ctx.include(new StringHolder("abc"));
+                          }
+                          else if ("reader".equals(bufferType)) {
+                              ctx.include(new StringReader("abc"));
+                          }
+                      //}
+                  })
+                ))
+        );
+        Rule rule = node("root", sequence(string("###"), include, optional(sequence(oneOrMore(any()), eoi()))));
+        //Rule rule = node("root", sequence(string("###"), include, optional(sequence(oneOrMore(any()), eoi(), oneOrMore(any()), eoi()))));//TODO OLIV
 
         ParsingResult result = parse(rule, "###inc:input.txt***", listener, null, inputBufferStateListener);
 
@@ -90,12 +143,14 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc***\uFFFF".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());//TODO OLIV
 
         verify(inputBufferStateListener).visitReset(15, 16, 0);
-        verify(inputBufferStateListener).visitReset(18, 3, 16);
-        verify(inputBufferStateListener).visitReset(22, 7, 16);
-        verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
+        //verify(inputBufferStateListener).visitReset(18, 3, 16);
+        verify(inputBufferStateListener).visitReset(21, 6, 16);
+        verify(inputBufferStateListener, times(2)).visitReset(anyInt(), anyInt(), anyInt());
+        //verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // ************************************
@@ -106,7 +161,7 @@ public class IncludeReaderTest extends BaseRules {
     public void test2() throws Exception {
         Rule include = node("include", sequence(string("inc:"), node("input",
                 action(oneOrMore(noneOf("&*")), ctx -> {
-                    char[] chars = ctx.extract();
+                    //char[] chars = ctx.extract(); TODO OLIV
                     if ("string".equals(bufferType)) {
                         ctx.include(new StringHolder("abc"));
                     }
@@ -115,7 +170,9 @@ public class IncludeReaderTest extends BaseRules {
                     }
                 })
         )));
-        Rule rule = node("root", sequence(string("###"), include, optional(sequence(oneOrMore(any()), eoi(), oneOrMore(any()), eoi()))));
+        Rule rule = node("root", sequence(string("###"), include, optional(sequence(oneOrMore(any()), eoi()))));
+//        Rule rule = node("root", sequence(string("###"), include, optional(sequence(oneOrMore(any()), oneOrMore(any()), eoi()))));
+//        Rule rule = node("root", sequence(string("###"), include, optional(sequence(oneOrMore(any()), eoi(), oneOrMore(any()), eoi()))));
 
         ParsingResult result = parse(rule, "###inc:input.txt***", listener, null, inputBufferStateListener);
 
@@ -128,12 +185,15 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc***\uFFFF".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(15, 16, 0);
-        verify(inputBufferStateListener).visitReset(18, 3, 16);
-        verify(inputBufferStateListener).visitReset(22, 7, 16);
-        verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
+//        verify(inputBufferStateListener).visitReset(18, 3, 16);
+        verify(inputBufferStateListener).visitReset(21, 6, 16);
+  //      verify(inputBufferStateListener).visitReset(22, 7, 16);
+//        verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, times(2)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // one include, with reset inside second source (position back to second source)
@@ -153,7 +213,8 @@ public class IncludeReaderTest extends BaseRules {
                 })
         )));
         Rule rule = node("root", sequence(string("###"), include,
-                firstOf(string("abc"), string("abd")), eoi(), string("***")));
+                firstOf(string("abc"), string("abd")), string("***")));
+//                firstOf(string("abc"), string("abd")), eoi(), string("***")));TODO OLIV
 
         ParsingResult result = parse(rule, source1, listener, null, inputBufferStateListener);
 
@@ -166,7 +227,8 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abd***".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());TODO OLIV
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
         }
@@ -194,8 +256,10 @@ public class IncludeReaderTest extends BaseRules {
                 })
         )));
         Rule rule = node("root", firstOf(
-                sequence(string("###"), include, string("abc"), eoi(), string("***")),
-                sequence(string("###"), include, string("abd"), eoi(), string("***"))
+                sequence(string("###"), include, string("abc"), string("***")),
+                sequence(string("###"), include, string("abd"), string("***"))
+//                sequence(string("###"), include, string("abc"), eoi(), string("***")),TODO OLIV
+//                sequence(string("###"), include, string("abd"), eoi(), string("***"))TODO OLIV
         ));
 
         ParsingResult result = parse(rule, source1, listener, null, inputBufferStateListener);
@@ -209,7 +273,8 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input.txt".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abd***".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abd\uFFFF***".toCharArray()), anyInt(), anyInt());TODO OLIV
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -253,11 +318,11 @@ public class IncludeReaderTest extends BaseRules {
                                     string("###"),
                                     include,
                                     string("abc"),
-                                    eoi(),
+//                                    eoi(),TODO OLIV
                                     string("***"),
                                     include,
                                     string("xyz"),
-                                    eoi(),
+//                                    eoi(),TODO OLIV
                                     string("&&&"),
                                     eoi()
                                  )
@@ -274,10 +339,12 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc***".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());TODO OLIV
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("xyz&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());TODO OLIV
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -285,7 +352,8 @@ public class IncludeReaderTest extends BaseRules {
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(12, 13, 0);
-        verify(inputBufferStateListener).visitReset(29, 30, 0);
+        verify(inputBufferStateListener).visitReset(28, 29, 0);
+//        verify(inputBufferStateListener).visitReset(29, 30, 0);TODO OLIV
         verify(inputBufferStateListener, times(2)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
@@ -321,11 +389,11 @@ public class IncludeReaderTest extends BaseRules {
                 string("###"),
                 include,
                 string("abc"),
-                eoi(),
+                //eoi(),TODO OLIV
                 string("***"),
                 include,
                 firstOf(string("xyz"), string("xyw")),
-                eoi(),
+                //eoi(),TODO OLIV
                 string("&&&"),
                 eoi()
                 )
@@ -342,10 +410,12 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc***".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());TODO OLIV
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("xyw\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("xyw&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("xyw\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());TODO OLIV
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -354,8 +424,10 @@ public class IncludeReaderTest extends BaseRules {
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(12, 13, 0);
-        verify(inputBufferStateListener).visitReset(29, 30, 0);
-        verify(inputBufferStateListener).visitReset(29, 32, 0);
+        verify(inputBufferStateListener).visitReset(28, 29, 0);
+//        verify(inputBufferStateListener).visitReset(29, 30, 0);TODO OLIV
+        verify(inputBufferStateListener).visitReset(28, 31, 0);
+//        verify(inputBufferStateListener).visitReset(29, 32, 0);TODO OLIV
         verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
@@ -391,10 +463,11 @@ public class IncludeReaderTest extends BaseRules {
                 string("###"),
                 include,
                 string("abc"),
-                eoi(),
+//                eoi(),TODO OLIV
                 string("***"),
                 include,
-                firstOf(sequence(string("xyz"), eoi(), string("&#&")), sequence(string("xyz"), eoi(), string("&&&"))),
+                firstOf(sequence(string("xyz"), string("&#&")), sequence(string("xyz"), string("&&&"))),
+//                firstOf(sequence(string("xyz"), eoi(), string("&#&")), sequence(string("xyz"), eoi(), string("&&&"))),TODO OLIV
                 eoi()
                 )
         );
@@ -410,10 +483,12 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("###".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input1".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc***".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF***".toCharArray()), anyInt(), anyInt());TODO OLIV
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("xyz&&&\uFFFF".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("xyz\uFFFF&&&\uFFFF".toCharArray()), anyInt(), anyInt());TODO OLIV
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -422,8 +497,10 @@ public class IncludeReaderTest extends BaseRules {
         verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(12, 13, 0);
-        verify(inputBufferStateListener).visitReset(29, 30, 0);
-        verify(inputBufferStateListener).visitReset(29, 35, 0);
+        verify(inputBufferStateListener).visitReset(28, 29, 0);
+//        verify(inputBufferStateListener).visitReset(29, 30, 0);//TODO OLIV
+        verify(inputBufferStateListener).visitReset(28, 33, 0);
+//        verify(inputBufferStateListener).visitReset(29, 35, 0);
         verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
@@ -460,9 +537,9 @@ public class IncludeReaderTest extends BaseRules {
                 string("&&&"),
                 include,
                 firstOf(string("abc"), string("abd")),
-                eoi(),
+                //eoi(),TODO OLIV
                 string("@@@"),
-                eoi(),
+                //eoi(),TODO OLIV
                 string("***"),
                 eoi()
                 )
@@ -482,7 +559,8 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abd\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abd@@@***\uFFFF".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abd\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());TODO OLIV
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -529,9 +607,9 @@ public class IncludeReaderTest extends BaseRules {
                 string("&&&"),
                 include,
                 string("abc"),
-                eoi(),
+                //eoi(),TODO OLIV
                 string("@@@"),
-                eoi(),
+                //eoi(),TODO OLIV
                 string("***"),
                 eoi()
                 )
@@ -551,7 +629,8 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc@@@***\uFFFF".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());TODO OLIV
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -597,8 +676,9 @@ public class IncludeReaderTest extends BaseRules {
                 include,
                 string("&&&"),
                 include,
-                firstOf(sequence(string("abc"), eoi(), string("@#@")), sequence(string("abc"), eoi(), string("@@@"))),
-                eoi(),
+                firstOf(sequence(string("abc"), string("@#@")), sequence(string("abc"), string("@@@"))),
+//                firstOf(sequence(string("abc"), eoi(), string("@#@")), sequence(string("abc"), eoi(), string("@@@"))),TODO OLIV
+//                eoi(),TODO OLIV
                 string("***"),
                 eoi()
                 )
@@ -618,7 +698,8 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc@@@***\uFFFF".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());TODO OLIV
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -627,7 +708,7 @@ public class IncludeReaderTest extends BaseRules {
 
         verify(inputBufferStateListener).visitReset(12, 13, 0);
         verify(inputBufferStateListener).visitReset(25, 26, 0);
-        verify(inputBufferStateListener).visitReset(25, 31, 0);
+        verify(inputBufferStateListener).visitReset(25, 30, 0);
         verify(inputBufferStateListener, times(3)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
@@ -663,8 +744,9 @@ public class IncludeReaderTest extends BaseRules {
                 string("###"),
                 include,
                 string("&&&"),
-                firstOf(sequence(include, string("abc"), eoi(), string("@#@")), sequence(include, string("abc"), eoi(), string("@@@"))),
-                eoi(),
+                firstOf(sequence(include, string("abc"), string("@#@")), sequence(include, string("abc"), string("@@@"))),
+//                firstOf(sequence(include, string("abc"), eoi(), string("@#@")), sequence(include, string("abc"), eoi(), string("@@@"))),TODO OLIV
+//                eoi(),TODO OLIV
                 string("***"),
                 eoi()
                 )
@@ -684,7 +766,8 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc@@@***\uFFFF".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());TODO OLIV
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -693,7 +776,7 @@ public class IncludeReaderTest extends BaseRules {
 
         verify(inputBufferStateListener).visitReset(12, 13, 0);
         verify(inputBufferStateListener, times(2)).visitReset(25, 26, 0);
-        verify(inputBufferStateListener).visitReset(15, 31, 0);
+        verify(inputBufferStateListener).visitReset(15, 30, 0);
         //verify(inputBufferStateListener).visitReset(25, 26, 0);
         verify(inputBufferStateListener, times(4)).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -729,8 +812,9 @@ public class IncludeReaderTest extends BaseRules {
         Rule rule = node("root", sequence(
                 string("###"),
                 include,
-                firstOf(sequence(string("&&&"), include, string("abc"), eoi(), string("@#@")), sequence(string("&&&"), include, string("abc"), eoi(), string("@@@"))),
-                eoi(),
+                firstOf(sequence(string("&&&"), include, string("abc"), string("@#@")), sequence(string("&&&"), include, string("abc"), string("@@@"))),
+//                firstOf(sequence(string("&&&"), include, string("abc"), eoi(), string("@#@")), sequence(string("&&&"), include, string("abc"), eoi(), string("@@@"))),TODO OLIV
+//                eoi(),TODO OLIV
                 string("***"),
                 eoi()
                 )
@@ -750,7 +834,8 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc@@@***\uFFFF".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -759,7 +844,7 @@ public class IncludeReaderTest extends BaseRules {
 
         verify(inputBufferStateListener).visitReset(12, 13, 0);
         verify(inputBufferStateListener, times(2)).visitReset(25, 26, 0);
-        verify(inputBufferStateListener).visitReset(12, 31, 0);
+        verify(inputBufferStateListener).visitReset(12, 30, 0);
         //verify(inputBufferStateListener).visitReset(25, 26, 0);
         verify(inputBufferStateListener, times(4)).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -794,8 +879,24 @@ public class IncludeReaderTest extends BaseRules {
         )));
         Rule rule = node("root", sequence(
                 string("###"),
-                firstOf(sequence(include, string("&&&"), include, string("abc"), eoi(), string("@#@")), sequence(include, string("&&&"), include, string("abc"), eoi(), string("@@@"))),
-                eoi(),
+                firstOf(
+                  sequence(
+                    include,
+                    string("&&&"),
+                    include,
+                    string("abc"),
+                    string("@#@")
+                  ),
+                  sequence(
+                    include,
+                    string("&&&"),
+                    include,
+                    string("abc"),
+                    string("@@@")
+                  )
+                ),
+                //firstOf(sequence(include, string("&&&"), include, string("abc"), eoi(), string("@#@")), sequence(include, string("&&&"), include, string("abc"), eoi(), string("@@@"))),
+                //eoi(),
                 string("***"),
                 eoi()
                 )
@@ -815,7 +916,8 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc@@@***\uFFFF".toCharArray()), anyInt(), anyInt());
+//        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());TODO OLIV
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -824,7 +926,7 @@ public class IncludeReaderTest extends BaseRules {
 
         verify(inputBufferStateListener, times(2)).visitReset(12, 13, 0);
         verify(inputBufferStateListener, times(2)).visitReset(25, 26, 0);
-        verify(inputBufferStateListener).visitReset(2, 31, 0);
+        verify(inputBufferStateListener).visitReset(2, 30, 0);
         //verify(inputBufferStateListener).visitReset(12, 13, 0);
         //verify(inputBufferStateListener).visitReset(25, 26, 0);
         verify(inputBufferStateListener, times(5)).visitReset(anyInt(), anyInt(), anyInt());
@@ -859,8 +961,9 @@ public class IncludeReaderTest extends BaseRules {
                 })
         )));
         Rule rule = node("root", sequence(
-                firstOf(sequence(string("###"), include, string("&&&"), include, string("abc"), eoi(), string("@#@")), sequence(string("###"), include, string("&&&"), include, string("abc"), eoi(), string("@@@"))),
-                eoi(),
+                firstOf(sequence(string("###"), include, string("&&&"), include, string("abc"), string("@#@")), sequence(string("###"), include, string("&&&"), include, string("abc"), string("@@@"))),
+//                firstOf(sequence(string("###"), include, string("&&&"), include, string("abc"), eoi(), string("@#@")), sequence(string("###"), include, string("&&&"), include, string("abc"), eoi(), string("@@@"))),TODO OLIV
+                //eoi(),TODO OLIV
                 string("***"),
                 eoi()
                 )
@@ -880,7 +983,8 @@ public class IncludeReaderTest extends BaseRules {
         inOrder.verify(listener).characters(ac.capture(), aryEq("&&&".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("inc:".toCharArray()), anyInt(), anyInt());
         inOrder.verify(listener).characters(ac.capture(), aryEq("input2".toCharArray()), anyInt(), anyInt());
-        inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());
+        inOrder.verify(listener).characters(ac.capture(), aryEq("abc@@@***\uFFFF".toCharArray()), anyInt(), anyInt());
+        //inOrder.verify(listener).characters(ac.capture(), aryEq("abc\uFFFF@@@\uFFFF***\uFFFF".toCharArray()), anyInt(), anyInt());TODO OLIV
 
         if ("string".equals(bufferType)) {
             verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
@@ -889,7 +993,7 @@ public class IncludeReaderTest extends BaseRules {
 
         verify(inputBufferStateListener, times(2)).visitReset(12, 13, 0);
         verify(inputBufferStateListener, times(2)).visitReset(25, 26, 0);
-        verify(inputBufferStateListener).visitReset(-1, 31, 0);
+        verify(inputBufferStateListener).visitReset(-1, 30, 0);
         //verify(inputBufferStateListener).visitReset(12, 13, 0);
         //verify(inputBufferStateListener).visitReset(25, 26, 0);
         verify(inputBufferStateListener, times(5)).visitReset(anyInt(), anyInt(), anyInt());

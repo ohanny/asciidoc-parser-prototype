@@ -325,6 +325,20 @@ public class MatcherContext {
         }
         attributes.put(name, value);
     }
+
+    public MatcherContext findParentContextNode(String parentName) {
+        MatcherContext parent = findParentContextNode();
+        while (parent != null &&  !parentName.equals(parent.getNodeName())) {
+            parent = parent.findParentContextNode();
+        }
+        return parent;
+    }
+
+    public void setAttributeOnParent(String parentName, String name, Object value) {
+        MatcherContext parent = findParentContextNode(parentName);
+        if (parent != null) parent.setAttribute(name, value);
+    }
+
     public Map<String, Object> getAttributes() {
         return attributes;
     }
