@@ -5,6 +5,7 @@ import fr.icodem.asciidoc.parser.elements.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Deprecated
 class HeaderContext {
     Title title;
     List<Author> authors; // ANTLR

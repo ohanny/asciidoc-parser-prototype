@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Deprecated
 public class HandlerNotificationsEmitter {
     // threading purpose
     private BlockingQueue<ActionRequest> tasks = new ArrayBlockingQueue<>(1024);

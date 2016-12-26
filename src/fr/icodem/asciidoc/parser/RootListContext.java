@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import static fr.icodem.asciidoc.parser.ListType.Ordered;
 import static fr.icodem.asciidoc.parser.ListType.Unordered;
 
+@Deprecated
 class RootListContext {
 
     ListContext listContext;

@@ -6,6 +6,7 @@ import fr.icodem.asciidoc.parser.elements.Text;
 import java.util.LinkedList;
 import java.util.List;
 
+@Deprecated
 class ListItemContext {
 
     Text text;

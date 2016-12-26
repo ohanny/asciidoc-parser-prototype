@@ -8,6 +8,7 @@ import java.util.List;
 import static fr.icodem.asciidoc.parser.ListType.Ordered;
 import static fr.icodem.asciidoc.parser.ListType.Unordered;
 
+@Deprecated
 class ListContext {
 
     AttributeList attributeList;
