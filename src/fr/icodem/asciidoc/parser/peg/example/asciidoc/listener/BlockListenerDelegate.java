@@ -16,11 +16,7 @@ import static java.lang.Math.min;
 
 public class BlockListenerDelegate extends AbstractDelegate {
 
-    private final static String DOCUMENT_TITLE = "DOCUMENT_TITLE";
-
     private AsciidocHandler handler;
-
-    private Deque<String> nodes; // TODO rename variable
 
     private enum ListType {Ordered, Unordered}
     private static class ListContext {
@@ -267,8 +263,6 @@ public class BlockListenerDelegate extends AbstractDelegate {
     public BlockListenerDelegate(AsciidocHandler handler) {
         super();
         this.handler = handler;
-        this.nodes = new LinkedList<>();
-        this.nodes.add("");
     }
 
     public void postProcess() {
@@ -285,16 +279,10 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     }
 
-    public void text(String text) {
-        switch (nodes.peekLast()) {
-            case DOCUMENT_TITLE:
-                handler.writeDocumentTitle(text);
-                break;
-
-            default:
-                handler.writeText(text);
-        }
+    public void blockTitleValue(String text) {// TODO not yet tested
+        handler.writeText(text);
     }
+
 
     // document and header methods
     public void enterDocument() {
@@ -315,12 +303,14 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void enterDocumentTitle() {
         handler.startDocumentTitle();
-        nodes.addLast(DOCUMENT_TITLE);
+    }
+
+    public void documentTitleValue(String text) {
+        handler.writeDocumentTitle(text);
     }
 
     public void exitDocumentTitle() {
         handler.endDocumentTitle();
-        nodes.removeLast();
     }
 
     public void enterAuthors() {
@@ -372,6 +362,10 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void enterSection() {
         handler.startSection();
+    }
+
+    public void sectionTitleValue(String text) {
+        handler.writeText(text);
     }
 
     public void exitSection() {
