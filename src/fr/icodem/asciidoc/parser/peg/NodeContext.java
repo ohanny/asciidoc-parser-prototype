@@ -10,7 +10,7 @@ public class NodeContext {
         this.context = context;
     }
 
-    @Deprecated //???
+    @Deprecated // Is it useful ? This method is useable only at listener level, not root level
     public void include(Object source) {
         context.include(source);
     }

@@ -3,7 +3,6 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html;
 import fr.icodem.asciidoc.parser.AttributeDefaults;
 import fr.icodem.asciidoc.parser.elements.AttributeEntry;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.BlockRules;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.BlockRules2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.BlockListener;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.SourceResolver;
@@ -22,7 +21,6 @@ import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFacto
 public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHandler {
 
     private BlockRules rules = new BlockRules(); // TODO inject
-//    private BlockRules2 rules = new BlockRules2(); // TODO inject
 
     protected Map<String, AttributeEntry> attributes;
 
@@ -53,7 +51,6 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
                 .parse(new StringReader(text), new BlockListener(this), null, null);
 
         outputter.closeWriter();
-        //closeWriter();
     }
 
     protected String getAttributeValue(String key) {

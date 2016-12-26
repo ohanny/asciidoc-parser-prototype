@@ -232,9 +232,6 @@ public class BufferLayout<T> {
     }
 
     public boolean isGlobalEOI() {
-        //System.out.println(activeSegments.peekLast().source == activeSegments.peekFirst().source);
-        //return activeSegments.peekLast().source == activeSegments.peekFirst().source;
-//        return suspendedSegments.size() == 0 && activeSegments.peekLast().source == activeSegments.peekFirst().source;
         return suspendedSegments.size() == 0;
     }
 
@@ -247,7 +244,6 @@ public class BufferLayout<T> {
             lastSuspendedSegment.start = activeLength;
             activeLength += lastSuspendedSegment.length;
             suspendedLength -= lastSuspendedSegment.length;
-
         }
     }
 
