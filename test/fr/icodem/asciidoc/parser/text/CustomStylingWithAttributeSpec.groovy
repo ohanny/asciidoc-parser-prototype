@@ -12,7 +12,7 @@ class CustomStylingWithAttributeSpec extends TextSpecification {
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(formattedText (mark (attributeList [ (positionalAttribute (attributeValue y e l l o w)) ]) # (text I t ' s   a   n i c e   d a y) #))";
+        result.tree == "(formattedText (attributeList [ (positionalAttribute (attributeValue y e l l o w)) ]) (mark # (text I t ' s   a   n i c e   d a y) #))";
     }
 
     def "marked phrase with two custom css classes"() {
@@ -23,7 +23,7 @@ class CustomStylingWithAttributeSpec extends TextSpecification {
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(formattedText (mark (attributeList [ (positionalAttribute (attributeValue y e l l o w   s h i n y)) ]) # (text I t ' s   a   n i c e   d a y) #))";
+        result.tree == "(formattedText (attributeList [ (positionalAttribute (attributeValue y e l l o w   s h i n y)) ]) (mark # (text I t ' s   a   n i c e   d a y) #))";
     }
 
     def "marked word within phrase with custom css class"() {
@@ -34,7 +34,7 @@ class CustomStylingWithAttributeSpec extends TextSpecification {
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(formattedText (text I t ' s   a  ) (mark (attributeList [ (positionalAttribute (attributeValue y e l l o w)) ]) # (text n i c e) #) (text   d a y))";
+        result.tree == "(formattedText (text I t ' s   a  ) (attributeList [ (positionalAttribute (attributeValue y e l l o w)) ]) (mark # (text n i c e) #) (text   d a y))";
     }
 
     def "marked word within phrase with two custom css classes"() {
@@ -45,7 +45,7 @@ class CustomStylingWithAttributeSpec extends TextSpecification {
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(formattedText (text I t ' s   a  ) (mark (attributeList [ (positionalAttribute (attributeValue y e l l o w   s h i n y)) ]) # (text n i c e) #) (text   d a y))";
+        result.tree == "(formattedText (text I t ' s   a  ) (attributeList [ (positionalAttribute (attributeValue y e l l o w   s h i n y)) ]) (mark # (text n i c e) #) (text   d a y))";
     }
 
 

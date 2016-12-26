@@ -1,18 +1,13 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html;
 
-import fr.icodem.asciidoc.parser.elements.AttributeEntry;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.ImageMacro;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Macro;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.SourceResolver;
 
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
@@ -31,6 +26,10 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "include::file1.adoc[]\n"  +
                 "\n" +
                 "The sun, *the earth* and _the_ sea.\n" +
+                "\n" +
+                "The sun, ~the earth~ and ^the^ sea.\n" +
+                "\n" +
+                "The sun, `the earth` and [big]#the# sea.\n" +
                 "\n" +
                 "'''\n" +
                 "\n" +
@@ -109,7 +108,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "\n" +
                 "Block below";
 
-        if (true) text =  "* A\n" +
+        if (false) text =  "* A\n" +
                 "\n" +
                 "include::f[]\n" +
                 "\n" +
@@ -890,6 +889,54 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void endItalic() {
         append(EM.end());
+    }
+
+    @Override
+    public void startSubscript() {
+        append(SUB.start());
+    }
+
+    @Override
+    public void endSubscript() {
+        append(SUB.end());
+    }
+
+    @Override
+    public void startSuperscript() {
+        append(SUP.start());
+    }
+
+    @Override
+    public void endSuperscript() {
+        append(SUP.end());
+    }
+
+    @Override
+    public void startMonospace() {
+        append(CODE.start());
+    }
+
+    @Override
+    public void endMonospace() {
+        append(CODE.end());
+    }
+
+    @Override
+    public void startMark(AttributeList attList) {
+        if (attList == null || attList.getFirstPositionalAttribute() == null) {
+            append(MARK.start());
+        } else {
+            append(SPAN.start("class", attList.getFirstPositionalAttribute()));
+        }
+    }
+
+    @Override
+    public void endMark(AttributeList attList) {
+        if (attList == null || attList.getFirstPositionalAttribute() == null) {
+            append(MARK.end());
+        } else {
+            append(SPAN.end());
+        }
     }
 
 }

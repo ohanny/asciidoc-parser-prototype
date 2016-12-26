@@ -400,15 +400,4 @@ class QuotedTextSpec extends TextSpecification {
         result.tree == "(formattedText (text E n t e r   t h e  ) (mark # (bold * (text a d b   d e v i c e s) *) #) (text   c o m m a n d))";
     }
 
-    def "custom style on words within a phrase"() {
-        given:
-        String input = "it's [big]#a nice# day";
-
-        when:
-        ParsingResult result = parse(input);
-
-        then:
-        result.tree == "(formattedText (text i t ' s  ) (mark (attributeList [ (positionalAttribute (attributeValue b i g)) ]) # (text a   n i c e) #) (text   d a y))";
-    }
-
 }

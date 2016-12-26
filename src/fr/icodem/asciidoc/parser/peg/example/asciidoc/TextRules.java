@@ -34,7 +34,7 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
         return named("chunk",
                 oneOrMore(
                     firstOf(
-                        mark(),
+                        attListAndMark(),
                         macro(),
                         text(),
                         bold(),
@@ -57,7 +57,7 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
                         string("\\#"),
                         sequence(
                             test(ch('[')),
-                            testNot(mark()),
+                            testNot(attListAndMark()),
                             ch('[')
                         ),
                         openingSingleQuote(),
@@ -285,7 +285,6 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
 
         return node("mark",
                 sequence(
-                    optional(attributeList()),
                     notInsideMark,
                     oneOrMore(ch('#')),
                     toggleInsideMark,
@@ -294,6 +293,10 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
                     toggleInsideMark
                 ));
 
+    }
+
+    private Rule attListAndMark() {
+        return sequence(optional(attributeList()), mark());
     }
 
     private Rule openingSingleQuote() {

@@ -11,7 +11,7 @@ public enum HtmlTag {
     TABLE, COLGROUP, COL, THEAD, TH, TBODY, TFOOT, TR, TD,
     H1, H2, H3, H4, H5, H6,
     BR, HR,
-    A, IMG, SPAN, STRONG, EM;
+    A, IMG, SPAN, STRONG, EM, SUB, SUP, CODE, MARK;
 
     public static HtmlTag getTitleHeader(int level) {
         switch (level) {
@@ -110,6 +110,10 @@ public enum HtmlTag {
             case SPAN: return buildStartTag("span", attributes);
             case STRONG: return "<strong>";
             case EM: return "<em>";
+            case SUB: return "<sub>";
+            case SUP: return "<sup>";
+            case CODE: return "<code>";
+            case MARK: return "<mark>";
             default: return null;
         }
     }
@@ -147,6 +151,10 @@ public enum HtmlTag {
             case A: return "</a>";
             case STRONG: return "</strong>";
             case EM: return "</em>";
+            case SUB: return "</sub>";
+            case SUP: return "</sup>";
+            case CODE: return "</code>";
+            case MARK: return "</mark>";
             default: return null;
         }
     }

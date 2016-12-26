@@ -107,4 +107,16 @@ public interface AsciidocHandler {
     void startItalic();
     void endItalic();
 
+    void startSubscript();
+    void endSubscript();
+
+    void startSuperscript();
+    void endSuperscript();
+
+    void startMonospace();
+    void endMonospace();
+
+    void startMark(AttributeList attList);
+    void endMark(AttributeList attList);
+
 }

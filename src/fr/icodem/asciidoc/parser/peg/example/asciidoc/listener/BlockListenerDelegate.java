@@ -14,25 +14,13 @@ import java.util.List;
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 import static java.lang.Math.min;
 
-public class BlockListenerDelegate {
+public class BlockListenerDelegate extends AbstractDelegate {
 
     private final static String DOCUMENT_TITLE = "DOCUMENT_TITLE";
 
     private AsciidocHandler handler;
 
-    private Deque<Text> textObjects;
     private Deque<String> nodes; // TODO rename variable
-    private List<Attribute> attList;
-
-    private MacroContext currentMacro;
-    private static class MacroContext {
-        String name;
-        String target;
-
-        static MacroContext empty() {
-            return new MacroContext();
-        }
-    }
 
     private enum ListType {Ordered, Unordered}
     private static class ListContext {
@@ -239,14 +227,13 @@ public class BlockListenerDelegate {
     private TableContext currentTable;
 
     public BlockListenerDelegate(AsciidocHandler handler) {
+        super();
         this.handler = handler;
         this.nodes = new LinkedList<>();
         this.nodes.add("");
-        this.textObjects = new LinkedList<>();
-        this.attList = new LinkedList<>();
     }
 
-    public void formattedText(char[] chars) {
+    public void formattedText(char[] chars) {// TODO optimize this code by using singletons
         //System.out.println("formattedText() => " + new String(chars));
         TextRules rules = new TextRules();// TODO inject rules
         rules.withFactory(defaultRulesFactory());
@@ -266,91 +253,6 @@ public class BlockListenerDelegate {
             default:
                 handler.writeText(text);
         }
-    }
-
-    private AttributeList consumeAttList() {
-        if (this.attList.isEmpty()) return null;
-        AttributeList attList = AttributeList.of(this.attList);
-        clearAttList();
-        return attList;
-    }
-
-    private void clearAttList() {
-        attList.clear();
-    }
-
-
-    // attributes methods
-    public void attributeName(String value) {
-        textObjects.pop()
-                   .setValue(value);
-    }
-
-    public void attributeValue(String value) {
-        textObjects.pop()
-                   .setValue(value);
-    }
-
-    public void enterIdAttribute() {
-        Text text = Text.empty();
-        attList.add(Attribute.of("id", text));
-        textObjects.push(text);
-    }
-
-    public void enterRoleAttribute() {
-        Text text = Text.empty();
-        attList.add(Attribute.of("role", text));
-        textObjects.push(text);
-    }
-
-    public void enterOptionAttribute() {
-        Text text = Text.empty();
-        attList.add(Attribute.of("options", text));
-        textObjects.push(text);
-    }
-
-    public void enterPositionalAttribute() {
-        Text value = Text.empty();
-        attList.add(Attribute.of((String)null, value));
-        textObjects.push(value);
-    }
-
-    public void enterNamedAttribute() {
-        Text name = Text.empty();
-        Text value = Text.empty();
-        attList.add(Attribute.of(name, value));
-
-        textObjects.push(value);
-        textObjects.push(name);
-    }
-
-    // macro methods
-    public void enterMacro() {
-        currentMacro = MacroContext.empty();
-    }
-
-    public void exitMacro(NodeContext context) {
-        switch (currentMacro.name) {
-            case "image":
-                ImageMacro image = Macro.image(currentMacro.name, currentMacro.target, consumeAttList());
-                handler.writeImage(image);
-                break;
-            case "include":
-//    System.out.println("INCLUDE");
-//                Reader reader = sourceResolver.resolve(currentMacro.target);
-//                context.include(reader);
-                break;
-        }
-
-        currentMacro = null;
-    }
-
-    public void macroName(String name) {
-        currentMacro.name = name;
-    }
-
-    public void macroTarget(String target) {
-        currentMacro.target = target;
     }
 
     // document and header methods
@@ -446,6 +348,11 @@ public class BlockListenerDelegate {
     // blocks methods
     public void horizontalRule() {
         handler.horizontalRule();
+    }
+
+    @Override
+    protected void image(ImageMacro macro) {
+        handler.writeImage(macro);
     }
 
     public void enterParagraph(String admonition) {
@@ -601,7 +508,6 @@ public class BlockListenerDelegate {
     public void tableBlock(String text) {
         currentTable.columns.currentCell.text = text;
     }
-
 
 
 }
