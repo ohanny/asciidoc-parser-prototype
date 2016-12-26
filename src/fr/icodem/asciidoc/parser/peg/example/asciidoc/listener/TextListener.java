@@ -108,7 +108,7 @@ public class TextListener implements ParseTreeListener {
 
             // macro
             case "macro":
-                delegate.exitMacro(context);
+                delegate.exitMacro();
                 break;
 
             // markup

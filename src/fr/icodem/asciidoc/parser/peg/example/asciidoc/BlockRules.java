@@ -182,7 +182,6 @@ public class BlockRules extends BaseRules {
                 attributeList(),
                 anchor(),
                 blockTitle(),
-                //blockMacro(),
                 macro(),
                 section(),
                 block(false),

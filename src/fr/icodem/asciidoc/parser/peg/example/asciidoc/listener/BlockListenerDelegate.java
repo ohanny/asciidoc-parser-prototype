@@ -226,11 +226,52 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
     private TableContext currentTable;
 
+    private TocContext toc;
+    private static class TocContext {
+        TocItemContext root;
+        TocItemContext currentItem;
+
+        static TocContext empty() {
+            TocContext toc = new TocContext();
+            toc.root = TocItemContext.of(-1, "Table of Contents");
+            toc.currentItem = toc.root;
+
+            return toc;
+        }
+
+        void addItem(int level, String text) {
+            this.currentItem.next = TocItemContext.of(level, text);
+            this.currentItem.next.previous = this.currentItem;
+            this.currentItem = this.currentItem.next;
+        }
+    }
+
+    private static class TocItemContext {
+        int level;
+        String text;
+
+        TocItemContext previous;
+        TocItemContext next;
+
+        static TocItemContext of(int level, String text) {
+            TocItemContext item = new TocItemContext();
+            item.level = level;
+            item.text = text;
+
+            return item;
+        }
+    }
+
+
+
     public BlockListenerDelegate(AsciidocHandler handler) {
         super();
         this.handler = handler;
         this.nodes = new LinkedList<>();
         this.nodes.add("");
+    }
+
+    public void postProcess() {
     }
 
     public void formattedText(char[] chars) {// TODO optimize this code by using singletons
@@ -321,6 +362,8 @@ public class BlockListenerDelegate extends AbstractDelegate {
     // content and sections methods
     public void enterContent() {
         handler.startContent();
+
+        toc = TocContext.empty();
     }
 
     public void exitContent() {
@@ -338,6 +381,8 @@ public class BlockListenerDelegate extends AbstractDelegate {
     public void enterSectionTitle(NodeContext context) {
         int level = min(context.getIntAttribute("eqs.count", -1), 6);
         handler.startSectionTitle(level);
+
+        toc.addItem(level, "OLIV");
     }
 
     public void exitSectionTitle(NodeContext context) {

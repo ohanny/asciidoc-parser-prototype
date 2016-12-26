@@ -211,7 +211,7 @@ public class BlockListener implements ParseTreeListener {
 
             // macro
             case "macro":
-                delegate.exitMacro(context);
+                delegate.exitMacro();
                 break;
 
             // document and header
@@ -287,5 +287,9 @@ public class BlockListener implements ParseTreeListener {
                 break;
 
         }
+    }
+
+    public void postProcess() {
+        delegate.postProcess();
     }
 }

@@ -86,17 +86,13 @@ public abstract class AbstractDelegate {
         currentMacro = BlockListenerDelegate.MacroContext.empty();
     }
 
-    public void exitMacro(NodeContext context) {
+    public void exitMacro() {
         switch (currentMacro.name) {
             case "image":
                 ImageMacro macro = Macro.image(currentMacro.name, currentMacro.target, consumeAttList());
-                //handler.writeImage(image);
                 image(macro);
                 break;
             case "include":
-//    System.out.println("INCLUDE");
-//                Reader reader = sourceResolver.resolve(currentMacro.target);
-//                context.include(reader);
                 break;
         }
 
