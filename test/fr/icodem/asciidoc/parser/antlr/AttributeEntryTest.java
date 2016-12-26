@@ -123,7 +123,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":fruit: kiwi",
 
                 /* expected */
-                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) <EOF>))))"
+                "(document (content (section (sectionTitle = =   (sectionTitleValue S e c t i o n) \\n) (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) <EOF>))))"
             },
             {
                 /* message */
@@ -134,7 +134,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":fruit: kiwi\n",
 
                 /* expected */
-                "(document (content (section (sectionTitle = =   (title S e c t i o n) \\n) (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n))) (bl <EOF>))"
+                "(document (content (section (sectionTitle = =   (sectionTitleValue S e c t i o n) \\n) (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n))) (bl <EOF>))"
             }
         });
 

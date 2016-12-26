@@ -191,11 +191,17 @@ public class BlockRules extends BaseRules {
 
     private Rule documentTitle() {
         return node("documentTitle", true,
-                sequence(ch('='), ch(' '), optional(title()), optional(blank()), firstOf(newLine(), eoi())));
+                sequence(ch('='), ch(' '), optional(documentTitleValue()), optional(blank()), firstOf(newLine(), eoi())));
+    }
+
+    private Rule documentTitleValue() {
+        return node("documentTitleValue", title());
     }
 
     private Rule title() {
-        return node("title", sequence(noneOf(" \n\t\r"), zeroOrMore(noneOf('\n'))));
+        if (isCached("title")) return cached("title");
+
+        return cached("title", sequence(noneOf(" \n\t\r"), zeroOrMore(noneOf('\n'))));
     }
 
     private Rule section() {
@@ -215,9 +221,13 @@ public class BlockRules extends BaseRules {
 
     private Rule sectionTitle() {
         return node("sectionTitle", sequence(
-                action(oneOrMore('='), ctx -> ctx.exportAttributesToParentNode("eqs")), oneOrMore(blank()), title(),
+                action(oneOrMore('='), ctx -> ctx.exportAttributesToParentNode("eqs")), oneOrMore(blank()), sectionTitleValue(),
                 zeroOrMore(blank()), firstOf(newLine(), eoi())
         ));
+    }
+
+    private Rule sectionTitleValue() {
+        return node("sectionTitleValue", title());
     }
 
     private Rule bl(boolean withEOI) {
@@ -253,9 +263,13 @@ public class BlockRules extends BaseRules {
                 testNot(literalBlockDelimiter()),
                 ch('.'),
                 test(isFirstCharInLine()),
-                title(),
+                blockTitleValue(),
                 firstOf(newLine(), eoi()) // TODO replace
         ));
+    }
+
+    private Rule blockTitleValue() {
+        return node("blockTitleValue", title());
     }
 
     private Rule horizontalRule() {

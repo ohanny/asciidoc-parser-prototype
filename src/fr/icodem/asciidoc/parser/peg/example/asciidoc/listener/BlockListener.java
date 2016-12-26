@@ -28,7 +28,9 @@ public class BlockListener implements ParseTreeListener {
         //}
 
         switch (context.getNodeName()) {
-            case "title":
+            case "documentTitleValue":
+            case "sectionTitleValue":
+            case "blockTitleValue":
                 delegate.text(new String(chars));
                 break;
             case "paragraph":

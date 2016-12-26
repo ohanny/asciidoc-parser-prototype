@@ -86,7 +86,7 @@ public class OrderedListTest extends GrammarTest {
                 ". Mandarine\n",
 
                 /* expected */
-                "(document (content (blockTitle . (title S o m e   f r u i t s) \\n) (block (list (listItem .   (listItemValue L e m o n) \\n) (listItem .   (listItemValue C h e r r y) \\n) (listItem .   (listItemValue M a n d a r i n e) \\n)))) (bl <EOF>))"
+                "(document (content (blockTitle . (blockTitleValue S o m e   f r u i t s) \\n) (block (list (listItem .   (listItemValue L e m o n) \\n) (listItem .   (listItemValue C h e r r y) \\n) (listItem .   (listItemValue M a n d a r i n e) \\n)))) (bl <EOF>))"
             },
             {
                 /* message */

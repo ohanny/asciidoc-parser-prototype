@@ -40,7 +40,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe\n",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))) (bl <EOF>))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -51,7 +51,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))))"
             },
             {
                 /* message */
@@ -62,7 +62,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John .Doe",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   . D o e)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   . D o e)))))"
             },
             {
                 /* message */
@@ -73,7 +73,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe <jd@mail.com>\n",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m)))) (bl <EOF>))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m)))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -84,7 +84,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe <jd@mail.com>",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m)))))"
             },
             {
                 /* message */
@@ -95,7 +95,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe <jd@mail.com[John]>",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m) (authorAddressLabel J o h n)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m) (authorAddressLabel J o h n)))))"
             },
             {
                 /* message */
@@ -106,7 +106,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe; Janie Roe\n",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)) (author (authorName J a n i e   R o e)))) (bl <EOF>))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)) (author (authorName J a n i e   R o e)))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -117,7 +117,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe <jd@mail.com>; Janie Roe <janie@mail.com>\n",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m)) (author (authorName J a n i e   R o e) (authorAddress j a n i e @ m a i l . c o m)))) (bl <EOF>))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m)) (author (authorName J a n i e   R o e) (authorAddress j a n i e @ m a i l . c o m)))) (bl <EOF>))"
             },
             {
                 /* message */
@@ -129,7 +129,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (singleComment / /   a   s i n g l e   c o m m e n t \\n) (authors (author (authorName J o h n   D o e)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (singleComment / /   a   s i n g l e   c o m m e n t \\n) (authors (author (authorName J o h n   D o e)))))"
             },
             {
                 /* message */
@@ -142,7 +142,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (singleComment / /   a   s i n g l e   c o m m e n t \\n) (singleComment / /   a n o t h e r   c o m m e n t \\n) (authors (author (authorName J o h n   D o e)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (singleComment / /   a   s i n g l e   c o m m e n t \\n) (singleComment / /   a n o t h e r   c o m m e n t \\n) (authors (author (authorName J o h n   D o e)))))"
             },
             {
                 /* message */
@@ -156,7 +156,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe",
 
                 /* expected */
-                "(document (header (documentTitle (title H e l l o ,   A s c i i D o c !)) (multiComment (multiCommentDelimiter / / / / \\n) a   c o m m e n t \\n (multiCommentDelimiter / / / / \\n)) (authors (author (authorName J o h n   D o e)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (multiComment (multiCommentDelimiter / / / / \\n) a   c o m m e n t \\n (multiCommentDelimiter / / / / \\n)) (authors (author (authorName J o h n   D o e)))))"
             }
 
         });
