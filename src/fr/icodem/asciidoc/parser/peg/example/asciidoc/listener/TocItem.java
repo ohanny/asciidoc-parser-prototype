@@ -6,17 +6,19 @@ import java.util.List;
 public class TocItem {
     private int level;
     private String title;
+    private String ref;
 
     private List<TocItem> children;
 
-    private TocItem(int level, String title) {
+    private TocItem(int level, String title, String ref) {
         this.level = level;
         this.title = title;
+        this.ref = ref;
         this.children = new LinkedList<>();
     }
 
-    public static TocItem of(int level, String title) {
-        return new TocItem(level, title);
+    public static TocItem of(int level, String title, String ref) {
+        return new TocItem(level, title, ref);
     }
 
     public int getLevel() {
@@ -25,6 +27,10 @@ public class TocItem {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getRef() {
+        return ref;
     }
 
     public List<TocItem> getChildren() {

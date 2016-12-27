@@ -11,8 +11,6 @@ public class TextOutputter {
     private DocumentWriter writer;
 
     private StringBuilder buffer;
-    private Consumer<String> bufferAppender;
-    private Consumer<String> writerAppender;
     private Consumer<String> appender;
 
     private int positionInBuffer;
@@ -36,7 +34,7 @@ public class TextOutputter {
     }
 
     private Map<String, Marker> markers;
-    private Map<String, Marker> markersOnWriter;// TODO move somewhere else ?
+    private Map<String, Marker> markersOnWriter;// TODO move somewhere else ? rename ?
 
     private static class Indenter {
         int level;
@@ -63,9 +61,7 @@ public class TextOutputter {
 
         buffer = new StringBuilder();
 
-        writerAppender = this::appendToWriter;
-        bufferAppender = this::appendToBuffer;
-        appender = writerAppender;
+        appender = this::appendToWriter;
         markers = new HashMap<>();
         markersOnWriter = new HashMap<>();
         positionInBuffer = -1;
@@ -91,6 +87,17 @@ public class TextOutputter {
             updateMarkers(length);
             positionInBuffer += length;
         }
+    }
+
+    // when insert is done after first pass
+    private void insertToWriter(String str) {
+        for (Map.Entry<String, Marker> entry : markers.entrySet()) { // TODO warning : not tested (used if multiple seek are done)
+            if (entry.getValue().position >= writer.getPosition()) {
+                entry.getValue().position +=  str.length();
+            }
+        }
+
+        writer.write(str);
     }
 
     public void append(String str) {
@@ -160,7 +167,7 @@ public class TextOutputter {
     }
 
     public void bufferOn() {
-        appender = bufferAppender;
+        appender = this::appendToBuffer;
     }
 
     public void bufferOff() {
@@ -168,7 +175,7 @@ public class TextOutputter {
             appendToWriter(buffer.toString());
             buffer.setLength(0);
         }
-        appender = writerAppender;
+        appender = this::appendToWriter;
         positionInBuffer = -1;
         indenter = rootIndenter;
         markers.clear();
@@ -205,13 +212,19 @@ public class TextOutputter {
         }
     }
 
-    // mark for post-processing
+    // markers for post-processing
     public void markOnWriter(String key) {
-        writer.mark(key);
+        Marker marker = Marker.of(writer.getPosition(), indenter.level);
+        markersOnWriter.put(key, marker);
     }
 
     public void seekOnWriter(String key) {
-        writer.seek(key);
+        Marker marker = markersOnWriter.get(key);
+        if (marker != null) {
+            indenter = marker.indenter;
+            writer.seek(marker.position);
+            appender = this::insertToWriter;
+        }
     }
 
 

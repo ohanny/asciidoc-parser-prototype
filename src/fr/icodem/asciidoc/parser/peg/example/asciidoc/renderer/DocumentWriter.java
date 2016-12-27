@@ -1,19 +1,14 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.Map;
-
 public  interface DocumentWriter {
 
     void write(String str);
 
     void close();
 
-    void mark(String marker);
+    int getPosition();
 
-    void seek(String marker);
+    void seek(int position);
 
 
     static DocumentWriter bufferedWriter() {
@@ -25,51 +20,36 @@ public  interface DocumentWriter {
     }
 
     class BufferedDocumentWriter implements DocumentWriter {
-        private OutputStream os;
         private StringBuilder buffer;
 
-        private Map<String, Integer> markers;
         private int position;
 
         public BufferedDocumentWriter() {
             this.buffer = new StringBuilder();
-            this.markers = new HashMap<>();
             this.position = -1;
         }
 
         @Override
         public void write(String str) {
-            if (position == -1) {
-                buffer.append(str);
-            } else {
+            if (position > -1) {
                 buffer.insert(position, str);
-                for (Map.Entry<String, Integer> entry : markers.entrySet()) {
-                    if (entry.getValue() >= position) {
-                        entry.setValue(entry.getValue() + str.length());
-                    }
-                }
-
                 position += str.length();
+            } else {
+                buffer.append(str);
             }
         }
 
         @Override
-        public void close() {
-            try {
-                if (os != null) os.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        public void close() {}
+
+        @Override
+        public int getPosition() {
+            return position == -1?buffer.length():position;
         }
 
         @Override
-        public void mark(String marker) {
-            markers.put(marker, buffer.length());
-        }
-
-        @Override
-        public void seek(String marker) {
-            this.position = markers.getOrDefault(marker, -1);
+        public void seek(int position) {
+            this.position = position;
         }
 
         @Override
@@ -91,18 +71,14 @@ public  interface DocumentWriter {
         }
 
         @Override
-        public void mark(String marker) {
-
+        public int getPosition() {
+            return 0;
         }
 
         @Override
-        public void seek(String marker) {
+        public void seek(int position) {
 
         }
 
-//        @Override
-//        public void flush() {
-//
-//        }
     }
 }

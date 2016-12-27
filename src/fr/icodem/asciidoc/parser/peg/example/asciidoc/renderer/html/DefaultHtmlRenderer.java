@@ -189,11 +189,9 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void postProcess(Toc toc) {
         if (toc != null) {
-            Map<String, Integer> refs = new HashMap<>();
 
-            seekOnWriter("TOC").nl();
-
-            indent()
+            seekOnWriter("TOC")
+              .indent()
               .append(DIV.start("id", "toc", "class", "toc2"))
               .nl()
               .incIndent()
@@ -202,49 +200,57 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
               .append(toc.getRoot().getTitle())
               .append(DIV.end())
               .nl()
+              .indent()
               .append(UL.start("class", "sectlevel0"))
               .nl()
-              .forEach(toc.getRoot().getChildren(), item -> processTocItem(item, refs))
+              .incIndent()
+              .forEach(toc.getRoot().getChildren(), this::processTocItem)
+              .decIndent()
+              .indent()
               .append(UL.end())
               .nl()
               .decIndent()
+              .indent()
               .append(DIV.end())
-              .nl().nl()
+              .nl()
             ;
 
         }
     }
 
-    private void processTocItem(TocItem item, Map<String, Integer> refs) {
-        append(LI.start())
-          .append(A.start("href", tocTitleToRef(item.getTitle(), refs)))
-          .append(item.getTitle())
-          .append(A.end())
+    private void processTocItem(TocItem item) {
+        indent()
+          .append(LI.start())
           .runIf(item.getChildren().size() > 0, () ->
               nl()
+                .incIndent()
+                .indent()
+                .append(A.start("href", "#" + item.getRef()))
+                .append(item.getTitle())
+                .append(A.end())
+                .nl()
+                .indent()
                 .append(UL.start("class", "sectlevel" + item.getLevel()))
                 .nl()
-                .forEach(item.getChildren(), ti -> processTocItem(ti, refs))
+                .incIndent()
+                .forEach(item.getChildren(), this::processTocItem)
+                .decIndent()
+                .indent()
                 .append(UL.end())
                 .nl()
+                .decIndent()
+                .indent()
                 .append(LI.end())
                 .nl()
           )
         .runIf(item.getChildren().size() == 0, () ->
-          append(LI.end())
+            append(A.start("href", "#" + item.getRef()))
+            .append(item.getTitle())
+            .append(A.end())
+            .append(LI.end())
             .nl()
         )
         ;
-    }
-
-    private String tocTitleToRef(String title, Map<String, Integer> refs) {
-        String ref = "#" + title.toLowerCase().replaceAll("\\s+", "_");
-        int count = refs.getOrDefault(ref, 0);
-        refs.put(ref, ++count);
-        if (count > 1) {
-            ref = ref + "_" + count;
-        }
-        return ref;
     }
 
     /* **********************************************/

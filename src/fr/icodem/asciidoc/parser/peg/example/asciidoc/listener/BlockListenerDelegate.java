@@ -7,7 +7,9 @@ import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
 import java.io.StringReader;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 import static java.lang.Math.min;
@@ -220,6 +222,9 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
     private TableContext currentTable;
 
+    // computed refs : helps avoid duplicates
+    private Map<String, Integer> refs = new HashMap<>();
+
     private TocContext toc;
     private static class TocContext {
         TocItemContext root;
@@ -227,14 +232,14 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
         static TocContext empty() {
             TocContext toc = new TocContext();
-            toc.root = TocItemContext.of(0, Text.of("Table of Contents"));
+            toc.root = TocItemContext.of(0, Text.of("Table of Contents"), null);
             toc.currentItem = toc.root;
 
             return toc;
         }
 
-        void addItem(int level, Text text) {
-            this.currentItem.next = TocItemContext.of(level, text);
+        void addItem(int level, Text text, Text ref) {
+            this.currentItem.next = TocItemContext.of(level, text, ref);
             this.currentItem.next.previous = this.currentItem;
             this.currentItem = this.currentItem.next;
         }
@@ -243,14 +248,16 @@ public class BlockListenerDelegate extends AbstractDelegate {
     private static class TocItemContext {
         int level;
         Text text;
+        Text ref;
 
         TocItemContext previous;
         TocItemContext next;
 
-        static TocItemContext of(int level, Text text) {
+        static TocItemContext of(int level, Text text, Text ref) {
             TocItemContext item = new TocItemContext();
             item.level = level;
             item.text = text;
+            item.ref = ref;
 
             return item;
         }
@@ -262,6 +269,16 @@ public class BlockListenerDelegate extends AbstractDelegate {
         this.handler = handler;
     }
 
+    private String textToRef(String text) {
+        String ref = text.toLowerCase().replaceAll("\\s+", "_");
+        int count = refs.getOrDefault(ref, 0);
+        refs.put(ref, ++count);
+        if (count > 1) {
+            ref = ref + "_" + count;
+        }
+        return ref;
+    }
+
     public void postProcess() {
 
         // process TOC
@@ -270,16 +287,11 @@ public class BlockListenerDelegate extends AbstractDelegate {
         if (this.toc != null) {
 
             Deque<TocItem> parents = new LinkedList<>();
-            TocItem root = TocItem.of(this.toc.root.level, this.toc.root.text.getValue());
+            TocItem root = TocItem.of(this.toc.root.level, this.toc.root.text.getValue(), null);
             parents.push(root);
 
             TocItemContext item = this.toc.root.next;
             while (item != null) {
-                TocItem ti = TocItem.of(item.level, item.text.getValue());
-
-                TocItem parent = parents.peek();
-                parent.getChildren().add(ti);
-
                 if (item.level < item.previous.level) {
                     while (true) {
                         if (parents.peek().getLevel() >= item.level) {
@@ -289,6 +301,11 @@ public class BlockListenerDelegate extends AbstractDelegate {
                         }
                     }
                 }
+
+                TocItem ti = TocItem.of(item.level, item.text.getValue(), item.ref.getValue());
+
+                TocItem parent = parents.peek();
+                parent.getChildren().add(ti);
 
                 if (item.next != null && item.level < item.next.level) {
                     parents.push(ti);
@@ -403,12 +420,14 @@ public class BlockListenerDelegate extends AbstractDelegate {
         handler.endSection();
     }
 
-    public void enterSectionTitle(NodeContext context) {
+    public void enterSectionTitle(NodeContext context) { // TODO créer section title context
         int level = min(context.getIntAttribute("eqs.count", -1), 6);
         handler.startSectionTitle(level);
 
         Text text = Text.empty();
-        toc.addItem(level, text);
+        Text ref = Text.empty();
+        toc.addItem(level, text, ref);
+        textObjects.push(ref);
         textObjects.push(text);
     }
 
@@ -416,6 +435,8 @@ public class BlockListenerDelegate extends AbstractDelegate {
         handler.writeText(text);
         textObjects.pop()
                 .setValue(text);
+        textObjects.pop()
+                .setValue(textToRef(text));
     }
 
     public void exitSectionTitle(NodeContext context) {
