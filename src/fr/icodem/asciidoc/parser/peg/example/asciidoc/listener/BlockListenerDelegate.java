@@ -5,11 +5,9 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.TextRules;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
-import java.io.Reader;
 import java.io.StringReader;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.List;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 import static java.lang.Math.min;
@@ -229,13 +227,13 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
         static TocContext empty() {
             TocContext toc = new TocContext();
-            toc.root = TocItemContext.of(-1, "Table of Contents");
+            toc.root = TocItemContext.of(0, Text.of("Table of Contents"));
             toc.currentItem = toc.root;
 
             return toc;
         }
 
-        void addItem(int level, String text) {
+        void addItem(int level, Text text) {
             this.currentItem.next = TocItemContext.of(level, text);
             this.currentItem.next.previous = this.currentItem;
             this.currentItem = this.currentItem.next;
@@ -244,12 +242,12 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     private static class TocItemContext {
         int level;
-        String text;
+        Text text;
 
         TocItemContext previous;
         TocItemContext next;
 
-        static TocItemContext of(int level, String text) {
+        static TocItemContext of(int level, Text text) {
             TocItemContext item = new TocItemContext();
             item.level = level;
             item.text = text;
@@ -259,13 +257,50 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
 
-
     public BlockListenerDelegate(AsciidocHandler handler) {
         super();
         this.handler = handler;
     }
 
     public void postProcess() {
+
+        // process TOC
+        Toc toc = null;
+
+        if (this.toc != null) {
+
+            Deque<TocItem> parents = new LinkedList<>();
+            TocItem root = TocItem.of(this.toc.root.level, this.toc.root.text.getValue());
+            parents.push(root);
+
+            TocItemContext item = this.toc.root.next;
+            while (item != null) {
+                TocItem ti = TocItem.of(item.level, item.text.getValue());
+
+                TocItem parent = parents.peek();
+                parent.getChildren().add(ti);
+
+                if (item.level < item.previous.level) {
+                    while (true) {
+                        if (parents.peek().getLevel() >= item.level) {
+                            parents.pop();
+                        } else {
+                            break;
+                        }
+                    }
+                }
+
+                if (item.next != null && item.level < item.next.level) {
+                    parents.push(ti);
+                }
+
+                item = item.next;
+            }
+
+            toc = Toc.of(root);
+        }
+
+        handler.postProcess(toc);
     }
 
     public void formattedText(char[] chars) {// TODO optimize this code by using singletons
@@ -353,7 +388,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
     public void enterContent() {
         handler.startContent();
 
-        toc = TocContext.empty();
+        if (true) toc = TocContext.empty();
     }
 
     public void exitContent() {
@@ -364,10 +399,6 @@ public class BlockListenerDelegate extends AbstractDelegate {
         handler.startSection();
     }
 
-    public void sectionTitleValue(String text) {
-        handler.writeText(text);
-    }
-
     public void exitSection() {
         handler.endSection();
     }
@@ -376,7 +407,15 @@ public class BlockListenerDelegate extends AbstractDelegate {
         int level = min(context.getIntAttribute("eqs.count", -1), 6);
         handler.startSectionTitle(level);
 
-        toc.addItem(level, "OLIV");
+        Text text = Text.empty();
+        toc.addItem(level, text);
+        textObjects.push(text);
+    }
+
+    public void sectionTitleValue(String text) {
+        handler.writeText(text);
+        textObjects.pop()
+                .setValue(text);
     }
 
     public void exitSectionTitle(NodeContext context) {

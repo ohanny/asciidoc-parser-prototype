@@ -1,7 +1,5 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -10,7 +8,7 @@ public class TextOutputter {
     private final static String NL = "\r\n";
     private final static String INDENT = "  ";
 
-    private Writer writer;
+    private DocumentWriter writer;
 
     private StringBuilder buffer;
     private Consumer<String> bufferAppender;
@@ -38,6 +36,7 @@ public class TextOutputter {
     }
 
     private Map<String, Marker> markers;
+    private Map<String, Marker> markersOnWriter;// TODO move somewhere else ?
 
     private static class Indenter {
         int level;
@@ -59,9 +58,7 @@ public class TextOutputter {
     private Indenter rootIndenter;
     private Indenter indenter;
 
-    public TextOutputter(Writer writer) {
-        this.writer = writer;
-
+    public TextOutputter(DocumentWriter writer) {
         this.writer = writer;
 
         buffer = new StringBuilder();
@@ -70,6 +67,7 @@ public class TextOutputter {
         bufferAppender = this::appendToBuffer;
         appender = writerAppender;
         markers = new HashMap<>();
+        markersOnWriter = new HashMap<>();
         positionInBuffer = -1;
 
         rootIndenter = new Indenter();
@@ -77,21 +75,11 @@ public class TextOutputter {
     }
 
     public void closeWriter() {
-        try {
-            if (writer != null) {
-                writer.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writer.close();
     }
 
     private void appendToWriter(String str) {
-        try {
-            writer.write(str);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writer.write(str);
     }
 
     private void appendToBuffer(String str) {
@@ -216,5 +204,15 @@ public class TextOutputter {
             m = m.next;
         }
     }
+
+    // mark for post-processing
+    public void markOnWriter(String key) {
+        writer.mark(key);
+    }
+
+    public void seekOnWriter(String key) {
+        writer.seek(key);
+    }
+
 
 }

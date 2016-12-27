@@ -7,6 +7,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.BlockListener;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.SourceResolver;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.AsciidocRenderer;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.TextOutputter;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
@@ -26,7 +27,7 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
 
     private TextOutputter outputter;
 
-    protected HtmlBaseRenderer(Writer writer) {
+    protected HtmlBaseRenderer(DocumentWriter writer) {
         this.outputter = new TextOutputter(writer);
 
         List<AttributeEntry> attributes = new ArrayList<>();
@@ -53,6 +54,8 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
                 .parse(new StringReader(text), listener, null, null);
 
         outputter.closeWriter();
+
+        listener.postProcess();
     }
 
     protected String getAttributeValue(String key) {
@@ -99,6 +102,7 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
         return this;
     }
 
+    // mark for first pass
     protected HtmlBaseRenderer mark(String key) {
         outputter.mark(key);
         return this;
@@ -124,4 +128,14 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
         return this;
     }
 
+    // mark for post-processing
+    protected HtmlBaseRenderer markOnWriter(String key) {
+        outputter.markOnWriter(key);
+        return this;
+    }
+
+    protected HtmlBaseRenderer seekOnWriter(String key) {
+        outputter.seekOnWriter(key);
+        return this;
+    }
 }

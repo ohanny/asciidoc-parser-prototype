@@ -10,7 +10,7 @@ public interface Text {
         return new DefaultText();
     }
 
-    static Text withValue(String value) {
+    static Text of(String value) {
         Text text = new DefaultText();
         text.setValue(value);
         return text;

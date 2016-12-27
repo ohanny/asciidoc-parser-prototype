@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.renderer
 
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.TextOutputter
 import spock.lang.Specification
 
@@ -7,7 +8,7 @@ class TextOutputterSpec extends Specification {
 
     def "append abc"() {
         given:
-        StringWriter writer = new StringWriter()
+        DocumentWriter writer = DocumentWriter.bufferedWriter()
         TextOutputter outputter = new TextOutputter(writer)
 
         when:
@@ -19,7 +20,7 @@ class TextOutputterSpec extends Specification {
 
     def "append abc and new line"() {
         given:
-        StringWriter writer = new StringWriter()
+        DocumentWriter writer = DocumentWriter.bufferedWriter()
         TextOutputter outputter = new TextOutputter(writer)
 
         when:
@@ -32,7 +33,7 @@ class TextOutputterSpec extends Specification {
 
     def "indent level 1 on second line"() {
         given:
-        StringWriter writer = new StringWriter()
+        DocumentWriter writer = DocumentWriter.bufferedWriter()
         TextOutputter outputter = new TextOutputter(writer)
 
         when:
@@ -48,7 +49,7 @@ class TextOutputterSpec extends Specification {
 
     def "indent level 1 on second line and level 2 on third line"() {
         given:
-        StringWriter writer = new StringWriter()
+        DocumentWriter writer = DocumentWriter.bufferedWriter()
         TextOutputter outputter = new TextOutputter(writer)
 
         when:
@@ -68,7 +69,7 @@ class TextOutputterSpec extends Specification {
 
     def "data after buffer on are not outputted if buffer off is not requested"() {
         given:
-        StringWriter writer = new StringWriter();
+        DocumentWriter writer = DocumentWriter.bufferedWriter()
         TextOutputter outputter = new TextOutputter(writer)
 
         when:
@@ -82,7 +83,7 @@ class TextOutputterSpec extends Specification {
 
     def "data after buffer on are outputted if buffer off is requested"() {
         given:
-        StringWriter writer = new StringWriter();
+        DocumentWriter writer = DocumentWriter.bufferedWriter()
         TextOutputter outputter = new TextOutputter(writer)
 
         when:
@@ -97,7 +98,7 @@ class TextOutputterSpec extends Specification {
 
     def "insert data using a mark"() {
         given:
-        StringWriter writer = new StringWriter()
+        DocumentWriter writer = DocumentWriter.bufferedWriter()
         TextOutputter outputter = new TextOutputter(writer)
 
         when:
@@ -115,7 +116,7 @@ class TextOutputterSpec extends Specification {
 
     def "insert data using a mark, then append data at the end"() {
         given:
-        StringWriter writer = new StringWriter()
+        DocumentWriter writer = DocumentWriter.bufferedWriter()
         TextOutputter outputter = new TextOutputter(writer)
 
         when:
@@ -135,7 +136,7 @@ class TextOutputterSpec extends Specification {
 
     def "insert data using two marks"() {
         given:
-        StringWriter writer = new StringWriter()
+        DocumentWriter writer = DocumentWriter.bufferedWriter()
         TextOutputter outputter = new TextOutputter(writer)
 
         when:
@@ -157,7 +158,7 @@ class TextOutputterSpec extends Specification {
 
     def "two marks before move"() {
         given:
-        StringWriter writer = new StringWriter()
+        DocumentWriter writer = DocumentWriter.bufferedWriter()
         TextOutputter outputter = new TextOutputter(writer)
 
         when:
@@ -179,7 +180,7 @@ class TextOutputterSpec extends Specification {
 
     def "interwoven marks (important for nested lists)"() {
         given:
-        StringWriter writer = new StringWriter()
+        DocumentWriter writer = DocumentWriter.bufferedWriter()
         TextOutputter outputter = new TextOutputter(writer)
 
         when:

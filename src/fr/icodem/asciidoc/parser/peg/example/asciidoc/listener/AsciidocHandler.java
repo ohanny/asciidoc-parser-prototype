@@ -2,6 +2,9 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 public interface AsciidocHandler {
 
+    void postProcess(Toc toc);
+
+    //
     void writeText(String text);
 
     // Macro

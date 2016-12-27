@@ -1,7 +1,5 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
-import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Text.withValue;
-
 public class Attribute {
     private Text name;
     private Text text;
@@ -19,12 +17,12 @@ public class Attribute {
     }
 
     private Attribute(String name, String value) {
-        this.name = withValue(name);
-        this.text = withValue(value);
+        this.name = Text.of(name);
+        this.text = Text.of(value);
     }
 
     private Attribute(String name, Text text) {
-        this.name = Text.withValue(name);
+        this.name = Text.of(name);
         this.text = text;
     }
 

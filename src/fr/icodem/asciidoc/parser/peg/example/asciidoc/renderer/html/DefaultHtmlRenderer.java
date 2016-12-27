@@ -2,12 +2,14 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.ImageMacro;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Toc;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.TocItem;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
 
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
@@ -33,7 +35,13 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "\n" +
                 "'''\n" +
                 "\n" +
-                "== About fruits\n" +
+                "= About fruits\n" +
+                "\n" +
+                "== Orange\n" +
+                "\n" +
+                "== Apple\n" +
+                "\n" +
+                "== Orange\n" +
                 "\n" +
                 "Block before rule \n" +
                 "\n" +
@@ -95,6 +103,12 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 "\n" +
                 "NOTE: this is a note\n" +
                 "\n" +
+                "= About vegetables\n" +
+                "\n" +
+                "== Cabbage\n" +
+                "\n" +
+                "== Carrot\n" +
+                "\n" +
                 "Paragraph #2\n" +
                 "\n" +
                 "include::file1.adoc[]\n" +
@@ -127,19 +141,21 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 //        System.out.println(writer);
 
         //System.out.println("\r\nWITH NEW PEG\r\n");
-        StringWriter writer = new StringWriter();
+        //StringWriter writer = new StringWriter();
+        DocumentWriter writer = DocumentWriter.bufferedWriter();
         DefaultHtmlRenderer.withWriter(writer)
                            .withSourceResolver(name -> new StringReader(includedText))
                            .render(text);
         System.out.println(writer);
+        //writer.flush();
 
     }
 
-    private DefaultHtmlRenderer(Writer writer) {
+    private DefaultHtmlRenderer(DocumentWriter writer) {
         super(writer);
     }
 
-    public static DefaultHtmlRenderer withWriter(Writer writer) {
+    public static DefaultHtmlRenderer withWriter(DocumentWriter writer) {
         return new DefaultHtmlRenderer(writer);
     }
 
@@ -164,7 +180,76 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     private Deque<AuthorContext> authors;
 
     private boolean hasHeader;
-    private boolean hasPreamble;
+    private boolean contentStarted;
+
+    /* **********************************************/
+    // Post-processing
+    /* **********************************************/
+
+    @Override
+    public void postProcess(Toc toc) {
+        if (toc != null) {
+            Map<String, Integer> refs = new HashMap<>();
+
+            seekOnWriter("TOC").nl();
+
+            indent()
+              .append(DIV.start("id", "toc", "class", "toc2"))
+              .nl()
+              .incIndent()
+              .indent()
+              .append(DIV.start("id", "toctitle"))
+              .append(toc.getRoot().getTitle())
+              .append(DIV.end())
+              .nl()
+              .append(UL.start("class", "sectlevel0"))
+              .nl()
+              .forEach(toc.getRoot().getChildren(), item -> processTocItem(item, refs))
+              .append(UL.end())
+              .nl()
+              .decIndent()
+              .append(DIV.end())
+              .nl().nl()
+            ;
+
+        }
+    }
+
+    private void processTocItem(TocItem item, Map<String, Integer> refs) {
+        append(LI.start())
+          .append(A.start("href", tocTitleToRef(item.getTitle(), refs)))
+          .append(item.getTitle())
+          .append(A.end())
+          .runIf(item.getChildren().size() > 0, () ->
+              nl()
+                .append(UL.start("class", "sectlevel" + item.getLevel()))
+                .nl()
+                .forEach(item.getChildren(), ti -> processTocItem(ti, refs))
+                .append(UL.end())
+                .nl()
+                .append(LI.end())
+                .nl()
+          )
+        .runIf(item.getChildren().size() == 0, () ->
+          append(LI.end())
+            .nl()
+        )
+        ;
+    }
+
+    private String tocTitleToRef(String title, Map<String, Integer> refs) {
+        String ref = "#" + title.toLowerCase().replaceAll("\\s+", "_");
+        int count = refs.getOrDefault(ref, 0);
+        refs.put(ref, ++count);
+        if (count > 1) {
+            ref = ref + "_" + count;
+        }
+        return ref;
+    }
+
+    /* **********************************************/
+    // Text
+    /* **********************************************/
 
     @Override
     public void writeText(String text) {
@@ -220,14 +305,14 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .append(META.tag("name", "viewport", "content", "width=device-width, initial-scale=1.0"))
             .nl()
             .indent()
-            .append(META.tag("name", "generator", "content", "xxx"))
+            .append(META.tag("name", "generator", "content", "iodoc"))
             .nl()
             .bufferOn()
             .mark("authors")
             .indent()
             .append(LINK.tag("rel", "stylesheet", "href", "styles.css"))
             .nl()
-            .mark("text")
+            .mark("title")
             .append(HEAD.end())
             .nl()
             .decIndent()
@@ -258,17 +343,19 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     @Override
     public void endHeader() {
-        decIndent()
-            .indent()
-            .append(DIV.end())
-            .nl()
-            .moveTo("text")
-            .indent()
-            .append(TITLE.start())
-            .append(title)
-            .append(TITLE.end())
-            .nl()
-            .bufferOff();
+        moveTo("title")
+          .indent()
+          .append(TITLE.start())
+          .append(title)
+          .append(TITLE.end())
+          .nl()
+          .bufferOff()
+          .runIf(true, () -> markOnWriter("TOC"))
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl()
+        ;
 
         startContent();
     }
@@ -316,6 +403,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .append(META.tag("name", "author", "content", authors))
             .nl()
             .moveEnd();
+
     }
 
     @Override
@@ -369,8 +457,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     @Override
     public void startPreamble() {
-        hasPreamble = true;
-
         indent()
             .append(DIV.start("id", "preamble"))
             .incIndent()
@@ -388,12 +474,14 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     @Override
     public void startContent() {
         runIf(!hasHeader, () -> bufferOff())
-            .runIf(!hasPreamble, () ->
+            .runIf(!contentStarted, () ->
                 indent()
                 .append(DIV.start("id", "content"))
                 .incIndent()
                 .nl()
             );
+
+        contentStarted = true;
     }
 
     @Override
@@ -437,21 +525,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .append(HR.tag())
             .nl();
     }
-
-    /*
-    <div class="admonitionblock note">
-      <table>
-        <tr>
-          <td class="icon">
-            <div class="title">Note</div>
-          </td>
-          <td class="content">
-            une note
-          </td>
-        </tr>
-    </table>
-   </div>
-     */
 
     @Override
     public void startParagraph(String admonition) {
