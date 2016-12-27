@@ -448,7 +448,6 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
     public void sectionTitleValue(String text) {
-        //handler.writeText(text);
         textObjects.pop()
                 .setValue(text);
         textObjects.pop()
