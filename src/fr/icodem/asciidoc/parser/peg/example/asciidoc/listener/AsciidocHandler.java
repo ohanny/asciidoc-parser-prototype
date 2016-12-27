@@ -39,8 +39,7 @@ public interface AsciidocHandler {
     void startSection();
     void endSection();
 
-    void startSectionTitle(int level);
-    void endSectionTitle(int level);
+    void writeSectionTitle(int level, String title, String ref);
 
     void horizontalRule();
 

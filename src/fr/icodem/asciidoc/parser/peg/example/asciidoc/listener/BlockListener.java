@@ -249,7 +249,7 @@ public class BlockListener implements ParseTreeListener {
                 delegate.exitSection();
                 break;
             case "sectionTitle" :
-                delegate.exitSectionTitle(context);
+                delegate.exitSectionTitle();
                 break;
 
             // blocks

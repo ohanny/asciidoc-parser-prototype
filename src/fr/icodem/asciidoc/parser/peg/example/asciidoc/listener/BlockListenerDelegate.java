@@ -263,6 +263,21 @@ public class BlockListenerDelegate extends AbstractDelegate {
         }
     }
 
+    private SectionContext currentSection;
+    private static class SectionContext {
+        int level;
+        Text title;
+        Text ref;
+
+        static SectionContext of(int level, Text title, Text ref) {
+            SectionContext section = new SectionContext();
+            section.level = level;
+            section.title = title;
+            section.ref = ref;
+
+            return section;
+        }
+    }
 
     public BlockListenerDelegate(AsciidocHandler handler) {
         super();
@@ -422,26 +437,27 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void enterSectionTitle(NodeContext context) { // TODO créer section title context
         int level = min(context.getIntAttribute("eqs.count", -1), 6);
-        handler.startSectionTitle(level);
 
         Text text = Text.empty();
         Text ref = Text.empty();
         toc.addItem(level, text, ref);
         textObjects.push(ref);
         textObjects.push(text);
+
+        currentSection = SectionContext.of(level, text, ref);
     }
 
     public void sectionTitleValue(String text) {
-        handler.writeText(text);
+        //handler.writeText(text);
         textObjects.pop()
                 .setValue(text);
         textObjects.pop()
                 .setValue(textToRef(text));
     }
 
-    public void exitSectionTitle(NodeContext context) {
-        int level = min(context.getIntAttribute("eqs.count", -1), 6);
-        handler.endSectionTitle(level);
+    public void exitSectionTitle() {
+        handler.writeSectionTitle(currentSection.level, currentSection.title.getValue(), currentSection.ref.getValue());
+        currentSection = null;
     }
 
     // blocks methods

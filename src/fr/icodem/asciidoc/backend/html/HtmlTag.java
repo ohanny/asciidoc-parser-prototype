@@ -100,12 +100,12 @@ public enum HtmlTag {
             case TFOOT: return "<tfoot>";
             case TR: return "<tr>";
             case TD: return buildStartTag("td", attributes);
-            case H1: return "<h1>";
-            case H2: return "<h2>";
-            case H3: return "<h3>";
-            case H4: return "<h4>";
-            case H5: return "<h5>";
-            case H6: return "<h6>";
+            case H1: return buildStartTag("h1", attributes);
+            case H2: return buildStartTag("h2", attributes);
+            case H3: return buildStartTag("h3", attributes);
+            case H4: return buildStartTag("h4", attributes);
+            case H5: return buildStartTag("h5", attributes);
+            case H6: return buildStartTag("h6", attributes);
             case A: return buildStartTag("a", attributes);
             case SPAN: return buildStartTag("span", attributes);
             case STRONG: return "<strong>";

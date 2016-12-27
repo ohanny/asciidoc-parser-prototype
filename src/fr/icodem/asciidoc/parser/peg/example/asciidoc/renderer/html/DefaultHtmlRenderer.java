@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html;
 
+import fr.icodem.asciidoc.backend.html.HtmlTag;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.ImageMacro;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Toc;
@@ -515,14 +516,13 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
-    public void startSectionTitle(int level) {
-        indent().append(getTitleHeader(level).start());
-    }
-
-    @Override
-    public void endSectionTitle(int level) {
-        append(getTitleHeader(level).end())
-            .nl();
+    public void writeSectionTitle(int level, String title, String ref) {
+        HtmlTag titleHeader = getTitleHeader(level);
+        indent()
+          .append(titleHeader.start("id", ref))
+          .append(title)
+          .append(getTitleHeader(level).end())
+          .nl();
     }
 
     @Override
