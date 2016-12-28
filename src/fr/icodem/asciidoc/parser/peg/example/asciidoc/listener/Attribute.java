@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 public class Attribute {
     private Text name;
-    private Text text;
+    private Text value;
 
     public static Attribute of(String name, String value) {
         return new Attribute(name, value);
@@ -18,17 +18,17 @@ public class Attribute {
 
     private Attribute(String name, String value) {
         this.name = Text.of(name);
-        this.text = Text.of(value);
+        this.value = Text.of(value);
     }
 
-    private Attribute(String name, Text text) {
+    private Attribute(String name, Text value) {
         this.name = Text.of(name);
-        this.text = text;
+        this.value = value;
     }
 
-    private Attribute(Text name, Text text) {
+    private Attribute(Text name, Text value) {
         this.name = name;
-        this.text = text;
+        this.value = value;
     }
 
     public String getName() {
@@ -36,14 +36,14 @@ public class Attribute {
     }
 
     public Object getValue() {
-        return text.getValue();
+        return value.getValue();
     }
 
     @Override
     public String toString() {
         return "Attribute{" +
-                "name='" + name + '\'' +
-                ", value='" + text + '\'' +
+                "name=" + name +
+                ", value=" + value +
                 '}';
     }
 }

@@ -17,6 +17,7 @@ import static java.lang.Math.min;
 public class BlockListenerDelegate extends AbstractDelegate {
 
     private AsciidocHandler handler;
+    private AttributeEntries attributeEntries;
 
     private enum ListType {Ordered, Unordered}
     private static class ListContext {
@@ -279,9 +280,14 @@ public class BlockListenerDelegate extends AbstractDelegate {
         }
     }
 
+    private AttributeEntry currentAttributeEntry;
+
     public BlockListenerDelegate(AsciidocHandler handler) {
         super();
         this.handler = handler;
+        this.attributeEntries = AttributeEntries.newAttributeEntries();
+
+        this.handler.attributeEntries(attributeEntries);
     }
 
     private String textToRef(String text) {
@@ -292,6 +298,10 @@ public class BlockListenerDelegate extends AbstractDelegate {
             ref = ref + "_" + count;
         }
         return ref;
+    }
+
+    private AttributeEntry getAttributeEntry(String name) {
+        return attributeEntries.getAttribute(name);
     }
 
     public void postProcess() {
@@ -348,6 +358,34 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void blockTitleValue(String text) {// TODO not yet tested
         handler.writeText(text);
+    }
+
+    // attributes
+    public void enterAttributeEntry() {
+        currentAttributeEntry = AttributeEntry.empty();
+    }
+
+    public void attributeEntry(String delim) {
+        if (delim.contains("!")) {
+            currentAttributeEntry.setDisabled(true);
+        }
+    }
+
+    public void exitAttributeEntry() {
+        attributeEntries.addAttribute(currentAttributeEntry);
+        currentAttributeEntry = null;
+    }
+
+
+    public void attributeEntryName(String name) {
+        currentAttributeEntry.setName(name);
+    }
+
+    public void attributeEntryValuePart(String value) {
+        if (currentAttributeEntry.getValue() != null) {
+            value = currentAttributeEntry.getValue() + value;
+        }
+        currentAttributeEntry.setValue(value);
     }
 
 
@@ -420,7 +458,9 @@ public class BlockListenerDelegate extends AbstractDelegate {
     public void enterContent() {
         handler.startContent();
 
-        if (true) toc = TocContext.empty();
+        if (!getAttributeEntry("toc").isDisabled()) {
+            toc = TocContext.empty();
+        }
     }
 
     public void exitContent() {
@@ -435,16 +475,20 @@ public class BlockListenerDelegate extends AbstractDelegate {
         handler.endSection();
     }
 
-    public void enterSectionTitle(NodeContext context) { // TODO créer section title context
+    public void enterSectionTitle(NodeContext context) {
         int level = min(context.getIntAttribute("eqs.count", -1), 6);
 
         Text text = Text.empty();
         Text ref = Text.empty();
-        toc.addItem(level, text, ref);
         textObjects.push(ref);
         textObjects.push(text);
 
         currentSection = SectionContext.of(level, text, ref);
+
+
+        if (!getAttributeEntry("toc").isDisabled()) {
+            toc.addItem(level, text, ref);
+        }
     }
 
     public void sectionTitleValue(String text) {

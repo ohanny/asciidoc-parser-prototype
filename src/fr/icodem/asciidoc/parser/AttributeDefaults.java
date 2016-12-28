@@ -6,6 +6,7 @@ import fr.icodem.asciidoc.parser.elements.ElementFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public enum AttributeDefaults {
 
     Instance;

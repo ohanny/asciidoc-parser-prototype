@@ -1,9 +1,8 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html;
 
-import fr.icodem.asciidoc.parser.AttributeDefaults;
-import fr.icodem.asciidoc.parser.elements.AttributeEntry;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.BlockRules;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntries;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.BlockListener;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.SourceResolver;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.AsciidocRenderer;
@@ -13,8 +12,7 @@ import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
 import java.io.StringReader;
-import java.io.Writer;
-import java.util.*;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
@@ -23,19 +21,20 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
 
     private BlockRules rules = new BlockRules(); // TODO inject
 
-    protected Map<String, AttributeEntry> attributes;
+    //protected Map<String, AttributeEntry> attributes;
+    private AttributeEntries attributeEntries;
 
     private TextOutputter outputter;
 
     protected HtmlBaseRenderer(DocumentWriter writer) {
         this.outputter = new TextOutputter(writer);
 
-        List<AttributeEntry> attributes = new ArrayList<>();
+//        List<AttributeEntry> attributes = new ArrayList<>();
 
-        this.attributes = AttributeDefaults.Instance.getAttributes();
-        for (AttributeEntry att : attributes) {
-            this.attributes.put(att.getName(), att);
-        }
+//        this.attributes = AttributeDefaults.Instance.getAttributes();
+//        for (AttributeEntry att : attributes) {
+//            this.attributes.put(att.getName(), att);
+//        }
 
         rules.withFactory(defaultRulesFactory());
     }
@@ -53,14 +52,24 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
                 //.trace()
                 .parse(new StringReader(text), listener, null, null);
 
-        outputter.closeWriter();
-
         listener.postProcess();
+
+        outputter.closeWriter();
     }
 
-    protected String getAttributeValue(String key) {
-        return attributes.get(key).getValue();
+//    protected String getAttributeValue(String key) {
+//        return attributes.get(key).getValue();
+//    }
+
+    @Override
+    public void attributeEntries(AttributeEntries atts) { // TODO is this method useful in renderer ?
+        this.attributeEntries = atts;
     }
+
+    protected fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntry getAttributeEntry(String name) {
+        return attributeEntries.getAttribute(name);
+    }
+
 
     protected HtmlBaseRenderer append(String str) {
         outputter.append(str);
@@ -136,6 +145,11 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
 
     protected HtmlBaseRenderer seekOnWriter(String key) {
         outputter.seekOnWriter(key);
+        return this;
+    }
+
+    protected HtmlBaseRenderer endInsertOnWriter() {
+        outputter.endInsertOnWriter();
         return this;
     }
 }

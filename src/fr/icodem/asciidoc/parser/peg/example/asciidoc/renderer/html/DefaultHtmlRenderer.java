@@ -1,10 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html;
 
 import fr.icodem.asciidoc.backend.html.HtmlTag;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.ImageMacro;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Toc;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.TocItem;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
 
 import java.io.StringReader;
@@ -25,6 +22,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 //":fruit: kiwi\n" +
                 //":fruit2!:\n" +
                 //":!fruit3:\n" +
+                ":toc: right\n" +
                 "\n" +
                 "include::file1.adoc[]\n"  +
                 "\n" +
@@ -144,6 +142,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
         //System.out.println("\r\nWITH NEW PEG\r\n");
         //StringWriter writer = new StringWriter();
         DocumentWriter writer = DocumentWriter.bufferedWriter();
+//        DocumentWriter writer = DocumentWriter.fileWriter("test.html");
         DefaultHtmlRenderer.withWriter(writer)
                            .withSourceResolver(name -> new StringReader(includedText))
                            .render(text);
@@ -191,9 +190,16 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     public void postProcess(Toc toc) {
         if (toc != null) {
 
+            AttributeEntry tocAtt = getAttributeEntry("toc");
+
+            String tocClass = "toc";
+            if ("right".equals(tocAtt.getValue()) || "left".equals(tocAtt.getValue())) {
+                tocClass = "toc2";
+            }
+
             seekOnWriter("TOC")
               .indent()
-              .append(DIV.start("id", "toc", "class", "toc2"))
+              .append(DIV.start("id", "toc", "class", tocClass))
               .nl()
               .incIndent()
               .indent()
@@ -214,6 +220,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
               .indent()
               .append(DIV.end())
               .nl()
+              .endInsertOnWriter()
             ;
 
         }
@@ -298,6 +305,18 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     @Override
     public void startDocument() {
+        String bodyClass = getAttributeEntry("doctype").getValue();
+
+        AttributeEntry tocAtt = getAttributeEntry("toc");
+        if (!tocAtt.isDisabled()) {
+            if ("right".equals(tocAtt.getValue())) {
+                bodyClass += " toc2 toc-right";
+            }
+            else if ("left".equals(tocAtt.getValue())) {
+                bodyClass += " toc2 toc-left";
+            }
+        }
+
         append(DOCTYPE.tag())
             .nl()
             .append(HTML.start())
@@ -323,7 +342,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .append(HEAD.end())
             .nl()
             .decIndent()
-            .append(BODY.start("class", getAttributeValue("doctype")))
+            .append(BODY.start("class", bodyClass))
             .nl()
             .incIndent();
     }
@@ -639,19 +658,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .runIf(olType != null, () -> append(OL.start("class", olStyle, "type", olType)))
             .nl()
             .incIndent();
-
-
-
-
-        /*
-        indent().append(DIV.start("class", divStyles)).nl().incIndent()
-                .runIf(olType == null, () -> indent().append(OL.start("class", olStyle)).nl().incIndent())
-                .runIf(olType != null, () -> indent().append(OL.start("class", olStyle, "type", olType)).nl().incIndent())
-                .forEach(list.getItems(), this::addListItem)
-                .decIndent().indent().append(OL.end()).nl()
-                .decIndent().indent().append(DIV.end()).nl();
-                 */
-
     }
 
     @Override

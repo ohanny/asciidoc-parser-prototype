@@ -227,5 +227,10 @@ public class TextOutputter {
         }
     }
 
+    public void endInsertOnWriter() {
+        writer.endInsert();
+        indenter = rootIndenter;
+    }
+
 
 }

@@ -28,6 +28,18 @@ public class BlockListener implements ParseTreeListener {
         //}
 
         switch (context.getNodeName()) {
+            case "attributeEntry":
+                delegate.attributeEntry(new String(chars));
+                break;
+
+            case "attributeEntryName":
+                delegate.attributeEntryName(new String(chars));
+                break;
+
+            case "attributeValuePart":
+                delegate.attributeEntryValuePart(new String(chars));
+                break;
+
             case "documentTitleValue":
                 delegate.documentTitleValue(new String(chars));
                 break;
@@ -83,6 +95,9 @@ public class BlockListener implements ParseTreeListener {
         //System.out.println(context.getNodeName());
         switch (context.getNodeName()) {
             // attributes
+            case "attributeEntry" :
+               delegate.enterAttributeEntry();
+                break;
             case "attributeList" :
 //                enterAttributeList();
                 break;
@@ -100,9 +115,6 @@ public class BlockListener implements ParseTreeListener {
                 break;
             case "namedAttribute" :
                 delegate.enterNamedAttribute();
-                break;
-            case "attributeEntry" :
-//                enterAttributeEntry(context);
                 break;
 
             // macro
@@ -201,6 +213,9 @@ public class BlockListener implements ParseTreeListener {
     public void exitNode(NodeContext context) {
         switch (context.getNodeName()) {
             // attributes
+            case "attributeEntry" :
+                delegate.exitAttributeEntry();
+                break;
             case "attributeList" :
                 break;
             case "idName" :
@@ -213,8 +228,8 @@ public class BlockListener implements ParseTreeListener {
                 break;
             case "namedAttribute" :
                 break;
-            case "attributeEntry" :
-                break;
+//            case "attributeEntry" :
+//                break;
 
             // macro
             case "macro":

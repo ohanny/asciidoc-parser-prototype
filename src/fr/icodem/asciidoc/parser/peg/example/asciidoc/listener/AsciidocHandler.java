@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 public interface AsciidocHandler {
 
+    void attributeEntries(AttributeEntries atts);
     void postProcess(Toc toc);
 
     //
