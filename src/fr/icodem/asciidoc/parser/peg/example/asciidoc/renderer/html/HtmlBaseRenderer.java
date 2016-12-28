@@ -21,21 +21,12 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
 
     private BlockRules rules = new BlockRules(); // TODO inject
 
-    //protected Map<String, AttributeEntry> attributes;
     private AttributeEntries attributeEntries;
 
     private TextOutputter outputter;
 
     protected HtmlBaseRenderer(DocumentWriter writer) {
-        this.outputter = new TextOutputter(writer);
-
-//        List<AttributeEntry> attributes = new ArrayList<>();
-
-//        this.attributes = AttributeDefaults.Instance.getAttributes();
-//        for (AttributeEntry att : attributes) {
-//            this.attributes.put(att.getName(), att);
-//        }
-
+        outputter = new TextOutputter(writer);
         rules.withFactory(defaultRulesFactory());
     }
 
@@ -56,10 +47,6 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
 
         outputter.closeWriter();
     }
-
-//    protected String getAttributeValue(String key) {
-//        return attributes.get(key).getValue();
-//    }
 
     @Override
     public void attributeEntries(AttributeEntries atts) { // TODO is this method useful in renderer ?
