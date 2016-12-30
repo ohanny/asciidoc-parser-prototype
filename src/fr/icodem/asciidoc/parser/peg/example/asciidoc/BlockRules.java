@@ -130,7 +130,8 @@ public class BlockRules extends BaseRules {
 
     private Rule paragraph() {
         return node("paragraph", sequence(
-                testNot(sectionTitle()),
+                testNot(section()),
+//                testNot(sectionTitle()),
                 optional(admonition()),
                 oneOrMore(firstOf(
                     noneOf("= \t/+\r\n"),
@@ -206,26 +207,11 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule section() {
-        return node("section", sequence(
-                sectionTitle(),
-                zeroOrMore(firstOf(
-                        sequence(isCurrentCharNotEOI(), bl(false)),
-                        nl(),
-                        horizontalRule(),
-                        attributeEntry(),
-                        attributeList(),
-                        macro(),
-                        block(false)
-                ))
-        ));
-    }
-
-    private Rule sectionTitle() {
-        return node("sectionTitle",
+        return node("section",
                  sequence(
                    action(oneOrMore('='), this::exportLevelOnSection),
                    oneOrMore(blank()),
-                   sectionTitleValue(),
+                   sectionTitle(),
                    zeroOrMore(blank()),
                    firstOf(
                      newLine(),
@@ -236,24 +222,17 @@ public class BlockRules extends BaseRules {
         ;
     }
 
+    private Rule sectionTitle() {
+        return node("sectionTitle", title());
+    }
+
     private void exportLevelOnSection(ActionContext context) {
         int level = context.getIntAttribute("count", 0);
-        context.setAttributeOnParent("sectionTitle", "level", level);
         context.setAttributeOnParent("section", "level", level);
 
         context.exportAttributesToParentNode("eqs");
     }
 
-    private Rule sectionTitle1() {
-        return node("sectionTitle", sequence(
-                action(oneOrMore('='), ctx -> ctx.exportAttributesToParentNode("eqs")), oneOrMore(blank()), sectionTitleValue(),
-                zeroOrMore(blank()), firstOf(newLine(), eoi())
-        ));
-    }
-
-    private Rule sectionTitleValue() {
-        return node("sectionTitleValue", title());
-    }
 
     private Rule bl(boolean withEOI) {
         return wrap(setAttribute("withEOI", withEOI), bl());
@@ -337,7 +316,8 @@ public class BlockRules extends BaseRules {
 
     private Rule revisionInfo() {
         return node("revisionInfo", sequence(
-                testNot(firstOf(newLine(), sectionTitle())),
+                testNot(firstOf(newLine(), section())),
+//                testNot(firstOf(newLine(), sectionTitle())),
                 oneOrMore(firstOf(
                         noneOf("\r\n/"),
                         sequence(isNotStartOfComment(), ch('/')),

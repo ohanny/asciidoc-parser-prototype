@@ -21,11 +21,6 @@ public class BlockListener implements ParseTreeListener {
     @Override
     public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {// TODO recycle char tab => add offset + length (cf SAX)
         //System.out.println("CHARS => " + new String(chars));
-        //final Text text = textObjects.peek();
-        //text.offer(new String(chars));
-        //if (text instanceof Text.FormattedText) { // TODO remplacer par isFormattedText ?
-            //textProcessor.parse((Text.FormattedText) text);
-        //}
 
         switch (context.getNodeName()) {
             case "attributeEntry":
@@ -43,12 +38,11 @@ public class BlockListener implements ParseTreeListener {
             case "documentTitleValue":
                 delegate.documentTitleValue(new String(chars));
                 break;
-            case "sectionTitleValue":
-                delegate.sectionTitleValue(new String(chars));
+            case "sectionTitle":
+                delegate.sectionTitle(new String(chars));
                 break;
             case "blockTitleValue":
                 delegate.blockTitleValue(new String(chars));
-                //delegate.text(new String(chars));
                 break;
             case "paragraph":
             case "listItemValue":
@@ -154,9 +148,6 @@ public class BlockListener implements ParseTreeListener {
             case "section" :
                 delegate.enterSection(context);
                 break;
-            case "sectionTitle" :
-                delegate.enterSectionTitle(context);
-                break;
 
             // blocks
             case "horizontalRule":
@@ -192,22 +183,6 @@ public class BlockListener implements ParseTreeListener {
             case "tableCell" :
                 delegate.enterTableCell(context.getIntAttribute("lineNumber", -1));
                 break;
-
-            case "title" :
-//                enterTitle();
-                break;
-//                enterDocumentTitle();
-
-
-            case "block" :
-//                enterBlock(context.getBooleanAttribute("fromList", false));
-                break;
-            case "nl" :
-            case "bl" :
-            case "listContinuation" :
-//                textObjects.push(Text.dummy());
-                break;
-
         }
 
     }
@@ -219,20 +194,6 @@ public class BlockListener implements ParseTreeListener {
             case "attributeEntry" :
                 delegate.exitAttributeEntry();
                 break;
-            case "attributeList" :
-                break;
-            case "idName" :
-                break;
-            case "roleName" :
-                break;
-            case "optionName" :
-                break;
-            case "positionalAttribute" :
-                break;
-            case "namedAttribute" :
-                break;
-//            case "attributeEntry" :
-//                break;
 
             // macro
             case "macro":
@@ -252,9 +213,6 @@ public class BlockListener implements ParseTreeListener {
             case "authors" :
                 delegate.exitAuthors();
                 break;
-            case "author" :
-                delegate.exitAuthor();
-                break;
             case "preamble" :
                 delegate.exitPreamble();
                 break;
@@ -262,12 +220,6 @@ public class BlockListener implements ParseTreeListener {
             // content and sections
             case "content" :
                 delegate.exitContent();
-                break;
-            case "section" :
-                delegate.exitSection(context);
-                break;
-            case "sectionTitle" :
-                delegate.exitSectionTitle();
                 break;
 
             // blocks
@@ -301,16 +253,6 @@ public class BlockListener implements ParseTreeListener {
             case "tableCell" :
                 delegate.exitTableCell();
                 break;
-
-
-            case "listContinuation" :
-                break;
-
-            case "nl" :
-            case "bl" :
-            case "title" :
-                break;
-
         }
     }
 

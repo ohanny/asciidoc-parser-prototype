@@ -130,7 +130,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]\n",
 
                 /* expected */
-                "(document (content (section (sectionTitle = =   (sectionTitleValue S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] \\n))) (bl <EOI>))"
+                "(document (content (section = =   (sectionTitle S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -141,7 +141,7 @@ public class AttributeListTest extends GrammarTest {
                 "[att1,att2=value2]",
 
                 /* expected */
-                "(document (content (section (sectionTitle = =   (sectionTitleValue S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] <EOI>))))"
+                "(document (content (section = =   (sectionTitle S e c t i o n) \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] <EOI>)))"
             },
             {
                 /* message */
@@ -154,7 +154,7 @@ public class AttributeListTest extends GrammarTest {
                 "A paragraph",
 
                 /* expected */
-                "(document (content (section (sectionTitle = =   (sectionTitleValue S e c t i o n) \\n) (bl \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] \\n) (block (paragraph A   p a r a g r a p h <EOI>)))))"
+                "(document (content (section = =   (sectionTitle S e c t i o n) \\n) (bl \\n) (attributeList [ (positionalAttribute (attributeValue a t t 1)) , (namedAttribute (attributeName a t t 2) = (attributeValue v a l u e 2)) ] \\n) (block (paragraph A   p a r a g r a p h <EOI>))))"
             },
             {
                 /* message */

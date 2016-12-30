@@ -43,7 +43,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n)) (content (section (sectionTitle = =   (sectionTitleValue F i r s t   S e c t i o n) \\n))) (bl <EOI>))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n)) (content (section = =   (sectionTitle F i r s t   S e c t i o n) \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -56,7 +56,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))) (bl \\n) (content (section (sectionTitle = =   (sectionTitleValue F i r s t   S e c t i o n) \\n))) (bl <EOI>))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))) (bl \\n) (content (section = =   (sectionTitle F i r s t   S e c t i o n) \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -68,7 +68,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "YYY",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (content (section (sectionTitle = =   (sectionTitleValue F i r s t   S e c t i o n) \\n) (block (paragraph Y Y Y <EOI>)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (content (section = =   (sectionTitle F i r s t   S e c t i o n) \\n) (block (paragraph Y Y Y <EOI>))))"
             },
             {
                 /* message */
@@ -82,7 +82,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n)) (content (section (sectionTitle = =   (sectionTitleValue F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Y Y Y <EOI>)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n)) (content (section = =   (sectionTitle F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Y Y Y <EOI>))))"
             },
             {
                 /* message */
@@ -96,7 +96,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n)) (content (section (sectionTitle = =   (sectionTitleValue F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Y Y Y) (nl \\n)))) (bl <EOI>))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n)) (content (section = =   (sectionTitle F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Y Y Y) (nl \\n))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -111,7 +111,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nZZZ",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n) (block (paragraph Y Y Y) (nl \\n)) (bl \\n)) (content (section (sectionTitle = =   (sectionTitleValue F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z <EOI>)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n) (block (paragraph Y Y Y) (nl \\n)) (bl \\n)) (content (section = =   (sectionTitle F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z <EOI>))))"
             },
             {
                 /* message */
@@ -126,7 +126,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n)) (content (section (sectionTitle = =   (sectionTitleValue F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y <EOI>)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n)) (content (section = =   (sectionTitle F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y <EOI>))))"
             },
             {
                 /* message */
@@ -142,7 +142,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n) (block (paragraph W W W) (nl \\n)) (bl \\n)) (content (section (sectionTitle = =   (sectionTitleValue F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y <EOI>)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n)) (bl \\n) (block (paragraph W W W) (nl \\n)) (bl \\n)) (content (section = =   (sectionTitle F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y <EOI>))))"
             },
             {
                 /* message */
@@ -158,7 +158,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "\nYYY",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))) (bl \\n) (preamble (block (paragraph W W W) (nl \\n)) (bl \\n)) (content (section (sectionTitle = =   (sectionTitleValue F i r s t   S e c t i o n) \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y <EOI>)))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))) (bl \\n) (preamble (block (paragraph W W W) (nl \\n)) (bl \\n)) (content (section = =   (sectionTitle F i r s t   S e c t i o n) \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y <EOI>))))"
             },
             {
                 /* message */
@@ -174,7 +174,7 @@ public class HeaderAndOneSectionWithContentTest extends GrammarTest {
                 "* Mandarine",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))) (bl \\n) (content (section (sectionTitle = =   (sectionTitleValue F i r s t   S e c t i o n) \\n) (block (list (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) <EOI>))))))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))) (bl \\n) (content (section = =   (sectionTitle F i r s t   S e c t i o n) \\n) (block (list (listItem *   (listItemValue L e m o n) \\n) (listItem *   (listItemValue C h e r r y) \\n) (listItem *   (listItemValue M a n d a r i n e) <EOI>)))))"
             }
 
         });

@@ -257,8 +257,8 @@ public class BlockListenerDelegate extends AbstractDelegate {
             return toc;
         }
 
-        void addItem(int level, Text text, Text ref) {
-            this.currentItem.next = TocItemContext.of(level, text, ref);
+        void addItem(int level, String text, String ref) {
+            this.currentItem.next = TocItemContext.of(level, Text.of(text), Text.of(ref));
             this.currentItem.next.previous = this.currentItem;
             this.currentItem = this.currentItem.next;
         }
@@ -282,18 +282,28 @@ public class BlockListenerDelegate extends AbstractDelegate {
         }
     }
 
+    private SectionContext firstSection;
     private SectionContext currentSection;
     private static class SectionContext {
         int level;
-        Text title;
-        Text ref;
+        String title;
+        String ref;
 
-        static SectionContext of(int level, Text title, Text ref) {
+        SectionContext next;
+        SectionContext previous;
+        SectionContext parent;
+
+        static SectionContext of(int level) {
             SectionContext section = new SectionContext();
             section.level = level;
-            section.title = title;
-            section.ref = ref;
+            return section;
+        }
 
+        static SectionContext of(int level, SectionContext previous, SectionContext parent) {
+            SectionContext section = new SectionContext();
+            section.level = level;
+            section.previous = previous;
+            section.parent = parent;
             return section;
         }
     }
@@ -427,6 +437,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
     public void exitDocument() {
+        checkExitSection(-1);
         handler.endDocument();
     }
 
@@ -453,11 +464,9 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void enterAuthors() {
         authors = new LinkedList<>();
-        //handler.startAuthors();
     }
 
     public void exitAuthors() {
-        //handler.endAuthors();
         List<Author> authors = this.authors
                 .stream()
                 .map(a -> Author.of(a.position, a.name, a.address, a.addressLabel))
@@ -467,52 +476,18 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void enterAuthor() {
         authors.add(AuthorContext.withPosition(authors.size() + 1));
-        //handler.startAuthor();
     }
 
     public void authorName(String name) {
-        //handler.writeAuthorName(name);
         authors.peekLast().name = name;
     }
 
     public void authorAddress(String address) {
-        //handler.writeAuthorAddress(address);
         authors.peekLast().address = address;
     }
 
     public void authorAddressLabel(String label) {
-        //handler.writeAuthorAddressLabel(label);
         authors.peekLast().addressLabel = label;
-    }
-
-    public void exitAuthor() {
-//        handler.endAuthor();
-//        AuthorContext author = authors.peekLast();
-//        String index = author.position == 1?"":"" + author.position;
-//
-//        indent()
-//                .append(SPAN.start("id", "author" + index, "class", "author"))
-//                .append(SPAN.end())
-//                .append(BR.tag())
-//                .nl()
-//                .runIf(author.address != null, () -> {
-//                    String href = author.address;
-//                    if (!(href.startsWith("http://") || href.startsWith("https://"))) {
-//                        href = "mailto:" + href;
-//                    }
-//
-//                    String label = author.addressLabel != null ? author.addressLabel : author.address;
-//
-//                    indent()
-//                            .append(SPAN.start("id", "email" + index, "class", "email"))
-//                            .append(A.start("href", href))
-//                            .append(label)
-//                            .append(A.end())
-//                            .append(SPAN.end())
-//                            .append(BR.tag())
-//                            .nl();
-//                });
-
     }
 
     public void enterPreamble() {
@@ -539,44 +514,68 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void enterSection(NodeContext context) {
         int level = min(context.getIntAttribute("level", -1), 6);
+
+        // new section
+        if (firstSection != null) {
+            // close parents and get new section parent
+            SectionContext parent = checkExitSection(level);
+
+            SectionContext previous = currentSection;
+            currentSection = SectionContext.of(level, previous, parent);
+            previous.next = currentSection;
+        } else {
+            firstSection = SectionContext.of(level);
+            currentSection = firstSection;
+        }
+
         handler.startSection(level);
     }
 
-    public void exitSection(NodeContext context) {
-        int level = min(context.getIntAttribute("level", -1), 6);
-        handler.endSection(level);
-    }
-
-    public void enterSectionTitle(NodeContext context) {
-        int level = min(context.getIntAttribute("eqs.count", -1), 6);
-        //int level = min(context.getIntAttribute("level", -1), 6);
-
-        System.out.println("LEVEL:"+level + " / " + min(context.getIntAttribute("level", -1), 6));
-
-        Text text = Text.empty();
-        Text ref = Text.empty();
-        textObjects.push(ref);
-        textObjects.push(text);
-
-        currentSection = SectionContext.of(level, text, ref);
-
-
+    public void sectionTitle(String title) {
+        currentSection.title = title;
+        currentSection.ref = textToRef(title);
+        int level = currentSection.level;
+        String ref = currentSection.ref;
         if (!getAttributeEntry("toc").isDisabled()) {
-            toc.addItem(level, text, ref);
+            toc.addItem(level, title, ref);
         }
+        handler.writeSectionTitle(level, title, ref);
     }
 
-    public void sectionTitleValue(String text) {
-        textObjects.pop()
-                .setValue(text);
-        textObjects.pop()
-                .setValue(textToRef(text));
+
+    /**
+     *
+     * @param newSectionLevel new section level; -1 if not a new section, but the end of document
+     * @return the parent level
+     */
+    private SectionContext checkExitSection(int newSectionLevel) {
+        SectionContext parent = null;
+        if (newSectionLevel == currentSection.level) {
+            handler.endSection(currentSection.level);
+            parent = currentSection.parent;
+        } else if (newSectionLevel < currentSection.level) {
+            handler.endSection(currentSection.level);
+            SectionContext p = currentSection.parent;
+            while (p != null) {
+                if (p.level > newSectionLevel) {
+                    handler.endSection(p.level);
+                    p = p.parent;
+                } else if (p.level == newSectionLevel) {
+                    handler.endSection(p.level);
+                    parent = p.parent;
+                    break;
+                } else {
+                    parent = p;
+                    break;
+                }
+            }
+        } else {
+            parent = currentSection;
+        }
+
+        return parent;
     }
 
-    public void exitSectionTitle() {
-        handler.writeSectionTitle(currentSection.level, currentSection.title.getValue(), currentSection.ref.getValue());
-        currentSection = null;
-    }
 
     // blocks methods
     public void horizontalRule() {
