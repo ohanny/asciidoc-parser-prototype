@@ -40,8 +40,8 @@ public interface AsciidocHandler {
     void startContent();
     void endContent();
 
-    void startSection();
-    void endSection();
+    void startSection(int level);
+    void endSection(int level);
 
     void writeSectionTitle(int level, String title, String ref);
 

@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc;
 
 import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.Chars;
+import fr.icodem.asciidoc.parser.peg.action.ActionContext;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.SourceResolver;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
@@ -220,6 +221,30 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule sectionTitle() {
+        return node("sectionTitle",
+                 sequence(
+                   action(oneOrMore('='), this::exportLevelOnSection),
+                   oneOrMore(blank()),
+                   sectionTitleValue(),
+                   zeroOrMore(blank()),
+                   firstOf(
+                     newLine(),
+                     eoi()
+                   )
+                 )
+               )
+        ;
+    }
+
+    private void exportLevelOnSection(ActionContext context) {
+        int level = context.getIntAttribute("count", 0);
+        context.setAttributeOnParent("sectionTitle", "level", level);
+        context.setAttributeOnParent("section", "level", level);
+
+        context.exportAttributesToParentNode("eqs");
+    }
+
+    private Rule sectionTitle1() {
         return node("sectionTitle", sequence(
                 action(oneOrMore('='), ctx -> ctx.exportAttributesToParentNode("eqs")), oneOrMore(blank()), sectionTitleValue(),
                 zeroOrMore(blank()), firstOf(newLine(), eoi())

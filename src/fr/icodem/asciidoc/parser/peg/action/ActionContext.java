@@ -37,6 +37,10 @@ public class ActionContext {
         return parent != null?context.getStringAttribute(name, defaultValue):defaultValue;
     }
 
+    public int getIntAttribute(String name, int defaultValue) {
+        return delegateContext.getIntAttribute(name, defaultValue);
+    }
+
     public void exportAttributesToParentNode(String prefix) {
         String realPrefix = (prefix == null || prefix.isEmpty())?"":prefix + ".";
         MatcherContext parentContext = context.findParentContextNode();

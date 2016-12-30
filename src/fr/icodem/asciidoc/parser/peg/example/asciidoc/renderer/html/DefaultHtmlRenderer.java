@@ -334,18 +334,18 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
-    public void startSection() {
+    public void startSection(int level) {
         indent()
-            .append(SECTION.start())
+            .append(DIV.start("class", "sect" + level))
             .nl()
             .incIndent();
     }
 
     @Override
-    public void endSection() {
+    public void endSection(int level) {
         decIndent()
             .indent()
-            .append(SECTION.end())
+            .append(DIV.end())
             .nl();
     }
 
@@ -358,6 +358,75 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
           .append(getTitleHeader(level).end())
           .nl();
     }
+
+    /*
+<div class="sect1">
+  <h2 id="_par1">Par1</h2>
+  <div class="sectionbody">
+
+  </div>
+</div>
+
+<div class="sect1">
+  <h2 id="_par2">Par2</h2>
+  <div class="sectionbody">
+      <div class="sect2">
+          <h3 id="_par_2_1">Par 2.1</h3>
+          <div class="paragraph">
+            <p>xxx</p>
+          </div>
+      </div>
+
+      <div class="sect2">
+        <h3 id="_par_2_2">Par 2.2</h3>
+        <div class="paragraph">
+          <p>xxx</p>
+        </div>
+
+        <div class="sect3">
+            <h4 id="_par_2_2_1">Par 2.2.1</h4>
+            <div class="paragraph">
+                <p>xxx</p>
+            </div>
+        </div>
+
+        <div class="sect3">
+            <h4 id="_par_2_2_2">Par 2.2.2</h4>
+            <div class="paragraph">
+                <p>xxx</p>
+            </div>
+            <div class="paragraph">
+                <p>La fin</p>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>
+</div>
+
+= My Doc
+
+== Par1
+
+== Par2
+
+=== Par 2.1
+
+xxx
+
+=== Par 2.2
+
+xxx
+
+==== Par 2.2.1
+
+xxx
+
+==== Par 2.2.2
+
+xxx
+
+     */
 
     @Override
     public void horizontalRule() {
@@ -809,7 +878,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
           .nl();
     }
 
-/* **********************************************/
+    /* **********************************************/
     // Inline text
     /* **********************************************/
 

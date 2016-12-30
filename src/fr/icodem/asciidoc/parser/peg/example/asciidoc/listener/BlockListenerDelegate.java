@@ -537,16 +537,21 @@ public class BlockListenerDelegate extends AbstractDelegate {
         handler.endContent();
     }
 
-    public void enterSection() {
-        handler.startSection();
+    public void enterSection(NodeContext context) {
+        int level = min(context.getIntAttribute("level", -1), 6);
+        handler.startSection(level);
     }
 
-    public void exitSection() {
-        handler.endSection();
+    public void exitSection(NodeContext context) {
+        int level = min(context.getIntAttribute("level", -1), 6);
+        handler.endSection(level);
     }
 
     public void enterSectionTitle(NodeContext context) {
         int level = min(context.getIntAttribute("eqs.count", -1), 6);
+        //int level = min(context.getIntAttribute("level", -1), 6);
+
+        System.out.println("LEVEL:"+level + " / " + min(context.getIntAttribute("level", -1), 6));
 
         Text text = Text.empty();
         Text ref = Text.empty();
