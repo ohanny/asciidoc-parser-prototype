@@ -504,6 +504,8 @@ public class BlockListenerDelegate extends AbstractDelegate {
      * @return the parent level
      */
     private SectionContext checkExitSection(int newSectionLevel) {
+        if (currentSection == null) return null;
+
         SectionContext parent = null;
         if (newSectionLevel == currentSection.level) {
             handler.endSection(currentSection.level);
