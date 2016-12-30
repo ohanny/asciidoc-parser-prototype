@@ -98,6 +98,8 @@ public class Main {
                         "\n" +
                         "== Carrot\n" +
                         "\n" +
+                        "=== Red Carrot\n" +
+                        "\n" +
                         "Paragraph #2\n" +
                         "\n" +
                         "include::file1.adoc[]\n" +

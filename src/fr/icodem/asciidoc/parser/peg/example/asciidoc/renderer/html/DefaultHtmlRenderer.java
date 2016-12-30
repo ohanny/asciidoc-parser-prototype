@@ -334,16 +334,22 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
-    public void startSection(int level) {
+    public void startSection(int level) { // TODO case level = 0 should generate an error (not a book document, but article) ?
         indent()
-            .append(DIV.start("class", "sect" + level))
-            .nl()
-            .incIndent();
+          .append(DIV.start("class", "sect" + (level - 1)))
+          .nl()
+          .incIndent();
     }
 
     @Override
     public void endSection(int level) {
-        decIndent()
+        runIf(level == 2, () ->
+          decIndent()
+            .indent()
+            .append(DIV.end())
+            .nl()
+        )
+        .decIndent()
             .indent()
             .append(DIV.end())
             .nl();
@@ -356,77 +362,14 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
           .append(titleHeader.start("id", ref))
           .append(title)
           .append(getTitleHeader(level).end())
-          .nl();
+          .nl()
+          .runIf(level == 2, () ->
+            indent()
+              .append(DIV.start("class", "sectionbody"))
+              .nl()
+              .incIndent()
+        );
     }
-
-    /*
-<div class="sect1">
-  <h2 id="_par1">Par1</h2>
-  <div class="sectionbody">
-
-  </div>
-</div>
-
-<div class="sect1">
-  <h2 id="_par2">Par2</h2>
-  <div class="sectionbody">
-      <div class="sect2">
-          <h3 id="_par_2_1">Par 2.1</h3>
-          <div class="paragraph">
-            <p>xxx</p>
-          </div>
-      </div>
-
-      <div class="sect2">
-        <h3 id="_par_2_2">Par 2.2</h3>
-        <div class="paragraph">
-          <p>xxx</p>
-        </div>
-
-        <div class="sect3">
-            <h4 id="_par_2_2_1">Par 2.2.1</h4>
-            <div class="paragraph">
-                <p>xxx</p>
-            </div>
-        </div>
-
-        <div class="sect3">
-            <h4 id="_par_2_2_2">Par 2.2.2</h4>
-            <div class="paragraph">
-                <p>xxx</p>
-            </div>
-            <div class="paragraph">
-                <p>La fin</p>
-            </div>
-        </div>
-      </div>
-  </div>
-</div>
-</div>
-
-= My Doc
-
-== Par1
-
-== Par2
-
-=== Par 2.1
-
-xxx
-
-=== Par 2.2
-
-xxx
-
-==== Par 2.2.1
-
-xxx
-
-==== Par 2.2.2
-
-xxx
-
-     */
 
     @Override
     public void horizontalRule() {
