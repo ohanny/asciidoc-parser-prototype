@@ -10,7 +10,7 @@ import spock.lang.Specification
 class HtmlRendererSpecification extends Specification {
 
     Document transform(String input) {
-        transform(input, Collections.emptyList());
+        transform(input, Collections.emptyList())
     }
 
     Document transform(String input, List<AttributeEntry> attributes) {

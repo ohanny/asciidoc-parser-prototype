@@ -39,7 +39,7 @@ public class SingleCommentTest extends GrammarTest {
                 "// this is a comment",
 
                 /* expected */
-                "(document (singleComment / /   t h i s   i s   a   c o m m e n t <EOF>))"
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t <EOI>))"
             },
             {
                 /* message */
@@ -49,7 +49,7 @@ public class SingleCommentTest extends GrammarTest {
                 "// this is a comment\n",
 
                 /* expected */
-                "(document (singleComment / /   t h i s   i s   a   c o m m e n t \\n) (bl <EOF>))"
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t \\n) (bl <EOI>))"
             },            {
                 /* message */
                 "a line comment without space after '//' ",
@@ -58,7 +58,7 @@ public class SingleCommentTest extends GrammarTest {
                 "//this is a comment",
 
                 /* expected */
-                "(document (singleComment / / t h i s   i s   a   c o m m e n t <EOF>))"
+                "(document (singleComment / / t h i s   i s   a   c o m m e n t <EOI>))"
             },
             {
                 /* message */
@@ -70,7 +70,7 @@ public class SingleCommentTest extends GrammarTest {
                 "// comment 3",
 
                 /* expected */
-                "(document (singleComment / /   c o m m e n t   1 \\n) (singleComment / /   c o m m e n t   2 \\n) (singleComment / /   c o m m e n t   3 <EOF>))"
+                "(document (singleComment / /   c o m m e n t   1 \\n) (singleComment / /   c o m m e n t   2 \\n) (singleComment / /   c o m m e n t   3 <EOI>))"
             },
             {
                 /* message */
@@ -80,7 +80,7 @@ public class SingleCommentTest extends GrammarTest {
                 "// this is a comment // is it ok ?",
 
                 /* expected */
-                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   / /   i s   i t   o k   ? <EOF>))"
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   / /   i s   i t   o k   ? <EOI>))"
             },
             {
                 /* message */
@@ -90,7 +90,7 @@ public class SingleCommentTest extends GrammarTest {
                 "// this is a comment with [ and [[ is it ok ?",
 
                 /* expected */
-                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   [   a n d   [ [   i s   i t   o k   ? <EOF>))"
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   [   a n d   [ [   i s   i t   o k   ? <EOI>))"
             },
             {
                 /* message */
@@ -100,7 +100,7 @@ public class SingleCommentTest extends GrammarTest {
                 "// this is a comment with ] and ]] is it ok ?",
 
                 /* expected */
-                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   ]   a n d   ] ]   i s   i t   o k   ? <EOF>))"
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   ]   a n d   ] ]   i s   i t   o k   ? <EOI>))"
             },
             {
                 /* message */
@@ -110,7 +110,7 @@ public class SingleCommentTest extends GrammarTest {
                 "// this is a comment with [hello] is it ok ?",
 
                 /* expected */
-                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   [ h e l l o ]   i s   i t   o k   ? <EOF>))"
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   [ h e l l o ]   i s   i t   o k   ? <EOI>))"
             },
             {
                 /* message */
@@ -120,7 +120,7 @@ public class SingleCommentTest extends GrammarTest {
                 "// this is a comment with [[hello]] is it ok ?",
 
                 /* expected */
-                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   [ [ h e l l o ] ]   i s   i t   o k   ? <EOF>))"
+                "(document (singleComment / /   t h i s   i s   a   c o m m e n t   w i t h   [ [ h e l l o ] ]   i s   i t   o k   ? <EOI>))"
             }
 
         });

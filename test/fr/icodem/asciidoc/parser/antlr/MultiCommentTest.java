@@ -41,7 +41,7 @@ public class MultiCommentTest extends GrammarTest {
                 "////\n",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t \\n (multiCommentDelimiter / / / / \\n)) (bl <EOF>))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t \\n (multiCommentDelimiter / / / / \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -53,7 +53,7 @@ public class MultiCommentTest extends GrammarTest {
                 "////",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t \\n (multiCommentDelimiter / / / / <EOF>)))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t \\n (multiCommentDelimiter / / / / <EOI>)))"
             },
             {
                 /* message */
@@ -67,7 +67,7 @@ public class MultiCommentTest extends GrammarTest {
                 "////\n",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) F i r s t   l i n e \\n S e c o n d   l i n e \\n T h i r d   l i n e \\n (multiCommentDelimiter / / / / \\n)) (bl <EOF>))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) F i r s t   l i n e \\n S e c o n d   l i n e \\n T h i r d   l i n e \\n (multiCommentDelimiter / / / / \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -80,7 +80,7 @@ public class MultiCommentTest extends GrammarTest {
                 "////",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t . . . \\n . . . o n   t w o   l i n e s \\n (multiCommentDelimiter / / / / <EOF>)))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t . . . \\n . . . o n   t w o   l i n e s \\n (multiCommentDelimiter / / / / <EOI>)))"
             },
             {
                 /* message */
@@ -95,7 +95,7 @@ public class MultiCommentTest extends GrammarTest {
                 "////",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   1 \\n (multiCommentDelimiter / / / / \\n)) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   2 \\n (multiCommentDelimiter / / / / <EOF>)))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   1 \\n (multiCommentDelimiter / / / / \\n)) (multiComment (multiCommentDelimiter / / / / \\n) c o m m e n t   2 \\n (multiCommentDelimiter / / / / <EOI>)))"
             },
             {
                 /* message */
@@ -108,7 +108,7 @@ public class MultiCommentTest extends GrammarTest {
                 "////\n",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   / /   a n d   / / /   . . . \\n a n d   / / /   a n d   / / / /   a n d   t h a t ' s   a l l \\n (multiCommentDelimiter / / / / \\n)) (bl <EOF>))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   / /   a n d   / / /   . . . \\n a n d   / / /   a n d   / / / /   a n d   t h a t ' s   a l l \\n (multiCommentDelimiter / / / / \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -123,7 +123,7 @@ public class MultiCommentTest extends GrammarTest {
                 "////\n",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) /   o n e   l e a d i n g   s l a s h \\n / /   t w o   l e a d i n g   s l a s h e s \\n / / /   t h r e e   l e a d i n g   s l a s h e s \\n / / / /   f o u r   l e a d i n g   s l a s h e s \\n (multiCommentDelimiter / / / / \\n)) (bl <EOF>))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) /   o n e   l e a d i n g   s l a s h \\n / /   t w o   l e a d i n g   s l a s h e s \\n / / /   t h r e e   l e a d i n g   s l a s h e s \\n / / / /   f o u r   l e a d i n g   s l a s h e s \\n (multiCommentDelimiter / / / / \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -135,7 +135,7 @@ public class MultiCommentTest extends GrammarTest {
                 "////\n",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   [   a n d   [ [   . . . \\n (multiCommentDelimiter / / / / \\n)) (bl <EOF>))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   [   a n d   [ [   . . . \\n (multiCommentDelimiter / / / / \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -147,7 +147,7 @@ public class MultiCommentTest extends GrammarTest {
                 "////\n",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   ]   a n d   ] ]   . . . \\n (multiCommentDelimiter / / / / \\n)) (bl <EOF>))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   ]   a n d   ] ]   . . . \\n (multiCommentDelimiter / / / / \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -159,7 +159,7 @@ public class MultiCommentTest extends GrammarTest {
                 "////\n",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   [ h e l l o ]   . . . \\n (multiCommentDelimiter / / / / \\n)) (bl <EOF>))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   [ h e l l o ]   . . . \\n (multiCommentDelimiter / / / / \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -171,7 +171,7 @@ public class MultiCommentTest extends GrammarTest {
                 "////\n",
 
                 /* expected */
-                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   [ [ h e l l o ] ]   . . . \\n (multiCommentDelimiter / / / / \\n)) (bl <EOF>))"
+                "(document (multiComment (multiCommentDelimiter / / / / \\n) T h i s   i s   a   c o m m e n t   w i t h   [ [ h e l l o ] ]   . . . \\n (multiCommentDelimiter / / / / \\n)) (bl <EOI>))"
             }
         });
 

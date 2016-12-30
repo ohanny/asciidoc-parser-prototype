@@ -258,7 +258,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .append(LI.end())
             .nl()
         )
-        ;
+      ;
     }
 
     /* **********************************************/

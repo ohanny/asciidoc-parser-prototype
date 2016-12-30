@@ -12,7 +12,7 @@ class AdmonitionSpec extends BlockSpecification {
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(document (content (block (paragraph (admonition N O T E :  ) T h i s   i s   a   n o t e . <EOF>))))";
+        result.tree == "(document (content (block (paragraph (admonition N O T E :  ) T h i s   i s   a   n o t e . <EOI>))))";
     }
 
     def "tip admonition"() {
@@ -23,7 +23,7 @@ class AdmonitionSpec extends BlockSpecification {
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(document (content (block (paragraph (admonition T I P :  ) T h i s   i s   a   t i p . <EOF>))))";
+        result.tree == "(document (content (block (paragraph (admonition T I P :  ) T h i s   i s   a   t i p . <EOI>))))";
     }
 
     def "important admonition"() {
@@ -34,7 +34,7 @@ class AdmonitionSpec extends BlockSpecification {
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(document (content (block (paragraph (admonition I M P O R T A N T :  ) T h i s   i s   i m p o r t a n t . <EOF>))))";
+        result.tree == "(document (content (block (paragraph (admonition I M P O R T A N T :  ) T h i s   i s   i m p o r t a n t . <EOI>))))";
     }
 
     def "caution admonition"() {
@@ -45,7 +45,7 @@ class AdmonitionSpec extends BlockSpecification {
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(document (content (block (paragraph (admonition C A U T I O N :  ) D o   t h i s   w i t h   c a u t i o n . <EOF>))))";
+        result.tree == "(document (content (block (paragraph (admonition C A U T I O N :  ) D o   t h i s   w i t h   c a u t i o n . <EOI>))))";
     }
 
     def "warning admonition"() {
@@ -56,7 +56,7 @@ class AdmonitionSpec extends BlockSpecification {
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(document (content (block (paragraph (admonition W A R N I N G :  ) T h i s   i s   a   w a r n i n g . <EOF>))))";
+        result.tree == "(document (content (block (paragraph (admonition W A R N I N G :  ) T h i s   i s   a   w a r n i n g . <EOI>))))";
     }
 
 }

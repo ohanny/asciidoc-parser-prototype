@@ -40,7 +40,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))) (bl <EOF>))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -73,7 +73,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe <jd@mail.com>\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m)))) (bl <EOF>))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m)))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -106,7 +106,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe; Janie Roe\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)) (author (authorName J a n i e   R o e)))) (bl <EOF>))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e)) (author (authorName J a n i e   R o e)))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -117,7 +117,7 @@ public class AuthorLineTest extends GrammarTest {
                 "John Doe <jd@mail.com>; Janie Roe <janie@mail.com>\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m)) (author (authorName J a n i e   R o e) (authorAddress j a n i e @ m a i l . c o m)))) (bl <EOF>))"
+                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e) (authorAddress j d @ m a i l . c o m)) (author (authorName J a n i e   R o e) (authorAddress j a n i e @ m a i l . c o m)))) (bl <EOI>))"
             },
             {
                 /* message */

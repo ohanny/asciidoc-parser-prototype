@@ -16,6 +16,8 @@ import static java.lang.Math.min;
 
 public class BlockListenerDelegate extends AbstractDelegate {
 
+    private DeferredHandler deferredHandler;
+    private AsciidocHandler directHandler;
     private AsciidocHandler handler;
     private AttributeEntries attributeEntries;
 
@@ -284,10 +286,24 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public BlockListenerDelegate(AsciidocHandler handler) {
         super();
-        this.handler = handler;
-        this.attributeEntries = AttributeEntries.newAttributeEntries();
+        this.directHandler = handler;
+        this.deferredHandler = DeferredHandler.of(handler);
 
+        selectDirectHandler();
+
+        this.attributeEntries = AttributeEntries.newAttributeEntries();
         this.handler.attributeEntries(attributeEntries);
+
+        selectDeferredHandler();
+    }
+
+    private void selectDirectHandler() {
+        deferredHandler.flush();
+        this.handler = directHandler;
+    }
+
+    private void selectDeferredHandler() {
+        this.handler = deferredHandler.getProxy();
     }
 
     private String textToRef(String text) {
@@ -404,6 +420,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void exitHeader() {
         handler.endHeader();
+        selectDirectHandler();
     }
 
     public void enterDocumentTitle() {
@@ -456,6 +473,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     // content and sections methods
     public void enterContent() {
+        selectDirectHandler();
         handler.startContent();
 
         if (!getAttributeEntry("toc").isDisabled()) {

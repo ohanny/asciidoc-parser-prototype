@@ -8,17 +8,17 @@ public interface Chars {
     /**
      * The null character
      */
-    final static char NULL = '\u0000';
+    char NULL = '\u0000';
 
     /**
      * The End Of Input non-character
      */
-    final static char EOI = '\uFFFF';
+    char EOI = '\uFFFF';
 
     static void append(char c, StringBuilder sb) {
         switch (c) {
             case Chars.EOI:
-                sb.append("<EOF>");
+                sb.append("<EOI>");
                 break;
             case '\r':
                 sb.append("\\r");
