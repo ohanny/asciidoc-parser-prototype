@@ -244,44 +244,6 @@ public class BlockListenerDelegate extends AbstractDelegate {
     // computed refs : helps avoid duplicates
     private Map<String, Integer> refs = new HashMap<>();
 
-    private TocContext toc;
-    private static class TocContext {
-        TocItemContext root;
-        TocItemContext currentItem;
-
-        static TocContext empty() {
-            TocContext toc = new TocContext();
-            toc.root = TocItemContext.of(0, Text.of("Table of Contents"), null);
-            toc.currentItem = toc.root;
-
-            return toc;
-        }
-
-        void addItem(int level, String text, String ref) {
-            this.currentItem.next = TocItemContext.of(level, Text.of(text), Text.of(ref));
-            this.currentItem.next.previous = this.currentItem;
-            this.currentItem = this.currentItem.next;
-        }
-    }
-
-    private static class TocItemContext {
-        int level;
-        Text text;
-        Text ref;
-
-        TocItemContext previous;
-        TocItemContext next;
-
-        static TocItemContext of(int level, Text text, Text ref) {
-            TocItemContext item = new TocItemContext();
-            item.level = level;
-            item.text = text;
-            item.ref = ref;
-
-            return item;
-        }
-    }
-
     private SectionContext firstSection;
     private SectionContext currentSection;
     private static class SectionContext {
@@ -351,13 +313,13 @@ public class BlockListenerDelegate extends AbstractDelegate {
         // process TOC
         Toc toc = null;
 
-        if (this.toc != null) {
-
+        if (!getAttributeEntry("toc").isDisabled() && firstSection != null) {
             Deque<TocItem> parents = new LinkedList<>();
-            TocItem root = TocItem.of(this.toc.root.level, this.toc.root.text.getValue(), null);
+            TocItem root = TocItem.of(0, "Table of Contents", null);
             parents.push(root);
 
-            TocItemContext item = this.toc.root.next;
+            SectionContext item = firstSection;
+            item.previous = SectionContext.of(0);
             while (item != null) {
                 if (item.level < item.previous.level) {
                     while (true) {
@@ -369,7 +331,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
                     }
                 }
 
-                TocItem ti = TocItem.of(item.level, item.text.getValue(), item.ref.getValue());
+                TocItem ti = TocItem.of(item.level, item.title, item.ref);
 
                 TocItem parent = parents.peek();
                 parent.getChildren().add(ti);
@@ -502,10 +464,6 @@ public class BlockListenerDelegate extends AbstractDelegate {
     public void enterContent() {
         selectDirectHandler();
         handler.startContent();
-
-        if (!getAttributeEntry("toc").isDisabled()) {
-            toc = TocContext.empty();
-        }
     }
 
     public void exitContent() {
@@ -536,9 +494,6 @@ public class BlockListenerDelegate extends AbstractDelegate {
         currentSection.ref = textToRef(title);
         int level = currentSection.level;
         String ref = currentSection.ref;
-        if (!getAttributeEntry("toc").isDisabled()) {
-            toc.addItem(level, title, ref);
-        }
         handler.writeSectionTitle(level, title, ref);
     }
 
