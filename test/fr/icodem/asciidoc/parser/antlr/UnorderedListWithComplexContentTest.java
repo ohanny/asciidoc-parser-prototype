@@ -84,7 +84,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
             },
             {
                 /* message */
-                "a list item continued by a source block",
+                "a list item continued by a listing block",
 
                 /* input */
                 "* The sun is shining...\n" +
@@ -94,7 +94,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - <EOI>)))))))))"
+                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - <EOI>)))))))))"
             },
             {
                 /* message */
@@ -110,7 +110,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - <EOI>)))))))))"
+                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - <EOI>)))))))))"
             },
             {
                 /* message */
@@ -128,7 +128,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
             },
             {
                 /* message */
-                "a list item continued by source block interspersed in two paragraphs",
+                "a list item continued by listing block interspersed in two paragraphs",
 
                 /* input */
                 "* The sun is shining...\n" +
@@ -142,7 +142,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "Great !",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (sourceBlock (sourceBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (sourceBlockDelimiter - - - - \\n)))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOI>))))))))"
+                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - \\n)))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOI>))))))))"
             },
             {
                 /* message */

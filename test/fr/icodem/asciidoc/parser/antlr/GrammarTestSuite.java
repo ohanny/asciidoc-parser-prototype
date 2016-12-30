@@ -16,7 +16,7 @@ import org.junit.runners.Suite;
     MultiCommentTest.class,
     HeaderWithMultiCommentTest.class,
     ParagraphTest.class,
-    SourceBlockTest.class,
+    ListingBlockTest.class,
     LiteralBlockTest.class,
     BlockIdTest.class,
     RevisionInfoTest.class,

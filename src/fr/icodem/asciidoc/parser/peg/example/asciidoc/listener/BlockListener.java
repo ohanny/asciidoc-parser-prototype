@@ -86,6 +86,11 @@ public class BlockListener implements ParseTreeListener {
             case "tableBlock":
                 delegate.tableBlock(new String(chars).trim());
                 break;
+
+            case "listingBlock" :
+                delegate.listingBlock(new String(chars).trim());
+                break;
+
         }
 
     }
@@ -187,8 +192,6 @@ public class BlockListener implements ParseTreeListener {
             case "tableCell" :
                 delegate.enterTableCell(context.getIntAttribute("lineNumber", -1));
                 break;
-
-
 
             case "title" :
 //                enterTitle();

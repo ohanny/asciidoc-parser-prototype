@@ -103,6 +103,19 @@ public class Main {
                         "include::file1.adoc[]\n" +
                         "\n" +
                         "image::sunset.jpg[Sunset]\n" +
+                        "\n" +
+                        "[source,java]\n" +
+                        "----\n" +
+                        "public class Produit {\n" +
+                        "  private int id;\n" +
+                        "  private String nom;\n" +
+                        "\n" +
+                        "  public void afficher() {\n" +
+                        "    System.out.println(\"nom : \" + nom)\n" +
+                        "  }\n" +
+                        "\n" +
+                        "}\n" +
+                        "----\n" +
                         "\n";
 
         if (false) text =  "Block above\n" +

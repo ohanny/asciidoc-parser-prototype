@@ -100,7 +100,7 @@ public class BlockRules extends BaseRules {
                 multiComment(),
                 singleComment(),
                 list(),
-                sourceBlock(),
+                listingBlock(),
                 literalBlock(),
                 table(),
                 labeledList(),
@@ -557,22 +557,23 @@ public class BlockRules extends BaseRules {
                );
     }
 
-    private Rule sourceBlock() {
-        return node("sourceBlock", sequence(
-                sourceBlockDelimiter(),
+    private Rule listingBlock() {
+        return node("listingBlock", sequence(
+                listingBlockDelimiter(),
                 zeroOrMore(firstOf(
                         noneOf("-"),
-                        sequence(testNot(sourceBlockDelimiter()), ch('-'))
-                )),
-                sourceBlockDelimiter()
+                        sequence(testNot(listingBlockDelimiter()), ch('-'))
+                )
+                ),
+                listingBlockDelimiter()
         ));
 
     }
 
-    private Rule sourceBlockDelimiter() {
-        return node("sourceBlockDelimiter", sequence(
+    private Rule listingBlockDelimiter() {
+        return node("listingBlockDelimiter", sequence(
                     test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), // TODO replace
-                    ch('-'), ch('-'), ch('-'), ch('-'), // TODO ntimes
+                    atLeast('-', 4),
                     optional(blank()), // TODO replace with blanks
                     firstOf(newLine(), eoi())
                 ));

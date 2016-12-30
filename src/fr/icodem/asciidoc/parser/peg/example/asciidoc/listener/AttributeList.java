@@ -70,12 +70,23 @@ public class AttributeList {
         return firstPositionalAttribute;
     }
 
+    public String getSecondPositionalAttribute() {
+        if (positionalAttributes != null && positionalAttributes.size() > 1) {
+            return positionalAttributes.get(1);
+        }
+        return null;
+    }
+
     public Attribute getAttribute(String name) {
         return attributes.get(name);
     }
 
     public boolean hasOption(String option) {
         return options.contains(option);
+    }
+
+    public List<String> getPositionalAttributes() {
+        return positionalAttributes;
     }
 
     public String getId() {

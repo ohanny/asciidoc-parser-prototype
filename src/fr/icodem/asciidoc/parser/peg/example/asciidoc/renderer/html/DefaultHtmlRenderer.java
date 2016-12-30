@@ -767,7 +767,49 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 //            .nl();
     }
 
-    /* **********************************************/
+    @Override
+    public void writeListingBlock(String listing, String language) {
+        indent()
+          .append(DIV.start("class", "listingblock"))
+          .nl()
+          .incIndent()
+          .indent()
+          .append(DIV.start("class", "content"))
+          .nl()
+          .incIndent()
+          .indent()
+          .runIf(language != null, () -> append(PRE.start("class", "highlight")))
+          .runIf(language == null, () -> append(PRE.start()))
+          .nl()
+          .runIf(language != null, () ->
+            incIndent()
+              .indent()
+              .append(CODE.start("class", "language-" + language, "data-lang", language))
+              .nl()
+          )
+          .append(listing)
+          .runIf(language != null, () ->
+            nl()
+              .decIndent()
+              .indent()
+              .append(CODE.end())
+          )
+          .nl()
+          .decIndent()
+          .indent()
+          .append(PRE.end())
+          .nl()
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl()
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl();
+    }
+
+/* **********************************************/
     // Inline text
     /* **********************************************/
 

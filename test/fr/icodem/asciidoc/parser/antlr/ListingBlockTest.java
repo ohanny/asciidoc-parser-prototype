@@ -11,7 +11,7 @@ import static org.junit.runners.Parameterized.Parameter;
 import static org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class SourceBlockTest extends GrammarTest {
+public class ListingBlockTest extends GrammarTest {
 
     @Parameter(0)
     public String message;
@@ -33,7 +33,7 @@ public class SourceBlockTest extends GrammarTest {
         return Arrays.asList(new Object[][]{
             {
                 /* message */
-                "a simple source block",
+                "a simple listing block",
 
                 /* input */
                 "----\n" +
@@ -41,7 +41,7 @@ public class SourceBlockTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (content (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (sourceBlockDelimiter - - - - <EOI>)))))"
+                "(document (content (block (listingBlock (listingBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (listingBlockDelimiter - - - - <EOI>)))))"
             },
             {
                 /* message */
@@ -53,7 +53,7 @@ public class SourceBlockTest extends GrammarTest {
                 "----\n",
 
                 /* expected */
-                "(document (content (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (sourceBlockDelimiter - - - - \\n)))) (bl <EOI>))"
+                "(document (content (block (listingBlock (listingBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (listingBlockDelimiter - - - - \\n)))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -65,7 +65,7 @@ public class SourceBlockTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (content (block (sourceBlock (sourceBlockDelimiter - - - - \\n) i n t   a   =   - 1 0 ; \\n (sourceBlockDelimiter - - - - <EOI>)))))"
+                "(document (content (block (listingBlock (listingBlockDelimiter - - - - \\n) i n t   a   =   - 1 0 ; \\n (listingBlockDelimiter - - - - <EOI>)))))"
             }
         });
 
