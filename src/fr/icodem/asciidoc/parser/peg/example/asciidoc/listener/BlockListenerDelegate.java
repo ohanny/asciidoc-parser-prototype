@@ -6,10 +6,8 @@ import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
 import java.io.StringReader;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 import static java.lang.Math.min;
@@ -20,6 +18,24 @@ public class BlockListenerDelegate extends AbstractDelegate {
     private AsciidocHandler directHandler;
     private AsciidocHandler handler;
     private AttributeEntries attributeEntries;
+
+    private static class AuthorContext {// TODO move class ?
+
+        private AuthorContext(int position) {
+            this.position = position;
+        }
+
+        public static AuthorContext withPosition(int position) {
+            return new AuthorContext(position);
+        }
+
+        int position;
+        String name;
+        String address;
+        String addressLabel;
+    }
+
+    private Deque<AuthorContext> authors;
 
     private enum ListType {Ordered, Unordered}
     private static class ListContext {
@@ -436,31 +452,67 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
     public void enterAuthors() {
-        handler.startAuthors();
+        authors = new LinkedList<>();
+        //handler.startAuthors();
     }
 
     public void exitAuthors() {
-        handler.endAuthors();
+        //handler.endAuthors();
+        List<Author> authors = this.authors
+                .stream()
+                .map(a -> Author.of(a.position, a.name, a.address, a.addressLabel))
+                .collect(Collectors.toList());
+        handler.writeAuthors(authors);
     }
 
     public void enterAuthor() {
-        handler.startAuthor();
+        authors.add(AuthorContext.withPosition(authors.size() + 1));
+        //handler.startAuthor();
     }
 
     public void authorName(String name) {
-        handler.writeAuthorName(name);
+        //handler.writeAuthorName(name);
+        authors.peekLast().name = name;
     }
 
     public void authorAddress(String address) {
-        handler.writeAuthorAddress(address);
+        //handler.writeAuthorAddress(address);
+        authors.peekLast().address = address;
     }
 
     public void authorAddressLabel(String label) {
-        handler.writeAuthorAddressLabel(label);
+        //handler.writeAuthorAddressLabel(label);
+        authors.peekLast().addressLabel = label;
     }
 
     public void exitAuthor() {
-        handler.endAuthor();
+//        handler.endAuthor();
+//        AuthorContext author = authors.peekLast();
+//        String index = author.position == 1?"":"" + author.position;
+//
+//        indent()
+//                .append(SPAN.start("id", "author" + index, "class", "author"))
+//                .append(SPAN.end())
+//                .append(BR.tag())
+//                .nl()
+//                .runIf(author.address != null, () -> {
+//                    String href = author.address;
+//                    if (!(href.startsWith("http://") || href.startsWith("https://"))) {
+//                        href = "mailto:" + href;
+//                    }
+//
+//                    String label = author.addressLabel != null ? author.addressLabel : author.address;
+//
+//                    indent()
+//                            .append(SPAN.start("id", "email" + index, "class", "email"))
+//                            .append(A.start("href", href))
+//                            .append(label)
+//                            .append(A.end())
+//                            .append(SPAN.end())
+//                            .append(BR.tag())
+//                            .nl();
+//                });
+
     }
 
     public void enterPreamble() {

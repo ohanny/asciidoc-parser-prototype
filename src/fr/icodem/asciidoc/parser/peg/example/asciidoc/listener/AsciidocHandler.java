@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
+import java.util.List;
+
 public interface AsciidocHandler {
 
     void attributeEntries(AttributeEntries atts);
@@ -22,14 +24,15 @@ public interface AsciidocHandler {
     void writeDocumentTitle(String title);
     void endDocumentTitle();
 
-    void startAuthors();
-    void endAuthors();
-
-    void startAuthor();
-    void writeAuthorName(String name);
-    void writeAuthorAddress(String address);
-    void writeAuthorAddressLabel(String label);
-    void endAuthor();
+    void writeAuthors(List<Author> authors);
+//    void startAuthors();
+//    void endAuthors();
+//
+//    void startAuthor();
+//    void writeAuthorName(String name);
+//    void writeAuthorAddress(String address);
+//    void writeAuthorAddressLabel(String label);
+//    void endAuthor();
 
     void startPreamble();
     void endPreamble();

@@ -160,25 +160,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     private String title;
-
-    private static class AuthorContext {// TODO move class ?
-
-        private AuthorContext(int position) {
-            this.position = position;
-        }
-
-        public static AuthorContext withPosition(int position) {
-            return new AuthorContext(position);
-        }
-
-        int position;
-        String name;
-        String address;
-        String addressLabel;
-    }
-
-    private Deque<AuthorContext> authors;
-
     private boolean hasHeader;
     private boolean contentStarted;
 
@@ -404,81 +385,52 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
     }
 
     @Override
-    public void startAuthors() {
-        indent()
-            .append(DIV.start("class", "details"))
-            .nl()
-            .incIndent();
-        authors = new LinkedList<>();
-    }
-
-    @Override
-    public void endAuthors() {
-        String authors =
-                this.authors
-                    .stream()
-                    .map(a -> a.name)
-                    .collect(Collectors.joining(", "));
-
-        decIndent()
-            .indent()
-            .append(DIV.end())
-            .nl()
-            .moveTo("authors")
-            .indent()
-            .append(META.tag("name", "author", "content", authors))
-            .nl()
-            .moveEnd();
-
-    }
-
-    @Override
-    public void startAuthor() {
-        authors.add(AuthorContext.withPosition(authors.size() + 1));
-    }
-
-    @Override
-    public void endAuthor() {
-        AuthorContext author = authors.peekLast();
-        String index = author.position == 1?"":"" + author.position;
+    public void writeAuthors(List<Author> authors) {
+        String authorsStr = authors
+                        .stream()
+                        .map(a -> a.getName())
+                        .collect(Collectors.joining(", "));
 
         indent()
-            .append(SPAN.start("id", "author" + index, "class", "author"))
-            .append(SPAN.end())
-            .append(BR.tag())
-            .nl()
-            .runIf(author.address != null, () -> {
-                String href = author.address;
+          .append(DIV.start("class", "details"))
+          .nl()
+          .incIndent()
+          .forEach(authors, a -> {
+            String index = a.getPosition() == 1?"":"" + a.getPosition();
+
+            indent()
+              .append(SPAN.start("id", "author" + index, "class", "author"))
+              .append(a.getName())
+              .append(SPAN.end())
+              .append(BR.tag())
+              .nl()
+              .runIf(a.getAddress() != null, () -> {
+                String href = a.getAddress();
                 if (!(href.startsWith("http://") || href.startsWith("https://"))) {
-                    href = "mailto:" + href;
+                  href = "mailto:" + href;
                 }
 
-                String label = author.addressLabel != null ? author.addressLabel : author.address;
+                String label = a.getAddressLabel() != null ? a.getAddressLabel() : a.getAddress();
 
                 indent()
-                    .append(SPAN.start("id", "email" + index, "class", "email"))
-                    .append(A.start("href", href))
-                    .append(label)
-                    .append(A.end())
-                    .append(SPAN.end())
-                    .append(BR.tag())
-                    .nl();
-            });
-    }
-
-    @Override
-    public void writeAuthorName(String name) {
-        authors.peekLast().name = name;
-    }
-
-    @Override
-    public void writeAuthorAddress(String address) {
-        authors.peekLast().address = address;
-    }
-
-    @Override
-    public void writeAuthorAddressLabel(String label) {
-        authors.peekLast().addressLabel = label;
+                  .append(SPAN.start("id", "email" + index, "class", "email"))
+                  .append(A.start("href", href))
+                  .append(label)
+                  .append(A.end())
+                  .append(SPAN.end())
+                  .append(BR.tag())
+                  .nl();
+                });
+              })
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl()
+          .moveTo("authors")
+          .indent()
+          .append(META.tag("name", "author", "content", authorsStr))
+          .nl()
+          .moveEnd();
     }
 
     @Override
