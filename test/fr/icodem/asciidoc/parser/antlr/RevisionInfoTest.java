@@ -41,7 +41,7 @@ public class RevisionInfoTest extends GrammarTest {
                 "v1.0",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 <EOI>)))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 <EOI>)))"
             },
             {
                 /* message */
@@ -53,7 +53,7 @@ public class RevisionInfoTest extends GrammarTest {
                 "v1.0\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 \\n)) (bl <EOI>))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -65,7 +65,7 @@ public class RevisionInfoTest extends GrammarTest {
                 "v1.0\n\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 \\n)) (bl \\n) (bl <EOI>))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 \\n)) (bl \\n) (bl <EOI>))"
             },
             {
                 /* message */
@@ -78,7 +78,7 @@ public class RevisionInfoTest extends GrammarTest {
                 ": First incarnation",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n :   F i r s t   i n c a r n a t i o n <EOI>)))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n :   F i r s t   i n c a r n a t i o n <EOI>)))"
             },
             {
                 /* message */
@@ -91,7 +91,7 @@ public class RevisionInfoTest extends GrammarTest {
                 "v1.0, October 2, 2013\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (singleComment / /   a   c o m m e n t \\n) (revisionInfo v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n)) (bl <EOI>))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (singleComment / /   a   c o m m e n t \\n) (revisionInfo v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -105,7 +105,7 @@ public class RevisionInfoTest extends GrammarTest {
                 "v1.0, October 2, 2013\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (singleComment / /   a   c o m m e n t \\n) (singleComment / /   a n o t h e r   c o m m e n t \\n) (revisionInfo v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n)) (bl <EOI>))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (singleComment / /   a   c o m m e n t \\n) (singleComment / /   a n o t h e r   c o m m e n t \\n) (revisionInfo v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -120,7 +120,7 @@ public class RevisionInfoTest extends GrammarTest {
                 "v1.0, October 2, 2013\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (multiComment (multiCommentDelimiter / / / / \\n) a   c o m m e n t \\n (multiCommentDelimiter / / / / \\n)) (revisionInfo v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n)) (bl <EOI>))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (multiComment (multiCommentDelimiter / / / / \\n) a   c o m m e n t \\n (multiCommentDelimiter / / / / \\n)) (revisionInfo v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n)) (bl <EOI>))"
             },
             {
                 /* message */
@@ -133,7 +133,7 @@ public class RevisionInfoTest extends GrammarTest {
                 "// a comment",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 \\n)) (singleComment / /   a   c o m m e n t <EOI>))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 \\n)) (singleComment / /   a   c o m m e n t <EOI>))"
             },
             {
                 /* message */
@@ -147,7 +147,7 @@ public class RevisionInfoTest extends GrammarTest {
                 ":fruit: kiwi",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 \\n v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n) (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) <EOI>)))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (authors (author (authorName J o h n   D o e))) (revisionInfo v 1 . 0 \\n v 1 . 0 ,   O c t o b e r   2 ,   2 0 1 3 \\n) (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) <EOI>)))"
             }
         });
 

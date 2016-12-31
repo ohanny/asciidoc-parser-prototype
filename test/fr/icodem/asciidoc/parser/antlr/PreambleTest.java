@@ -41,7 +41,7 @@ public class PreambleTest extends GrammarTest {
                 "XXX\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n))) (bl <EOI>))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X) (nl \\n))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -54,7 +54,7 @@ public class PreambleTest extends GrammarTest {
                 "== First Section\n",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X \\n = =   F i r s t   S e c t i o n) (nl \\n))) (bl <EOI>))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph X X X \\n = =   F i r s t   S e c t i o n) (nl \\n))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -70,7 +70,7 @@ public class PreambleTest extends GrammarTest {
                 "Some other text...",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . .) (nl \\n)) (bl \\n) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (bl \\n) (block (paragraph S o m e   o t h e r   t e x t . . . <EOI>))))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . .) (nl \\n)) (bl \\n) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (bl \\n) (block (paragraph S o m e   o t h e r   t e x t . . . <EOI>))))"
             },
             {
                 /* message */
@@ -85,7 +85,7 @@ public class PreambleTest extends GrammarTest {
                 "Some other text...",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . . \\n)) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (bl \\n) (block (paragraph S o m e   o t h e r   t e x t . . . <EOI>))))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . . \\n)) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (bl \\n) (block (paragraph S o m e   o t h e r   t e x t . . . <EOI>))))"
             },
             {
                 /* message */
@@ -99,7 +99,7 @@ public class PreambleTest extends GrammarTest {
                 "Some other text...",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . . \\n)) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (block (paragraph S o m e   o t h e r   t e x t . . . <EOI>))))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . . \\n)) (block (singleComment / /   T h i s   i s   a   c o m m e n t \\n)) (block (paragraph S o m e   o t h e r   t e x t . . . <EOI>))))"
             }
 
         });

@@ -68,7 +68,7 @@ public class BlockRules extends BaseRules {
 
     private Rule header() {
         return node("header", sequence(
-                documentTitle(),
+                documentSection(),
                 zeroOrMore(firstOf(multiComment(), singleComment())),
                 optional(sequence(
                         authors(),
@@ -78,6 +78,22 @@ public class BlockRules extends BaseRules {
                 zeroOrMore(attributeEntry())
         ));
     }
+
+    private Rule documentSection() {
+        return node("documentSection", true,
+                sequence(ch('='), ch(' '), optional(documentTitle()), optional(blank()), firstOf(newLine(), eoi())));
+    }
+
+    private Rule documentTitle() {
+        return node("documentTitle", title());
+    }
+
+    private Rule title() {
+        if (isCached("title")) return cached("title");
+
+        return cached("title", sequence(noneOf(" \n\t\r"), zeroOrMore(noneOf('\n'))));
+    }
+
 
     private Rule preamble() {
         return node("preamble", sequence(
@@ -189,21 +205,6 @@ public class BlockRules extends BaseRules {
                 block(false),
                 nl()
         )));
-    }
-
-    private Rule documentTitle() {
-        return node("documentTitle", true,
-                sequence(ch('='), ch(' '), optional(documentTitleValue()), optional(blank()), firstOf(newLine(), eoi())));
-    }
-
-    private Rule documentTitleValue() {
-        return node("documentTitleValue", title());
-    }
-
-    private Rule title() {
-        if (isCached("title")) return cached("title");
-
-        return cached("title", sequence(noneOf(" \n\t\r"), zeroOrMore(noneOf('\n'))));
     }
 
     private Rule section() {

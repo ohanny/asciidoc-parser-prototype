@@ -35,8 +35,8 @@ public class BlockListener implements ParseTreeListener {
                 delegate.attributeEntryValuePart(new String(chars));
                 break;
 
-            case "documentTitleValue":
-                delegate.documentTitleValue(new String(chars));
+            case "documentTitle":
+                delegate.documentTitle(new String(chars));
                 break;
             case "sectionTitle":
                 delegate.sectionTitle(new String(chars));
@@ -128,7 +128,7 @@ public class BlockListener implements ParseTreeListener {
             case "header" :
                 delegate.enterHeader();
                 break;
-            case "documentTitle" :
+            case "documentSection" :
                 delegate.enterDocumentTitle();
                 break;
             case "authors" :
@@ -207,7 +207,7 @@ public class BlockListener implements ParseTreeListener {
             case "header" :
                 delegate.exitHeader();
                 break;
-            case "documentTitle" :
+            case "documentSection" :
                 delegate.exitDocumentTitle();
                 break;
             case "authors" :

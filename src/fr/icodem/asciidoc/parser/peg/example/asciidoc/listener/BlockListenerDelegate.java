@@ -416,7 +416,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
         handler.startDocumentTitle();
     }
 
-    public void documentTitleValue(String text) {
+    public void documentTitle(String text) {
         handler.writeDocumentTitle(text);
     }
 

@@ -40,7 +40,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 "// this is a comment",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (singleComment / /   t h i s   i s   a   c o m m e n t <EOI>)))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (singleComment / /   t h i s   i s   a   c o m m e n t <EOI>)))"
             },
             {
                 /* message */
@@ -51,7 +51,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 "// this is a comment // is it ok ?",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (singleComment / /   t h i s   i s   a   c o m m e n t   / /   i s   i t   o k   ? <EOI>)))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (singleComment / /   t h i s   i s   a   c o m m e n t   / /   i s   i t   o k   ? <EOI>)))"
             },
             {
                 /* message */
@@ -64,7 +64,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 "// comment 3",
 
                 /* expected */
-                "(document (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !)) (singleComment / /   c o m m e n t   1 \\n) (singleComment / /   c o m m e n t   2 \\n) (singleComment / /   c o m m e n t   3 <EOI>)))"
+                "(document (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !)) (singleComment / /   c o m m e n t   1 \\n) (singleComment / /   c o m m e n t   2 \\n) (singleComment / /   c o m m e n t   3 <EOI>)))"
             },
             {
                 /* message */
@@ -75,7 +75,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 "= Hello, AsciiDoc!\n",
 
                 /* expected */
-                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl <EOI>))"
+                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -88,7 +88,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 "Some text...",
 
                 /* expected */
-                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentTitle (documentTitleValue H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . . <EOI>))))"
+                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . . <EOI>))))"
             },
 
         });
