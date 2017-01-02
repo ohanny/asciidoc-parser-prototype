@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 
-public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHandler {
+public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implements AsciidocRenderer, AsciidocHandler {
 
     private BlockRules rules = new BlockRules(); // TODO inject
 
@@ -30,9 +30,9 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
         rules.withFactory(defaultRulesFactory());
     }
 
-    public HtmlBaseRenderer withSourceResolver(SourceResolver resolver) {
+    public HR withSourceResolver(SourceResolver resolver) {
         rules.withSourceResolver(resolver);
-        return this;
+        return (HR)this;
     }
 
     @Override
@@ -58,85 +58,85 @@ public abstract class HtmlBaseRenderer implements AsciidocRenderer, AsciidocHand
     }
 
 
-    protected HtmlBaseRenderer append(String str) {
+    protected HR append(String str) {
         outputter.append(str);
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer include(Runnable r) {
+    protected HR include(Runnable r) {
         r.run();
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer nl() {
+    protected HR nl() {
         outputter.nl();
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer indent() {
+    protected HR indent() {
         outputter.indent();
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer incIndent() {// TODO rename method (shorter name) ?
+    protected HR incIndent() {// TODO rename method (shorter name) ?
         outputter.incIndent();
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer decIndent() {// TODO rename method (shorter name) ?
+    protected HR decIndent() {// TODO rename method (shorter name) ?
         outputter.decIndent();
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer runIf(boolean condition, Runnable runnable) {
+    protected HR runIf(boolean condition, Runnable runnable) {
         if (condition) runnable.run();
-        return this;
+        return (HR)this;
     }
 
-    protected <T> HtmlBaseRenderer forEach(List<T> elements, Consumer<T> c) {
+    protected <T> HR forEach(List<T> elements, Consumer<T> c) {
         elements.forEach(c);
-        return this;
+        return (HR)this;
     }
 
     // mark for first pass
-    protected HtmlBaseRenderer mark(String key) {
+    protected HR mark(String key) {
         outputter.mark(key);
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer bufferOn() {
+    protected HR bufferOn() {
         outputter.bufferOn();
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer bufferOff() {
+    protected HR bufferOff() {
         outputter.bufferOff();
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer moveTo(String key) {
+    protected HR moveTo(String key) {
         outputter.moveTo(key);
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer moveEnd() {
+    protected HR moveEnd() {
         outputter.moveEnd();
-        return this;
+        return (HR)this;
     }
 
     // mark for post-processing
-    protected HtmlBaseRenderer markOnWriter(String key) {
+    protected HR markOnWriter(String key) {
         outputter.markOnWriter(key);
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer seekOnWriter(String key) {
+    protected HR seekOnWriter(String key) {
         outputter.seekOnWriter(key);
-        return this;
+        return (HR)this;
     }
 
-    protected HtmlBaseRenderer endInsertOnWriter() {
+    protected HR endInsertOnWriter() {
         outputter.endInsertOnWriter();
-        return this;
+        return (HR)this;
     }
 }

@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 
-public class DefaultHtmlRenderer extends HtmlBaseRenderer {
+public class DefaultHtmlRenderer extends HtmlBaseRenderer<DefaultHtmlRenderer> {
 
-    private DefaultHtmlRenderer(DocumentWriter writer) {
+    protected DefaultHtmlRenderer(DocumentWriter writer) {
         super(writer);
     }
 
@@ -149,6 +149,36 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
 
     @Override
     public void startDocument() {
+        append(DOCTYPE.tag())
+          .nl()
+          .append(HTML.start())
+          .nl()
+          .append(HEAD.start())
+          .nl()
+          .incIndent()
+          .indent()
+          .append(META.tag("charset", "utf-8"))
+          .nl()
+          .indent()
+          .append(META.tag("name", "viewport", "content", "width=device-width, initial-scale=1.0"))
+          .nl()
+          .indent()
+          .append(META.tag("name", "generator", "content", "iodoc"))
+          .nl()
+          .bufferOn()
+          .mark("authors")
+          .includeStylesheets()
+          .mark("title")
+          .append(HEAD.end())
+          .nl()
+          .decIndent()
+          .append(BODY.start("class", getBodyClass()))
+          .nl()
+          .incIndent()
+        ;
+    }
+
+    protected String getBodyClass() {
         String bodyClass = getAttributeEntry("doctype").getValue();
 
         AttributeEntry tocAtt = getAttributeEntry("toc");
@@ -161,27 +191,12 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             }
         }
 
-        AttributeEntry iconsAtt = getAttributeEntry("icons");
+        return bodyClass;
+    }
 
-        append(DOCTYPE.tag())
-          .nl()
-          .append(HTML.start())
-          .nl()
-          .append(HEAD.start())
-          .nl()
-          .incIndent()
-          .indent()
-          .append(META.tag("charset", "UTF-8"))
-          .nl()
-          .indent()
-          .append(META.tag("name", "viewport", "content", "width=device-width, initial-scale=1.0"))
-          .nl()
-          .indent()
-          .append(META.tag("name", "generator", "content", "iodoc"))
-          .nl()
-          .bufferOn()
-          .mark("authors")
-          .indent()
+    protected DefaultHtmlRenderer includeStylesheets() {
+        AttributeEntry iconsAtt = getAttributeEntry("icons");
+        indent()
           .append(LINK.tag("rel", "stylesheet", "href", "styles.css"))
           .nl()
           .indent()
@@ -192,14 +207,8 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
               .append(LINK.tag("rel", "stylesheet", "href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css"))
               .nl()
           )
-          .mark("title")
-          .append(HEAD.end())
-          .nl()
-          .decIndent()
-          .append(BODY.start("class", bodyClass))
-          .nl()
-          .incIndent()
         ;
+        return this;
     }
 
     @Override
@@ -446,34 +455,6 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 .indent();
         }
     }
-
-    /*
-<div class="admonitionblock note">
-  <table>
-    <tr>
-      <td class="icon">
-        <i class="fa icon-note" title="Note"></i>
-      </td>
-      <td class="content">
-        une note
-      </td>
-    </tr>
-  </table>
-</div>
-
-<div class="admonitionblock note">
-  <table>
-    <tr>
-      <td class="icon">
-        <div class="title">Note</div>
-      </td>
-      <td class="content">
-        une note
-      </td>
-    </tr>
-  </table>
-</div>
-     */
 
     @Override
     public void endParagraph(String admonition) {
