@@ -309,7 +309,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
                   .append(A.end())
                   .append(SPAN.end())
                   .append(BR.tag())
-                  .nl();
+                  .nl()
+                ;
                 });
               })
           .decIndent()
@@ -320,7 +321,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .indent()
           .append(META.tag("name", "author", "content", authorsStr))
           .nl()
-          .moveEnd();
+          .moveEnd()
+        ;
     }
 
     @Override

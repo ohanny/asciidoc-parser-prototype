@@ -134,6 +134,7 @@ public class Main {
                 "\n" +
                 "* B\n";
 
+        if (true)
         text = "= Shower Presentation Engine\n" +
                "iodoc\n" +
                "\n" +

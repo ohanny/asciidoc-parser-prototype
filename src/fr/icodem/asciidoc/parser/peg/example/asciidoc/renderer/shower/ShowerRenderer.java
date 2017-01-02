@@ -27,7 +27,8 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     protected ShowerRenderer includeCustomMeta() {
         indent()
           .append(META.tag("http-equiv", "x-ua-compatible", "content", "ie=edge"))
-          .nl();
+          .nl()
+        ;
         return this;
     }
 
@@ -48,12 +49,13 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
 
     @Override
     public void startHeader() {
-        hasHeader = true;
+        hasHeader = true; // TODO useful ?
 
         indent()
           .append(HEADER.start("class", "caption"))
           .nl()
-          .incIndent();
+          .incIndent()
+        ;
     }
 
     @Override
@@ -67,24 +69,28 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .append(TITLE.end())
           .nl()
           .bufferOff()
-          .runIf(!tocAtt.isDisabled(), () -> markOnWriter("TOC"))
+          .runIf(!tocAtt.isDisabled(), () -> markOnWriter("TOC")) // TODO how to deal with toc ?
+          .bufferOn()
+          .mark("preamble")
           .decIndent()
           .indent()
           .append(HEADER.end())
           .nl()
         ;
-
-        startContent();
     }
 
     @Override
-    public void startPreamble() {}
+    public void startPreamble() {
+        moveTo("preamble");
+    }
 
     @Override
     public void endPreamble() {}
 
     @Override
-    public void startContent() {}
+    public void startContent() {
+        bufferOff();
+    }
 
     @Override
     public void endContent() {
@@ -136,7 +142,5 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
 
     @Override
     public void endSection(int level) {}
-
-
 
 }
