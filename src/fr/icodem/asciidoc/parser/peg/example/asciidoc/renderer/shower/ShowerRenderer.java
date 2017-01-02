@@ -3,7 +3,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.shower;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html.DefaultHtmlRenderer;
 
-public class ShowerRenderer extends DefaultHtmlRenderer {
+public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     private ShowerRenderer(DocumentWriter writer) {
         super(writer);
     }

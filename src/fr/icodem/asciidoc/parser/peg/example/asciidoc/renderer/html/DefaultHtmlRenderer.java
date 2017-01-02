@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 
-public class DefaultHtmlRenderer extends HtmlBaseRenderer<DefaultHtmlRenderer> {
+public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends HtmlBaseRenderer<DHR> {
 
     protected DefaultHtmlRenderer(DocumentWriter writer) {
         super(writer);
