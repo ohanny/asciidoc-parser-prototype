@@ -10,11 +10,14 @@ import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     private ShowerRenderer(DocumentWriter writer) {
         super(writer);
+        startSection = this::startFirstSection;
     }
 
     public static ShowerRenderer withWriter(DocumentWriter writer) {
         return new ShowerRenderer(writer);
     }
+
+    private Runnable startSection;
 
     @Override
     protected String getBodyClass() {
@@ -84,11 +87,36 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     public void startContent() {}
 
     @Override
-    public void endContent() {}
+    public void endContent() {
+        // end section for last slide
+        decIndent()
+          .indent()
+          .append(SECTION.end())
+          .nl()
+        ;
+    }
 
     @Override
     public void startSection(int level) {
+        startSection.run();
+    }
+
+    private void startFirstSection() {
         indent()
+          .append(SECTION.start("class", "slide"))
+          .nl()
+          .incIndent()
+        ;
+
+        startSection = this::startNextSection;
+    }
+
+    private void startNextSection() {
+        decIndent()
+          .indent()
+          .append(SECTION.end())
+          .nl()
+          .indent()
           .append(SECTION.start("class", "slide"))
           .nl()
           .incIndent()
@@ -107,12 +135,8 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     }
 
     @Override
-    public void endSection(int level) {
-        decIndent()
-          .indent()
-          .append(SECTION.end())
-          .nl()
-        ;
-    }
+    public void endSection(int level) {}
+
+
 
 }
