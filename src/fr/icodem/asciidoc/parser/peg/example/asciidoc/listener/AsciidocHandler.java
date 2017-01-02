@@ -47,7 +47,7 @@ public interface AsciidocHandler {
 
     void horizontalRule();
 
-    void startParagraph(String admonition);
+    void startParagraph(String admonition, String icons);
     void endParagraph(String admonition);
 
     void startList();

@@ -16,6 +16,7 @@ public class AttributeEntries {
         addAttribute("doctype", "article");
         addAttribute("doctitle", "Untitled");
         addAttribute("toc", null, true);
+        addAttribute("icons", null);
         addAttribute("toc-title", "Table of Contents");
     }
 

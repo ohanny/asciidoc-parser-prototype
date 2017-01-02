@@ -154,7 +154,8 @@ public class BlockListener implements ParseTreeListener {
                 delegate.horizontalRule();
                 break;
             case "paragraph" :
-                delegate.enterParagraph(context.getStringAttribute("admonition", null));
+                final String admonition = context.getStringAttribute("admonition", null);
+                delegate.enterParagraph(admonition);
                 break;
             case "list" :
                 delegate.enterList();

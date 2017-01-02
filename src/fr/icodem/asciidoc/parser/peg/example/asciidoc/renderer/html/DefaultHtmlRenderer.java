@@ -161,34 +161,43 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             }
         }
 
+        AttributeEntry iconsAtt = getAttributeEntry("icons");
+
         append(DOCTYPE.tag())
-            .nl()
-            .append(HTML.start())
-            .nl()
-            .append(HEAD.start())
-            .nl()
-            .incIndent()
-            .indent()
-            .append(META.tag("charset", "UTF-8"))
-            .nl()
-            .indent()
-            .append(META.tag("name", "viewport", "content", "width=device-width, initial-scale=1.0"))
-            .nl()
-            .indent()
-            .append(META.tag("name", "generator", "content", "iodoc"))
-            .nl()
-            .bufferOn()
-            .mark("authors")
-            .indent()
-            .append(LINK.tag("rel", "stylesheet", "href", "styles.css"))
-            .nl()
-            .mark("title")
-            .append(HEAD.end())
-            .nl()
-            .decIndent()
-            .append(BODY.start("class", bodyClass))
-            .nl()
-            .incIndent();
+          .nl()
+          .append(HTML.start())
+          .nl()
+          .append(HEAD.start())
+          .nl()
+          .incIndent()
+          .indent()
+          .append(META.tag("charset", "UTF-8"))
+          .nl()
+          .indent()
+          .append(META.tag("name", "viewport", "content", "width=device-width, initial-scale=1.0"))
+          .nl()
+          .indent()
+          .append(META.tag("name", "generator", "content", "iodoc"))
+          .nl()
+          .bufferOn()
+          .mark("authors")
+          .indent()
+          .append(LINK.tag("rel", "stylesheet", "href", "styles.css"))
+          .append(LINK.tag("rel", "stylesheet", "href", "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"))
+          .nl()
+          .runIf("font".equals(iconsAtt.getValue()), () ->
+            indent()
+              .append(LINK.tag("rel", "stylesheet", "href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css"))
+              .nl()
+          )
+          .mark("title")
+          .append(HEAD.end())
+          .nl()
+          .decIndent()
+          .append(BODY.start("class", bodyClass))
+          .nl()
+          .incIndent()
+        ;
     }
 
     @Override
@@ -378,8 +387,17 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
             .nl();
     }
 
+    private static Properties ADMONITIONS = new Properties();
+    {
+        ADMONITIONS.setProperty("note", "Note");
+        ADMONITIONS.setProperty("tip", "Tip");
+        ADMONITIONS.setProperty("important", "Important");
+        ADMONITIONS.setProperty("caution", "Caution");
+        ADMONITIONS.setProperty("warning", "Warning");
+    }
+
     @Override
-    public void startParagraph(String admonition) {
+    public void startParagraph(String admonition, String icons) {
         if (admonition == null) {
             indent()
               .append(DIV.start("class", "paragraph"))
@@ -389,7 +407,7 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
               .append(P.start());
         } else {
             indent()
-              .append(DIV.start("class", "admonitionblock " + admonition.toLowerCase()))
+              .append(DIV.start("class", "admonitionblock " + admonition))
                 .nl()
                 .incIndent()
                 .indent()
@@ -405,9 +423,15 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 .nl()
                 .incIndent()
                 .indent()
-                .append(DIV.start("class", "title"))
-                .append("Note")
-                .append(DIV.end())
+                .runIf("font".equals(icons), () ->
+                    append(I.start("class", "fa icon-" + admonition, "title", ADMONITIONS.getProperty(admonition)))
+                      .append(I.end())
+                )
+                .runIf(!"font".equals(icons), () ->
+                    append(DIV.start("class", "title"))
+                      .append(ADMONITIONS.getProperty(admonition))
+                      .append(DIV.end())
+                )
                 .nl()
                 .decIndent()
                 .indent()
@@ -420,6 +444,34 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
                 .indent();
         }
     }
+
+    /*
+<div class="admonitionblock note">
+  <table>
+    <tr>
+      <td class="icon">
+        <i class="fa icon-note" title="Note"></i>
+      </td>
+      <td class="content">
+        une note
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div class="admonitionblock note">
+  <table>
+    <tr>
+      <td class="icon">
+        <div class="title">Note</div>
+      </td>
+      <td class="content">
+        une note
+      </td>
+    </tr>
+  </table>
+</div>
+     */
 
     @Override
     public void endParagraph(String admonition) {

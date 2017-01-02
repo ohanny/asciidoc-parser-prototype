@@ -1,6 +1,7 @@
-package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html;
+package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html.DefaultHtmlRenderer;
 
 import java.io.StringReader;
 
@@ -13,6 +14,7 @@ public class Main {
                         //":fruit2!:\n" +
                         //":!fruit3:\n" +
                         ":toc: right\n" +
+                        ":icons: font\n" +
                         "\n" +
                         "include::file1.adoc[]\n"  +
                         "\n" +

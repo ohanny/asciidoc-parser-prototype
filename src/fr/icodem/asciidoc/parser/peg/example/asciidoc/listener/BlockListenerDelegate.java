@@ -304,6 +304,10 @@ public class BlockListenerDelegate extends AbstractDelegate {
         return ref;
     }
 
+    private boolean hasAttributeEntry(String name) {
+        return attributeEntries.getAttribute(name) != null;
+    }
+
     private AttributeEntry getAttributeEntry(String name) {
         return attributeEntries.getAttribute(name);
     }
@@ -545,7 +549,10 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
     public void enterParagraph(String admonition) {
-        handler.startParagraph(admonition);
+        admonition = admonition == null?null:admonition.toLowerCase();
+        //String icons = hasAttributeEntry("icons")?getAttributeEntry("icons").getValue():null;
+        String icons = getAttributeEntry("icons").getValue();
+        handler.startParagraph(admonition, icons);
     }
 
     public void exitParagraph(String admonition) {
