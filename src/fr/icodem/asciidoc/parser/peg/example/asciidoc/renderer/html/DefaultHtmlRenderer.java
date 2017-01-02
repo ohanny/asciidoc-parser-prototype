@@ -183,6 +183,8 @@ public class DefaultHtmlRenderer extends HtmlBaseRenderer {
           .mark("authors")
           .indent()
           .append(LINK.tag("rel", "stylesheet", "href", "styles.css"))
+          .nl()
+          .indent()
           .append(LINK.tag("rel", "stylesheet", "href", "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"))
           .nl()
           .runIf("font".equals(iconsAtt.getValue()), () ->
