@@ -22,9 +22,9 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         return new DefaultHtmlRenderer(writer);
     }
 
-    private String title;
-    private boolean hasHeader;
-    private boolean contentStarted;
+    protected String title;
+    protected boolean hasHeader;
+    protected boolean contentStarted;
 
     /* **********************************************/
     // Post-processing
@@ -165,6 +165,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .indent()
           .append(META.tag("name", "generator", "content", "iodoc"))
           .nl()
+          .includeCustomMeta()
           .bufferOn()
           .mark("authors")
           .includeStylesheets()
@@ -194,7 +195,11 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         return bodyClass;
     }
 
-    protected DefaultHtmlRenderer includeStylesheets() {
+    protected DHR includeCustomMeta() {
+        return (DHR)this;
+    }
+
+    protected DHR includeStylesheets() {
         AttributeEntry iconsAtt = getAttributeEntry("icons");
         indent()
           .append(LINK.tag("rel", "stylesheet", "href", "styles.css"))
@@ -208,17 +213,17 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
               .nl()
           )
         ;
-        return this;
+        return (DHR)this;
     }
 
     @Override
     public void endDocument() {
         decIndent()
-            .indent()
-            .append(BODY.end())
-            .nl()
-            .decIndent()
-            .append(HTML.end());
+          .indent()
+          .append(BODY.end())
+          .nl()
+          .decIndent()
+          .append(HTML.end());
     }
 
     @Override
@@ -233,6 +238,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     @Override
     public void endHeader() {
+        AttributeEntry tocAtt = getAttributeEntry("toc");
+
         moveTo("title")
           .indent()
           .append(TITLE.start())
@@ -240,7 +247,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .append(TITLE.end())
           .nl()
           .bufferOff()
-          .runIf(true, () -> markOnWriter("TOC"))
+          .runIf(!tocAtt.isDisabled(), () -> markOnWriter("TOC"))
           .decIndent()
           .indent()
           .append(DIV.end())
@@ -319,28 +326,31 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     @Override
     public void startPreamble() {
         indent()
-            .append(DIV.start("id", "preamble"))
-            .incIndent()
-            .nl();
+          .append(DIV.start("id", "preamble"))
+          .incIndent()
+          .nl()
+        ;
     }
 
     @Override
     public void endPreamble() {
         decIndent()
-            .indent()
-            .append(DIV.end())
-            .nl();
+          .indent()
+          .append(DIV.end())
+          .nl()
+        ;
     }
 
     @Override
     public void startContent() {
         runIf(!hasHeader, () -> bufferOff())
-            .runIf(!contentStarted, () ->
-                indent()
-                .append(DIV.start("id", "content"))
-                .incIndent()
-                .nl()
-            );
+          .runIf(!contentStarted, () ->
+            indent()
+              .append(DIV.start("id", "content"))
+              .incIndent()
+              .nl()
+          )
+        ;
 
         contentStarted = true;
     }
@@ -348,9 +358,10 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     @Override
     public void endContent() {
         decIndent()
-            .indent()
-            .append(DIV.end())
-            .nl();
+          .indent()
+          .append(DIV.end())
+          .nl()
+        ;
     }
 
     @Override
@@ -359,6 +370,22 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .append(DIV.start("class", "sect" + (level - 1)))
           .nl()
           .incIndent();
+    }
+
+    @Override
+    public void writeSectionTitle(int level, String title, String ref) {
+        HtmlTag titleHeader = getTitleHeader(level);
+        indent()
+                .append(titleHeader.start("id", ref))
+                .append(title)
+                .append(titleHeader.end())
+                .nl()
+                .runIf(level == 2, () ->
+                        indent()
+                                .append(DIV.start("class", "sectionbody"))
+                                .nl()
+                                .incIndent()
+                );
     }
 
     @Override
@@ -373,22 +400,6 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             .indent()
             .append(DIV.end())
             .nl();
-    }
-
-    @Override
-    public void writeSectionTitle(int level, String title, String ref) {
-        HtmlTag titleHeader = getTitleHeader(level);
-        indent()
-          .append(titleHeader.start("id", ref))
-          .append(title)
-          .append(getTitleHeader(level).end())
-          .nl()
-          .runIf(level == 2, () ->
-            indent()
-              .append(DIV.start("class", "sectionbody"))
-              .nl()
-              .incIndent()
-        );
     }
 
     @Override
