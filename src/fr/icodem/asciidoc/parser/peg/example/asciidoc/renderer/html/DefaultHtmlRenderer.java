@@ -941,4 +941,10 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         }
     }
 
+    @Override
+    public void xref(XRef xref) {
+        append(A.start("href", xref.getValue()))
+          .append(xref.getLabel())
+          .append(A.end());
+    }
 }

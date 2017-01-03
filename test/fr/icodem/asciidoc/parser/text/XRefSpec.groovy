@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.text
 
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
 
-class XrefSpec extends TextSpecification {
+class XRefSpec extends TextSpecification {
 
     def "xref using angle bracket syntax"() {
         given:

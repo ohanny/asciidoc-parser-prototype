@@ -30,6 +30,12 @@ public class TextListener implements ParseTreeListener {
             case "macroTarget":
                 delegate.macroTarget(new String(chars));
                 break;
+            case "xrefValue":
+                delegate.xrefValue(new String(chars));
+                break;
+            case "xrefLabel":
+                delegate.xrefLabel(new String(chars));
+                break;
         }
     }
 
@@ -84,6 +90,9 @@ public class TextListener implements ParseTreeListener {
             case "mark" :
                 delegate.enterMark();
                 break;
+            case "xref" :
+                delegate.enterXRef();
+                break;
         }
     }
 
@@ -129,6 +138,9 @@ public class TextListener implements ParseTreeListener {
                 break;
             case "mark" :
                 delegate.exitMark();
+                break;
+            case "xref" :
+                delegate.exitXRef();
                 break;
         }
     }

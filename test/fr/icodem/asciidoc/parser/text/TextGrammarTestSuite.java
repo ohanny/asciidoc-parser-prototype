@@ -9,7 +9,7 @@ import org.junit.runners.Suite;
     CustomStylingWithAttributeSpec.class,
     ReplacementTextSpec.class,
     InlineMacroSpec.class,
-    XrefSpec.class
+    XRefSpec.class
 })
 public class TextGrammarTestSuite {
 }

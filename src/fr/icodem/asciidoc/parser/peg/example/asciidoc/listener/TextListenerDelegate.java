@@ -15,6 +15,16 @@ public class TextListenerDelegate extends AbstractDelegate {
         }
     }
 
+    XRefContext currentXRef;
+    private static class XRefContext {
+        String label;
+        String value;
+
+        static XRefContext empty() {
+            return new XRefContext();
+        }
+    }
+
     public TextListenerDelegate(AsciidocHandler handler) {
         this.handler = handler;
     }
@@ -78,5 +88,22 @@ public class TextListenerDelegate extends AbstractDelegate {
     public void exitMark() {
         handler.endMark(currentMark.attributeList);
         currentMark = null;
+    }
+
+    public void enterXRef() {
+        currentXRef = XRefContext.empty();
+    }
+
+    public void xrefValue(String value) {
+        currentXRef.value = "#" + value;
+    }
+
+    public void xrefLabel(String label) {
+        currentXRef.label = label;
+    }
+
+    public void exitXRef() {
+        handler.xref(XRef.of(currentXRef.value, currentXRef.label));
+        currentXRef = null;
     }
 }

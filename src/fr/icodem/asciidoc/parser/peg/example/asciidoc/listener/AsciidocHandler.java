@@ -126,4 +126,5 @@ public interface AsciidocHandler {
     void startMark(AttributeList attList);
     void endMark(AttributeList attList);
 
+    void xref(XRef xref);
 }
