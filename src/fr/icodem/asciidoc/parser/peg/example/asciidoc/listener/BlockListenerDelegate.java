@@ -623,8 +623,6 @@ public class BlockListenerDelegate extends AbstractDelegate {
                     }
                 }
             } else if (currentList.type == ListType.Unordered) {
-//                currentList = ListContext.withParent(currentList);
-//                currentList.bullets = dots;
                 // find parent with same type and level
                 ListContext ancestorWithSameLevel = findParentListWithTypeAndLevel(currentList, ListType.Ordered, dots);
                 if (ancestorWithSameLevel == null) {
