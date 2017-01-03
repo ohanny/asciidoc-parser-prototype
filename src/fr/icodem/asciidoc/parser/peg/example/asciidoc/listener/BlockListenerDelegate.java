@@ -17,7 +17,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
     private DeferredHandler deferredHandler;
     private AsciidocHandler directHandler;
     private AsciidocHandler handler;
-    private SourceCodeProcessor sourceCodeProcessor;
+    private ListingProcessor listingProcessor;
     private AttributeEntries attributeEntries;
 
     private static class AuthorContext {// TODO move class ?
@@ -308,7 +308,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
         super();
         this.directHandler = handler;
         this.deferredHandler = DeferredHandler.of(handler);
-        this.sourceCodeProcessor = SourceCodeProcessor.newInstance();
+        this.listingProcessor = ListingProcessor.newInstance();
 
         selectDirectHandler();
 
@@ -803,7 +803,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
         }
 
 
-        String transformed = sourceCodeProcessor.process(listing);
+        String transformed = listingProcessor.process(listing);
         handler.writeListingBlock(transformed, language);
     }
 

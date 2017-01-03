@@ -1,13 +1,13 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
-public class SourceCodeProcessor {
+public class ListingProcessor {
     private char[] buffer = new char[512];
 
     private final static char[] LT = "&lt;".toCharArray();
     private final static char[] GT = "&gt;".toCharArray();
 
-    public static SourceCodeProcessor newInstance() {
-        return new SourceCodeProcessor();
+    public static ListingProcessor newInstance() {
+        return new ListingProcessor();
     }
 
     public String process(char[] input) {
