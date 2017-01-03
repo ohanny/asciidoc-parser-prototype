@@ -551,7 +551,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
     public void enterParagraph(String admonition) {
         admonition = admonition == null?null:admonition.toLowerCase();
         String icons = getAttributeEntry("icons").getValue();
-        handler.startParagraph(admonition, icons);
+        handler.startParagraph(admonition, icons, consumeAttList());
     }
 
     public void exitParagraph(String admonition) {

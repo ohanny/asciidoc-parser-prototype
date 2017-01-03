@@ -85,6 +85,10 @@ public class AttributeList {
         return options.contains(option);
     }
 
+    public Set<String> getRoles() {
+        return roles;
+    }
+
     public List<String> getPositionalAttributes() {
         return positionalAttributes;
     }

@@ -421,17 +421,25 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void startParagraph(String admonition, String icons) {
+    public void startParagraph(String admonition, String icons, AttributeList attList) {
+        String moreClasses = "";
+        if (attList != null && attList.getRoles() != null) {
+            moreClasses = " " + attList.getRoles()
+                    .stream()
+                    .collect(Collectors.joining(" "));
+        }
+
         if (admonition == null) {
             indent()
-              .append(DIV.start("class", "paragraph"))
+              .append(DIV.start("class", "paragraph" + moreClasses))
               .nl()
               .incIndent()
               .indent()
-              .append(P.start());
+              .append(P.start())
+            ;
         } else {
             indent()
-              .append(DIV.start("class", "admonitionblock " + admonition))
+              .append(DIV.start("class", "admonitionblock " + admonition + moreClasses))
                 .nl()
                 .incIndent()
                 .indent()
@@ -465,7 +473,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
                 .append(TD.start("class", "content"))
                 .nl()
                 .incIndent()
-                .indent();
+                .indent()
+            ;
         }
     }
 
