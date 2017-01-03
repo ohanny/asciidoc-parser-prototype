@@ -110,6 +110,12 @@ public class DefaultRulesFactory implements RulesFactory {
     }
 
     @Override
+    public Rule times(char c, int times) {
+        String name = "TimesRule." + c + "." + times;
+        return cachedInternal(name, () -> new TimesMatcher(c, times));
+    }
+
+    @Override
     public Rule string(String string) {
         String name = "String." + string;
         return cachedInternal(name, () -> new StringMatcher(string));

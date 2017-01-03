@@ -147,6 +147,10 @@ public class BaseRules {
         return factory.atLeast(c, times);
     }
 
+    protected Rule times(char c, int times) {
+        return factory.times(c, times);
+    }
+
     /**
      * Creates a string rule.
      * @see DefaultRulesFactory#string(String)
@@ -260,6 +264,10 @@ public class BaseRules {
             System.out.println(message);
             return true;
         });
+    }
+
+    protected Rule debug(Rule rule) {
+        return action(rule, ctx -> System.out.println(new String(ctx.extract())));
     }
 
     private Rule[] toRule(char[] chars) {

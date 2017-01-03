@@ -14,12 +14,12 @@ class TextSpecification extends Specification {
     protected RulesFactory factory = defaultRulesFactory()
 
     ParsingResult parse(String input) {
-        TextRules rules = new TextRules();
-        rules.withFactory(factory);
+        TextRules rules = new TextRules()
+        rules.withFactory(factory)
         new ParseRunner(rules, rules.&formattedText)
                 .generateStringTree()
                 //.trace()
-                .parse(new StringReader(input), null, null, null);
+                .parse(new StringReader(input), null, null, null)
     }
 
 }

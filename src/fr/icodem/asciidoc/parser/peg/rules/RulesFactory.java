@@ -93,6 +93,8 @@ public interface RulesFactory {
 
     Rule atLeast(char c, int times);
 
+    Rule times(char c, int times);
+
     /**
      * Creates a rule that supplies a {@link StringMatcher string matcher}
      * @param string the string to be matched

@@ -8,7 +8,8 @@ import org.junit.runners.Suite;
     QuotedTextSpec.class,
     CustomStylingWithAttributeSpec.class,
     ReplacementTextSpec.class,
-    InlineMacroSpec.class
+    InlineMacroSpec.class,
+    XrefSpec.class
 })
 public class TextGrammarTestSuite {
 }

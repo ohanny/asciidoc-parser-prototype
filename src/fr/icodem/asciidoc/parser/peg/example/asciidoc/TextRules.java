@@ -4,7 +4,7 @@ import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 
-public class TextRules extends BaseRules { // TODO rename classe to FormattedTextRules
+public class TextRules extends BaseRules {
 
     private CommonRules commonRules = new CommonRules();
 
@@ -26,59 +26,68 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
     // formatted text rules
     public Rule formattedText() {
         return node("formattedText",
-                zeroOrMore(chunk())
-        );
+                 zeroOrMore(chunk())
+               )
+        ;
     }
 
     private Rule chunk() {
         return named("chunk",
-                oneOrMore(
-                    firstOf(
-                        attListAndMark(),
-                        macro(),
-                        text(),
-                        bold(),
-                        italic(),
-                        subscript(),
-                        superscript(),
-                        monospace()
-                    )
-                )
-        );
+                 oneOrMore(
+                   firstOf(
+                     attListAndMark(),
+                     macro(),
+                     xref(),
+                     text(),
+                     bold(),
+                     italic(),
+                     subscript(),
+                     superscript(),
+                     monospace()
+                   )
+                 )
+               )
+        ;
     }
 
     private Rule text() {
         return node("text",
-                oneOrMore(
-                    firstOf(
-                        string("\\*"),
-                        string("\\_"),
-                        string("\\`"),
-                        string("\\#"),
-                        sequence(
-                            test(ch('[')),
-                            testNot(attListAndMark()),
-                            ch('[')
-                        ),
-                        openingSingleQuote(),
-                        closingSingleQuote(),
-                        openingDoubleQuote(),
-                        closingDoubleQuote(),
-                        sequence(
-                            markPositionInParent(),
-                            string("image:"),
-                            firstOf(
-                                hasBeenCheckedAsNotAMacro(),
-                                breakTextRequest()
-                            )
-                        ),
-                        sequence(
-                            textShouldNotBreak(),
-                            noneOf("*_~^`#[")
-                        )
-                    )
-                )
-        );
+                 oneOrMore(
+                   firstOf(
+                     string("\\*"),
+                     string("\\_"),
+                     string("\\`"),
+                     string("\\#"),
+                     sequence(
+                       test(ch('[')),
+                       testNot(attListAndMark()),
+                       ch('[')
+                     ),
+                     openingSingleQuote(),
+                     closingSingleQuote(),
+                     openingDoubleQuote(),
+                     closingDoubleQuote(),
+                     sequence(
+                       markPositionInParent(),
+                       string("image:"),
+                       firstOf(
+                         hasBeenCheckedAsNotAMacro(),
+                         breakTextRequest()
+                       )
+                     ),
+                     sequence(
+                       test(ch('<')),
+                       testNot(xref()),
+                       ch('<')
+                     ),
+                     sequence(
+                       textShouldNotBreak(),
+                       noneOf("*_~^`#[<")
+                     )
+                   )
+                 )
+               )
+        ;
     }
 
     private Rule markPositionInParent() {
@@ -131,14 +140,16 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
         Rule notInsideBold = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideBold", false);
 
         return node("bold",
-                sequence(
-                    notInsideBold,
-                    oneOrMore(ch('*')),
-                    toggleInsideBold,
-                    oneOrMore(proxy("chunk")),
-                    zeroOrMore(ch('*')),
-                    toggleInsideBold
-                ));
+                 sequence(
+                   notInsideBold,
+                   oneOrMore(ch('*')),
+                   toggleInsideBold,
+                   oneOrMore(proxy("chunk")),
+                   zeroOrMore(ch('*')),
+                   toggleInsideBold
+                 )
+               )
+        ;
     }
 
     private Rule italic() {
@@ -161,14 +172,16 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
         Rule notInsideItalic = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideItalic", false);
 
         return node("italic",
-                sequence(
-                        notInsideItalic,
-                        oneOrMore(ch('_')),
-                        toggleInsideItalic,
-                        oneOrMore(proxy("chunk")),
-                        zeroOrMore(ch('_')),
-                        toggleInsideItalic
-                ));
+                 sequence(
+                   notInsideItalic,
+                   oneOrMore(ch('_')),
+                   toggleInsideItalic,
+                   oneOrMore(proxy("chunk")),
+                   zeroOrMore(ch('_')),
+                   toggleInsideItalic
+                 )
+               )
+        ;
     }
 
     private Rule subscript() {
@@ -191,15 +204,16 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
         Rule notInsideSubscript = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideSubscript", false);
 
         return node("subscript",
-                sequence(
-                        notInsideSubscript,
-                        oneOrMore(ch('~')),
-                        toggleInsideSubscript,
-                        oneOrMore(proxy("chunk")),
-                        zeroOrMore(ch('~')),
-                        toggleInsideSubscript
-                ));
-
+                 sequence(
+                   notInsideSubscript,
+                   oneOrMore(ch('~')),
+                   toggleInsideSubscript,
+                   oneOrMore(proxy("chunk")),
+                   zeroOrMore(ch('~')),
+                   toggleInsideSubscript
+                 )
+               )
+        ;
     }
 
     private Rule superscript() {
@@ -222,15 +236,16 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
         Rule notInsideSuperscript = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideSuperscript", false);
 
         return node("superscript",
-                sequence(
-                        notInsideSuperscript,
-                        oneOrMore(ch('^')),
-                        toggleInsideSuperscript,
-                        oneOrMore(proxy("chunk")),
-                        zeroOrMore(ch('^')),
-                        toggleInsideSuperscript
-                ));
-
+                 sequence(
+                   notInsideSuperscript,
+                   oneOrMore(ch('^')),
+                   toggleInsideSuperscript,
+                   oneOrMore(proxy("chunk")),
+                   zeroOrMore(ch('^')),
+                   toggleInsideSuperscript
+                 )
+               )
+        ;
     }
 
     private Rule monospace() {
@@ -253,15 +268,21 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
         Rule notInsideMonospace = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideMonospace", false);
 
         return node("monospace",
-                sequence(
-                        notInsideMonospace,
-                        oneOrMore(ch('`')),
-                        toggleInsideMonospace,
-                        oneOrMore(proxy("chunk")),
-                        zeroOrMore(sequence(testNot(string("`\"")), ch('`'))),
-                        toggleInsideMonospace
-                ));
-
+                 sequence(
+                   notInsideMonospace,
+                   oneOrMore(ch('`')),
+                   toggleInsideMonospace,
+                   oneOrMore(proxy("chunk")),
+                   zeroOrMore(
+                     sequence(
+                       testNot(string("`\"")),
+                       ch('`')
+                     )
+                   ),
+                   toggleInsideMonospace
+                 )
+               )
+        ;
     }
 
     private Rule mark() {
@@ -284,19 +305,24 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
         Rule notInsideMark = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideMark", false);
 
         return node("mark",
-                sequence(
-                    notInsideMark,
-                    oneOrMore(ch('#')),
-                    toggleInsideMark,
-                    oneOrMore(proxy("chunk")),
-                    zeroOrMore(ch('#')),
-                    toggleInsideMark
-                ));
-
+                 sequence(
+                   notInsideMark,
+                   oneOrMore(ch('#')),
+                   toggleInsideMark,
+                   oneOrMore(proxy("chunk")),
+                   zeroOrMore(ch('#')),
+                   toggleInsideMark
+                 )
+               )
+        ;
     }
 
     private Rule attListAndMark() {
-        return sequence(optional(attributeList()), mark());
+        return sequence(
+                 optional(attributeList()),
+                 mark()
+               )
+        ;
     }
 
     private Rule openingSingleQuote() {
@@ -315,4 +341,34 @@ public class TextRules extends BaseRules { // TODO rename classe to FormattedTex
         return node("closingDoubleQuote", string("`\""));
     }
 
+    private Rule xref() {
+        return node("xref",
+                 sequence(
+                   times('<', 2),
+                   xrefValue(),
+                   optional(
+                     sequence(
+                       ch(','),
+                       xrefLabel()
+                     )
+                   ),
+                   times('>', 2)
+                 )
+               )
+        ;
+    }
+
+    private Rule xrefValue() {
+        return node("xrefValue",
+                 oneOrMore(noneOf(",<>\r\n"))
+               )
+        ;
+    }
+
+    private Rule xrefLabel() {
+        return node("xrefLabel",
+                 oneOrMore(noneOf(",<>\r\n"))
+               )
+        ;
+    }
 }
