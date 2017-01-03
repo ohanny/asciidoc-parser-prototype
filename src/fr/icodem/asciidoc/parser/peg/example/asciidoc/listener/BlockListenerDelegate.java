@@ -37,6 +37,37 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     private Deque<AuthorContext> authors;
 
+    private ParagraphContext currentParagraph;
+    private static class ParagraphContext {
+        String admonition;
+        AttributeList attributeList;
+        boolean quoted;
+
+        public ParagraphContext(String admonition, AttributeList attributeList) {
+            this.admonition = admonition;
+            this.attributeList = attributeList;
+        }
+
+        static ParagraphContext of(String admonition, AttributeList attributeList) {
+            return new ParagraphContext(admonition, attributeList);
+        }
+    }
+
+    private QuoteContext currentQuote;
+    private static class QuoteContext {
+        String attribution;
+        String citationTitle;
+
+        public QuoteContext(String attribution, String citationTitle) {
+            this.attribution = attribution;
+            this.citationTitle = citationTitle;
+        }
+
+        public static QuoteContext of(String attribution, String citationTitle) {
+            return new QuoteContext(attribution, citationTitle);
+        }
+    }
+
     private enum ListType {Ordered, Unordered}
     private static class ListContext {
         int level;
@@ -550,12 +581,33 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void enterParagraph(String admonition) {
         admonition = admonition == null?null:admonition.toLowerCase();
-        String icons = getAttributeEntry("icons").getValue();
-        handler.startParagraph(admonition, icons, consumeAttList());
+        AttributeList attList = consumeAttList();
+
+        currentParagraph = ParagraphContext.of(admonition, attList);
+        if (attList != null && "quote".equals(attList.getFirstPositionalAttribute())) {
+            currentParagraph.quoted = true;
+        }
+
+        if (!currentParagraph.quoted) {
+            String icons = getAttributeEntry("icons").getValue();
+            handler.startParagraph(admonition, icons, currentParagraph.attributeList);
+        } else {
+            String attribution = attList.getSecondPositionalAttribute();
+            String citationTitle = attList.getThirdPositionalAttribute();
+            currentQuote = QuoteContext.of(attribution, citationTitle);
+            handler.startQuote(attribution, citationTitle);
+        }
     }
 
-    public void exitParagraph(String admonition) {
-        handler.endParagraph(admonition);
+    public void exitParagraph() {
+        if (!currentParagraph.quoted) {
+            handler.endParagraph(currentParagraph.admonition);
+        } else {
+            handler.endQuote(currentQuote.attribution, currentQuote.citationTitle);
+            currentQuote = null;
+        }
+
+        currentParagraph = null;
     }
 
     public void enterList() {

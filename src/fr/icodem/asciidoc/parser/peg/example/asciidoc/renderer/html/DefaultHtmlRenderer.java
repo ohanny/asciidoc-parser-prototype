@@ -509,6 +509,61 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
+    public void startQuote(String attribution, String citationTitle) {
+        indent()
+          .append(DIV.start("class", "quote"))
+          .nl()
+          .incIndent()
+          .indent()
+          .append(BLOCKQUOTE.start())
+        ;
+    }
+
+    /*
+    <div class="quoteblock">
+<blockquote>
+Quote or excerpt text
+</blockquote>
+<div class="attribution">
+&#8212; attribution<br>
+<cite>citation title and information</cite>
+</div>
+</div>
+
+     */
+
+    @Override
+    public void endQuote(String attribution, String citationTitle) {
+        append(BLOCKQUOTE.end())
+          .nl()
+          .indent()
+          .append(DIV.start("class", "attribution"))
+          .nl()
+          .incIndent()
+          .indent()
+          .append("&#8212; ")
+          .append(attribution)
+          .append(BR.tag())
+          .nl()
+          .runIf(citationTitle != null, () ->
+            indent()
+              .append(CITE.start())
+              .append(citationTitle)
+              .append(CITE.end())
+              .nl()
+          )
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl()
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl()
+        ;
+    }
+
+    @Override
     public void startList() {
         bufferOn();
     }

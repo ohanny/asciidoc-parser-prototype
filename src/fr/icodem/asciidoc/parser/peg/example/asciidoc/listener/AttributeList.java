@@ -77,6 +77,13 @@ public class AttributeList {
         return null;
     }
 
+    public String getThirdPositionalAttribute() {
+        if (positionalAttributes != null && positionalAttributes.size() > 2) {
+            return positionalAttributes.get(2);
+        }
+        return null;
+    }
+
     public Attribute getAttribute(String name) {
         return attributes.get(name);
     }

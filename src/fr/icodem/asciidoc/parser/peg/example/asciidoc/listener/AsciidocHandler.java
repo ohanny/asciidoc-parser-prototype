@@ -50,6 +50,9 @@ public interface AsciidocHandler {
     void startParagraph(String admonition, String icons, AttributeList attList);
     void endParagraph(String admonition);
 
+    void startQuote(String attribution, String citationTitle);
+    void endQuote(String attribution, String citationTitle);
+
     void startList();
     void endList();
 

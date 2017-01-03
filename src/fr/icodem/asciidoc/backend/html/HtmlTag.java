@@ -8,7 +8,7 @@ public enum HtmlTag {
     HTML, BODY, HEAD,
     META, TITLE, LINK,
     DIV, SECTION, HEADER,
-    P, UL, OL, LI, DL, DT, DD,
+    P, BLOCKQUOTE, CITE, UL, OL, LI, DL, DT, DD,
     TABLE, COLGROUP, COL, THEAD, TH, TBODY, TFOOT, TR, TD,
     PRE,
     H1, H2, H3, H4, H5, H6,
@@ -89,6 +89,8 @@ public enum HtmlTag {
             case SECTION: return buildStartTag("section", attributes);
             case HEADER: return buildStartTag("header", attributes);
             case P: return buildStartTag("p", attributes);
+            case BLOCKQUOTE: return "<blockquote>";
+            case CITE: return "<cite>";
             case UL: return buildStartTag("ul", attributes);
             case OL: return buildStartTag("ol", attributes);
             case LI: return buildStartTag("li", attributes);
@@ -133,6 +135,8 @@ public enum HtmlTag {
             case SECTION: return "</section>";
             case HEADER: return "</header>";
             case P: return "</p>";
+            case BLOCKQUOTE: return "</blockquote>";
+            case CITE: return "</cite>";
             case UL: return "</ul>";
             case OL: return "</ol>";
             case LI: return "</li>";
