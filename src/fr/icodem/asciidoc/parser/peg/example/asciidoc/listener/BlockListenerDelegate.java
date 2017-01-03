@@ -579,37 +579,64 @@ public class BlockListenerDelegate extends AbstractDelegate {
         int times, dots = 0;
         if ((times = context.getIntAttribute("times.count", -1)) > 0) {
             if (currentList.type == ListType.Unordered) {
-                if (currentList.bullets == times) {
+                if (times == currentList.bullets) {
 
-                } else if (currentList.bullets < times) {
+                } else if (times > currentList.bullets) {
                     currentList = ListContext.withParent(currentList);
                     currentList.bullets = times;
-                } else if (currentList.bullets > times) {
-                    while (currentList.bullets > times && currentList.level > 1) {
+                } else if (times < currentList.bullets) {
+                    while (times < currentList.bullets  && currentList.level > 1) {
                         handler.endUnorderedList(currentList.level);
                         currentList = currentList.parent;
                     }
                 }
             } else if (currentList.type == ListType.Ordered) {
-                currentList = ListContext.withParent(currentList);
-                currentList.bullets = times;
+                if (times > currentList.bullets) {
+                    currentList = ListContext.withParent(currentList);
+                    currentList.bullets = times;
+                } else {
+                    // find parent with same type and level
+                    ListContext ancestorWithSameLevel = findParentListWithTypeAndLevel(currentList, ListType.Unordered, times);
+                    if (ancestorWithSameLevel == null) {
+                        currentList = ListContext.withParent(currentList);
+                        currentList.bullets = times;
+                    } else {
+                        ListContext parent = currentList.parent;
+                        while (currentList != parent) {
+                            handler.endUnorderedList(currentList.level);
+                            currentList = currentList.parent;
+                        }
+                    }
+                }
             }
         } else if ((dots = context.getIntAttribute("dots.count", -1)) > 0) {
             if (currentList.type == ListType.Ordered) {
-                if (currentList.bullets == dots) {
+                if (dots == currentList.bullets) {
 
-                } else if (currentList.bullets < dots) {
+                } else if (dots > currentList.bullets) {
                     currentList = ListContext.withParent(currentList);
                     currentList.bullets = dots;
-                } else if (currentList.bullets > dots) {
-                    while (currentList.bullets > times && currentList.level > 1) {
+                } else if (dots < currentList.bullets) {
+                    while (dots < currentList.bullets && currentList.level > 1) {
                         handler.endOrderedList(currentList.level);
                         currentList = currentList.parent;
                     }
                 }
             } else if (currentList.type == ListType.Unordered) {
-                currentList = ListContext.withParent(currentList);
-                currentList.bullets = dots;
+//                currentList = ListContext.withParent(currentList);
+//                currentList.bullets = dots;
+                // find parent with same type and level
+                ListContext ancestorWithSameLevel = findParentListWithTypeAndLevel(currentList, ListType.Ordered, dots);
+                if (ancestorWithSameLevel == null) {
+                    currentList = ListContext.withParent(currentList);
+                    currentList.bullets = dots;
+                } else {
+                    ListContext parent = currentList.parent;
+                    while (currentList != parent) {
+                        handler.endUnorderedList(currentList.level);
+                        currentList = currentList.parent;
+                    }
+                }
             }
         }
 
@@ -627,6 +654,17 @@ public class BlockListenerDelegate extends AbstractDelegate {
         }
         handler.startListItem(currentList.level);
         clearAttList();
+    }
+
+    private ListContext findParentListWithTypeAndLevel(ListContext list, ListType type, int level) {
+        ListContext parent = list.parent;
+        while (parent != null) {
+            if (parent.type.equals(type) && parent.level == level) {
+                return parent;
+            }
+        }
+
+        return null;
     }
 
     public void exitListItem() {

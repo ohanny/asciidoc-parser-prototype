@@ -177,26 +177,24 @@ public class Main {
                 "aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum " +
                 "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.\n" +
                "\n" +
+               "== All kind of lists\n" +
+               "\n" +
+               ". Simple lists are marked with bullets\n" +
+               ". Ordered lists begin with a number\n" +
+               ". You can even nest lists one inside another\n" +
+               "* Or mix their types\n" +
+               "* But do not go too far\n" +
+               "* Otherwise audience will be bored\n" +
+               ". Look, seven rows exactly!\n" +
+               "\n" +
                "\n";
 
-        /*
-        		<h2>Plain text on your slides</h2>
-		<p>Lorem ipsum dolor sit amet, consectetur <a href="#4">adipisicing</a> elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <em>quis nostrud</em> exercitation ullamco laboris <strong>nisi ut aliquip</strong> ex ea commodo consequat. Duis aute irure <i>dolor</i> in reprehenderit in voluptate velit esse cillum <b>dolore</b> eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in <code>&lt;culpa&gt;</code> qui officia deserunt mollit anim id est laborum.</p
-         */
+
 
         //String includedText = "\n\nLe *ciel* est bleu.\n\n";
 //        String includedText = "\n* Le *ciel* est bleu.";
         String includedText = "\nX\n";
 
-        //List<AttributeEntry> attributes = new ArrayList<>();
-
-//        System.out.println("\r\nWITH PEG\r\n");
-//        StringWriter writer = new StringWriter();
-//        new AsciidocPegProcessor(new HtmlBackend(writer), attributes).parse(text);
-//        System.out.println(writer);
-
-        //System.out.println("\r\nWITH NEW PEG\r\n");
-        //StringWriter writer = new StringWriter();
         DocumentWriter writer = DocumentWriter.bufferedWriter();
 //        DocumentWriter writer = DocumentWriter.fileWriter("test.html");
 
@@ -212,7 +210,6 @@ public class Main {
         }
 
         System.out.println(writer);
-        //writer.flush();
 
     }
 }
