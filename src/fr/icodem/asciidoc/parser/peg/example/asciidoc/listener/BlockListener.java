@@ -82,7 +82,7 @@ public class BlockListener implements ParseTreeListener {
                 break;
 
             case "listingBlock" :
-                delegate.listingBlock(new String(chars).trim());
+                delegate.listingBlock(chars);
                 break;
 
         }

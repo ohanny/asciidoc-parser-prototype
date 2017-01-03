@@ -195,6 +195,18 @@ public class Main {
                "ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu " +
                "fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.\n" +
                "\n" +
+               "== Code samples\n" +
+               "\n" +
+               "----\n" +
+               "\t\t\t<!DOCTYPE html>\n" +
+               "\t\t\t<html lang=\"en\">\n" +
+               "\t\t\t<head> <!--Comment-->\n" +
+               "\t\t\t    <title>Shower</title>\n" +
+               "\t\t\t    <meta charset=\"UTF-8\">\n" +
+               "\t\t\t    <link rel=\"stylesheet\" href=\"screen.css\">\n" +
+               "\t\t\t</head>\n" +
+               "----\n" +
+               "\n" +
                "\n" +
                "\n" +
                "\n";

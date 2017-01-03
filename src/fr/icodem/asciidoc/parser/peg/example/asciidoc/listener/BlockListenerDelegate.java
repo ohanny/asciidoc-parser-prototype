@@ -17,6 +17,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
     private DeferredHandler deferredHandler;
     private AsciidocHandler directHandler;
     private AsciidocHandler handler;
+    private SourceCodeProcessor sourceCodeProcessor;
     private AttributeEntries attributeEntries;
 
     private static class AuthorContext {// TODO move class ?
@@ -307,6 +308,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
         super();
         this.directHandler = handler;
         this.deferredHandler = DeferredHandler.of(handler);
+        this.sourceCodeProcessor = SourceCodeProcessor.newInstance();
 
         selectDirectHandler();
 
@@ -792,14 +794,17 @@ public class BlockListenerDelegate extends AbstractDelegate {
         currentTable.columns.currentCell.text = text;
     }
 
-    public void listingBlock(String listing) {
+    public void listingBlock(char[] listing) {
         String language = null;
         AttributeList attList = consumeAttList();
         if (attList != null && "source".equals(attList.getFirstPositionalAttribute())) {
             language = attList.getSecondPositionalAttribute();
             if (language != null) language = language.toLowerCase();
         }
-        handler.writeListingBlock(listing, language);
+
+
+        String transformed = sourceCodeProcessor.process(listing);
+        handler.writeListingBlock(transformed, language);
     }
 
 
