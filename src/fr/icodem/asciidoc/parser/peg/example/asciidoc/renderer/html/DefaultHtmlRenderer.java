@@ -27,6 +27,21 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     protected boolean contentStarted;
 
     /* **********************************************/
+    // Attributes methode
+    /* **********************************************/
+
+    private String getMoreClasses(AttributeList attList) {
+        String moreClasses = "";
+        if (attList != null && attList.getRoles() != null) {
+            moreClasses = " " + attList.getRoles()
+                    .stream()
+                    .collect(Collectors.joining(" "));
+        }
+        return moreClasses;
+    }
+
+
+    /* **********************************************/
     // Post-processing
     /* **********************************************/
 
@@ -121,8 +136,10 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     @Override
     public void writeImage(ImageMacro image) {
+        String moreClasses = getMoreClasses(image.getBlockAttributes());
+
         indent()
-          .append(DIV.start("class", "imageblock"))
+          .append(DIV.start("class", "imageblock" + moreClasses))
           .nl()
           .incIndent()
           .indent()
@@ -422,12 +439,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     @Override
     public void startParagraph(String admonition, String icons, AttributeList attList) {
-        String moreClasses = "";
-        if (attList != null && attList.getRoles() != null) {
-            moreClasses = " " + attList.getRoles()
-                    .stream()
-                    .collect(Collectors.joining(" "));
-        }
+        String moreClasses = getMoreClasses(attList);
 
         if (admonition == null) {
             indent()

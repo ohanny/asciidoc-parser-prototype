@@ -4,7 +4,7 @@ public class ImageMacro extends Macro {
     ImageMacro() {}
 
     public String getAlternateText() {
-        String alt = (attributeList== null)?null:attributeList.getFirstPositionalAttribute();
+        String alt = (attributes== null)?null:attributes.getFirstPositionalAttribute();
         if (alt == null) {
             int beginIndex = target.lastIndexOf('/');
             if (beginIndex == -1) beginIndex = 0;

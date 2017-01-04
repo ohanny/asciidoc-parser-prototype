@@ -207,11 +207,26 @@ public class Main {
                "\t\t\t</head>\n" +
                "----\n" +
                "\n" +
+               "== Even tables\n" +
                "\n" +
+               "[%autowidth]\n" +
+               "|===\n" +
+               "|Locavore|Umami|Helvetica|Vegan\n" +
+               "\n" +
+               "|Fingerstache|Kale|Chips|Keytar\n" +
+               "|Sriracha|Gluten-free|Ennui|Keffiyeh\n" +
+               "|Thundercats|Jean|Shorts|Biodiesel\n" +
+               "|Terry|Richardson|Swag|Blog\n" +
+               "|===\n" +
+               "\n" +
+               "It’s good to have information organized.\n" +
+               "\n" +
+               "== Pictures\n" +
+               "\n" +
+               "[.cover]\n" +
+               "image::pictures/picture.jpg[]\n" +
                "\n" +
                "\n";
-
-
 
         //String includedText = "\n\nLe *ciel* est bleu.\n\n";
 //        String includedText = "\n* Le *ciel* est bleu.";

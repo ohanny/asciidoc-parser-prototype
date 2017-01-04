@@ -14,10 +14,16 @@ public abstract class AbstractDelegate {
     protected static class MacroContext {
         String name;
         String target;
+        AttributeList attList; // block attribute list
 
-        static MacroContext empty() {
-            return new MacroContext();
+        public MacroContext(AttributeList attList) {
+            this.attList = attList;
         }
+
+        static MacroContext of(AttributeList attList) {
+            return new MacroContext(attList);
+        }
+
     }
 
 
@@ -83,13 +89,15 @@ public abstract class AbstractDelegate {
 
     // macro methods
     public void enterMacro() {
-        currentMacro = BlockListenerDelegate.MacroContext.empty();
+        currentMacro = BlockListenerDelegate.MacroContext.of(consumeAttList());
     }
 
     public void exitMacro() {
         switch (currentMacro.name) {
             case "image":
-                ImageMacro macro = Macro.image(currentMacro.name, currentMacro.target, consumeAttList());
+                ImageMacro macro =
+                        Macro.image(currentMacro.name, currentMacro.target,
+                                consumeAttList(), currentMacro.attList);
                 image(macro);
                 break;
             case "include":
