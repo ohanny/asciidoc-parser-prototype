@@ -96,6 +96,10 @@ public class AttributeList {
         return roles;
     }
 
+    public Set<String> getOptions() {
+        return options;
+    }
+
     public List<String> getPositionalAttributes() {
         return positionalAttributes;
     }

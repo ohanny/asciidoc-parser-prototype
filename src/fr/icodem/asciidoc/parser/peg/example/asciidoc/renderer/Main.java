@@ -226,7 +226,35 @@ public class Main {
                "[.cover]\n" +
                "image::pictures/picture.jpg[]\n" +
                "\n" +
+               "== Inner navigation\n" +
+               "\n" +
+               "[%step]\n" +
+               ". Lets you reveal list items one by one\n" +
+               ". To keep some key points\n" +
+               ". In secret from audience\n" +
+               ". But it will work only once\n" +
+               ". Nobody wants to see the same joke twice\n" +
+               "\n" +
+               "[.grid]\n" +
+               "== All nicely aligned to grid\n" +
+               "\n" +
+               "\n" +
+               "\n" +
                "\n";
+
+        /*
+        	<section class="slide">
+		<h2></h2>
+		<ol>
+			<li>Lets you reveal list items one by one</li>
+			<li class="next">To keep some key points</li>
+			<li class="next">In secret from audience</li>
+			<li class="next">But it will work only once</li>
+			<li class="next">Nobody wants to see the same joke twice</li>
+		</ol>
+	</section>
+
+         */
 
         //String includedText = "\n\nLe *ciel* est bleu.\n\n";
 //        String includedText = "\n* Le *ciel* est bleu.";

@@ -2,8 +2,11 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.shower;
 
 import fr.icodem.asciidoc.backend.html.HtmlTag;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntry;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html.DefaultHtmlRenderer;
+
+import java.util.function.Consumer;
 
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 
@@ -17,7 +20,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
         return new ShowerRenderer(writer);
     }
 
-    private Runnable startSection;
+    private Consumer<AttributeList> startSection;
 
     @Override
     protected String getBodyClass() {
@@ -103,13 +106,15 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     }
 
     @Override
-    public void startSection(int level) {
-        startSection.run();
+    public void startSection(int level, AttributeList attList) {
+        startSection.accept(attList);
     }
 
-    private void startFirstSection() {
+    private void startFirstSection(AttributeList attList) {
+        String moreClasses = getMoreClasses(attList);
+
         indent()
-          .append(SECTION.start("class", "slide"))
+          .append(SECTION.start("class", "slide" + moreClasses))
           .nl()
           .incIndent()
         ;
@@ -117,13 +122,15 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
         startSection = this::startNextSection;
     }
 
-    private void startNextSection() {
+    private void startNextSection(AttributeList attList) {
+        String moreClasses = getMoreClasses(attList);
+
         decIndent()
           .indent()
           .append(SECTION.end())
           .nl()
           .indent()
-          .append(SECTION.start("class", "slide"))
+          .append(SECTION.start("class", "slide" + moreClasses))
           .nl()
           .incIndent()
         ;

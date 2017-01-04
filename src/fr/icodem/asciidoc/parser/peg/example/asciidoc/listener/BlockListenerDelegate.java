@@ -524,7 +524,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
             currentSection = firstSection;
         }
 
-        handler.startSection(level);
+        handler.startSection(level, consumeAttList());
     }
 
     public void sectionTitle(String title) {

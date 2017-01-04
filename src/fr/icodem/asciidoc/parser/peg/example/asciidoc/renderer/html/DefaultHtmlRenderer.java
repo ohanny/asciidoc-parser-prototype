@@ -30,7 +30,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     // Attributes methode
     /* **********************************************/
 
-    private String getMoreClasses(AttributeList attList) {
+    protected String getMoreClasses(AttributeList attList) {
         String moreClasses = "";
         if (attList != null && attList.getRoles() != null) {
             moreClasses = " " + attList.getRoles()
@@ -384,9 +384,11 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void startSection(int level) { // TODO case level = 0 should generate an error (not a book document, but article) ?
+    public void startSection(int level, AttributeList attList) { // TODO case level = 0 should generate an error (not a book document, but article) ?
+        String moreClasses = getMoreClasses(attList);
+
         indent()
-          .append(DIV.start("class", "sect" + (level - 1)))
+          .append(DIV.start("class", "sect" + (level - 1) + moreClasses))
           .nl()
           .incIndent();
     }
