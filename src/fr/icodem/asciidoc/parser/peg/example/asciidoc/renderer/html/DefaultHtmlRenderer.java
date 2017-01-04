@@ -30,14 +30,14 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     // Attributes methode
     /* **********************************************/
 
-    protected String getMoreClasses(AttributeList attList) {
+    protected String getMoreClasses(String baseClass, AttributeList attList) {
         String moreClasses = "";
         if (attList != null && attList.getRoles() != null) {
             moreClasses = " " + attList.getRoles()
                     .stream()
                     .collect(Collectors.joining(" "));
         }
-        return moreClasses;
+        return baseClass + moreClasses;
     }
 
 
@@ -136,10 +136,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     @Override
     public void writeImage(ImageMacro image) {
-        String moreClasses = getMoreClasses(image.getBlockAttributes());
-
         indent()
-          .append(DIV.start("class", "imageblock" + moreClasses))
+          .append(DIV.start("class", getMoreClasses("imageblock", image.getBlockAttributes())))
           .nl()
           .incIndent()
           .indent()
@@ -385,10 +383,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     @Override
     public void startSection(int level, AttributeList attList) { // TODO case level = 0 should generate an error (not a book document, but article) ?
-        String moreClasses = getMoreClasses(attList);
-
         indent()
-          .append(DIV.start("class", "sect" + (level - 1) + moreClasses))
+          .append(DIV.start("class", getMoreClasses("sect" + (level - 1), attList)))
           .nl()
           .incIndent();
     }
@@ -441,11 +437,9 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     @Override
     public void startParagraph(String admonition, String icons, AttributeList attList) {
-        String moreClasses = getMoreClasses(attList);
-
         if (admonition == null) {
             indent()
-              .append(DIV.start("class", "paragraph" + moreClasses))
+              .append(DIV.start("class", getMoreClasses("paragraph", attList)))
               .nl()
               .incIndent()
               .indent()
@@ -453,7 +447,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             ;
         } else {
             indent()
-              .append(DIV.start("class", "admonitionblock " + admonition + moreClasses))
+              .append(DIV.start("class", getMoreClasses("admonitionblock " + admonition, attList)))
                 .nl()
                 .incIndent()
                 .indent()

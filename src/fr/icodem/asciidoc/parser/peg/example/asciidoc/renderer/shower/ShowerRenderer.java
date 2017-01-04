@@ -111,10 +111,8 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     }
 
     private void startFirstSection(AttributeList attList) {
-        String moreClasses = getMoreClasses(attList);
-
         indent()
-          .append(SECTION.start("class", "slide" + moreClasses))
+          .append(SECTION.start("class", getMoreClasses("slide", attList)))
           .nl()
           .incIndent()
         ;
@@ -123,14 +121,12 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     }
 
     private void startNextSection(AttributeList attList) {
-        String moreClasses = getMoreClasses(attList);
-
         decIndent()
           .indent()
           .append(SECTION.end())
           .nl()
           .indent()
-          .append(SECTION.start("class", "slide" + moreClasses))
+          .append(SECTION.start("class", getMoreClasses("slide", attList)))
           .nl()
           .incIndent()
         ;
