@@ -108,7 +108,7 @@ public interface AsciidocHandler {
     void writeTableCellContent(String text);
     void endTableCell();
 
-    void writeListingBlock(String listing, String language);
+    void writeListingBlock(Listing listing);
 
     // Inline text
     void startBold();

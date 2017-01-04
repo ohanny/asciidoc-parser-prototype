@@ -892,7 +892,9 @@ Quote or excerpt text
     }
 
     @Override
-    public void writeListingBlock(String listing, String language) {
+    public void writeListingBlock(Listing listing) {
+        String language = listing.getLanguage();
+
         indent()
           .append(DIV.start("class", "listingblock"))
           .nl()
@@ -911,7 +913,19 @@ Quote or excerpt text
               .append(CODE.start("class", "language-" + language, "data-lang", language))
               .nl()
           )
-          .append(listing)
+          .forEach(listing.getLines(), line ->
+             append(line.getText())
+               .forEach(line.getCallouts(), c ->
+                 append(I.start("class", "conum", "data-value", Integer.toString(c.getNum())))
+                   .append(I.end())
+                   .append(B.start())
+                   .append("(")
+                   .append(Integer.toString(c.getNum()))
+                   .append(")")
+                   .append(B.end())
+               )
+               .nl()
+          )
           .runIf(language != null, () ->
             nl()
               .decIndent()

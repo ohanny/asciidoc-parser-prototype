@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.TextRules;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing.ListingProcessor;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
@@ -794,7 +795,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
         currentTable.columns.currentCell.text = text;
     }
 
-    public void listingBlock(char[] listing) {
+    public void listingBlock(char[] chars) {
         String language = null;
         AttributeList attList = consumeAttList();
         if (attList != null && "source".equals(attList.getFirstPositionalAttribute())) {
@@ -803,8 +804,8 @@ public class BlockListenerDelegate extends AbstractDelegate {
         }
 
 
-        String transformed = listingProcessor.process(listing);
-        handler.writeListingBlock(transformed, language);
+        Listing listing = listingProcessor.process(language, chars);
+        handler.writeListingBlock(listing);
     }
 
 

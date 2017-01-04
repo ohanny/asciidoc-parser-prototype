@@ -198,9 +198,9 @@ public class Main {
                "== Code samples\n" +
                "\n" +
                "----\n" +
-               "\t\t\t<!DOCTYPE html>\n" +
+               "\t\t\t<!DOCTYPE html>    <1> <2>\n" +
                "\t\t\t<html lang=\"en\">\n" +
-               "\t\t\t<head> <!--Comment-->\n" +
+               "\t\t\t<head> <!--Comment--> <3>\n" +
                "\t\t\t    <title>Shower</title>\n" +
                "\t\t\t    <meta charset=\"UTF-8\">\n" +
                "\t\t\t    <link rel=\"stylesheet\" href=\"screen.css\">\n" +
