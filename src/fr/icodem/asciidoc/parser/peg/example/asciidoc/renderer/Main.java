@@ -226,6 +226,9 @@ public class Main {
                "[.cover]\n" +
                "image::pictures/picture.jpg[]\n" +
                "\n" +
+               "[%shout%shrink]\n" +
+               "== You can even shout this way\n" +
+               "\n" +
                "== Inner navigation\n" +
                "\n" +
                "[%step]\n" +

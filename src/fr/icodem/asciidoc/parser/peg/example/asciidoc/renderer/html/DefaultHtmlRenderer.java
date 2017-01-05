@@ -32,7 +32,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     protected String getMoreClasses(String baseClass, AttributeList attList) {
         String moreClasses = "";
-        if (attList != null && attList.getRoles() != null) {
+        if (attList != null && attList.getRoles() != null && !attList.getRoles().isEmpty()) {
             moreClasses = " " + attList.getRoles()
                     .stream()
                     .collect(Collectors.joining(" "));

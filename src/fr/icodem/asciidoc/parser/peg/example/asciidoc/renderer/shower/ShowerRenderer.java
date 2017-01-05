@@ -39,7 +39,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     protected ShowerRenderer includeStylesheets() {
         AttributeEntry iconsAtt = getAttributeEntry("icons");
         indent()
-          .append(LINK.tag("rel", "stylesheet", "href", "shower/themes/ribbon/styles/screen-16x10.css"))
+          .append(LINK.tag("rel", "stylesheet", "href", "shower/styles/screen-16x10.css"))
           .nl()
           .runIf("font".equals(iconsAtt.getValue()), () ->
             indent()
