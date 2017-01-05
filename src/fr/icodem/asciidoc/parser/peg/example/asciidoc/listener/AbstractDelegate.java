@@ -8,7 +8,9 @@ import java.util.List;
 
 public abstract class AbstractDelegate {
     protected Deque<Text> textObjects;
+    protected AttributeEntries attributeEntries;
     protected List<Attribute> attList;
+
 
     private MacroContext currentMacro;
     protected static class MacroContext {
@@ -30,9 +32,19 @@ public abstract class AbstractDelegate {
     public AbstractDelegate() {
         this.textObjects = new LinkedList<>();
         this.attList = new LinkedList<>();
+
+        this.attributeEntries = AttributeEntries.newAttributeEntries();
     }
 
     // attributes methods
+    protected boolean hasAttributeEntry(String name) {
+        return attributeEntries.getAttribute(name) != null;
+    }
+
+    protected AttributeEntry getAttributeEntry(String name) {
+        return attributeEntries.getAttribute(name);
+    }
+
     protected AttributeList consumeAttList() {
         if (this.attList.isEmpty()) return null;
         AttributeList attList = AttributeList.of(this.attList);
@@ -95,8 +107,12 @@ public abstract class AbstractDelegate {
     public void exitMacro() {
         switch (currentMacro.name) {
             case "image":
+                String target = currentMacro.target;
+                if (hasAttributeEntry("imagesdir")) {
+                    target = getAttributeEntry("imagesdir").getValue() + "/" + target; // TODO replace separator
+                }
                 ImageMacro macro =
-                        Macro.image(currentMacro.name, currentMacro.target,
+                        Macro.image(currentMacro.name, target,
                                 consumeAttList(), currentMacro.attList);
                 image(macro);
                 break;

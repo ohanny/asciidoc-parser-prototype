@@ -1,10 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.BlockRules;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AsciidocHandler;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntries;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.BlockListener;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.SourceResolver;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.AsciidocRenderer;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.TextOutputter;
@@ -54,7 +51,7 @@ public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implemen
         this.attributeEntries = atts;
     }
 
-    protected fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntry getAttributeEntry(String name) {
+    protected AttributeEntry getAttributeEntry(String name) {
         return attributeEntries.getAttribute(name);
     }
 

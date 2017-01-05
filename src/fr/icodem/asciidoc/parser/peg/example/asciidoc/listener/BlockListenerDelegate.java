@@ -19,7 +19,6 @@ public class BlockListenerDelegate extends AbstractDelegate {
     private AsciidocHandler directHandler;
     private AsciidocHandler handler;
     private ListingProcessor listingProcessor;
-    private AttributeEntries attributeEntries;
 
     private static class AuthorContext {// TODO move class ?
 
@@ -313,7 +312,6 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
         selectDirectHandler();
 
-        this.attributeEntries = AttributeEntries.newAttributeEntries();
         this.handler.attributeEntries(attributeEntries);
 
         selectDeferredHandler();
@@ -336,14 +334,6 @@ public class BlockListenerDelegate extends AbstractDelegate {
             ref = ref + "_" + count;
         }
         return ref;
-    }
-
-    private boolean hasAttributeEntry(String name) {
-        return attributeEntries.getAttribute(name) != null;
-    }
-
-    private AttributeEntry getAttributeEntry(String name) {
-        return attributeEntries.getAttribute(name);
     }
 
     public void postProcess() {
