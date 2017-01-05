@@ -53,7 +53,7 @@ public class CalloutProcessor {
     }
 
     private boolean matchGT() {
-        for (int i = ListingConstants.GT.length - 1; i >= 0; i--) {
+        for (int i = ListingConstants.GT.length - 1; i >= 0 && position > -1; i--) {
             if (context.data[position] != ListingConstants.GT[i]) {
                 return false;
             }

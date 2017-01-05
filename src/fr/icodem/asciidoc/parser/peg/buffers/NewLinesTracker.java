@@ -19,8 +19,16 @@ public class NewLinesTracker {
     }
 
     public void addNewLine(int position) {
+        ensureCapacity();
+
         newLinePositions[++lastNewLinePositionIndex] = position;
         lineNumber++;
+    }
+
+    private void ensureCapacity() {
+        if (newLinePositions.length == lastNewLinePositionIndex + 1) {
+            newLinePositions = Arrays.copyOf(newLinePositions, newLinePositions.length * 2);
+        }
     }
 
     public void sync(int position) {

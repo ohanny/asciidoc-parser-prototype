@@ -64,6 +64,17 @@ public class AttributeEntryTest extends GrammarTest {
             },
             {
                 /* message */
+                "two attribute entries, last one ended by new line",
+
+                /* input */
+                ":fruit: kiwi\n" +
+                ":vegetable: cabbage\n",
+
+                /* expected */
+                "(document (content (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n) (attributeEntry : (attributeEntryName v e g e t a b l e) :   (attributeValueParts (attributeValuePart c a b b a g e)) \\n)) (bl <EOI>))"
+            },
+            {
+                /* message */
                 "attribute entry with no value",
 
                 /* input */
@@ -135,6 +146,16 @@ public class AttributeEntryTest extends GrammarTest {
 
                 /* expected */
                 "(document (content (section = =   (sectionTitle S e c t i o n) \\n) (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n)) (bl <EOI>))"
+            },
+            {
+                /* message */
+                "attribute entry with dash character",
+
+                /* input */
+                ":toc-title: Sommaire\n",
+
+                /* expected */
+                "(document (content (attributeEntry : (attributeEntryName t o c - t i t l e) :   (attributeValueParts (attributeValuePart S o m m a i r e)) \\n)) (bl <EOI>))"
             }
         });
 

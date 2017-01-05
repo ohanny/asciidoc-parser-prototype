@@ -286,7 +286,7 @@ public class BlockRules extends BaseRules {
                 charRange('A', 'Z'),
                 charRange('a', 'z'),
                 charRange('0', '9'),
-                ch(' ')
+                ch(' '), ch('-')
         )));
     }
 

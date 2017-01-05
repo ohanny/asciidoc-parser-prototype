@@ -352,12 +352,13 @@ public class BlockListenerDelegate extends AbstractDelegate {
         Toc toc = null;
 
         if (!getAttributeEntry("toc").isDisabled() && firstSection != null) {
+            TocItem root = TocItem.of(firstSection.level - 1, "Table of Contents", null);
+
             Deque<TocItem> parents = new LinkedList<>();
-            TocItem root = TocItem.of(0, "Table of Contents", null);
             parents.push(root);
 
             SectionContext item = firstSection;
-            item.previous = SectionContext.of(0);
+            item.previous = SectionContext.of(root.getLevel());
             while (item != null) {
                 if (item.level < item.previous.level) {
                     while (true) {

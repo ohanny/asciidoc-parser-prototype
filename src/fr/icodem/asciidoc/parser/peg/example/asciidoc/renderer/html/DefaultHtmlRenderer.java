@@ -67,7 +67,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
               .append(DIV.end())
               .nl()
               .indent()
-              .append(UL.start("class", "sectlevel0"))
+              .append(UL.start("class", "sectlevel" + toc.getRoot().getLevel()))
               .nl()
               .incIndent()
               .forEach(toc.getRoot().getChildren(), this::processTocItem)
@@ -217,7 +217,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     protected DHR includeStylesheets() {
         AttributeEntry iconsAtt = getAttributeEntry("icons");
         indent()
-          .append(LINK.tag("rel", "stylesheet", "href", "styles.css"))
+          .append(LINK.tag("rel", "stylesheet", "href", "article/style.css"))
           .nl()
           .indent()
           .append(LINK.tag("rel", "stylesheet", "href", "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"))

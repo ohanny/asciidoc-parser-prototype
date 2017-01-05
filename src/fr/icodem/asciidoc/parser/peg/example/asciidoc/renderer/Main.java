@@ -43,12 +43,12 @@ public class Main {
                         "\n" +
                         "Block below rule\n" +
                         "\n" +
-                        ". Pomme\n" +
-                        ". Poire\n" +
-                        ".. Cerise\n" +
-                        ".. Kiwi\n" +
-                        "* Mangue\n" +
-                        "* Kiwai\n" +
+//                        ". Pomme\n" +
+//                        ". Poire\n" +
+//                        ".. Cerise\n" +
+//                        ".. Kiwi\n" +
+//                        "* Mangue\n" +
+//                        "* Kiwai\n" +
                         "\n" +
                         ":fruit: banana\n" +
                         ":fruit2!:\n" +
@@ -137,7 +137,7 @@ public class Main {
                 "\n" +
                 "* B\n";
 
-        if (true)
+        if (false)
         text = "= Shower Presentation Engine\n" +
                "iodoc\n" +
                "\n" +
@@ -266,7 +266,7 @@ public class Main {
         DocumentWriter writer = DocumentWriter.bufferedWriter();
 //        DocumentWriter writer = DocumentWriter.fileWriter("test.html");
 
-        boolean shower = true;
+        boolean shower = false;
         if (!shower) {
             DefaultHtmlRenderer.withWriter(writer)
                     .withSourceResolver(name -> new StringReader(includedText))
