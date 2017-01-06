@@ -212,19 +212,6 @@ public class BlockRules extends BaseRules {
         ;
     }
 
-//    private Rule isNewLineInParagraph() {
-//        return testNot(
-//                 sequence(
-//                   firstOf(
-//                     any(),
-//                     eoi()
-//                   ),
-//                   bl(true)
-//                 )
-//               )
-//        ;
-//    }
-//
     private Rule content() {
         return node("content", oneOrMore(firstOf(
                 sequence(isCurrentCharNotEOI(), bl(false)),
