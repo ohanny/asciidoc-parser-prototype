@@ -145,20 +145,34 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule paragraph() {
-        return node("paragraph", sequence(
-                testNot(section()),
-//                testNot(sectionTitle()),
-                optional(admonition()),
-                oneOrMore(firstOf(
-                    noneOf("= \t/+\r\n"),
-                    blank(),
-                    sequence(isBlankInParagraph(), newLine()),
-                    sequence(isNotStartOfComment(), ch('/')),
-                    sequence(test(() -> ctx -> ctx.getBooleanAttribute("fromList", false)), testNot(listContinuation()), ch('+')), // TODO optimize
-                    ch('=')
-                )),
-                optional(eoi())
-        ));
+        return node("paragraph",
+                 sequence(
+                   testNot(section()),
+                   optional(admonition()),
+                   oneOrMore(
+                     firstOf(
+                       noneOf("= \t/+\r\n"),
+                       blank(),
+                       sequence(
+                         newLine(),
+                         isNewLineInParagraph()
+                       ),
+                       sequence(
+                         isNotStartOfComment(),
+                         ch('/')
+                       ),
+                       sequence(// TODO optimize
+                         test(() -> ctx -> ctx.getBooleanAttribute("fromList", false)),
+                         testNot(listContinuation()),
+                         ch('+')
+                       ),
+                       ch('=')
+                     )
+                   ),
+                   optional(eoi())
+                 )
+               )
+        ;
     }
 
     private Rule admonition() {
@@ -188,10 +202,29 @@ public class BlockRules extends BaseRules {
                );
     }
 
-    private Rule isBlankInParagraph() {
-        return testNot(sequence(firstOf(any(), eoi()), bl(true)));
+    private Rule isNewLineInParagraph() {
+        return testNot(
+                 firstOf(
+                   eoi(),
+                   bl(true)
+                 )
+               )
+        ;
     }
 
+//    private Rule isNewLineInParagraph() {
+//        return testNot(
+//                 sequence(
+//                   firstOf(
+//                     any(),
+//                     eoi()
+//                   ),
+//                   bl(true)
+//                 )
+//               )
+//        ;
+//    }
+//
     private Rule content() {
         return node("content", oneOrMore(firstOf(
                 sequence(isCurrentCharNotEOI(), bl(false)),

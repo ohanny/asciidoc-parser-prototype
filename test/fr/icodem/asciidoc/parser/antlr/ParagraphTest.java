@@ -158,7 +158,22 @@ public class ParagraphTest extends GrammarTest {
 
                 /* expected */
                 "(document (content (block (paragraph = = B a n a n a) (nl \\n))) (bl <EOI>))"
-            }
+            },
+            {
+                /* message */
+                "paragraph ended with \\r\\n",
+
+                /* input */
+                "= Fruits\r\n" +
+                "\r\n" +
+                "About fruits\r\n" +
+                "\r\n" +
+                "== Banana\r\n",
+
+                /* expected */
+                "(document (header (documentSection (documentTitle F r u i t s \\r))) (bl \\r \\n) (preamble (block (paragraph A b o u t   f r u i t s) (nl \\r \\n)) (bl \\r \\n)) (content (section = =   (sectionTitle B a n a n a \\r) \\n)) (bl <EOI>))"
+                }
+
         });
 
     }
