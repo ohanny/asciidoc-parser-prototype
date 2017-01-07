@@ -99,7 +99,7 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
         inOrder.verify(inputBufferStateListener).visitData("consume", data, 0, -1, 3);
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
 
@@ -175,10 +175,10 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
                .visitData(eq("consume"), aryEq(new char[] {'c', 'c'}), eq(0), eq(-1), eq(6));
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(5)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(5)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(4, 0, 5);
-        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitReset(anyInt(), anyInt(), anyInt());
 
     }
 
@@ -189,11 +189,11 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
         ParsingResult result = parse(rule, "axyxyb", listener, null, inputBufferStateListener, 2);
 
         assertTrue("Did not match", result.matched);
-        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(3)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(3)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(4, 0, 5);
-        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     @Test // buffer smaller than input data : 1. check that buffer size is increased twice 2. check that data are consumed only once
@@ -203,11 +203,11 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
         ParsingResult result = parse(rule, "axyxyb", listener, null, inputBufferStateListener, 2);
 
         assertTrue("Did not match", result.matched);
-        verify(inputBufferStateListener, times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(2)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(4, 5, 0);
-        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // ****** test intermediate flushings when optionals are detected ****** //
@@ -248,7 +248,7 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -282,12 +282,12 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
         inOrder.verify(listener).enterNode(ac.capture());
         assertEquals("Node name incorrect", "child2", ac.getValue().getNodeName());
 
-        inOrder.verify(listener, times(2)).exitNode(ac.capture());
+        inOrder.verify(listener, org.mockito.Mockito.times(2)).exitNode(ac.capture());
         assertEquals("Node name incorrect", "child2", ac.getAllValues().get(6).getNodeName());
         assertEquals("Node name incorrect", "root", ac.getAllValues().get(7).getNodeName());
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -330,7 +330,7 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -371,10 +371,10 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(2, 1, 2);
-        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'named' matcher should let flush preceeding nodes if children are optional
@@ -413,7 +413,7 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -445,18 +445,18 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
                .visitData(eq("consume"), aryEq(new char[] {'a', 'b'}), eq(0), eq(-1), eq(2));
 
 
-        inOrder.verify(listener, times(2)).enterNode(ac.capture());
+        inOrder.verify(listener, org.mockito.Mockito.times(2)).enterNode(ac.capture());
         assertEquals("Node name incorrect", "child2", ac.getAllValues().get(5).getNodeName());
         assertEquals("Node name incorrect", "child3", ac.getAllValues().get(6).getNodeName());
 
         inOrder.verify(listener).characters(ac.capture(), aryEq(new char[]{'x'}), eq(2), eq(2));
-        inOrder.verify(listener, times(3)).exitNode(ac.capture());
+        inOrder.verify(listener, org.mockito.Mockito.times(3)).exitNode(ac.capture());
         assertEquals("Node name incorrect", "child3", ac.getAllValues().get(8).getNodeName());
         assertEquals("Node name incorrect", "child2", ac.getAllValues().get(9).getNodeName());
         assertEquals("Node name incorrect", "root", ac.getAllValues().get(10).getNodeName());
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -502,7 +502,7 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -543,7 +543,7 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -584,7 +584,7 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
         assertEquals("Node name incorrect", "root", ac.getValue().getNodeName());
 
         verify(inputBufferStateListener, never()).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(2)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -603,8 +603,8 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
 
         assertTrue("Did not match", result.matched);
 
-        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -620,8 +620,8 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
 
         assertTrue("Did not match", result.matched);
 
-        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -637,8 +637,8 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
 
         assertTrue("Did not match", result.matched);
 
-        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -654,8 +654,8 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
 
         assertTrue("Did not match", result.matched);
 
-        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener, never()).visitReset(anyInt(), anyInt(), anyInt());
     }
@@ -671,11 +671,11 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
 
         assertTrue("Did not match", result.matched);
 
-        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(2, 3, 0);
-        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'test' matcher should not let flush preceeding nodes
@@ -689,11 +689,11 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
 
         assertTrue("Did not match", result.matched);
 
-        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(1, 2, 0);
-        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
     // 'test not' matcher should not let flush preceeding nodes
@@ -707,11 +707,11 @@ public class FlushingWithReaderInputBufferTest extends BaseRules {
 
         assertTrue("Did not match", result.matched);
 
-        verify(inputBufferStateListener, times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
-        verify(inputBufferStateListener, times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("increase"), anyObject(), anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitData(eq("consume"), anyObject(), anyInt(), anyInt(), anyInt());
 
         verify(inputBufferStateListener).visitReset(1, 2, 0);
-        verify(inputBufferStateListener, times(1)).visitReset(anyInt(), anyInt(), anyInt());
+        verify(inputBufferStateListener, org.mockito.Mockito.times(1)).visitReset(anyInt(), anyInt(), anyInt());
     }
 
 }

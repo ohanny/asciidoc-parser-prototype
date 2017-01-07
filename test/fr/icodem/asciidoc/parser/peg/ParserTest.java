@@ -91,7 +91,7 @@ public class ParserTest extends BaseRules {
         assertEquals("Node name incorrect", "child", ac.getValue().getNodeName());
 
         inOrder.verify(listener).characters(ac.capture(), aryEq(new char[] {'c', 'd'}), eq(2), eq(3));
-        inOrder.verify(listener, times(2)).exitNode(ac.capture());
+        inOrder.verify(listener, org.mockito.Mockito.times(2)).exitNode(ac.capture());
         assertEquals("Node name incorrect", "child", ac.getAllValues().get(4).getNodeName());
         assertEquals("Node name incorrect", "root", ac.getAllValues().get(5).getNodeName());
     }

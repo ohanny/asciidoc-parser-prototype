@@ -483,7 +483,8 @@ public class BlockRules extends BaseRules {
                      )
                    )
                  )
-               );
+               )
+        ;
     }
 
     private Rule labeledListItem() {
@@ -503,7 +504,8 @@ public class BlockRules extends BaseRules {
                    labeledListItemContent(),
                    optional(nl())
                  )
-               );
+               )
+        ;
     }
 
     private Rule labeledListItemTitle() {
@@ -525,7 +527,8 @@ public class BlockRules extends BaseRules {
                      noneOf("\r\n")
                    )
                  )
-               );
+               )
+        ;
     }
 
     // Could be greatly simplified if content was always considered as block
@@ -580,7 +583,8 @@ public class BlockRules extends BaseRules {
                      )
                    )
                  )
-               );
+               )
+        ;
     }
 
     private Rule listingBlock() {

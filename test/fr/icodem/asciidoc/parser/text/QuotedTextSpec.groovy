@@ -37,6 +37,17 @@ class QuotedTextSpec extends TextSpecification {
         result.tree == "(formattedText (text i t ' s   a   [ n i c e ]   d a y))";
     }
 
+    def "phrase with \\n character"() {
+        given:
+        String input = "it's a nice \n day"
+
+        when:
+        ParsingResult result = parse(input)
+
+        then:
+        result.tree == "(formattedText (text i t ' s   a   n i c e   \\n   d a y))"
+    }
+
     def "bold phrase"() {
         given:
         String input = "*it's a nice day*";

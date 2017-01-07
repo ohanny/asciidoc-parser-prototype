@@ -76,7 +76,7 @@ public class FlushingTest extends BaseRules {
         inOrder.verify(inputBufferStateListener).visitNextChar(0, 'a');
         inOrder.verify(inputBufferStateListener).visitNextChar(1, 'b');
 
-        inOrder.verify(listener, times(2)).enterNode(ac.capture());
+        inOrder.verify(listener, org.mockito.Mockito.times(2)).enterNode(ac.capture());
         assertEquals("Node name incorrect", "root", ac.getAllValues().get(0).getNodeName());
         assertEquals("Node name incorrect", "child", ac.getAllValues().get(1).getNodeName());
 
@@ -102,7 +102,7 @@ public class FlushingTest extends BaseRules {
         InOrder inOrder = inOrder(listener, inputBufferStateListener);
         inOrder.verify(inputBufferStateListener).visitNextChar(0, 'a');
 
-        inOrder.verify(listener, times(2)).enterNode(ac.capture());
+        inOrder.verify(listener, org.mockito.Mockito.times(2)).enterNode(ac.capture());
         assertEquals("Node name incorrect", "root", ac.getAllValues().get(0).getNodeName());
         assertEquals("Node name incorrect", "child", ac.getAllValues().get(1).getNodeName());
 

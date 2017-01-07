@@ -51,6 +51,20 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     }
 
     @Override
+    public void endDocument() {
+        indent()
+          .append(DIV.start("class", "progress"))
+          .nl()
+          .indent()
+          .append(SCRIPT.start("src", "shower/shower.min.js"))
+          .append(SCRIPT.end())
+          .nl()
+        ;
+
+        super.endDocument();
+    }
+
+    @Override
     public void startHeader() {
         hasHeader = true; // TODO useful ?
 

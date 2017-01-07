@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public enum HtmlTag {
     DOCTYPE,
     HTML, BODY, HEAD,
-    META, TITLE, LINK,
+    META, TITLE, LINK, SCRIPT,
     DIV, SECTION, HEADER,
     P, BLOCKQUOTE, CITE, UL, OL, LI, DL, DT, DD,
     TABLE, COLGROUP, COL, THEAD, TH, TBODY, TFOOT, TR, TD,
@@ -85,6 +85,7 @@ public enum HtmlTag {
             case BODY: return buildStartTag("body", attributes);
             case HEAD: return "<head>";
             case TITLE: return "<title>";
+            case SCRIPT: return buildStartTag("script", attributes);
             case DIV: return buildStartTag("div", attributes);
             case SECTION: return buildStartTag("section", attributes);
             case HEADER: return buildStartTag("header", attributes);
@@ -132,6 +133,7 @@ public enum HtmlTag {
             case BODY: return "</body>";
             case HEAD: return "</head>";
             case TITLE: return "</title>";
+            case SCRIPT: return "</script>";
             case DIV: return "</div>";
             case SECTION: return "</section>";
             case HEADER: return "</header>";
