@@ -30,6 +30,9 @@ public class ListingProcessor {
                 case '>':
                     count += copy(ListingConstants.GT, buffer, count);
                     break;
+                case '&':
+                    count += copy(ListingConstants.AMP, buffer, count);
+                    break;
                 case '\n':
                     LineContext lineContext = LineContext.of(lines.size() + 1, language, buffer, count);
                     calloutProcessor.processCallouts(lineContext);
