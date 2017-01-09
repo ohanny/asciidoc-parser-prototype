@@ -914,6 +914,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
                    .append(Integer.toString(c.getNum()))
                    .append(")")
                    .append(B.end())
+                   .append(" ")
                )
                .runIf(listing.getLines().size() - 1 != index, () -> nl())
           )
