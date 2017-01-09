@@ -10,6 +10,7 @@ import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
 import java.io.StringReader;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -93,6 +94,13 @@ public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implemen
 
     protected <T> HR forEach(List<T> elements, Consumer<T> c) {
         elements.forEach(c);
+        return (HR)this;
+    }
+
+    protected <T> HR forEach(List<T> elements, BiConsumer<T, Integer> c) {
+        for (int i = 0; i < elements.size(); i++) {
+            c.accept(elements.get(i), i);
+        }
         return (HR)this;
     }
 

@@ -527,19 +527,6 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         ;
     }
 
-    /*
-    <div class="quoteblock">
-<blockquote>
-Quote or excerpt text
-</blockquote>
-<div class="attribution">
-&#8212; attribution<br>
-<cite>citation title and information</cite>
-</div>
-</div>
-
-     */
-
     @Override
     public void endQuote(String attribution, String citationTitle) {
         append(BLOCKQUOTE.end())
@@ -914,14 +901,10 @@ Quote or excerpt text
           .indent()
           .runIf(language != null, () -> append(PRE.start("class", "highlight")))
           .runIf(language == null, () -> append(PRE.start()))
-          .nl()
           .runIf(language != null, () ->
-            incIndent()
-              .indent()
-              .append(CODE.start("class", "language-" + language, "data-lang", language))
-              .nl()
+            append(CODE.start("class", "language-" + language, "data-lang", language))
           )
-          .forEach(listing.getLines(), line ->
+          .forEach(listing.getLines(), (line, index) ->
              append(line.getText())
                .forEach(line.getCallouts(), c ->
                  append(I.start("class", "conum", "data-value", Integer.toString(c.getNum())))
@@ -932,17 +915,11 @@ Quote or excerpt text
                    .append(")")
                    .append(B.end())
                )
-               .nl()
+               .runIf(listing.getLines().size() - 1 != index, () -> nl())
           )
           .runIf(language != null, () ->
-            nl()
-              .decIndent()
-              .indent()
-              .append(CODE.end())
+            append(CODE.end())
           )
-          .nl()
-          .decIndent()
-          .indent()
           .append(PRE.end())
           .nl()
           .decIndent()

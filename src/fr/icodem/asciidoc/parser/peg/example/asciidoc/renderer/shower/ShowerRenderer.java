@@ -4,6 +4,7 @@ import fr.icodem.asciidoc.backend.html.HtmlTag;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntry;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html.CssElement;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html.DefaultHtmlRenderer;
 
 import java.util.function.Consumer;
@@ -159,5 +160,83 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
 
     @Override
     public void endSection(int level) {}
+
+
+    @Override
+    public void startList() {
+        bufferOn();
+    }
+
+    @Override
+    public void endList() {
+        bufferOff();
+    }
+
+    @Override
+    public void startOrderedList(int level, AttributeList atts) {
+        runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
+          .indent()
+          .append(OL.start())
+          .nl()
+          .incIndent();
+    }
+
+    @Override
+    public void endOrderedList(int level) {
+        decIndent()
+          .indent()
+          .append(OL.end())
+          .nl()
+          .runIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
+    }
+
+    @Override
+    public void startUnorderedList(int level, AttributeList attList) {
+        runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
+          .indent()
+          .append(UL.start())
+          .nl()
+          .incIndent();
+    }
+
+    @Override
+    public void endUnorderedList(int level) {
+        decIndent()
+          .indent()
+          .append(UL.end())
+          .nl()
+          .runIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
+    }
+
+    @Override
+    public void startListItem(int level) {
+        indent()
+          .append(LI.start())
+          .nl()
+          .incIndent();
+    }
+
+    @Override
+    public void endListItem(int level) {
+        mark("BeforeEndLI" + level)
+          .decIndent()
+          .indent()
+          .append(LI.end())
+          .nl()
+          .mark("AfterEndLI" + level);
+    }
+
+    @Override
+    public void startListItemValue() {
+//        indent()
+//          .append(P.start());
+    }
+
+    @Override
+    public void endListItemValue() {
+//        append(P.end())
+//                .nl();
+    }
+
 
 }
