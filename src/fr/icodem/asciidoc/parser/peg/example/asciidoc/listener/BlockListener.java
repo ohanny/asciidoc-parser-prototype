@@ -84,9 +84,13 @@ public class BlockListener implements ParseTreeListener {
             case "listingBlock" :
                 delegate.listingBlock(chars);
                 break;
-
+            case "calloutNumber" :
+                delegate.calloutNumber(new String(chars));
+                break;
+            case "calloutText" :
+                delegate.calloutText(new String(chars));
+                break;
         }
-
     }
 
     @Override
@@ -184,6 +188,12 @@ public class BlockListener implements ParseTreeListener {
             case "tableCell" :
                 delegate.enterTableCell(context.getIntAttribute("lineNumber", -1));
                 break;
+            case "callouts":
+                delegate.enterCallouts();
+                break;
+            case "callout":
+                delegate.enterCallout();
+                break;
         }
 
     }
@@ -253,6 +263,12 @@ public class BlockListener implements ParseTreeListener {
                 break;
             case "tableCell" :
                 delegate.exitTableCell();
+                break;
+            case "callouts":
+                delegate.exitCallouts();
+                break;
+            case "callout":
+                delegate.exitCallout();
                 break;
         }
     }

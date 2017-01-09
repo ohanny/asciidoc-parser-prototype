@@ -114,8 +114,8 @@ public class Main {
                         "[source,java]\n" +
                         "----\n" +
                         "public class Produit {\n" +
-                        "  private int id;\n" +
-                        "  private String nom;\n" +
+                        "  private int id;      <1> <2>\n" +
+                        "  private String nom;  <3>\n" +
                         "\n" +
                         "  public void afficher() {\n" +
                         "    System.out.println(\"nom : \" + nom)\n" +
@@ -123,6 +123,10 @@ public class Main {
                         "\n" +
                         "}\n" +
                         "----\n" +
+                        "<1> instance field\n" +
+                        "<2> type int\n" +
+                        "<3> type String\n" +
+                        "\n" +
                         "\n";
 
         if (false) text =  "Block above\n" +

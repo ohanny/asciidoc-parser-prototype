@@ -799,5 +799,28 @@ public class BlockListenerDelegate extends AbstractDelegate {
         handler.writeListingBlock(listing);
     }
 
+    public void enterCallouts() {
+        handler.startCallouts();
+    }
+
+    public void exitCallouts() {
+        handler.endCallouts();
+    }
+
+    public void enterCallout() {
+        handler.startCallout();
+    }
+
+    public void calloutNumber(String nb) {
+        handler.writeCalloutNumber(nb);
+    }
+
+    public void calloutText(String text) {
+        handler.writeCalloutText(text);
+    }
+
+    public void exitCallout() {
+        handler.endCallout();
+    }
 
 }

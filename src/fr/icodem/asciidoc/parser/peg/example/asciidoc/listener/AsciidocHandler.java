@@ -110,6 +110,14 @@ public interface AsciidocHandler {
 
     void writeListingBlock(Listing listing);
 
+    void startCallouts();
+    void endCallouts();
+
+    void startCallout();
+    void writeCalloutNumber(String nb);
+    void writeCalloutText(String text);
+    void endCallout();
+
     // Inline text
     void startBold();
     void endBold();

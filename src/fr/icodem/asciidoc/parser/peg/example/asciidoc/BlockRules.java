@@ -588,39 +588,101 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule listingBlock() {
-        return node("listingBlock", sequence(
-                listingBlockDelimiter(),
-                zeroOrMore(firstOf(
-                        noneOf("-"),
-                        sequence(testNot(listingBlockDelimiter()), ch('-'))
-                )
-                ),
-                listingBlockDelimiter()
-        ));
+        return node("listingBlock",
+                 sequence(
+                   listingBlockDelimiter(),
+                   zeroOrMore(
+                     firstOf(
+                       noneOf("-"),
+                       sequence(
+                         testNot(listingBlockDelimiter()),
+                         ch('-')
+                       )
+                     )
+                   ),
+                   listingBlockDelimiter(),
+                   optional(callouts())
+                 )
+               )
+        ;
 
     }
 
     private Rule listingBlockDelimiter() {
-        return node("listingBlockDelimiter", sequence(
-                    test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), // TODO replace
-                    atLeast('-', 4),
-                    optional(blank()), // TODO replace with blanks
-                    firstOf(newLine(), eoi())
-                ));
+        return node("listingBlockDelimiter",
+                 sequence(
+                   test(sequence(
+                     firstOf(
+                       any(),
+                       eoi()
+                     ),
+                     isFirstCharInLine())
+                   ), // TODO replace
+                   atLeast('-', 4),
+                   optional(blank()), // TODO replace with blanks
+                   firstOf(
+                     newLine(),
+                     eoi()
+                   )
+                 )
+               )
+        ;
+    }
+
+    private Rule callouts() {
+        return node("callouts",
+                 oneOrMore(callout())
+               )
+        ;
+    }
+
+    private Rule callout() {
+        return node("callout",
+                 sequence(
+                   zeroOrMore(blank()),
+                   ch('<'),
+                   calloutNumber(),
+                   ch('>'),
+                   zeroOrMore(blank()),
+                   calloutText(),
+                   newLine()
+                 )
+               )
+        ;
+    }
+
+    private Rule calloutNumber() {
+        return node("calloutNumber",
+                 digits()
+               )
+        ;
+    }
+
+    private Rule calloutText() {
+        return node("calloutText",
+                 zeroOrMore(noneOf("\r\n"))
+               )
+        ;
     }
 
     private Rule literalBlock() {
-        return node("literalBlock", sequence(
-                literalBlockDelimiter(),
-                zeroOrMore(firstOf(
-                        noneOf("."),
-                        sequence(testNot(literalBlockDelimiter()), ch('.'))
-                )),
-                literalBlockDelimiter()
-        ));
-
+        return node("literalBlock",
+                 sequence(
+                   literalBlockDelimiter(),
+                   zeroOrMore(
+                     firstOf(
+                       noneOf("."),
+                       sequence(
+                         testNot(literalBlockDelimiter()),
+                         ch('.')
+                       )
+                     )
+                   ),
+                  literalBlockDelimiter()
+                )
+              )
+        ;
     }
-
 
     private Rule literalBlockDelimiter() {
         return node("literalBlockDelimiter", sequence(

@@ -932,6 +932,74 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .nl();
     }
 
+    @Override
+    public void startCallouts() {
+        indent()
+          .append(DIV.start("class", "colist arabic"))
+          .nl()
+          .incIndent()
+          .indent()
+          .append(TABLE.start())
+          .nl()
+          .incIndent()
+        ;
+    }
+
+    @Override
+    public void startCallout() {
+        indent()
+          .append(TR.start())
+          .nl()
+          .incIndent()
+        ;
+    }
+
+    @Override
+    public void writeCalloutNumber(String nb) {
+        indent()
+          .append(TD.start())
+          .append(I.start("class", "conum", "data-value", nb))
+          .append(I.end())
+          .append(B.start())
+          .append(nb)
+          .append(B.end())
+          .append(TD.end())
+          .nl()
+        ;
+    }
+
+    @Override
+    public void writeCalloutText(String text) {
+        indent()
+          .append(TD.start())
+          .append(text)
+          .append(TD.end())
+          .nl()
+        ;
+    }
+
+    @Override
+    public void endCallout() {
+        decIndent()
+          .indent()
+          .append(TR.end())
+          .nl()
+        ;
+    }
+
+    @Override
+    public void endCallouts() {
+        decIndent()
+          .indent()
+          .append(TABLE.end())
+          .nl()
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl()
+        ;
+    }
+
     /* **********************************************/
     // Inline text
     /* **********************************************/
