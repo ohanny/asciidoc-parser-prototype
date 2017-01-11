@@ -212,16 +212,12 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     @Override
     public void startListItem(int level) {
         indent()
-          .append(LI.start())
-          .nl()
-          .incIndent();
+          .append(LI.start());
     }
 
     @Override
     public void endListItem(int level) {
         mark("BeforeEndLI" + level)
-          .decIndent()
-          .indent()
           .append(LI.end())
           .nl()
           .mark("AfterEndLI" + level);
