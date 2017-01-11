@@ -907,16 +907,6 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .forEach(listing.getLines(), (line, index) ->
              append(line.getText())
                  .writeListingCallout(line)
-//               .forEach(line.getCallouts(), c ->
-//                 append(I.start("class", "conum", "data-value", Integer.toString(c.getNum())))
-//                   .append(I.end())
-//                   .append(B.start())
-//                   .append("(")
-//                   .append(Integer.toString(c.getNum()))
-//                   .append(")")
-//                   .append(B.end())
-//                   .append(" ")
-//               )
                .runIf(listing.getLines().size() - 1 != index, () -> nl())
           )
           .runIf(language != null, () ->
