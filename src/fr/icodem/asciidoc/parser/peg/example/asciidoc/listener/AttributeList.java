@@ -104,6 +104,10 @@ public class AttributeList {
         return positionalAttributes;
     }
 
+    public boolean hasPositionalAttributes(String name) {
+        return positionalAttributes != null && positionalAttributes.contains(name);
+    }
+
     public String getId() {
         return id;
     }

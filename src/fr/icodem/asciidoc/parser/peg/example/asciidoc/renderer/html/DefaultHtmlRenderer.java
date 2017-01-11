@@ -906,16 +906,17 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           )
           .forEach(listing.getLines(), (line, index) ->
              append(line.getText())
-               .forEach(line.getCallouts(), c ->
-                 append(I.start("class", "conum", "data-value", Integer.toString(c.getNum())))
-                   .append(I.end())
-                   .append(B.start())
-                   .append("(")
-                   .append(Integer.toString(c.getNum()))
-                   .append(")")
-                   .append(B.end())
-                   .append(" ")
-               )
+                 .writeListingCallout(line)
+//               .forEach(line.getCallouts(), c ->
+//                 append(I.start("class", "conum", "data-value", Integer.toString(c.getNum())))
+//                   .append(I.end())
+//                   .append(B.start())
+//                   .append("(")
+//                   .append(Integer.toString(c.getNum()))
+//                   .append(")")
+//                   .append(B.end())
+//                   .append(" ")
+//               )
                .runIf(listing.getLines().size() - 1 != index, () -> nl())
           )
           .runIf(language != null, () ->
@@ -930,7 +931,23 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .decIndent()
           .indent()
           .append(DIV.end())
-          .nl();
+          .nl()
+        ;
+    }
+
+    protected DHR writeListingCallout(Listing.Line line) {
+       return
+         forEach(line.getCallouts(), c ->
+           append(I.start("class", "conum", "data-value", Integer.toString(c.getNum())))
+             .append(I.end())
+             .append(B.start())
+             .append("(")
+             .append(Integer.toString(c.getNum()))
+             .append(")")
+             .append(B.end())
+             .append(" ")
+           )
+         ;
     }
 
     @Override

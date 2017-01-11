@@ -16,7 +16,7 @@ public class ListingProcessor {
 
     private ListingProcessor() {}
 
-    public Listing process(String language, char[] input) {
+    public Listing process(char[] input, String language, boolean linenums) {
         List<Listing.Line> lines = new ArrayList<>();
 
 
@@ -47,7 +47,7 @@ public class ListingProcessor {
             }
         }
 
-        Listing listing = Listing.of(language, lines);
+        Listing listing = Listing.of(lines, language, linenums);
 
         return listing;
     }

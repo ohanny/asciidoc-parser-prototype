@@ -141,7 +141,7 @@ public class Main {
                 "\n" +
                 "* B\n";
 
-        if (false)
+        if (true)
         text = "= Shower Presentation Engine\n" +
                "iodoc\n" +
                "\n" +
@@ -201,6 +201,7 @@ public class Main {
                "\n" +
                "== Code samples\n" +
                "\n" +
+               "[source,html,linenums]\n" +
                "----\n" +
                "\t\t\t<!DOCTYPE html>    <1> <2>\n" +
                "\t\t\t<html lang=\"en\">\n" +
@@ -249,20 +250,6 @@ public class Main {
                "\n" +
                "\n";
 
-        /*
-        	<section class="slide">
-		<h2></h2>
-		<ol>
-			<li>Lets you reveal list items one by one</li>
-			<li class="next">To keep some key points</li>
-			<li class="next">In secret from audience</li>
-			<li class="next">But it will work only once</li>
-			<li class="next">Nobody wants to see the same joke twice</li>
-		</ol>
-	</section>
-
-         */
-
         //String includedText = "\n\nLe *ciel* est bleu.\n\n";
 //        String includedText = "\n* Le *ciel* est bleu.";
         String includedText = "\nX\n";
@@ -270,7 +257,7 @@ public class Main {
         DocumentWriter writer = DocumentWriter.bufferedWriter();
 //        DocumentWriter writer = DocumentWriter.fileWriter("test.html");
 
-        boolean shower = false;
+        boolean shower = true;
         if (!shower) {
             DefaultHtmlRenderer.withWriter(writer)
                     .withSourceResolver(name -> new StringReader(includedText))

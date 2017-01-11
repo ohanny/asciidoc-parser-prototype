@@ -35,24 +35,30 @@ public class Listing {
         }
     }
 
-    private String language;
     private List<Line> lines;
+    private String language;
+    private boolean linenums;
 
-    public static Listing of(String language, List<Line> lines) {
-        return new Listing(language, lines);
+    public static Listing of(List<Line> lines, String language, boolean linenums) {
+        return new Listing(lines, language, linenums);
     }
 
-    private Listing(String language, List<Line> lines) {
-        this.language = language;
+    private Listing(List<Line> lines, String language, boolean linenums) {
         this.lines = lines;
+        this.language = language;
+        this.linenums = linenums;
+    }
+
+    public List<Line> getLines() {
+        return lines;
     }
 
     public String getLanguage() {
         return language;
     }
 
-    public List<Line> getLines() {
-        return lines;
+    public boolean isLinenums() {
+        return linenums;
     }
 
     public List<ListingCallout> getCallouts() {

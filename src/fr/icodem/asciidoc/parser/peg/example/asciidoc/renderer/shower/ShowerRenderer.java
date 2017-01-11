@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.shower;
 import fr.icodem.asciidoc.backend.html.HtmlTag;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntry;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Listing;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html.CssElement;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html.DefaultHtmlRenderer;
@@ -236,6 +237,38 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     public void endListItemValue() {
 //        append(P.end())
 //                .nl();
+    }
+
+    @Override
+    public void writeListingBlock(Listing listing) {
+        String language = listing.getLanguage();
+        boolean linenums = listing.isLinenums();
+
+        indent()
+          .append(PRE.start())
+          .runIf(!linenums && language != null, () ->
+            append(CODE.start("class", language))
+          )
+          .runIf(!linenums && language == null, () ->
+            append(CODE.start())
+          )
+          .forEach(listing.getLines(), (line, index) ->
+            runIf(linenums, () ->
+              append(CODE.start())
+            )
+            .append(line.getText())
+            .writeListingCallout(line)
+            .runIf(linenums, () ->
+              append(CODE.end())
+            )
+            .runIf(listing.getLines().size() - 1 != index, () -> nl())
+          )
+          .runIf(!linenums, () ->
+            append(CODE.end())
+          )
+          .append(PRE.end())
+          .nl()
+        ;
     }
 
 
