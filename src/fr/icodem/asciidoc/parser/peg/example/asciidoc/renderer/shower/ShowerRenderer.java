@@ -48,6 +48,18 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
               .append(LINK.tag("rel", "stylesheet", "href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css"))
               .nl()
           )
+          .indent()
+          .append(LINK.tag("rel", "stylesheet", "href", "highlight/styles/atom-one-light.css"))
+          .nl()
+          .indent()
+          .append(SCRIPT.start("src", "highlight/highlight.pack.js"))
+          .append(SCRIPT.end())
+           .nl()
+           .indent()
+           .append(SCRIPT.start())
+           .append("hljs.initHighlightingOnLoad();")
+           .append(SCRIPT.end())
+           .nl()
         ;
         return this;
     }
