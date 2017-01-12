@@ -18,6 +18,7 @@ public class AttributeEntries {
         addAttribute("toc", null, true);
         addAttribute("icons", null);
         addAttribute("toc-title", "Table of Contents");
+        addAttribute("source-highlighter", null);
     }
 
     private void addAttribute(String name, String value, boolean disabled) {
@@ -34,5 +35,10 @@ public class AttributeEntries {
 
     public AttributeEntry getAttribute(String name) {
         return nameToAttributeMap.get(name);
+    }
+
+    public boolean isAttributeValueEqualTo(String name, String value) {
+        AttributeEntry att = getAttribute(name);
+        return (att != null && value.equals(att.getValue()));
     }
 }

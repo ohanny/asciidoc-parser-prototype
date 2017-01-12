@@ -5,7 +5,6 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntry;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Listing;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html.CssElement;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html.DefaultHtmlRenderer;
 
 import java.util.function.Consumer;
@@ -49,20 +48,8 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
               .nl()
           )
           .indent()
-          .append(LINK.tag("rel", "stylesheet", "href", "highlight/styles/atom-one-light.css"))
-          .nl()
-          .indent()
           .append(LINK.tag("rel", "stylesheet", "href", "iodoc/style.css"))
           .nl()
-          .indent()
-          .append(SCRIPT.start("src", "highlight/highlight.pack.js"))
-          .append(SCRIPT.end())
-           .nl()
-           .indent()
-           .append(SCRIPT.start())
-           .append("hljs.initHighlightingOnLoad();")
-           .append(SCRIPT.end())
-           .nl()
         ;
         return this;
     }

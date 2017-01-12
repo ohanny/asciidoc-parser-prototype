@@ -227,18 +227,6 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
               .append(LINK.tag("rel", "stylesheet", "href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css"))
               .nl()
           )
-          .indent()
-          .append(LINK.tag("rel", "stylesheet", "href", "highlight/styles/default.css"))
-          .nl()
-          .indent()
-          .append(SCRIPT.start("src", "highlight/highlight.pack.js"))
-          .append(SCRIPT.end())
-          .nl()
-          .indent()
-          .append(SCRIPT.start())
-          .append("hljs.initHighlightingOnLoad();")
-          .append(SCRIPT.end())
-          .nl()
         ;
 
         return (DHR)this;
@@ -246,12 +234,29 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     @Override
     public void endDocument() {
-        decIndent()
+        boolean highlightjs = isAttributeValueEqualTo("source-highlighter", "highlightjs");
+
+        runIf(highlightjs, () -> // atom-one-light.css ?
+          indent()
+            .append(LINK.tag("rel", "stylesheet", "href", "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css"))
+            .nl()
+            .indent()
+            .append(SCRIPT.start("src", "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"))
+            .append(SCRIPT.end())
+            .nl()
+            .indent()
+            .append(SCRIPT.start())
+            .append("hljs.initHighlightingOnLoad();")
+            .append(SCRIPT.end())
+            .nl()
+        )
+          .decIndent()
           .indent()
           .append(BODY.end())
           .nl()
           .decIndent()
-          .append(HTML.end());
+          .append(HTML.end())
+        ;
     }
 
     @Override
@@ -899,9 +904,21 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 //            .nl();
     }
 
+    private String getListingPreClass(Listing listing, boolean highlightjs) {
+        String preClass = null;
+        if (highlightjs && listing.isSource()) {
+            preClass = "highlightjs highlight";
+        } else if (listing.isSource()) {
+            preClass = "highlight";
+        }
+        return preClass;
+    }
+
     @Override
     public void writeListingBlock(Listing listing) {
         String language = listing.getLanguage();
+        boolean highlightjs = isAttributeValueEqualTo("source-highlighter", "highlightjs");
+        String preClass = getListingPreClass(listing, highlightjs);
 
         indent()
           .append(DIV.start("class", "listingblock"))
@@ -912,8 +929,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .nl()
           .incIndent()
           .indent()
-          .runIf(language != null, () -> append(PRE.start("class", "highlight")))
-          .runIf(language == null, () -> append(PRE.start()))
+          .runIf(listing.isSource(), () -> append(PRE.start("class", preClass)))
+          .runIf(!listing.isSource(), () -> append(PRE.start()))
           .runIf(language != null, () ->
             append(CODE.start("class", "language-" + language, "data-lang", language))
           )

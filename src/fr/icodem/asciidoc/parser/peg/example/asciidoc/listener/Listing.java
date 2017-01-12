@@ -36,21 +36,27 @@ public class Listing {
     }
 
     private List<Line> lines;
+    private boolean source;
     private String language;
     private boolean linenums;
 
-    public static Listing of(List<Line> lines, String language, boolean linenums) {
-        return new Listing(lines, language, linenums);
+    public static Listing of(List<Line> lines, boolean source, String language, boolean linenums) {
+        return new Listing(lines, source, language, linenums);
     }
 
-    private Listing(List<Line> lines, String language, boolean linenums) {
+    private Listing(List<Line> lines, boolean source, String language, boolean linenums) {
         this.lines = lines;
+        this.source = source;
         this.language = language;
         this.linenums = linenums;
     }
 
     public List<Line> getLines() {
         return lines;
+    }
+
+    public boolean isSource() {
+        return source;
     }
 
     public String getLanguage() {

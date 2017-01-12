@@ -787,17 +787,19 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
     public void listingBlock(char[] chars) {
+        boolean source = false;
         String language = null;
         boolean linenums = false;
         AttributeList attList = consumeAttList();
         if (attList != null && "source".equals(attList.getFirstPositionalAttribute())) {
+            source = true;
             language = attList.getSecondPositionalAttribute();
             if (language != null) language = language.toLowerCase();
             linenums = attList.hasPositionalAttributes("linenums");
         }
 
 
-        Listing listing = listingProcessor.process(chars, language, linenums);
+        Listing listing = listingProcessor.process(chars, source, language, linenums);
         handler.writeListingBlock(listing);
     }
 
