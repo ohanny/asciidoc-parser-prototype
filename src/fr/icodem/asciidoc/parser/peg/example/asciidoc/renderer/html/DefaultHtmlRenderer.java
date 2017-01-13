@@ -232,17 +232,21 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         return (DHR)this;
     }
 
+    protected String getHighlightjsSelector() {
+        return "pre.highlight code";
+    }
+
     @Override
     public void endDocument() {
         boolean highlightjs = isAttributeValueEqualTo("source-highlighter", "highlightjs");
         boolean highlightSelective = isAttributeEnabled("highlight-selective");
 
-        runIf(highlightjs, () -> // atom-one-light.css ?
+        runIf(highlightjs, () ->
           indent()
-            .append(LINK.tag("rel", "stylesheet", "href", "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css"))
+            .append(LINK.tag("rel", "stylesheet", "href", getAttributeEntryValue("highligthjs-style")))
             .nl()
             .indent()
-            .append(SCRIPT.start("src", "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"))
+            .append(SCRIPT.start("src", getAttributeEntryValue("highligthjs-script")))
             .append(SCRIPT.end())
             .nl()
             .runIf(!highlightSelective, () ->
@@ -257,7 +261,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
                 .append(SCRIPT.start())
                 .nl()
                 .indent()
-                .append("let blocks = document.querySelectorAll('pre.highlight code');")
+                .append("let blocks = document.querySelectorAll('" + getHighlightjsSelector() + "');")
                 .nl()
                 .indent()
                 .append("for (let i = 0; i < blocks.length; ++i) {")

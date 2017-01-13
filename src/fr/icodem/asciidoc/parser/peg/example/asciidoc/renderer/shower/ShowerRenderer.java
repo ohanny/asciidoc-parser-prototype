@@ -54,6 +54,10 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
         return this;
     }
 
+    protected String getHighlightjsSelector() {
+        return "pre.highlight";
+    }
+
     @Override
     public void endDocument() {
         indent()

@@ -19,6 +19,8 @@ public class AttributeEntries {
         addAttribute("icons", null);
         addAttribute("toc-title", "Table of Contents");
         addAttribute("source-highlighter", null);
+        addAttribute("highligthjs-script", "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js");
+        addAttribute("highligthjs-style", "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css");
     }
 
     private void addAttribute(String name, String value, boolean disabled) {
