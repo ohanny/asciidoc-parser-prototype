@@ -16,7 +16,7 @@ public class Main {
                         ":toc: right\n" +
                         ":icons: font\n" +
                         ":source-highlighter: highlightjs\n" +
-                        ":highlight-selectivex: \n" +
+                        ":highlight-selective: \n" +
                         "\n" +
                         "include::file1.adoc[]\n"  +
                         "\n" +
