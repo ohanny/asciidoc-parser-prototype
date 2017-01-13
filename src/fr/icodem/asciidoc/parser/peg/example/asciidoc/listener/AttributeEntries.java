@@ -41,4 +41,9 @@ public class AttributeEntries {
         AttributeEntry att = getAttribute(name);
         return (att != null && value.equals(att.getValue()));
     }
+
+    public boolean isAttributeEnabled(String name) {
+        AttributeEntry att = getAttribute(name);
+        return (att != null && !att.isDisabled());
+    }
 }

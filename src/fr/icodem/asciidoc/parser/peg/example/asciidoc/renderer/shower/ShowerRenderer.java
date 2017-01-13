@@ -242,8 +242,15 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
         String language = listing.getLanguage();
         boolean linenums = listing.isLinenums();
 
+        String preClass = getListingPreClass(listing);
+
         indent()
-          .append(PRE.start())
+          .runIf(preClass == null, () ->
+            append(PRE.start())
+          )
+          .runIf(preClass != null, () ->
+            append(PRE.start("class", preClass))
+          )
           .runIf(!linenums && language != null, () ->
             append(CODE.start("class", language))
           )

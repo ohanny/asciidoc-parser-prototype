@@ -39,16 +39,18 @@ public class Listing {
     private boolean source;
     private String language;
     private boolean linenums;
+    private boolean highlight;
 
-    public static Listing of(List<Line> lines, boolean source, String language, boolean linenums) {
-        return new Listing(lines, source, language, linenums);
+    public static Listing of(List<Line> lines, boolean source, String language, boolean linenums, boolean highlight) {
+        return new Listing(lines, source, language, linenums, highlight);
     }
 
-    private Listing(List<Line> lines, boolean source, String language, boolean linenums) {
+    private Listing(List<Line> lines, boolean source, String language, boolean linenums, boolean highlight) {
         this.lines = lines;
         this.source = source;
         this.language = language;
         this.linenums = linenums;
+        this.highlight = highlight;
     }
 
     public List<Line> getLines() {
@@ -65,6 +67,10 @@ public class Listing {
 
     public boolean isLinenums() {
         return linenums;
+    }
+
+    public boolean isHighlight() {
+        return highlight;
     }
 
     public List<ListingCallout> getCallouts() {

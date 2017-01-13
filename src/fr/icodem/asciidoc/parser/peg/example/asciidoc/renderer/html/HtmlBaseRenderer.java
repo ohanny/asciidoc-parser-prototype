@@ -60,6 +60,10 @@ public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implemen
         return attributeEntries.isAttributeValueEqualTo(name, value);
     }
 
+    public boolean isAttributeEnabled(String name) {
+        return attributeEntries.isAttributeEnabled(name);
+    }
+
     protected HR append(String str) {
         outputter.append(str);
         return (HR)this;

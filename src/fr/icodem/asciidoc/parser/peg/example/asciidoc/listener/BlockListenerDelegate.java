@@ -790,16 +790,18 @@ public class BlockListenerDelegate extends AbstractDelegate {
         boolean source = false;
         String language = null;
         boolean linenums = false;
+        boolean highlight = false;
         AttributeList attList = consumeAttList();
         if (attList != null && "source".equals(attList.getFirstPositionalAttribute())) {
             source = true;
             language = attList.getSecondPositionalAttribute();
             if (language != null) language = language.toLowerCase();
             linenums = attList.hasPositionalAttributes("linenums");
+            highlight = attList.hasOption("highlight");
         }
 
 
-        Listing listing = listingProcessor.process(chars, source, language, linenums);
+        Listing listing = listingProcessor.process(chars, source, language, linenums, highlight);
         handler.writeListingBlock(listing);
     }
 

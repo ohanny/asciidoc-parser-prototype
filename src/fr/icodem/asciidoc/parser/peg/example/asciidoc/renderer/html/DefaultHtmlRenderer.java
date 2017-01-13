@@ -235,6 +235,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     @Override
     public void endDocument() {
         boolean highlightjs = isAttributeValueEqualTo("source-highlighter", "highlightjs");
+        boolean highlightSelective = isAttributeEnabled("highlight-selective");
 
         runIf(highlightjs, () -> // atom-one-light.css ?
           indent()
@@ -244,9 +245,31 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             .append(SCRIPT.start("src", "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"))
             .append(SCRIPT.end())
             .nl()
-            .indent()
+                  .runIf(!highlightSelective, () ->
+            indent()
             .append(SCRIPT.start())
             .append("hljs.initHighlightingOnLoad();")
+            .append(SCRIPT.end())
+            .nl()
+                  )
+                  .runIf(highlightSelective, () ->
+            indent()
+            .append(SCRIPT.start())
+            .nl()
+            .indent()
+            .append("let blocks = document.querySelectorAll('pre.highlight code');")
+            .nl()
+            .indent()
+            .append("for (i = 0; i < blocks.length; ++i) {")
+            .nl()
+            .indent()
+            .append("hljs.highlightBlock(blocks[i]);")
+            .nl()
+            .indent()
+            .append("}")
+            .nl()
+                  )
+            .indent()
             .append(SCRIPT.end())
             .nl()
         )
@@ -257,6 +280,15 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .decIndent()
           .append(HTML.end())
         ;
+
+        /*
+
+        $(document).ready(function() {
+  $('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+});
+         */
     }
 
     @Override
@@ -904,12 +936,17 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 //            .nl();
     }
 
-    private String getListingPreClass(Listing listing, boolean highlightjs) {
+    protected String getListingPreClass(Listing listing) {
+        boolean highlightjs = isAttributeValueEqualTo("source-highlighter", "highlightjs");
+        boolean highlightSelective = isAttributeEnabled("highlight-selective");
+
         String preClass = null;
-        if (highlightjs && listing.isSource()) {
-            preClass = "highlightjs highlight";
-        } else if (listing.isSource()) {
-            preClass = "highlight";
+        if (!highlightSelective || listing.isHighlight()) {
+            if (highlightjs && listing.isSource()) {
+                preClass = "highlightjs highlight";
+            } else if (listing.isSource()) {
+                preClass = "highlight";
+            }
         }
         return preClass;
     }
@@ -917,8 +954,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     @Override
     public void writeListingBlock(Listing listing) {
         String language = listing.getLanguage();
-        boolean highlightjs = isAttributeValueEqualTo("source-highlighter", "highlightjs");
-        String preClass = getListingPreClass(listing, highlightjs);
+
+        String preClass = getListingPreClass(listing);
 
         indent()
           .append(DIV.start("class", "listingblock"))
@@ -929,8 +966,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .nl()
           .incIndent()
           .indent()
-          .runIf(listing.isSource(), () -> append(PRE.start("class", preClass)))
-          .runIf(!listing.isSource(), () -> append(PRE.start()))
+          .runIf(preClass != null, () -> append(PRE.start("class", preClass)))
+          .runIf(preClass == null, () -> append(PRE.start()))
           .runIf(language != null, () ->
             append(CODE.start("class", "language-" + language, "data-lang", language))
           )
