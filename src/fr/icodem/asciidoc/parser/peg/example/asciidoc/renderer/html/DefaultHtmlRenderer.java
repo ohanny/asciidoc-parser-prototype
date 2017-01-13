@@ -245,30 +245,30 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             .append(SCRIPT.start("src", "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"))
             .append(SCRIPT.end())
             .nl()
-                  .runIf(!highlightSelective, () ->
-            indent()
-            .append(SCRIPT.start())
-            .append("hljs.initHighlightingOnLoad();")
-            .append(SCRIPT.end())
-            .nl()
-                  )
-                  .runIf(highlightSelective, () ->
-            indent()
-            .append(SCRIPT.start())
-            .nl()
-            .indent()
-            .append("let blocks = document.querySelectorAll('pre.highlight code');")
-            .nl()
-            .indent()
-            .append("for (i = 0; i < blocks.length; ++i) {")
-            .nl()
-            .indent()
-            .append("hljs.highlightBlock(blocks[i]);")
-            .nl()
-            .indent()
-            .append("}")
-            .nl()
-                  )
+            .runIf(!highlightSelective, () ->
+              indent()
+                .append(SCRIPT.start())
+                .append("hljs.initHighlightingOnLoad();")
+                .append(SCRIPT.end())
+                .nl()
+              )
+            .runIf(highlightSelective, () ->
+              indent()
+                .append(SCRIPT.start())
+                .nl()
+                .indent()
+                .append("let blocks = document.querySelectorAll('pre.highlight code');")
+                .nl()
+                .indent()
+                .append("for (let i = 0; i < blocks.length; ++i) {")
+                .nl()
+                .indent()
+                .append("hljs.highlightBlock(blocks[i]);")
+                .nl()
+                .indent()
+                .append("}")
+                .nl()
+            )
             .indent()
             .append(SCRIPT.end())
             .nl()
@@ -280,15 +280,6 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .decIndent()
           .append(HTML.end())
         ;
-
-        /*
-
-        $(document).ready(function() {
-  $('pre code').each(function(i, block) {
-    hljs.highlightBlock(block);
-  });
-});
-         */
     }
 
     @Override

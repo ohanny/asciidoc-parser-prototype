@@ -16,7 +16,7 @@ public class Main {
                         ":toc: right\n" +
                         ":icons: font\n" +
                         ":source-highlighter: highlightjs\n" +
-                        ":highlight-selective: \n" +
+                        ":highlight-selectivex: \n" +
                         "\n" +
                         "include::file1.adoc[]\n"  +
                         "\n" +
@@ -152,7 +152,7 @@ public class Main {
                 "\n" +
                 "* B\n";
 
-        if (true)
+        if (false)
         text = "= Shower Presentation Engine\n" +
                "iodoc\n" +
                ":highlight-selective:\n" +
@@ -270,7 +270,7 @@ public class Main {
         DocumentWriter writer = DocumentWriter.bufferedWriter();
 //        DocumentWriter writer = DocumentWriter.fileWriter("test.html");
 
-        boolean shower = true;
+        boolean shower = false;
         if (!shower) {
             DefaultHtmlRenderer.withWriter(writer)
                     .withSourceResolver(name -> new StringReader(includedText))
