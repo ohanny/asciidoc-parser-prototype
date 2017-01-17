@@ -152,7 +152,7 @@ public class Main {
                 "\n" +
                 "* B\n";
 
-        if (false)
+        if (true)
         text = "= Shower Presentation Engine\n" +
                "iodoc\n" +
                ":highlight-selective:\n" +
@@ -260,6 +260,20 @@ public class Main {
                "== All nicely aligned to grid\n" +
                "\n" +
                "\n" +
+               "== Source with highlighting\n" +
+                "\n" +
+                "[source,java,highlight=\"3\"]\n" +
+                "----\n" +
+                "public class Produit {\n" +
+                "  private int id;\n" +
+                "  private String nom;\n" +
+                "\n" +
+                "  public void afficher() {\n" +
+                "    System.out.println(\"nom : \" + nom)\n" +
+                "  }\n" +
+                "\n" +
+                "}\n" +
+                "----\n" +
                "\n" +
                "\n";
 
@@ -270,7 +284,7 @@ public class Main {
         DocumentWriter writer = DocumentWriter.bufferedWriter();
 //        DocumentWriter writer = DocumentWriter.fileWriter("test.html");
 
-        boolean shower = false;
+        boolean shower = true;
         if (!shower) {
             DefaultHtmlRenderer.withWriter(writer)
                     .withSourceResolver(name -> new StringReader(includedText))

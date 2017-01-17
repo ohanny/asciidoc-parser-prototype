@@ -265,7 +265,13 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
             runIf(linenums, () ->
               append(CODE.start())
             )
-            .append(line.getText())
+            .runIf(line.getLineChunks() == null, () ->
+              append(line.getText())
+            )
+            .runIf(line.getLineChunks() != null, () ->
+              append(line.getLineChunks().get(0).getText())
+            )
+            //.append(line.getText())
             .writeListingCallout(line)
             .runIf(linenums, () ->
               append(CODE.end())

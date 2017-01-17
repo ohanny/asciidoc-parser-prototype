@@ -1,7 +1,10 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 import fr.icodem.asciidoc.parser.peg.NodeContext;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.HighlightRules;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.TextRules;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing.HighlightListener;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing.HighlightParameter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing.ListingProcessor;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
@@ -787,21 +790,39 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
     public void listingBlock(char[] chars) {
+        class HighlightParamsHolder {
+            List<HighlightParameter> highlightParams = null;
+
+        }
+        HighlightParamsHolder paramsHolder = new HighlightParamsHolder();
+
         boolean source = false;
         String language = null;
         boolean linenums = false;
         boolean highlight = false;
         AttributeList attList = consumeAttList();
-        if (attList != null && "source".equals(attList.getFirstPositionalAttribute())) {
-            source = true;
-            language = attList.getSecondPositionalAttribute();
-            if (language != null) language = language.toLowerCase();
-            linenums = attList.hasPositionalAttributes("linenums");
-            highlight = attList.hasOption("highlight");
+        if (attList != null) {
+            if ("source".equals(attList.getFirstPositionalAttribute())) {
+                source = true;
+                language = attList.getSecondPositionalAttribute();
+                if (language != null) language = language.toLowerCase();
+                linenums = attList.hasPositionalAttributes("linenums");
+                highlight = attList.hasOption("highlight");
+            }
+
+            Attribute attHighlightParams = attList.getAttribute("highlight");
+            if (attHighlightParams != null) {
+                HighlightRules rules = new HighlightRules();// TODO inject rules
+                rules.withFactory(defaultRulesFactory());
+                ParsingResult result = new ParseRunner(rules, rules::highlight)
+                        .trace()
+                        .parse(new StringReader((String)attHighlightParams.getValue()), new HighlightListener(params -> paramsHolder.highlightParams = params), null, null);
+
+            }
         }
 
 
-        Listing listing = listingProcessor.process(chars, source, language, linenums, highlight);
+        Listing listing = listingProcessor.process(chars, source, language, linenums, highlight, paramsHolder.highlightParams);
         handler.writeListingBlock(listing);
     }
 
