@@ -50,6 +50,17 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .indent()
           .append(LINK.tag("rel", "stylesheet", "href", "iodoc/style.css"))
           .nl()
+          .indent()
+          .append(STYLE.start())
+          .nl()
+          .incIndent()
+          .indent()
+          .append(".slide pre.nolinenums code:not(:only-child)::before {content: none;}")
+          .nl()
+          .decIndent()
+          .indent()
+          .append(STYLE.end())
+          .nl()
         ;
         return this;
     }
@@ -242,49 +253,62 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     }
 
     @Override
+    protected String getListingPreClass(Listing listing) {
+        String preClass = super.getListingPreClass(listing);
+        if (!listing.isLinenums()) {
+            if (preClass == null) preClass = "nolinenums";
+            else preClass += " nolinenums";
+        }
+        return preClass;
+    }
+
+    private String getListingCodeClass(String language, Listing.Line line) {
+        String codeClass = null;
+
+        if (language != null) {
+            codeClass = language;
+        }
+
+        if (line.getLineChunks().get(0).isHighlight()) {
+            if (codeClass == null) codeClass = "mark";
+            else codeClass += " mark";
+        }
+
+        return codeClass;
+    }
+
+    @Override
     public void writeListingBlock(Listing listing) {
-        String language = listing.getLanguage();
-        boolean linenums = listing.isLinenums();
-
-        String preClass = getListingPreClass(listing);
-
-        indent()
-          .runIf(preClass == null, () ->
-            append(PRE.start())
-          )
-          .runIf(preClass != null, () ->
-            append(PRE.start("class", preClass))
-          )
-          .runIf(!linenums && language != null, () ->
-            append(CODE.start("class", language))
-          )
-          .runIf(!linenums && language == null, () ->
-            append(CODE.start())
-          )
+        append(PRE.start("class", getListingPreClass(listing)))
           .forEach(listing.getLines(), (line, index) ->
-            runIf(linenums, () ->
-              append(CODE.start())
-            )
-            .runIf(line.getLineChunks() == null, () ->
-              append(line.getText())
-            )
-            .runIf(line.getLineChunks() != null, () ->
-              append(line.getLineChunks().get(0).getText())
-            )
-            //.append(line.getText())
-            .writeListingCallout(line)
-            .runIf(linenums, () ->
-              append(CODE.end())
-            )
-            .runIf(listing.getLines().size() - 1 != index, () -> nl())
-          )
-          .runIf(!linenums, () ->
-            append(CODE.end())
+            append(CODE.start("class", getListingCodeClass(listing.getLanguage(), line)))
+              .forEach(line.getLineChunks(), c ->
+                runIf(c.isMark(), () ->
+                  append(MARK.start())
+                    .append(c.getText())
+                    .append(MARK.end())
+                )
+                .runIf(c.isImportant(), () ->
+                  append(MARK.start("class", "important"))
+                    .append(c.getText())
+                    .append(MARK.end())
+                )
+                .runIf(c.isComment(), () ->
+                  append(SPAN.start("class", "comment"))
+                    .append(c.getText())
+                    .append(SPAN.end())
+                )
+                .runIf(c.isNotMarked(), () ->
+                  append(c.getText())
+                )
+              )
+              .writeListingCallout(line)
+              .append(CODE.end())
+              .runIf(listing.getLines().size() - 1 != index, () -> nl())
           )
           .append(PRE.end())
           .nl()
         ;
     }
-
 
 }

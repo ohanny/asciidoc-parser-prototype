@@ -28,11 +28,11 @@ public class HighlightListenerDelegate {
         this.consumer = consumer;
     }
 
-    public void enterHighlight() {
+    public void enterHighlights() {
 
     }
 
-    public void exitHighlight() {
+    public void exitHighlights() {
 
         List<HighlightParameter> params =
                 parameters.stream()
@@ -46,13 +46,7 @@ public class HighlightListenerDelegate {
 
     private HighlightParameter process(HighlightParameterContext ctx) {
         if (ctx.lineTo >= ctx.lineFrom || ctx.lineTo == -1) {
-            if (ctx.columnFrom == -1) {
-                ctx.columnFrom = 1;
-            }
             CodePoint from = CodePoint.ofPoint(ctx.lineFrom, ctx.columnFrom);
-            if (ctx.lineTo == -1) {
-                ctx.lineTo = ctx.lineFrom;
-            }
             CodePoint to = CodePoint.ofPoint(ctx.lineTo, ctx.columnTo);
 
             if (ctx.not) {
@@ -66,6 +60,9 @@ public class HighlightListenerDelegate {
             }
             else if (ctx.mark) {
                 return HighlightParameter.mark(from, to);
+            }
+            else if (ctx.columnFrom == -1 && ctx.columnTo == -1) {
+                return HighlightParameter.highlight(from, to);
             }
             else {
                 return HighlightParameter.normal(from, to);

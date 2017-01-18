@@ -38,8 +38,8 @@ public class HighlightListener implements ParseTreeListener {
     @Override
     public void enterNode(NodeContext context) {
         switch (context.getNodeName()) {
-            case "highlight":
-                delegate.enterHighlight();
+            case "highlights":
+                delegate.enterHighlights();
                 break;
 
             case "parameterSet":
@@ -65,8 +65,8 @@ public class HighlightListener implements ParseTreeListener {
     @Override
     public void exitNode(NodeContext context) {
         switch (context.getNodeName()) {
-            case "highlight":
-                delegate.exitHighlight();
+            case "highlights":
+                delegate.exitHighlights();
                 break;
 
             case "parameterSet":

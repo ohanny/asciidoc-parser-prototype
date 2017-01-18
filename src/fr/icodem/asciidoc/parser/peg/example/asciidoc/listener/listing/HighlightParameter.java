@@ -8,6 +8,7 @@ public class HighlightParameter {
     private boolean important;
     private boolean comment;
     private boolean mark;
+    private boolean highlight;
 
     public static HighlightParameter normal(CodePoint from, CodePoint to) {
         HighlightParameter param = new HighlightParameter();
@@ -41,6 +42,12 @@ public class HighlightParameter {
         return param;
     }
 
+    public static HighlightParameter highlight(CodePoint from, CodePoint to) {
+        HighlightParameter param = normal(from, to);
+        param.highlight = true;
+        return param;
+    }
+
     public CodePoint getFrom() {
         return from;
     }
@@ -63,5 +70,9 @@ public class HighlightParameter {
 
     public boolean isMark() {
         return mark;
+    }
+
+    public boolean isHighlight() {
+        return highlight;
     }
 }

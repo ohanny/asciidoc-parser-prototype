@@ -814,8 +814,8 @@ public class BlockListenerDelegate extends AbstractDelegate {
             if (attHighlightParams != null) {
                 HighlightRules rules = new HighlightRules();// TODO inject rules
                 rules.withFactory(defaultRulesFactory());
-                ParsingResult result = new ParseRunner(rules, rules::highlight)
-                        .trace()
+                ParsingResult result = new ParseRunner(rules, rules::highlights)
+                        //.trace()
                         .parse(new StringReader((String)attHighlightParams.getValue()), new HighlightListener(params -> paramsHolder.highlightParams = params), null, null);
 
             }

@@ -19,8 +19,8 @@ public class HighlightRules extends BaseRules {
     }
 
     // main rule
-    public Rule highlight() {
-        return node("highlight",
+    public Rule highlights() {
+        return node("highlights",
                  oneOrMore(
                    parameterSet()
                  )
@@ -75,6 +75,7 @@ public class HighlightRules extends BaseRules {
         ;
     }
 
+    @Deprecated
     public Rule parameterSet2() {
         return node("parameterSet",
                  sequence(

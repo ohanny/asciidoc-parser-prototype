@@ -163,4 +163,9 @@ public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implemen
         outputter.endInsertOnWriter();
         return (HR)this;
     }
+
+    protected HR trace(String message) {
+        System.out.println(message);
+        return (HR)this;
+    }
 }

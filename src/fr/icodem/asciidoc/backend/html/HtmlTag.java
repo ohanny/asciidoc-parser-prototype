@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public enum HtmlTag {
     DOCTYPE,
     HTML, BODY, HEAD,
-    META, TITLE, LINK, SCRIPT,
+    META, TITLE, LINK, SCRIPT, STYLE,
     DIV, SECTION, HEADER,
     P, BLOCKQUOTE, CITE, UL, OL, LI, DL, DT, DD,
     TABLE, COLGROUP, COL, THEAD, TH, TBODY, TFOOT, TR, TD,
@@ -36,9 +36,12 @@ public enum HtmlTag {
                         String str = attributes[i];
                         if (i + 1 < attributes.length && attributes[i + 1] != null) {
                             str += "=\"" + attributes[i + 1] + "\"";
+                        } else {
+                            str = null;
                         }
                         return str;
                     })
+                    .filter(str -> str != null)
                     .collect(Collectors.joining(" "));
         }
         if (atts.isEmpty()) atts = null;
@@ -86,6 +89,7 @@ public enum HtmlTag {
             case HEAD: return "<head>";
             case TITLE: return "<title>";
             case SCRIPT: return buildStartTag("script", attributes);
+            case STYLE: return "<style>";
             case DIV: return buildStartTag("div", attributes);
             case SECTION: return buildStartTag("section", attributes);
             case HEADER: return buildStartTag("header", attributes);
@@ -120,7 +124,7 @@ public enum HtmlTag {
             case SUB: return "<sub>";
             case SUP: return "<sup>";
             case CODE: return buildStartTag("code", attributes);
-            case MARK: return "<mark>";
+            case MARK: return buildStartTag("mark", attributes);
             case I: return buildStartTag("i", attributes);
             case B: return buildStartTag("b", attributes);
             default: return null;
@@ -134,6 +138,7 @@ public enum HtmlTag {
             case HEAD: return "</head>";
             case TITLE: return "</title>";
             case SCRIPT: return "</script>";
+            case STYLE: return "</style>";
             case DIV: return "</div>";
             case SECTION: return "</section>";
             case HEADER: return "</header>";

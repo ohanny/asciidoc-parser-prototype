@@ -262,7 +262,7 @@ public class Main {
                "\n" +
                "== Source with highlighting\n" +
                 "\n" +
-                "[source,java,highlight=\"3\"]\n" +
+                "[source,java,linenums,highlight=\"3:3@10!\"]\n" +
                 "----\n" +
                 "public class Produit {\n" +
                 "  private int id;\n" +

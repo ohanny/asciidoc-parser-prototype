@@ -635,8 +635,9 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             .nl()
             .incIndent()
             .indent()
-            .runIf(olType == null, () -> append(OL.start("class", olStyle)))
-            .runIf(olType != null, () -> append(OL.start("class", olStyle, "type", olType)))
+            .append(OL.start("class", olStyle, "type", olType))
+            //.runIf(olType == null, () -> append(OL.start("class", olStyle)))
+            //.runIf(olType != null, () -> append(OL.start("class", olStyle, "type", olType)))
             .nl()
             .incIndent();
     }
@@ -963,8 +964,9 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .nl()
           .incIndent()
           .indent()
-          .runIf(preClass != null, () -> append(PRE.start("class", preClass)))
-          .runIf(preClass == null, () -> append(PRE.start()))
+          .append(PRE.start("class", preClass))
+          //.runIf(preClass != null, () -> append(PRE.start("class", preClass)))
+          //.runIf(preClass == null, () -> append(PRE.start()))
           .runIf(language != null, () ->
             append(CODE.start("class", "language-" + language, "data-lang", language))
           )

@@ -1,6 +1,5 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing.HighlightParameter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing.ListingCallout;
 
 import java.util.List;
@@ -14,14 +13,16 @@ public class Listing {
         private boolean important;
         private boolean comment;
         private boolean mark;
+        private boolean highlight;
 
-        public static LineChunk of(String text, boolean not, boolean important, boolean comment, boolean mark) {
+        public static LineChunk of(String text, boolean not, boolean important, boolean comment, boolean mark, boolean highlight) {
             LineChunk chunk = new LineChunk();
             chunk.text = text;
             chunk.not = not;
             chunk.important = important;
             chunk.comment = comment;
             chunk.mark = mark;
+            chunk.highlight = highlight;
 
             return chunk;
         }
@@ -42,8 +43,16 @@ public class Listing {
             return comment;
         }
 
+        public boolean isNotMarked() {
+            return !(important || mark || comment);
+        }
+
         public boolean isMark() {
             return mark;
+        }
+
+        public boolean isHighlight() {
+            return highlight;
         }
     }
 
