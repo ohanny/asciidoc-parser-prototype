@@ -1,9 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.shower;
 
 import fr.icodem.asciidoc.backend.html.HtmlTag;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntry;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Listing;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.html.DefaultHtmlRenderer;
 
@@ -23,11 +21,61 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
 
     private Consumer<AttributeList> startSection;
 
+    private String getStyle(AttributeList attList) {
+        if (attList != null) {
+            String top = attList.getStringValue("top", null);
+            String right = attList.getStringValue("right", null);
+            String bottom = attList.getStringValue("bottom", null);
+            String left = attList.getStringValue("left", null);
+            String width = attList.getStringValue("width", null);
+
+            if (top != null || right != null || bottom != null || left != null || width != null) {
+                String style = "position: absolute;";
+                if (top != null) {
+                    style += "top: " + top + "px;";
+                }
+                if (right != null) {
+                    style += "right: " + right + "px;";
+                }
+                if (bottom != null) {
+                    style += "bottom: " + bottom + "px;";
+                }
+                if (left != null) {
+                    style += "left: " + left + "px;";
+                }
+                if (width != null) {
+                    style += "width: " + width + "px;";
+                }
+                return style;
+            }
+        }
+        return null;
+    }
+
+    /* **********************************************/
+    // Macro
+    /* **********************************************/
+
+    @Override
+    public void writeImage(ImageMacro image) {
+        indent()
+          .append(IMG.tag("src", image.getTarget(), "alt", image.getAlternateText(),
+                  "class", getCssClasses(image.getBlockAttributes()),
+                  "style", getStyle(image.getBlockAttributes())))
+          .nl()
+        ;
+    }
+
+    /* **********************************************/
+    // Block
+    /* **********************************************/
+
     @Override
     protected String getBodyClass() {
         return "shower list";
     }
 
+    @Override
     protected ShowerRenderer includeCustomMeta() {
         indent()
           .append(META.tag("http-equiv", "x-ua-compatible", "content", "ie=edge"))

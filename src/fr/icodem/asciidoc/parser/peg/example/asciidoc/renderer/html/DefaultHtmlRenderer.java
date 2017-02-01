@@ -27,17 +27,23 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     protected boolean contentStarted;
 
     /* **********************************************/
-    // Attributes methode
+    // Attributes methods
     /* **********************************************/
 
     protected String getMoreClasses(String baseClass, AttributeList attList) {
-        String moreClasses = "";
+        String moreClasses = getCssClasses(attList);
+        return baseClass + (moreClasses == null?"":" " + moreClasses);
+    }
+
+    protected String getCssClasses(AttributeList attList) {
+        String cssClasses = null;
         if (attList != null && attList.getRoles() != null && !attList.getRoles().isEmpty()) {
-            moreClasses = " " + attList.getRoles()
-                    .stream()
-                    .collect(Collectors.joining(" "));
+            cssClasses = attList.getRoles()
+                                 .stream()
+                                 .collect(Collectors.joining(" "));
         }
-        return baseClass + moreClasses;
+
+        return cssClasses;
     }
 
 

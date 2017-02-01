@@ -88,6 +88,15 @@ public class AttributeList {
         return attributes.get(name);
     }
 
+    public String getStringValue(String name, String defaultValue) {
+        Attribute att = getAttribute(name);
+        if (att != null) {
+            return (String) att.getValue();
+        }
+
+        return defaultValue;
+    }
+
     public boolean hasOption(String option) {
         return options.contains(option);
     }
