@@ -285,6 +285,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
         int level;
         String title;
         String ref;
+        AttributeList attList;
 
         SectionContext next;
         SectionContext previous;
@@ -518,7 +519,8 @@ public class BlockListenerDelegate extends AbstractDelegate {
             currentSection = firstSection;
         }
 
-        handler.startSection(level, consumeAttList());
+        currentSection.attList = consumeAttList();
+        handler.startSection(level, currentSection.attList);
     }
 
     public void sectionTitle(String title) {
@@ -526,7 +528,8 @@ public class BlockListenerDelegate extends AbstractDelegate {
         currentSection.ref = textToRef(title);
         int level = currentSection.level;
         String ref = currentSection.ref;
-        handler.writeSectionTitle(level, title, ref);
+        AttributeList attList = currentSection.attList;
+        handler.writeSectionTitle(level, title, ref, attList);
     }
 
 

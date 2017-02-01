@@ -22,15 +22,19 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     private Consumer<AttributeList> startSection;
 
     private String getStyle(AttributeList attList) {
+        String style = "";
+
         if (attList != null) {
             String top = attList.getStringValue("top", null);
             String right = attList.getStringValue("right", null);
             String bottom = attList.getStringValue("bottom", null);
             String left = attList.getStringValue("left", null);
             String width = attList.getStringValue("width", null);
+            String height = attList.getStringValue("height", null);
 
-            if (top != null || right != null || bottom != null || left != null || width != null) {
-                String style = "position: absolute;";
+
+            if (top != null || right != null || bottom != null || left != null) {
+                style += "position: absolute;";
                 if (top != null) {
                     style += "top: " + top + "px;";
                 }
@@ -46,10 +50,18 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
                 if (width != null) {
                     style += "width: " + width + "px;";
                 }
-                return style;
             }
+
+            if (width != null) {
+                style += "width: " + width + "px;";
+            }
+            if (height != null) {
+                style += "height: " + height + "px;";
+            }
+
         }
-        return null;
+
+        return style.isEmpty()?null:style;
     }
 
     /* **********************************************/
@@ -214,7 +226,9 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     }
 
     @Override
-    public void writeSectionTitle(int level, String title, String ref) {
+    public void writeSectionTitle(int level, String title, String ref, AttributeList attList) {
+        if (attList != null && attList.hasOption("conceal")) return;
+
         HtmlTag titleHeader = getTitleHeader(2);
         indent()
           .append(titleHeader.start("id", ref))

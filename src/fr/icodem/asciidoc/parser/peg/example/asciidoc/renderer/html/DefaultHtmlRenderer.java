@@ -443,7 +443,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void writeSectionTitle(int level, String title, String ref) {
+    public void writeSectionTitle(int level, String title, String ref, AttributeList attList) {
         HtmlTag titleHeader = getTitleHeader(level);
         indent()
                 .append(titleHeader.start("id", ref))
