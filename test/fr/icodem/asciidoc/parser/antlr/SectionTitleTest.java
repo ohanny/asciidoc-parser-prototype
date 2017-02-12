@@ -213,6 +213,19 @@ public class SectionTitleTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentSection (documentTitle T i t l e   w i t h   [ [ h e l l o ] ]   i s   i t   o k   ?))) (bl <EOI>))"
+            },
+            {
+                /* message */
+                "a title with attribute list",
+
+                /* input */
+                "= Title 1\n" +
+                "\n" +
+                "[.att1]\n" +
+                "== Title 2\n",
+
+                /* expected */
+                "(document (header (documentSection (documentTitle T i t l e   1))) (bl \\n) (content (attributeList [ (roleAttribute . (attributeName a t t 1)) ] \\n) (section = =   (sectionTitle T i t l e   2) \\n)) (bl <EOI>))"
             }
 
         });

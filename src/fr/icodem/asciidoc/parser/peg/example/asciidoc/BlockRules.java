@@ -147,7 +147,8 @@ public class BlockRules extends BaseRules {
     private Rule paragraph() {
         return node("paragraph",
                  sequence(
-                   testNot(section()),
+                   testNot(sequence(optional(attributeList()), section())),
+                   //testNot(section()),
                    optional(admonition()),
                    oneOrMore(
                      firstOf(
