@@ -1136,16 +1136,23 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     @Override
     public void startMark(AttributeList attList) {
-        if (attList == null || attList.getFirstPositionalAttribute() == null) {
+        if (attList == null || (attList.getFirstPositionalAttribute() == null && attList.getRoles().isEmpty())) {
             append(MARK.start());
         } else {
-            append(SPAN.start("class", attList.getFirstPositionalAttribute()));
+            String classAtt = attList.getFirstPositionalAttribute();
+            if (classAtt == null) {
+                classAtt = attList.getRoles()
+                                  .stream()
+                                  .collect(Collectors.joining(" "));
+            }
+
+            append(SPAN.start("class", classAtt));
         }
     }
 
     @Override
     public void endMark(AttributeList attList) {
-        if (attList == null || attList.getFirstPositionalAttribute() == null) {
+        if (attList == null || (attList.getFirstPositionalAttribute() == null  && attList.getRoles().isEmpty())) {
             append(MARK.end());
         } else {
             append(SPAN.end());
