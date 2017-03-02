@@ -46,57 +46,6 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         return cssClasses;
     }
 
-//    protected String getPositionStyle(AttributeList attList) {
-//        String style = "";
-//
-//        if (attList != null) {
-//            String top = attList.getStringValue("top", null);
-//            String right = attList.getStringValue("right", null);
-//            String bottom = attList.getStringValue("bottom", null);
-//            String left = attList.getStringValue("left", null);
-//
-//
-//            if (top != null || right != null || bottom != null || left != null) {
-//                style += "position: absolute;";
-//                if (top != null) {
-//                    style += "top: " + top + "px;";
-//                }
-//                if (right != null) {
-//                    style += "right: " + right + "px;";
-//                }
-//                if (bottom != null) {
-//                    style += "bottom: " + bottom + "px;";
-//                }
-//                if (left != null) {
-//                    style += "left: " + left + "px;";
-//                }
-//            }
-//
-//        }
-//
-//        return style.isEmpty()?null:style;
-//    }
-
-//    protected String getSizeStyle(AttributeList attList) {
-//        String style = "";
-//
-//        if (attList != null) {
-//            String width = attList.getStringValue("width", null);
-//            String height = attList.getStringValue("height", null);
-//
-//
-//            if (width != null) {
-//                style += "width: " + width + "px;";
-//            }
-//            if (height != null) {
-//                style += "height: " + height + "px;";
-//            }
-//
-//        }
-//
-//        return style.isEmpty()?null:style;
-//    }
-
     /* **********************************************/
     // Post-processing
     /* **********************************************/
@@ -724,9 +673,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             .nl()
             .incIndent()
             .indent()
-            .append(OL.start("class", olStyle, "type", olType))
-            //.runIf(olType == null, () -> append(OL.start("class", olStyle)))
-            //.runIf(olType != null, () -> append(OL.start("class", olStyle, "type", olType)))
+            .append(OL.start("class", olStyle, "type", olType,  "style", styleBuilder().reset(atts).addPosition().addSize().style()))
             .nl()
             .incIndent();
     }
@@ -748,7 +695,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     public void startUnorderedList(int level, AttributeList attList) {
         runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
             .indent()
-            .append(DIV.start("class", "ulist"))
+            .append(DIV.start("class", "ulist", "style", styleBuilder().reset(attList).addPosition().addSize().style()))
             .nl()
             .incIndent()
             .indent()

@@ -213,6 +213,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .runIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
     }
 
+    /*
     @Override
     public void startUnorderedList(int level, AttributeList attList) {
         runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
@@ -229,7 +230,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .append(UL.end())
           .nl()
           .runIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
-    }
+    }*/
 
     @Override
     public void startListItem(int level) {
