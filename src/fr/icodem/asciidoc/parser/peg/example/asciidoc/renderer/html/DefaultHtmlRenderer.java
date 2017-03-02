@@ -164,6 +164,37 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         ;
     }
 
+    @Override
+    public void writeVideo(VideoMacro video) {
+        indent()
+          .append(DIV.start("class", getMoreClasses("videoblock", video.getBlockAttributes())))
+          .nl()
+          .incIndent()
+          .indent()
+          .append(DIV.start("class", "content"))
+          .nl()
+          .incIndent()
+          .indent()
+          .append(VIDEO.start("src", video.getTarget(), "controls", "true", "width", "400"))
+          .nl()
+          .indent()
+          .append("Your browser does not support the video tag.")
+          .nl()
+          .indent()
+          .append(VIDEO.end())
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl()
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl()
+        ;
+    }
+
+
+
     /* **********************************************/
     // Block
     /* **********************************************/

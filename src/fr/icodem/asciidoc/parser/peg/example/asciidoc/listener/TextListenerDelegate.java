@@ -39,6 +39,11 @@ public class TextListenerDelegate extends AbstractDelegate {
 
     }
 
+    @Override
+    protected void video(VideoMacro macro) {
+
+    }
+
     // markup methods
     public void enterBold() {
         handler.startBold();

@@ -111,10 +111,20 @@ public abstract class AbstractDelegate {
                 if (hasAttributeEntry("imagesdir")) {
                     target = getAttributeEntry("imagesdir").getValue() + "/" + target; // TODO replace separator
                 }
-                ImageMacro macro =
+                ImageMacro image =
                         Macro.image(currentMacro.name, target,
                                 consumeAttList(), currentMacro.attList);
-                image(macro);
+                image(image);
+                break;
+            case "video":
+                target = currentMacro.target;
+                if (hasAttributeEntry("videosdir")) {
+                    target = getAttributeEntry("videosdir").getValue() + "/" + target; // TODO replace separator
+                }
+                VideoMacro video =
+                        Macro.video(currentMacro.name, target,
+                                consumeAttList(), currentMacro.attList);
+                video(video);
                 break;
             case "include":
                 break;
@@ -133,4 +143,5 @@ public abstract class AbstractDelegate {
 
     // other methods
     protected abstract void image(ImageMacro macro);
+    protected abstract void video(VideoMacro macro);
 }

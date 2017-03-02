@@ -31,6 +31,17 @@ public class Macro {
         return macro;
     }
 
+    public static VideoMacro video(String name, String target,
+                                   AttributeList attributes, AttributeList blockAttributes) {
+        VideoMacro macro = new VideoMacro();
+        macro.name = name;
+        macro.target = target;
+        macro.attributes = attributes;
+        macro.blockAttributes = blockAttributes;
+
+        return macro;
+    }
+
     public String getName() {
         return name;
     }

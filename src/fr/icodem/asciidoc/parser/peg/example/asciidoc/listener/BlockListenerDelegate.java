@@ -579,6 +579,11 @@ public class BlockListenerDelegate extends AbstractDelegate {
         handler.writeImage(macro);
     }
 
+    @Override
+    protected void video(VideoMacro macro) {
+        handler.writeVideo(macro);
+    }
+
     public void enterParagraph(String admonition) {
         admonition = admonition == null?null:admonition.toLowerCase();
         AttributeList attList = consumeAttList();

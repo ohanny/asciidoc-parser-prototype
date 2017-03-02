@@ -13,7 +13,8 @@ public enum HtmlTag {
     PRE,
     H1, H2, H3, H4, H5, H6,
     BR, HR,
-    A, IMG, SPAN, STRONG, EM, SUB, SUP, CODE, MARK, I, B;
+    A, IMG, SPAN, STRONG, EM, SUB, SUP, CODE, MARK, I, B,
+    VIDEO;
 
     public static HtmlTag getTitleHeader(int level) {
         switch (level) {
@@ -127,6 +128,7 @@ public enum HtmlTag {
             case MARK: return buildStartTag("mark", attributes);
             case I: return buildStartTag("i", attributes);
             case B: return buildStartTag("b", attributes);
+            case VIDEO: return buildStartTag("video", attributes);
             default: return null;
         }
     }
@@ -176,6 +178,7 @@ public enum HtmlTag {
             case MARK: return "</mark>";
             case I: return "</i>";
             case B: return "</b>";
+            case VIDEO: return "</video>";
             default: return null;
         }
     }

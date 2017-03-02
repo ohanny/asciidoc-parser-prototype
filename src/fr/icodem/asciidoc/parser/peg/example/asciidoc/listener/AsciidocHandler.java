@@ -12,6 +12,7 @@ public interface AsciidocHandler {
 
     // Macro
     void writeImage(ImageMacro macro);
+    void writeVideo(VideoMacro macro);
 
     // Block
     void startDocument();
