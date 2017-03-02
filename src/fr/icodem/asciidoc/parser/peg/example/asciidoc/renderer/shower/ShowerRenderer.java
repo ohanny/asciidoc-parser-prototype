@@ -21,63 +21,6 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
 
     private Consumer<AttributeList> startSection;
 
-    private String getStyle(AttributeList attList) {
-        String style = "";
-
-        if (attList != null) {
-            String top = attList.getStringValue("top", null);
-            String right = attList.getStringValue("right", null);
-            String bottom = attList.getStringValue("bottom", null);
-            String left = attList.getStringValue("left", null);
-            String width = attList.getStringValue("width", null);
-            String height = attList.getStringValue("height", null);
-
-
-            if (top != null || right != null || bottom != null || left != null) {
-                style += "position: absolute;";
-                if (top != null) {
-                    style += "top: " + top + "px;";
-                }
-                if (right != null) {
-                    style += "right: " + right + "px;";
-                }
-                if (bottom != null) {
-                    style += "bottom: " + bottom + "px;";
-                }
-                if (left != null) {
-                    style += "left: " + left + "px;";
-                }
-                if (width != null) {
-                    style += "width: " + width + "px;";
-                }
-            }
-
-            if (width != null) {
-                style += "width: " + width + "px;";
-            }
-            if (height != null) {
-                style += "height: " + height + "px;";
-            }
-
-        }
-
-        return style.isEmpty()?null:style;
-    }
-
-    /* **********************************************/
-    // Macro
-    /* **********************************************/
-
-    @Override
-    public void writeImage(ImageMacro image) {
-        indent()
-          .append(IMG.tag("src", image.getTarget(), "alt", image.getAlternateText(),
-                  "class", getCssClasses(image.getBlockAttributes()),
-                  "style", getStyle(image.getBlockAttributes())))
-          .nl()
-        ;
-    }
-
     /* **********************************************/
     // Block
     /* **********************************************/

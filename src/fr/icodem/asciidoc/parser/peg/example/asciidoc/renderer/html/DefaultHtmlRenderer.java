@@ -46,6 +46,56 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         return cssClasses;
     }
 
+//    protected String getPositionStyle(AttributeList attList) {
+//        String style = "";
+//
+//        if (attList != null) {
+//            String top = attList.getStringValue("top", null);
+//            String right = attList.getStringValue("right", null);
+//            String bottom = attList.getStringValue("bottom", null);
+//            String left = attList.getStringValue("left", null);
+//
+//
+//            if (top != null || right != null || bottom != null || left != null) {
+//                style += "position: absolute;";
+//                if (top != null) {
+//                    style += "top: " + top + "px;";
+//                }
+//                if (right != null) {
+//                    style += "right: " + right + "px;";
+//                }
+//                if (bottom != null) {
+//                    style += "bottom: " + bottom + "px;";
+//                }
+//                if (left != null) {
+//                    style += "left: " + left + "px;";
+//                }
+//            }
+//
+//        }
+//
+//        return style.isEmpty()?null:style;
+//    }
+
+//    protected String getSizeStyle(AttributeList attList) {
+//        String style = "";
+//
+//        if (attList != null) {
+//            String width = attList.getStringValue("width", null);
+//            String height = attList.getStringValue("height", null);
+//
+//
+//            if (width != null) {
+//                style += "width: " + width + "px;";
+//            }
+//            if (height != null) {
+//                style += "height: " + height + "px;";
+//            }
+//
+//        }
+//
+//        return style.isEmpty()?null:style;
+//    }
 
     /* **********************************************/
     // Post-processing
@@ -143,7 +193,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     @Override
     public void writeImage(ImageMacro image) {
         indent()
-          .append(DIV.start("class", getMoreClasses("imageblock", image.getBlockAttributes())))
+          .append(DIV.start("class", getMoreClasses("imageblock", image.getBlockAttributes()),
+                            "style", styleBuilder().reset(image.getBlockAttributes()).addPosition().style()))
           .nl()
           .incIndent()
           .indent()
@@ -151,7 +202,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .nl()
           .incIndent()
           .indent()
-          .append(IMG.tag("src", image.getTarget(), "alt", image.getAlternateText()))
+          .append(IMG.tag("src", image.getTarget(), "alt", image.getAlternateText(),
+                          "style", styleBuilder().reset(image.getBlockAttributes()).addSize().style()))
           .nl()
           .decIndent()
           .indent()

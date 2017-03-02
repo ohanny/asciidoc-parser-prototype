@@ -24,9 +24,12 @@ public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implemen
 
     private TextOutputter outputter;
 
+    private StyleAttributeBuilder styleAttributeBuilder;
+
     protected HtmlBaseRenderer(DocumentWriter writer) {
         outputter = new TextOutputter(writer);
         rules.withFactory(defaultRulesFactory());
+        styleAttributeBuilder = StyleAttributeBuilder.newIntance();
     }
 
     public HR withSourceResolver(SourceResolver resolver) {
@@ -66,6 +69,10 @@ public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implemen
 
     public boolean isAttributeEnabled(String name) {
         return attributeEntries.isAttributeEnabled(name);
+    }
+
+    protected StyleAttributeBuilder styleBuilder() {
+        return styleAttributeBuilder;
     }
 
     protected HR append(String str) {
