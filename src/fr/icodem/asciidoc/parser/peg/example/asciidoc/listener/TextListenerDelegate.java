@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.UrlUtils;
+
 public class TextListenerDelegate extends AbstractDelegate {
 
     private AsciidocHandler handler;
@@ -19,6 +21,7 @@ public class TextListenerDelegate extends AbstractDelegate {
     private static class XRefContext {
         String label;
         String value;
+        boolean internal;
 
         static XRefContext empty() {
             return new XRefContext();
@@ -101,7 +104,8 @@ public class TextListenerDelegate extends AbstractDelegate {
     }
 
     public void xrefValue(String value) {
-        currentXRef.value = "#" + value;
+        currentXRef.value = value;
+        currentXRef.internal = UrlUtils.isUrl(value);
     }
 
     public void xrefLabel(String label) {
@@ -109,7 +113,7 @@ public class TextListenerDelegate extends AbstractDelegate {
     }
 
     public void exitXRef() {
-        handler.xref(XRef.of(currentXRef.value, currentXRef.label));
+        handler.xref(XRef.of(currentXRef.value, currentXRef.label, currentXRef.internal));
         currentXRef = null;
     }
 }
