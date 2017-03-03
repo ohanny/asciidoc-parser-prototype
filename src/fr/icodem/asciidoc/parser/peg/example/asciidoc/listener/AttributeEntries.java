@@ -17,6 +17,7 @@ public class AttributeEntries {
         addAttribute("doctitle", "Untitled");
         addAttribute("toc", null, true);
         addAttribute("icons", null);
+        addAttribute("docdir", null);
         addAttribute("toc-title", "Table of Contents");
         addAttribute("source-highlighter", null);
         addAttribute("highligthjs-script", "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js");
@@ -37,6 +38,11 @@ public class AttributeEntries {
 
     public AttributeEntry getAttribute(String name) {
         return nameToAttributeMap.get(name);
+    }
+
+    public String getValue(String name) {
+        AttributeEntry att = getAttribute(name);
+        return att != null?att.getValue():null;
     }
 
     public boolean isAttributeValueEqualTo(String name, String value) {

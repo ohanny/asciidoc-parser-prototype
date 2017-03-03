@@ -524,7 +524,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     public void startParagraph(String admonition, String icons, AttributeList attList) {
         if (admonition == null) {
             indent()
-              .append(DIV.start("class", getMoreClasses("paragraph", attList)))
+              .append(DIV.start("class", getMoreClasses("paragraph", attList), "style", styleBuilder().reset(attList).addPosition().addSize().style()))
               .nl()
               .incIndent()
               .indent()
@@ -532,7 +532,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             ;
         } else {
             indent()
-              .append(DIV.start("class", getMoreClasses("admonitionblock " + admonition, attList)))
+              .append(DIV.start("class", getMoreClasses("admonitionblock " + admonition, attList), "style", styleBuilder().reset(attList).addPosition().addSize().style()))
                 .nl()
                 .incIndent()
                 .indent()

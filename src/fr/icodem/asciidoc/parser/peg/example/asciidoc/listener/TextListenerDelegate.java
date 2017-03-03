@@ -25,7 +25,8 @@ public class TextListenerDelegate extends AbstractDelegate {
         }
     }
 
-    public TextListenerDelegate(AsciidocHandler handler) {
+    public TextListenerDelegate(AsciidocHandler handler, AttributeEntries attributeEntries) {
+        super(attributeEntries);
         this.handler = handler;
     }
 

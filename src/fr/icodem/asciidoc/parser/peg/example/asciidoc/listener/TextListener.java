@@ -7,8 +7,8 @@ public class TextListener implements ParseTreeListener {
 
     private TextListenerDelegate delegate;
 
-    public TextListener(AsciidocHandler handler) {
-        this.delegate = new TextListenerDelegate(handler);
+    public TextListener(AsciidocHandler handler, AttributeEntries attributeEntries) {
+        this.delegate = new TextListenerDelegate(handler, attributeEntries);
     }
 
     @Override

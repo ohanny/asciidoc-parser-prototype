@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface AsciidocHandler {
 
-    void attributeEntries(AttributeEntries atts);
+    //void attributeEntries(AttributeEntries atts);
     void postProcess(Toc toc);
 
     //

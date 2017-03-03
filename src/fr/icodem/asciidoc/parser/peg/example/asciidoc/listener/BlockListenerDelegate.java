@@ -308,15 +308,15 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     private AttributeEntry currentAttributeEntry;
 
-    public BlockListenerDelegate(AsciidocHandler handler) {
-        super();
+    public BlockListenerDelegate(AsciidocHandler handler, AttributeEntries attributeEntries) {
+        super(attributeEntries);
         this.directHandler = handler;
         this.deferredHandler = DeferredHandler.of(handler);
         this.listingProcessor = ListingProcessor.newInstance();
 
         selectDirectHandler();
 
-        this.handler.attributeEntries(attributeEntries);
+        //this.handler.attributeEntries(attributeEntries);
 
         selectDeferredHandler();
     }
@@ -384,11 +384,11 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void formattedText(char[] chars) {// TODO optimize this code by using singletons
         //System.out.println("formattedText() => " + new String(chars));
-        TextRules rules = new TextRules();// TODO inject rules
+        TextRules rules = new TextRules(attributeEntries);// TODO inject rules
         rules.withFactory(defaultRulesFactory());
         ParsingResult result = new ParseRunner(rules, rules::formattedText)
                 //.trace()
-                .parse(new StringReader(new String(chars)), new TextListener(handler), null, null);
+                .parse(new StringReader(new String(chars)), new TextListener(handler, attributeEntries), null, null);
         // TODO optimize new StringReader(new String(chars))
 
     }
@@ -820,7 +820,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
             Attribute attHighlightParams = attList.getAttribute("highlight");
             if (attHighlightParams != null) {
-                HighlightRules rules = new HighlightRules();// TODO inject rules
+                HighlightRules rules = new HighlightRules(attributeEntries);// TODO inject rules
                 rules.withFactory(defaultRulesFactory());
                 ParsingResult result = new ParseRunner(rules, rules::highlights)
                         //.trace()

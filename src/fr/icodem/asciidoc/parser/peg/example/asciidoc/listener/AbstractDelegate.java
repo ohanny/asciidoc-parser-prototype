@@ -1,7 +1,5 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
-import fr.icodem.asciidoc.parser.peg.NodeContext;
-
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,11 +27,12 @@ public abstract class AbstractDelegate {
     }
 
 
-    public AbstractDelegate() {
+    public AbstractDelegate(AttributeEntries attributeEntries) {
         this.textObjects = new LinkedList<>();
         this.attList = new LinkedList<>();
 
-        this.attributeEntries = AttributeEntries.newAttributeEntries();
+        //this.attributeEntries = AttributeEntries.newAttributeEntries();
+        this.attributeEntries = attributeEntries;
     }
 
     // attributes methods

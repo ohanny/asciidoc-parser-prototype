@@ -14,8 +14,8 @@ public class BlockListener implements ParseTreeListener {
 
     private BlockListenerDelegate delegate;
 
-    public BlockListener(AsciidocHandler handler) {
-        this.delegate = new BlockListenerDelegate(handler);
+    public BlockListener(AsciidocHandler handler, AttributeEntries attributeEntries) {
+        this.delegate = new BlockListenerDelegate(handler, attributeEntries);
     }
 
     @Override

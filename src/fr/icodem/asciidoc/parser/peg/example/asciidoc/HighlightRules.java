@@ -1,11 +1,20 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc;
 
 import fr.icodem.asciidoc.parser.peg.BaseRules;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntries;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 
+import java.util.function.Supplier;
+
 public class HighlightRules extends BaseRules {
-    private CommonRules commonRules = new CommonRules();
+    private AttributeEntries attributeEntries;
+    private CommonRules commonRules;
+
+    public HighlightRules(AttributeEntries attributeEntries) {
+        this.attributeEntries = attributeEntries;
+        this.commonRules = new CommonRules(attributeEntries);
+    }
 
     @Override
     public void withFactory(RulesFactory factory) {

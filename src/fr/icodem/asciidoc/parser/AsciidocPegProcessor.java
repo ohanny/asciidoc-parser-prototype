@@ -21,7 +21,7 @@ public class AsciidocPegProcessor implements ParseTreeListener {
 
     private FormattedTextPegProcessor textProcessor;
 
-    private BlockRules rules = new BlockRules();
+    private BlockRules rules = new BlockRules(null);
 
     private HeaderContext headerContext;
     private RootListContext rootListContext;

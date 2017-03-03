@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.antlr;
 
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntries;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.BlockRules;
@@ -24,7 +25,7 @@ public abstract class GrammarTest {
             assertEquals(message, expected, tree.toStringTree(parser));
         }
         else {
-            BlockRules parser = new BlockRules();
+            BlockRules parser = new BlockRules(AttributeEntries.newAttributeEntries());
             parser.withFactory(defaultRulesFactory());
             ParsingResult result = new ParseRunner(parser, parser::document)
                     .generateStringTree()

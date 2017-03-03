@@ -13,7 +13,7 @@ import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFacto
 @Deprecated
 public class FormattedTextPegProcessor {
 
-    private TextRules rules = new TextRules();
+    private TextRules rules = new TextRules(null);
 
     public FormattedTextPegProcessor() {
         rules.withFactory(defaultRulesFactory());

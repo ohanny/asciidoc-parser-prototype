@@ -2,12 +2,21 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc;
 
 import fr.icodem.asciidoc.parser.peg.BaseRules;
 import fr.icodem.asciidoc.parser.peg.action.ActionContext;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntries;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.SourceResolver;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 
+import java.util.function.Supplier;
+
 public class CommonRules extends BaseRules {
 
-    private SourceResolver sourceResolver = SourceResolver.defaultResolver();
+    private SourceResolver sourceResolver;
+    private AttributeEntries attributeEntries;
+
+    public CommonRules(AttributeEntries attributeEntries) {
+        this.attributeEntries = attributeEntries;
+        this.sourceResolver = SourceResolver.defaultResolver(attributeEntries);
+    }
 
     public void withSourceResolver(SourceResolver resolver) {
         this.sourceResolver = resolver;

@@ -8,17 +8,21 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.TextOutputter;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 
 public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implements AsciidocRenderer, AsciidocHandler {
 
-    private BlockRules rules = new BlockRules(); // TODO inject
+    private BlockRules rules; // TODO inject
 
     private AttributeEntries attributeEntries;
 
@@ -27,7 +31,9 @@ public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implemen
     private StyleAttributeBuilder styleAttributeBuilder;
 
     protected HtmlBaseRenderer(DocumentWriter writer) {
+        attributeEntries = AttributeEntries.newAttributeEntries();
         outputter = new TextOutputter(writer);
+        rules = new BlockRules(attributeEntries);
         rules.withFactory(defaultRulesFactory());
         styleAttributeBuilder = StyleAttributeBuilder.newIntance();
     }
@@ -38,8 +44,22 @@ public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implemen
     }
 
     @Override
+    public void render(File source) {
+        try {
+            String text =
+                    Files.readAllLines(source.toPath())
+                            .stream()
+                            .collect(Collectors.joining("\n"));
+            attributeEntries.addAttribute(AttributeEntry.of("docdir", source.getParent()));
+            render(text);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void render(String text) {
-        final BlockListener listener = new BlockListener(this);
+        final BlockListener listener = new BlockListener(this, attributeEntries);
 
         ParsingResult result = new ParseRunner(rules, rules::document)
                 //.trace()
@@ -50,10 +70,10 @@ public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implemen
         outputter.closeWriter();
     }
 
-    @Override
-    public void attributeEntries(AttributeEntries atts) { // TODO is this method useful in renderer ?
-        this.attributeEntries = atts;
-    }
+//    @Override
+//    public void attributeEntries(AttributeEntries atts) { // TODO is this method useful in renderer ?
+//        this.attributeEntries = atts;
+//    }
 
     protected AttributeEntry getAttributeEntry(String name) {
         return attributeEntries.getAttribute(name);
