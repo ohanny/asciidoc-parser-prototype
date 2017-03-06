@@ -673,7 +673,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             .nl()
             .incIndent()
             .indent()
-            .append(OL.start("class", olStyle, "type", olType,  "style", styleBuilder().reset(atts).addPosition().addSize().style()))
+            .append(OL.start("class", olStyle, "type", olType, "style", styleBuilder().reset(atts).addPosition().addSize().style()))
             .nl()
             .incIndent();
     }
