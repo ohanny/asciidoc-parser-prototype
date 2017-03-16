@@ -284,8 +284,8 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     }
 
     @Override
-    public void writeListingBlock(Listing listing) {
-        append(PRE.start("class", getListingPreClass(listing)))
+    public void writeListingBlock(Listing listing, AttributeList attList) {
+        append(PRE.start("class", getMoreClasses(getListingPreClass(listing), attList)))
           .forEach(listing.getLines(), (line, index) ->
             append(CODE.start("class", getListingCodeClass(listing.getLanguage(), line)))
               .forEach(line.getLineChunks(), c ->

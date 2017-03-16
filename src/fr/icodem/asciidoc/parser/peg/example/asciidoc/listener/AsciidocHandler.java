@@ -109,7 +109,7 @@ public interface AsciidocHandler {
     void writeTableCellContent(String text);
     void endTableCell();
 
-    void writeListingBlock(Listing listing);
+    void writeListingBlock(Listing listing, AttributeList attList);
 
     void startCallouts();
     void endCallouts();

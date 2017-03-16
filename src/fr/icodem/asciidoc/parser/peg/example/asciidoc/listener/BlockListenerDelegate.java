@@ -831,7 +831,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
 
         Listing listing = listingProcessor.process(chars, source, language, linenums, highlight, paramsHolder.highlightParams);
-        handler.writeListingBlock(listing);
+        handler.writeListingBlock(listing, attList);
     }
 
     public void enterCallouts() {

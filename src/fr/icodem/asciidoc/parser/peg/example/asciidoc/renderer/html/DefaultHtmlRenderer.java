@@ -32,6 +32,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     protected String getMoreClasses(String baseClass, AttributeList attList) {
         String moreClasses = getCssClasses(attList);
+        if (baseClass == null) return moreClasses;
         return baseClass + (moreClasses == null?"":" " + moreClasses);
     }
 
@@ -168,7 +169,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     @Override
     public void writeVideo(VideoMacro video) {
         indent()
-          .append(DIV.start("class", getMoreClasses("videoblock", video.getBlockAttributes())))
+          .append(DIV.start("class", getMoreClasses("videoblock", video.getBlockAttributes()),
+                            "style", styleBuilder().reset(video.getBlockAttributes()).addPosition().style()))
           .nl()
           .incIndent()
           .indent()
@@ -176,7 +178,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .nl()
           .incIndent()
           .indent()
-          .append(VIDEO.start("src", video.getTarget(), "controls", "true", "width", "400"))
+          .append(VIDEO.start("src", video.getTarget(), "controls", "true", "style", styleBuilder().reset(video.getBlockAttributes()).addSize().style()))
+          //.append(VIDEO.start("src", video.getTarget(), "controls", "true", "width", "400"))
           .nl()
           .indent()
           .append("Your browser does not support the video tag.")
@@ -982,17 +985,18 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
                 preClass = "highlight";
             }
         }
+
         return preClass;
     }
 
     @Override
-    public void writeListingBlock(Listing listing) {
+    public void writeListingBlock(Listing listing, AttributeList attList) {
         String language = listing.getLanguage();
 
         String preClass = getListingPreClass(listing);
 
         indent()
-          .append(DIV.start("class", "listingblock"))
+          .append(DIV.start("class", getMoreClasses("listingblock", attList)))
           .nl()
           .incIndent()
           .indent()

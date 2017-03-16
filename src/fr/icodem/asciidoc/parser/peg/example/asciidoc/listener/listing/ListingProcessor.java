@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ListingProcessor {
-    private char[] buffer = new char[128];
+    //private char[] buffer = new char[128];
+    private char[] buffer = new char[1024];
 
     private CalloutProcessor calloutProcessor = CalloutProcessor.newInstance();
 
