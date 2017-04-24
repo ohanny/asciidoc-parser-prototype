@@ -11,8 +11,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         GrammarTestSuite.class,
         ParserTestSuite.class,
-        RendererTestSuite.class,
-        ListingProcessorSpec.class
+        RendererTestSuite.class
 })
 public class AllTestSuite {
 }

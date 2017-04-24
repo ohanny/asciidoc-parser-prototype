@@ -6,10 +6,26 @@ import java.util.List;
 public class LineContext {
     int lineNumber;
     String language;
-    char[] data;
-    int length;
+    public char[] data;
+    public int offset;
+    public int length;
     List<ListingCallout> callouts;
 
+
+    private LineContext() {
+    }
+
+    public static LineContext of(int lineNumber, char[] data, int offset, int length) {
+        LineContext line = new LineContext();
+        line.lineNumber = lineNumber;
+        line.data = data;
+        line.offset = offset;
+        line.length = length;
+
+        return line;
+    }
+
+    @Deprecated
     private LineContext(int lineNumber, String language, char[] data, int length) {
         this.lineNumber = lineNumber;
         this.language = language;
@@ -18,6 +34,7 @@ public class LineContext {
         this.callouts = new ArrayList<>();
     }
 
+    @Deprecated
     public static LineContext of(int lineNumber, String language, char[] data, int length) {
         return new LineContext(lineNumber, language, data, length);
     }
