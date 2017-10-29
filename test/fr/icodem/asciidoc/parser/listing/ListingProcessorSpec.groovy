@@ -115,7 +115,7 @@ public class Item {
         listing.lines.size() == 1
 
         listing.lines[0].number == 1
-        listing.lines[0].text == "&lt;div&gt;Some code&lt;/div&gt;"
+        listing.lines[0].text == "<div>Some code</div>"
         listing.lines[0].lineChunks != null
         listing.lines[0].lineChunks.size() == 1
         listing.lines[0].lineChunks[0].text == "&lt;div&gt;Some code&lt;/div&gt;"
@@ -142,7 +142,7 @@ public class Item {
         listing.lines.size() == 1
 
         listing.lines[0].number == 1
-        listing.lines[0].text == "&lt;div&gt;Some code&lt;/div&gt;"
+        listing.lines[0].text == "<div>Some code</div>"
         listing.lines[0].lineChunks != null
         listing.lines[0].lineChunks.size() == 3
         listing.lines[0].lineChunks[0].text == "&lt;div&gt;"

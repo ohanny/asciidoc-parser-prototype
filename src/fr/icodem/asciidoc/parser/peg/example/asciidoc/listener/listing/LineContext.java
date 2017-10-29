@@ -1,19 +1,17 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LineContext {
     int lineNumber;
-    String language;
     public char[] data;
     public int offset;
     public int length;
     List<ListingCallout> callouts;
 
+    List<LineChunkContext> chunks;
 
-    private LineContext() {
-    }
+    private LineContext() {}
 
     public static LineContext of(int lineNumber, char[] data, int offset, int length) {
         LineContext line = new LineContext();
@@ -25,17 +23,15 @@ public class LineContext {
         return line;
     }
 
-    @Deprecated
-    private LineContext(int lineNumber, String language, char[] data, int length) {
-        this.lineNumber = lineNumber;
-        this.language = language;
-        this.data = data;
-        this.length = length;
-        this.callouts = new ArrayList<>();
+    public List<LineChunkContext> getChunks() {
+        return chunks;
     }
 
-    @Deprecated
-    public static LineContext of(int lineNumber, String language, char[] data, int length) {
-        return new LineContext(lineNumber, language, data, length);
+    public void setChunks(List<LineChunkContext> chunks) {
+        this.chunks = chunks;
+    }
+
+    public String getText() {
+        return new String(data, offset, length);
     }
 }

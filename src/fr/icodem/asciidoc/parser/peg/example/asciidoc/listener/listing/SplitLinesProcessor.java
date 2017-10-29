@@ -7,11 +7,6 @@ public class SplitLinesProcessor {
     public List<LineContext> process(char[] input) {
         List<LineContext> lines = new LinkedList<>();
 
-        for (int i = 0; i < input.length; i++) {
-            System.out.println(i + " => " +(char)input[i]);
-
-        }
-
         int offset = 0;
         int count = 0;
         for (int i = 0; i < input.length; i++) {
