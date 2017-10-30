@@ -29,7 +29,10 @@ public class StyleAttributeBuilder {
 
 
             if (top != null || right != null || bottom != null || left != null) {
-                style.append("position: absolute;");
+                String pos = attributeList.getStringValue("position", "absolute");
+                style.append("position: ").append(pos).append(";");
+                //style.append("position: absolute;");
+
                 if (top != null) {
                     style.append("top: " + top + "px;");
                 }
