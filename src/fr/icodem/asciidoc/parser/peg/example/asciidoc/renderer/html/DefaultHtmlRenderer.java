@@ -1032,16 +1032,17 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     protected DHR writeListingCallout(Listing.Line line) {
-       return
-         forEach(line.getCallouts(), c ->
-           append(I.start("class", "conum", "data-value", Integer.toString(c.getNum())))
-             .append(I.end())
-             .append(B.start())
-             .append("(")
-             .append(Integer.toString(c.getNum()))
-             .append(")")
-             .append(B.end())
-             .append(" ")
+        if (line.getCallouts() == null) return (DHR)this;
+        return
+          forEach(line.getCallouts(), c ->
+            append(I.start("class", "conum", "data-value", Integer.toString(c.getNum())))
+              .append(I.end())
+              .append(B.start())
+              .append("(")
+              .append(Integer.toString(c.getNum()))
+              .append(")")
+              .append(B.end())
+              .append(" ")
            )
          ;
     }
