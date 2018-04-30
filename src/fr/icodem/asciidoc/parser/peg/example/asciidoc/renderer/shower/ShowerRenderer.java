@@ -233,9 +233,14 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     }*/
 
     @Override
-    public void startListItem(int level) {
+    public void startListItem(int level, int position, AttributeList parentAttList) {
+        boolean addNextClass = parentAttList != null
+                                    && parentAttList.hasOption("step")
+                                    && level == 1 && position > 1;
+
         indent()
-          .append(LI.start());
+          .runIf(addNextClass, () -> append(LI.start("class", "next")))
+          .runIf(!addNextClass, () -> append(LI.start()));
     }
 
     @Override

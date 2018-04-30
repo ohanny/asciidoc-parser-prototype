@@ -721,7 +721,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void startListItem(int level) {
+    public void startListItem(int level, int position, AttributeList parentAttList) {
         indent()
             .append(LI.start())
             .nl()

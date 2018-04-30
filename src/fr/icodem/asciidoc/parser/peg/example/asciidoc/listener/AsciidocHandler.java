@@ -63,7 +63,7 @@ public interface AsciidocHandler {
     void startUnorderedList(int level, AttributeList attList);
     void endUnorderedList(int level);
 
-    void startListItem(int level);
+    void startListItem(int level, int position, AttributeList parentAttList);
     void endListItem(int level);
 
     void startListItemValue();
