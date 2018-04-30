@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class LineContext {
@@ -33,5 +34,10 @@ public class LineContext {
 
     public String getText() {
         return new String(data, offset, length);
+    }
+
+    public void addCallout(int index, ListingCallout callout) {
+        if (callouts == null) callouts = new LinkedList<>();
+        callouts.add(index, callout);
     }
 }

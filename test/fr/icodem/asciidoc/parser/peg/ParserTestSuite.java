@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg;
 
+import fr.icodem.asciidoc.parser.listing.CalloutProcessorSpec;
 import fr.icodem.asciidoc.parser.listing.CodeMarksProcessorSpec;
 import fr.icodem.asciidoc.parser.listing.ListingProcessorSpec;
 import fr.icodem.asciidoc.parser.listing.SplitLinesProcessorSpec;
@@ -17,7 +18,8 @@ import org.junit.runners.Suite.SuiteClasses;
     IncludeReaderTest.class,
     SplitLinesProcessorSpec.class,
     CodeMarksProcessorSpec.class,
-    ListingProcessorSpec.class
+    ListingProcessorSpec.class,
+    CalloutProcessorSpec.class
 })
 public class ParserTestSuite {
 }

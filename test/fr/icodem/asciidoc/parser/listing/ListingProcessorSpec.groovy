@@ -150,4 +150,39 @@ public class Item {
         listing.lines[0].lineChunks[2].text == "&lt;/div&gt;"
     }
 
+    def "should have two callouts on second line" () {
+        given:
+        String input = '''\
+public class Item {
+    private int id; <1> <2>
+    private String name;
+}
+'''
+
+        when:
+        Listing listing = processor.process(input.chars, false, null, false, false, null)
+
+        then:
+        listing != null
+        listing.lines != null
+        listing.lines.size() == 4
+
+        listing.lines[0].callouts == null
+
+        println(listing.lines[1].text)
+        println(listing.lines[1].callouts)
+
+        listing.lines[1].callouts != null
+        listing.lines[1].callouts.size() == 2
+
+        listing.lines[1].callouts[0].line == 2
+        listing.lines[1].callouts[0].num == 1
+
+        listing.lines[1].callouts[1].line == 2
+        listing.lines[1].callouts[1].num == 2
+
+        listing.lines[2].callouts == null
+        listing.lines[3].callouts == null
+    }
+
 }

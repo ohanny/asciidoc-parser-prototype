@@ -17,11 +17,11 @@ public class CalloutProcessor {
 
     public void processCallouts(LineContext context) {
         this.context = context;
-        this.position = context.length - 1;
+        this.position = context.offset + context.length - 1;
 
         while (callout()) {
             context.length = position + 1;
-            context.callouts.add(0, ListingCallout.of(getCalloutNumber(), context.lineNumber));
+            context.addCallout(0, ListingCallout.of(getCalloutNumber(), context.lineNumber));
         }
     }
 
@@ -53,12 +53,11 @@ public class CalloutProcessor {
     }
 
     private boolean matchGT() {
-        for (int i = ListingConstants.GT.length - 1; i >= 0 && position > -1; i--) {
-            if (context.data[position] != ListingConstants.GT[i]) {
-                return false;
-            }
-            position--;
+        if (context.data[position] != '>') {
+            return false;
         }
+        position--;
+
         return true;
     }
 
@@ -76,12 +75,11 @@ public class CalloutProcessor {
     }
 
     private boolean matchLT() {
-        for (int i = ListingConstants.LT.length - 1; i >= 0; i--) {
-            if (context.data[position] != ListingConstants.LT[i]) {
-                return false;
-            }
-            position--;
+        if (context.data[position] != '<') {
+            return false;
         }
+        position--;
+
         return true;
     }
 
