@@ -20,7 +20,7 @@ public class Item {
 '''
 
         when:
-        Listing listing = processor.process(input.chars, false, null, false, false, null)
+        Listing listing = processor.process(null, input.chars, false, null, false, false, null)
 
         then:
         listing != null
@@ -68,7 +68,7 @@ public class Item {
         ]
 
         when:
-        Listing listing = processor.process(input.chars, false, null, false, false, params)
+        Listing listing = processor.process(null, input.chars, false, null, false, false, params)
 
         then:
         listing != null
@@ -108,7 +108,7 @@ public class Item {
 '''
 
         when:
-        Listing listing = processor.process(input.chars, false, null, false, false, null)
+        Listing listing = processor.process(null, input.chars, false, null, false, false, null)
 
         then:
         listing != null
@@ -135,7 +135,7 @@ public class Item {
         ]
 
         when:
-        Listing listing = processor.process(input.chars, false, null, false, false, params)
+        Listing listing = processor.process(null, input.chars, false, null, false, false, params)
 
         then:
         listing != null
@@ -160,7 +160,7 @@ public class Item {
 '''
 
         when:
-        Listing listing = processor.process(input.chars, false, null, false, false, null)
+        Listing listing = processor.process(null, input.chars, false, null, false, false, null)
 
         then:
         listing != null
@@ -193,7 +193,7 @@ public class HelloWorld { <1>
 '''
 
         when:
-        Listing listing = processor.process(input.chars, false, null, false, false, null)
+        Listing listing = processor.process(null, input.chars, false, null, false, false, null)
 
         then:
         listing != null

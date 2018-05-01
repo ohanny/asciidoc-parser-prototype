@@ -995,11 +995,18 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
         String preClass = getListingPreClass(listing);
 
+        //<div class="title">Two paragraphs in an AsciiDoc document</div>
         indent()
           .append(DIV.start("class", getMoreClasses("listingblock", attList)))
           .nl()
           .incIndent()
           .indent()
+          .runIf(listing.getTitle() != null, () ->
+              append(DIV.start("class", "title"))
+                  .append(listing.getTitle())
+                  .append(DIV.end())
+                  .nl()
+          )
           .append(DIV.start("class", "content"))
           .nl()
           .incIndent()

@@ -309,6 +309,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
     private AttributeEntry currentAttributeEntry;
+    private String currentBlockTitle;
 
     public BlockListenerDelegate(AsciidocHandler handler, AttributeEntries attributeEntries) {
         super(attributeEntries);
@@ -396,7 +397,13 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
     public void blockTitleValue(String text) {// TODO not yet tested
-        handler.writeText(text);
+        currentBlockTitle = text;
+    }
+
+    private String consumeBlockTitle() {
+        String title = currentBlockTitle;
+        currentBlockTitle = null;
+        return title;
     }
 
     // attributes
@@ -834,7 +841,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
         }
 
 
-        Listing listing = listingProcessor.process(chars, source, language, linenums, highlight, paramsHolder.highlightParams);
+        Listing listing = listingProcessor.process(consumeBlockTitle(), chars, source, language, linenums, highlight, paramsHolder.highlightParams);
         handler.writeListingBlock(listing, attList);
     }
 

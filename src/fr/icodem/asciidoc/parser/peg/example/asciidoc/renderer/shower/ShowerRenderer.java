@@ -266,6 +266,9 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     @Override
     protected String getListingPreClass(Listing listing) {
         String preClass = super.getListingPreClass(listing);
+        if (preClass == null) preClass = "listingblock";
+        else preClass += " listingblock";
+
         if (!listing.isLinenums()) {
             if (preClass == null) preClass = "nolinenums";
             else preClass += " nolinenums";
@@ -290,7 +293,12 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
 
     @Override
     public void writeListingBlock(Listing listing, AttributeList attList) {
-        append(PRE.start("class", getMoreClasses(getListingPreClass(listing), attList)))
+        runIf(listing.getTitle() != null, () ->
+          append(DIV.start("class", "title listingblock"))
+            .append(listing.getTitle())
+            .append(DIV.end())
+        )
+          .append(PRE.start("class", getMoreClasses(getListingPreClass(listing), attList)))
           .forEach(listing.getLines(), (line, index) ->
             append(CODE.start("class", getListingCodeClass(listing.getLanguage(), line)))
               .forEach(line.getLineChunks(), c ->

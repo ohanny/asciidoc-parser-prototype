@@ -20,7 +20,7 @@ public class ListingProcessor {
 
     private ListingProcessor() {}
 
-    public Listing process(char[] input, boolean source, String language, boolean linenums, boolean highlight, List<HighlightParameter> highlightParams) {
+    public Listing process(String title, char[] input, boolean source, String language, boolean linenums, boolean highlight, List<HighlightParameter> highlightParams) {
 
 
         List<LineContext> lines = splitLinesProcessor.process(input);
@@ -48,7 +48,7 @@ public class ListingProcessor {
              });
 
 
-        return Listing.of(listingLines, source, language, linenums, highlight);
+        return Listing.of(title, listingLines, source, language, linenums, highlight);
     }
 
 }
