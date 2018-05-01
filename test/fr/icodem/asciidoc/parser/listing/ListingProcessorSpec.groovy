@@ -169,9 +169,6 @@ public class Item {
 
         listing.lines[0].callouts == null
 
-        println(listing.lines[1].text)
-        println(listing.lines[1].callouts)
-
         listing.lines[1].callouts != null
         listing.lines[1].callouts.size() == 2
 
@@ -182,6 +179,45 @@ public class Item {
         listing.lines[1].callouts[1].num == 2
 
         listing.lines[2].callouts == null
+        listing.lines[3].callouts == null
+    }
+
+    def "should have three callouts on three different lines" () {
+        given:
+        String input = '''\
+public class HelloWorld { <1>
+  public static void main(String[] args) { <2>
+    System.out.println("Hello World"); <3>
+  }
+}
+'''
+
+        when:
+        Listing listing = processor.process(input.chars, false, null, false, false, null)
+
+        then:
+        listing != null
+        listing.lines != null
+        listing.lines.size() == 5
+
+        listing.lines[0].callouts != null
+        listing.lines[0].callouts.size() == 1
+
+        listing.lines[0].callouts[0].line == 1
+        listing.lines[0].callouts[0].num == 1
+
+        listing.lines[1].callouts != null
+        listing.lines[1].callouts.size() == 1
+
+        listing.lines[1].callouts[0].line == 2
+        listing.lines[1].callouts[0].num == 2
+
+        listing.lines[2].callouts != null
+        listing.lines[2].callouts.size() == 1
+
+        listing.lines[2].callouts[0].line == 3
+        listing.lines[2].callouts[0].num == 3
+
         listing.lines[3].callouts == null
     }
 

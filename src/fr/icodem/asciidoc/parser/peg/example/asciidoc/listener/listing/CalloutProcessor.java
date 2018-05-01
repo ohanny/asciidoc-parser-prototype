@@ -20,7 +20,7 @@ public class CalloutProcessor {
         this.position = context.offset + context.length - 1;
 
         while (callout()) {
-            context.length = position + 1;
+            context.length = position + 1 - context.offset;
             context.addCallout(0, ListingCallout.of(getCalloutNumber(), context.lineNumber));
         }
     }
@@ -37,7 +37,7 @@ public class CalloutProcessor {
     private boolean callout() {
         calloutNumber[0] = Chars.NULL;
         calloutNumber[1] = Chars.NULL;
-        return optionalBlank() && matchGT() && matchNumber() && matchLT();
+        return optionalBlank() && matchGT() && matchNumber() && matchLT() && optionalBlank();
     }
 
     private boolean optionalBlank() {
