@@ -1084,13 +1084,13 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void writeCalloutText(String text) {
-        indent()
-          .append(TD.start())
-          .append(text)
-          .append(TD.end())
-          .nl()
-        ;
+    public void enterCalloutText() {
+        indent().append(TD.start());
+    }
+
+    @Override
+    public void exitCalloutText() {
+        append(TD.end()).nl();
     }
 
     @Override

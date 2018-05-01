@@ -116,7 +116,8 @@ public interface AsciidocHandler {
 
     void startCallout();
     void writeCalloutNumber(String nb);
-    void writeCalloutText(String text);
+    void enterCalloutText();
+    void exitCalloutText();
     void endCallout();
 
     // Inline text

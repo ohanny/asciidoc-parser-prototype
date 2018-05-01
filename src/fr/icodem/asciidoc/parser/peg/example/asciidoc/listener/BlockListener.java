@@ -88,7 +88,9 @@ public class BlockListener implements ParseTreeListener {
                 delegate.calloutNumber(new String(chars));
                 break;
             case "calloutText" :
-                delegate.calloutText(new String(chars));
+                delegate.enterCalloutText();
+                delegate.formattedText(chars);
+                delegate.exitCalloutText();
                 break;
         }
     }
