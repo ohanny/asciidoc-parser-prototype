@@ -1,6 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 public class ImageMacro extends Macro {
+
+    private String title;
+
     ImageMacro() {}
 
     public String getAlternateText() {
@@ -16,5 +19,13 @@ public class ImageMacro extends Macro {
         }
 
         return alt;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

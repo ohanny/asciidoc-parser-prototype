@@ -585,6 +585,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     @Override
     protected void image(ImageMacro macro) {
+        macro.setTitle(consumeBlockTitle());
         handler.writeImage(macro);
     }
 

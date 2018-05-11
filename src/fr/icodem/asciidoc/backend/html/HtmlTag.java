@@ -10,7 +10,7 @@ public enum HtmlTag {
     DIV, SECTION, HEADER,
     P, BLOCKQUOTE, CITE, UL, OL, LI, DL, DT, DD,
     TABLE, COLGROUP, COL, THEAD, TH, TBODY, TFOOT, TR, TD,
-    PRE,
+    PRE, FIGURE, FIGCAPTION,
     H1, H2, H3, H4, H5, H6,
     BR, HR,
     A, IMG, SPAN, STRONG, EM, SUB, SUP, CODE, MARK, I, B,
@@ -112,6 +112,8 @@ public enum HtmlTag {
             case TR: return "<tr>";
             case TD: return buildStartTag("td", attributes);
             case PRE: return buildStartTag("pre", attributes);
+            case FIGURE: return buildStartTag("figure", attributes);
+            case FIGCAPTION: return "<figcaption>";
             case H1: return buildStartTag("h1", attributes);
             case H2: return buildStartTag("h2", attributes);
             case H3: return buildStartTag("h3", attributes);
@@ -162,6 +164,8 @@ public enum HtmlTag {
             case TR: return "</tr>";
             case TD: return "</td>";
             case PRE: return "</pre>";
+            case FIGURE: return "</figure>";
+            case FIGCAPTION: return "</figcaption>";
             case H1: return "</h1>";
             case H2: return "</h2>";
             case H3: return "</h3>";

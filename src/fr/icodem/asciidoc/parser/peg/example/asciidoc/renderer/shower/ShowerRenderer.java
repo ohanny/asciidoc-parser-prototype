@@ -330,4 +330,34 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
         ;
     }
 
+    /* **********************************************/
+    // Macro
+    /* **********************************************/
+
+    @Override
+    public void writeImage(ImageMacro image) {
+        indent()
+                .append(FIGURE.start("class", getCssClasses(image.getBlockAttributes()),
+                        "style", styleBuilder().reset(image.getBlockAttributes()).addPosition().style()))
+                .nl()
+                .incIndent()
+                .indent()
+                .append(IMG.tag("src", image.getTarget(), "alt", image.getAlternateText(),
+                        "style", styleBuilder().reset(image.getBlockAttributes()).addSize().style()))
+                .nl()
+                .runIf(image.getTitle() != null, () ->
+                        indent()
+                        .append(FIGCAPTION.start())
+                        .append(image.getTitle())
+                        .append(FIGCAPTION.end())
+                        .nl()
+                )
+                .decIndent()
+                .indent()
+                .append(FIGURE.end())
+                .nl()
+        ;
+    }
+
+
 }
