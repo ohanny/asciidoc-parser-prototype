@@ -33,6 +33,10 @@ public class CodeMarksProcessor {
             pos += length;
         }
 
+        if (line.length == 0) {
+            chunks.add(LineChunkContext.of(line.data, line.offset, line.length));
+        }
+
         line.setChunks(chunks);
     }
 

@@ -221,4 +221,39 @@ public class HelloWorld { <1>
         listing.lines[3].callouts == null
     }
 
+    def "listing with blank line" () {
+        given:
+        String input = '''\
+int id = 1;
+
+System.out.println(id);
+'''
+
+        when:
+        Listing listing = processor.process(null, input.chars, false, null, false, false, null)
+
+        then:
+        listing != null
+        listing.lines.size() == 3
+
+        listing.lines[0].number == 1
+        listing.lines[0].text == "int id = 1;"
+        listing.lines[0].lineChunks != null
+        listing.lines[0].lineChunks.size() == 1
+        listing.lines[0].lineChunks[0].text == "int id = 1;"
+
+        listing.lines[1].number == 2
+        listing.lines[1].text == ""
+        listing.lines[1].lineChunks != null
+        listing.lines[1].lineChunks.size() == 1
+        listing.lines[1].lineChunks[0].text == ""
+
+        listing.lines[2].number == 3
+        listing.lines[2].text == "System.out.println(id);"
+        listing.lines[2].lineChunks != null
+        listing.lines[2].lineChunks.size() == 1
+        listing.lines[2].lineChunks[0].text == "System.out.println(id);"
+
+    }
+
 }

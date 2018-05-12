@@ -56,26 +56,35 @@ console.log(str);
 
     }
 
-    def "listing not ended with \n" () {
+    def "listing with blank line" () {
         given:
-        String input = 'let str = "hello";\r\nconsole.log(str);'
+        String input = '''\
+int id = 1;
+
+System.out.println(id);
+'''
 
         when:
         List<LineContext> lines = processor.process(input.chars)
 
         then:
         lines != null
-        lines.size() == 2
+        lines.size() == 3
 
         lines[0].offset == 0
-        lines[0].length == 18
+        lines[0].length == 11
         lines[0].data != null
         lines[0].data.toString() == input
 
-        lines[1].offset == 20
-        lines[1].length == 17
+        lines[1].offset == 12
+        lines[1].length == 0
         lines[1].data != null
         lines[1].data.toString() == input
+
+        lines[2].offset == 13
+        lines[2].length == 23
+        lines[2].data != null
+        lines[2].data.toString() == input
 
     }
 
