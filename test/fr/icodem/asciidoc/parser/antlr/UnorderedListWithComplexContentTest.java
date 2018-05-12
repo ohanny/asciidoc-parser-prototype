@@ -98,6 +98,21 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
             },
             {
                 /* message */
+                "a list item continued by a listing block with attribute list",
+
+                /* input */
+                "* The sun is shining...\n" +
+                "+\n" +
+                "[source]\n" +
+                "----\n" +
+                "println('Yes !')\n" +
+                "----",
+
+                /* expected */
+                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (attributeList [ (positionalAttribute (attributeValue s o u r c e)) ] \\n) (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - <EOI>)))))))))"
+            },
+            {
+                /* message */
                 "a list item continued by a paragraph and a source block",
 
                 /* input */

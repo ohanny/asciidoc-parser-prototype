@@ -469,7 +469,7 @@ public class BlockRules extends BaseRules {
 
     private Rule listContinuation() {
         return node("listContinuation", sequence(
-                ch('+'), optional(blank()), newLine(), wrap(setAttribute("fromList", true), proxy("block"))
+                ch('+'), optional(blank()), newLine(), wrap(setAttribute("fromList", true), sequence(optional(attributeList()), proxy("block")))
         ));
     }
 
