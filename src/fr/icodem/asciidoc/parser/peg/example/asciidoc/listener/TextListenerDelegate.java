@@ -34,6 +34,8 @@ public class TextListenerDelegate extends AbstractDelegate {
     }
 
     public void text(String text) {
+        text = text.replace("\\_", "_");
+
         handler.writeText(text);
     }
 
