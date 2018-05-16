@@ -308,6 +308,20 @@ public class BlockListenerDelegate extends AbstractDelegate {
         }
     }
 
+    private ExampleContext currentExample;
+    private static class ExampleContext {
+        String admonition;
+        String icons;
+
+        static ExampleContext of (String admonition, String icons) {
+            ExampleContext example = new ExampleContext();
+            example.admonition = admonition;
+            example.icons = icons;
+
+            return example;
+        }
+    }
+
     private AttributeEntry currentAttributeEntry;
     private String currentBlockTitle;
 
@@ -872,6 +886,37 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void exitCallout() {
         handler.endCallout();
+    }
+
+    public void enterExample() {
+        String icons = getAttributeEntry("icons").getValue();
+
+        AttributeList attList = consumeAttList();
+        String admonition = null;
+        if (attList != null) {
+            if (attList.hasPositionalAttributes("NOTE")) {
+                admonition = "note";
+            } else if (attList.hasPositionalAttributes("TIP")) {
+                admonition = "tip";
+            } else if (attList.hasPositionalAttributes("IMPORTANT")) {
+                admonition = "important";
+            } else if (attList.hasPositionalAttributes("WARNING")) {
+                admonition = "warning";
+            } else if (attList.hasPositionalAttributes("CAUTION")) {
+                admonition = "caution";
+            } else if (attList.hasPositionalAttributes("WARNING")) {
+                admonition = "warning";
+            }
+        }
+
+        currentExample = ExampleContext.of(admonition, icons);
+
+        handler.startExample(admonition, icons, attList);
+    }
+
+    public void exitExample() {
+        handler.endExample(currentExample.admonition);
+        currentExample = null;
     }
 
 }

@@ -18,6 +18,7 @@ import org.junit.runners.Suite;
     ParagraphTest.class,
     ListingBlockTest.class,
     LiteralBlockTest.class,
+    ExampleBlockTest.class,
     BlockIdTest.class,
     RevisionInfoTest.class,
     AttributeEntryTest.class,

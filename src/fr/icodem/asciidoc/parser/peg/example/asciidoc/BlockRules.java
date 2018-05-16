@@ -127,6 +127,7 @@ public class BlockRules extends BaseRules {
                 list(),
                 listingBlock(),
                 literalBlock(),
+                exampleBlock(),
                 table(),
                 labeledList(),
                 sequence(paragraph(), optional(nl()))
@@ -175,7 +176,7 @@ public class BlockRules extends BaseRules {
                          testNot(listContinuation()),
                          ch('+')
                        ),
-                       ch('=')
+                       sequence(testNot(exampleBlockDelimiter()), ch('='))
                      )
                    ),
                    optional(eoi())
@@ -696,7 +697,36 @@ public class BlockRules extends BaseRules {
     private Rule literalBlockDelimiter() {
         return node("literalBlockDelimiter", sequence(
                     test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), // TODO replace
-                    ch('.'), ch('.'), ch('.'), ch('.'), // TODO ntimes
+                    string("...."), // TODO ntimes
+                    optional(blank()), // TODO replace with blanks
+                    firstOf(newLine(), eoi())
+                ));
+    }
+
+    private Rule exampleBlock() {
+        return node("exampleBlock",
+                sequence(
+                        exampleBlockDelimiter(),
+                        zeroOrMore(
+                                firstOf(
+                                        list(),
+                                        listingBlock(),
+                                        literalBlock(),
+                                        //exampleBlock(),
+                                        table(),
+                                        labeledList(),
+                                        sequence(paragraph(), optional(nl()))
+                                )
+                        ),
+                        exampleBlockDelimiter()
+                )
+        );
+    }
+
+    private Rule exampleBlockDelimiter() {
+        return node("exampleBlockDelimiter", sequence(
+                    test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), // TODO replace
+                    string("===="), // TODO ntimes
                     optional(blank()), // TODO replace with blanks
                     firstOf(newLine(), eoi())
                 ));

@@ -120,6 +120,9 @@ public interface AsciidocHandler {
     void exitCalloutText();
     void endCallout();
 
+    void startExample(String admonition, String icons, AttributeList attList);
+    void endExample(String admonition);
+
     // Inline text
     void startBold();
     void endBold();
