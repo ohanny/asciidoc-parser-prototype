@@ -293,10 +293,17 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
 
     @Override
     public void writeListingBlock(Listing listing, AttributeList attList) {
+        indent()
+                .append(DIV.start("class", getMoreClasses("listingblock", attList)))
+                .nl()
+                .incIndent()
+                .indent();
+
         runIf(listing.getTitle() != null, () ->
           append(DIV.start("class", "title listingblock"))
             .append(listing.getTitle())
             .append(DIV.end())
+            .nl()
         )
           .append(PRE.start("class", getMoreClasses(getListingPreClass(listing), attList)))
           .forEach(listing.getLines(), (line, index) ->
@@ -328,6 +335,12 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .append(PRE.end())
           .nl()
         ;
+
+                  decIndent()
+                .indent()
+                .append(DIV.end())
+                .nl();
+
     }
 
     /* **********************************************/

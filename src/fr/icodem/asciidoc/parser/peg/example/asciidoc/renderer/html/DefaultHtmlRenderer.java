@@ -1191,42 +1191,6 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         ;
     }
 
-    /*
-    <div class="exampleblock">
-<div class="title">Result: Admonition block</div>
-<div class="content">
-<div class="admonitionblock important">
-<table>
-<tbody><tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-<div class="title">Feeding the Werewolves</div>
-<div class="paragraph">
-<p>While werewolves are hardy community members, keep in mind the following dietary concerns:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>They are allergic to cinnamon.</p>
-</li>
-<li>
-<p>More than two glasses of orange juice in 24 hours makes them howl in harmony with alarms and sirens.</p>
-</li>
-<li>
-<p>Celery makes them sad.</p>
-</li>
-</ol>
-</div>
-</td>
-</tr>
-</tbody></table>
-</div>
-</div>
-</div>
-     */
-
     @Override
     public void startExample(String admonition, String icons, AttributeList attList) {
         if (admonition == null) {
