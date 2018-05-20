@@ -6,35 +6,35 @@ class QuotedTextSpec extends TextSpecification {
 
     def "normal phrase"() {
         given:
-        String input = "it's a nice day";
+        String input = "it's a nice day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a   n i c e   d a y))";
+        result.tree == "(formattedText (text i t ' s   a   n i c e   d a y))"
     }
 
     def "normal phrase with [ character"() {
         given:
-        String input = "it's a nice [day";
+        String input = "it's a nice [day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a   n i c e   [ d a y))";
+        result.tree == "(formattedText (text i t ' s   a   n i c e   [ d a y))"
     }
 
     def "normal phrase with [ and ] characters"() {
         given:
-        String input = "it's a [nice] day";
+        String input = "it's a [nice] day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a   [ n i c e ]   d a y))";
+        result.tree == "(formattedText (text i t ' s   a   [ n i c e ]   d a y))"
     }
 
     def "phrase with \\n character"() {
@@ -61,211 +61,211 @@ class QuotedTextSpec extends TextSpecification {
 
     def "bold phrase"() {
         given:
-        String input = "*it's a nice day*";
+        String input = "*it's a nice day*"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (bold * (text i t ' s   a   n i c e   d a y) *))";
+        result.tree == "(formattedText (bold * (text i t ' s   a   n i c e   d a y) *))"
     }
 
     def "bold word within a phrase"() {
         given:
-        String input = "it's a *nice* day";
+        String input = "it's a *nice* day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e) *) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e) *) (text   d a y))"
     }
 
     def "two bold words within a phrase"() {
         given:
-        String input = "it's a *nice* and *sunny* day";
+        String input = "it's a *nice* and *sunny* day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e) *) (text   a n d  ) (bold * (text s u n n y) *) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e) *) (text   a n d  ) (bold * (text s u n n y) *) (text   d a y))"
     }
 
     def "bold word delimited with several asterix"() {
         given:
-        String input = "it's a **nice*** day";
+        String input = "it's a **nice*** day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (bold * * (text n i c e) * * *) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (bold * * (text n i c e) * * *) (text   d a y))"
     }
 
     def "end of phrase should be bold"() {
         given:
-        String input = "it's a *nice day";
+        String input = "it's a *nice day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e   d a y)))";
+        result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e   d a y)))"
     }
 
     def "italic phrase"() {
         given:
-        String input = "_it's a nice day_";
+        String input = "_it's a nice day_"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (italic _ (text i t ' s   a   n i c e   d a y) _))";
+        result.tree == "(formattedText (italic _ (text i t ' s   a   n i c e   d a y) _))"
     }
 
     def "italic word within a phrase"() {
         given:
-        String input = "it's a _nice_ day";
+        String input = "it's a _nice_ day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e) _) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e) _) (text   d a y))"
     }
 
     def "two italic words within a phrase"() {
         given:
-        String input = "it's a _nice_ and _sunny_ day";
+        String input = "it's a _nice_ and _sunny_ day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e) _) (text   a n d  ) (italic _ (text s u n n y) _) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e) _) (text   a n d  ) (italic _ (text s u n n y) _) (text   d a y))"
     }
 
     def "italic word delimited with several underscore"() {
         given:
-        String input = "it's a __nice___ day";
+        String input = "it's a __nice___ day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (italic _ _ (text n i c e) _ _ _) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (italic _ _ (text n i c e) _ _ _) (text   d a y))"
     }
 
     def "end of phrase should be italic"() {
         given:
-        String input = "it's a _nice day";
+        String input = "it's a _nice day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e   d a y)))";
+        result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e   d a y)))"
     }
 
     def "bold italic word within a phrase"() {
         given:
-        String input = "it's a *_nice_* day";
+        String input = "it's a *_nice_* day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (bold * (italic _ (text n i c e) _) *) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (bold * (italic _ (text n i c e) _) *) (text   d a y))"
     }
 
     def "first letter of 'day' should be bold"() {
         given:
-        String input = "it's a nice *d*ay";
+        String input = "it's a nice *d*ay"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a   n i c e  ) (bold * (text d) *) (text a y))";
+        result.tree == "(formattedText (text i t ' s   a   n i c e  ) (bold * (text d) *) (text a y))"
     }
 
     def "last letter of 'nice' should be bold"() {
         given:
-        String input = "it's a nic*e* day";
+        String input = "it's a nic*e* day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a   n i c) (bold * (text e) *) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a   n i c) (bold * (text e) *) (text   d a y))"
     }
 
     def "hyphen before bold word"() {
         given:
-        String input = "-*2016*";
+        String input = "-*2016*"
 
         when:
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(formattedText (text -) (bold * (text 2 0 1 6) *))";
+        result.tree == "(formattedText (text -) (bold * (text 2 0 1 6) *))"
     }
 
     def "spaces inside formatting mark"() {
         given:
-        String input = "*bold *";
+        String input = "*bold *"
 
         when:
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(formattedText (bold * (text b o l d  ) *))";
+        result.tree == "(formattedText (bold * (text b o l d  ) *))"
     }
 
     def "hyphen after and before formatting mark"() {
         given:
-        String input = "*9*-to-*5*";
+        String input = "*9*-to-*5*"
 
         when:
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(formattedText (bold * (text 9) *) (text - t o -) (bold * (text 5) *))";
+        result.tree == "(formattedText (bold * (text 9) *) (text - t o -) (bold * (text 5) *))"
     }
 
     def "subscript character"() {
         given:
-        String input = "the H~2~O formula";
+        String input = "the H~2~O formula"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text t h e   H) (subscript ~ (text 2) ~) (text O   f o r m u l a))";
+        result.tree == "(formattedText (text t h e   H) (subscript ~ (text 2) ~) (text O   f o r m u l a))"
     }
 
     def "subscript word"() {
         given:
-        String input = "the CO~2 (aq)~ formula";
+        String input = "the CO~2 (aq)~ formula"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text t h e   C O) (subscript ~ (text 2   ( a q )) ~) (text   f o r m u l a))";
+        result.tree == "(formattedText (text t h e   C O) (subscript ~ (text 2   ( a q )) ~) (text   f o r m u l a))"
     }
 
     def "superscript character"() {
         given:
-        String input = "the E=MC^2^ formula";
+        String input = "the E=MC^2^ formula"
 
         when:
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(formattedText (text t h e   E = M C) (superscript ^ (text 2) ^) (text   f o r m u l a))";
+        result.tree == "(formattedText (text t h e   E = M C) (superscript ^ (text 2) ^) (text   f o r m u l a))"
     }
 
     def "superscript word"() {
@@ -273,76 +273,76 @@ class QuotedTextSpec extends TextSpecification {
         String input = "the 1^rst^ day";
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text t h e   1) (superscript ^ (text r s t) ^) (text   d a y))";
+        result.tree == "(formattedText (text t h e   1) (superscript ^ (text r s t) ^) (text   d a y))"
     }
 
     def "monospace phrase"() {
         given:
-        String input = "`it's a nice day`";
+        String input = "`it's a nice day`"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (monospace ` (text i t ' s   a   n i c e   d a y) `))";
+        result.tree == "(formattedText (monospace ` (text i t ' s   a   n i c e   d a y) `))"
     }
 
     def "monospace word within a phrase"() {
         given:
-        String input = "it's a `nice` day";
+        String input = "it's a `nice` day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (monospace ` (text n i c e) `) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (monospace ` (text n i c e) `) (text   d a y))"
     }
 
     def "two monospace words within a phrase"() {
         given:
-        String input = "it's a `nice` and `sunny` day";
+        String input = "it's a `nice` and `sunny` day"
 
         when:
         ParsingResult result = parse(input);
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (monospace ` (text n i c e) `) (text   a n d  ) (monospace ` (text s u n n y) `) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (monospace ` (text n i c e) `) (text   a n d  ) (monospace ` (text s u n n y) `) (text   d a y))"
     }
 
     def "end of phrase should be monospace"() {
         given:
-        String input = "it's a `nice day";
+        String input = "it's a `nice day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (monospace ` (text n i c e   d a y)))";
+        result.tree == "(formattedText (text i t ' s   a  ) (monospace ` (text n i c e   d a y)))"
     }
 
     def "monospace word delimited with several antiquote"() {
         given:
-        String input = "it's a ``nice``` day";
+        String input = "it's a ``nice``` day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (monospace ` ` (text n i c e) ` ` `) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (monospace ` ` (text n i c e) ` ` `) (text   d a y))"
     }
 
     def "monospace bold words within a phrase"() {
         given:
-        String input = "Enter the `*adb devices*` command";
+        String input = "Enter the `*adb devices*` command"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text E n t e r   t h e  ) (monospace ` (bold * (text a d b   d e v i c e s) *) `) (text   c o m m a n d))";
+        result.tree == "(formattedText (text E n t e r   t h e  ) (monospace ` (bold * (text a d b   d e v i c e s) *) `) (text   c o m m a n d))"
     }
 
     def "monospace italic words within a phrase"() {

@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.antlr;
 
+import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -172,7 +173,17 @@ public class ParagraphTest extends GrammarTest {
 
                 /* expected */
                 "(document (header (documentSection (documentTitle F r u i t s \\r))) (bl \\r \\n) (preamble (block (paragraph A b o u t   f r u i t s) (nl \\r \\n)) (bl \\r \\n)) (content (section = =   (sectionTitle B a n a n a \\r) \\n)) (bl <EOI>))"
-                }
+            },
+            {
+                /* message */
+                "paragraph with '+' character inside",
+
+                /* input */
+                "the + sign",
+
+                /* expected */
+                "(document (content (block (paragraph t h e   +   s i g n <EOI>))))"
+            }
 
         });
 

@@ -176,7 +176,8 @@ public class BlockRules extends BaseRules {
                          testNot(listContinuation()),
                          ch('+')
                        ),
-                       sequence(testNot(exampleBlockDelimiter()), ch('='))
+                       sequence(testNot(exampleBlockDelimiter()), ch('=')),
+                       sequence(testNot(() -> ctx -> ctx.getBooleanAttribute("fromList", false)), ch('+'))
                      )
                    ),
                    optional(eoi())
