@@ -294,7 +294,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     @Override
     public void writeListingBlock(Listing listing, AttributeList attList) {
         indent()
-                .append(DIV.start("class", getMoreClasses("listingblock", attList)))
+                .append(DIV.start("class", getMoreClasses("listingblock", attList), "style", styleBuilder().reset(attList).addPosition().style()))
                 .nl()
                 .incIndent()
                 .indent();
@@ -335,13 +335,16 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .append(PRE.end())
           .nl()
         ;
+    }
 
-                  decIndent()
+    @Override
+    public void endListingBlock() {
+        decIndent()
                 .indent()
                 .append(DIV.end())
                 .nl();
-
     }
+
 
     /* **********************************************/
     // Macro

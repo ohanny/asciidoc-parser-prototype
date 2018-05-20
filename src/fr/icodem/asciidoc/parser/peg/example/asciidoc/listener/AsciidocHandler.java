@@ -110,6 +110,7 @@ public interface AsciidocHandler {
     void endTableCell();
 
     void writeListingBlock(Listing listing, AttributeList attList);
+    void endListingBlock();
 
     void startCallouts();
     void endCallouts();
@@ -143,4 +144,5 @@ public interface AsciidocHandler {
     void endMark(AttributeList attList);
 
     void xref(XRef xref);
+
 }

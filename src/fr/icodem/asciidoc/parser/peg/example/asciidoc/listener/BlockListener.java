@@ -269,6 +269,9 @@ public class BlockListener implements ParseTreeListener {
             case "tableCell" :
                 delegate.exitTableCell();
                 break;
+            case "listingBlock" :
+                delegate.exitListingBlock();
+                break;
             case "callouts":
                 delegate.exitCallouts();
                 break;

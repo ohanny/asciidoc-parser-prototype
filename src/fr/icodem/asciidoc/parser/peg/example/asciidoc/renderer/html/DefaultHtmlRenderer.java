@@ -1064,7 +1064,6 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
         String preClass = getListingPreClass(listing);
 
-        //<div class="title">Two paragraphs in an AsciiDoc document</div>
         indent()
           .append(DIV.start("class", getMoreClasses("listingblock", attList)))
           .nl()
@@ -1106,6 +1105,9 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .nl()
         ;
     }
+
+    @Override
+    public void endListingBlock() {}
 
     protected DHR writeListingCallout(Listing.Line line) {
         if (line.getCallouts() == null) return (DHR)this;

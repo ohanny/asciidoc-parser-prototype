@@ -860,6 +860,10 @@ public class BlockListenerDelegate extends AbstractDelegate {
         handler.writeListingBlock(listing, attList);
     }
 
+    public void exitListingBlock() {
+        handler.endListingBlock();
+    }
+
     public void enterCallouts() {
         handler.startCallouts();
     }
