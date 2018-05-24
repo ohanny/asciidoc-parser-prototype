@@ -220,14 +220,6 @@ public class TextRules extends BaseRules {
         return () -> ctx -> !ctx.getBooleanAttribute("break", false);
     }
 
-//    private Rule notInsideBold() {
-//        return () -> ctx -> {
-//            System.out.println(!ctx.getRoot().getBooleanAttribute("insideBold", false));
-//
-//            return !ctx.getRoot().getBooleanAttribute("insideBold", false);
-//        };
-//    }
-
     private Rule notInsideBold() {
         return () -> ctx -> !ctx.getRoot().getBooleanAttribute("insideBold", false);
     }
@@ -257,43 +249,6 @@ public class TextRules extends BaseRules {
                      ),
                      testNot(unsetInsideBold)
                    )
-                 )
-               )
-        ;
-    }
-
-    @Deprecated
-    private Rule boldold() {
-
-        /* strict rule
-        return node("bold",
-                sequence(
-                        notInsideBold,
-                        ch('*'),
-                        toggleInsideBold,
-                        oneOrMore(proxy("chunk")),
-                        ch('*'),
-                        toggleInsideBold
-                ));
-                */
-
-        // permissive rule
-        Rule toggleInsideBold = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideBold", false);
-            ctx.getParent().setAttribute("insideBold", !b);
-            return true;
-        };
-
-        Rule notInsideBold = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideBold", false);
-
-        return node("bold",
-                 sequence(
-                   notInsideBold,
-                   oneOrMore(ch('*')),
-                   toggleInsideBold,
-                   oneOrMore(proxy("chunk")),
-                   oneOrMore(ch('*')),
-                   toggleInsideBold
                  )
                )
         ;
@@ -334,39 +289,6 @@ public class TextRules extends BaseRules {
         ;
     }
 
-    @Deprecated
-    private Rule italicold() {
-        /* strict rule
-        return node("italic",
-                sequence(
-                    ch('_'),
-                    oneOrMore(proxy("chunk")),
-                    ch('_')
-                ));
-        */
-
-        // permissive rule
-        Rule toggleInsideItalic = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideItalic", false);
-            ctx.getParent().setAttribute("insideItalic", !b);
-            return true;
-        };
-
-        Rule notInsideItalic = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideItalic", false);
-
-        return node("italic",
-                 sequence(
-                   notInsideItalic,
-                   oneOrMore(ch('_')),
-                   toggleInsideItalic,
-                   oneOrMore(proxy("chunk")),
-                   zeroOrMore(ch('_')),
-                   toggleInsideItalic
-                 )
-               )
-        ;
-    }
-
     private Rule notInsideSubscript() {
         return () -> ctx -> !ctx.getRoot().getBooleanAttribute("insideSubscript", false);
     }
@@ -401,39 +323,6 @@ public class TextRules extends BaseRules {
         ;
     }
 
-    @Deprecated
-    private Rule subscriptold() {
-        /* strict rule
-        return node("subscript",
-                sequence(
-                    ch('~'),
-                    oneOrMore(proxy("chunk")),
-                    optional(ch('~'))
-                ));
-                */
-
-        // permissive rule
-        Rule toggleInsideSubscript = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideSubscript", false);
-            ctx.getParent().setAttribute("insideSubscript", !b);
-            return true;
-        };
-
-        Rule notInsideSubscript = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideSubscript", false);
-
-        return node("subscript",
-                 sequence(
-                   notInsideSubscript,
-                   oneOrMore(ch('~')),
-                   toggleInsideSubscript,
-                   oneOrMore(proxy("chunk")),
-                   zeroOrMore(ch('~')),
-                   toggleInsideSubscript
-                 )
-               )
-        ;
-    }
-
     private Rule notInsideSuperscript() {
         return () -> ctx -> !ctx.getRoot().getBooleanAttribute("insideSuperscript", false);
     }
@@ -463,39 +352,6 @@ public class TextRules extends BaseRules {
                      ),
                      testNot(unsetInsideSuperscript)
                    )
-                 )
-               )
-        ;
-    }
-
-    @Deprecated
-    private Rule superscriptold() {
-        /* strict rule
-        return node("superscript",
-                sequence(
-                    ch('^'),
-                    oneOrMore(proxy("chunk")),
-                    optional(ch('^'))
-                ));
-                */
-
-        // permissive rule
-        Rule toggleInsideSuperscript = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideSuperscript", false);
-            ctx.getParent().setAttribute("insideSuperscript", !b);
-            return true;
-        };
-
-        Rule notInsideSuperscript = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideSuperscript", false);
-
-        return node("superscript",
-                 sequence(
-                   notInsideSuperscript,
-                   oneOrMore(ch('^')),
-                   toggleInsideSuperscript,
-                   oneOrMore(proxy("chunk")),
-                   zeroOrMore(ch('^')),
-                   toggleInsideSuperscript
                  )
                )
         ;
@@ -541,44 +397,6 @@ public class TextRules extends BaseRules {
         };
     }
 
-    @Deprecated
-    private Rule monospaceold() {
-        /* strict rule
-        return node("monospace",
-                sequence(
-                    ch('`'),
-                    oneOrMore(proxy("chunk")),
-                    ch('`')
-                ));
-                */
-
-        // permissive rule
-        Rule toggleInsideMonospace = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideMonospace", false);
-            ctx.getParent().setAttribute("insideMonospace", !b);
-            return true;
-        };
-
-        Rule notInsideMonospace = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideMonospace", false);
-
-        return node("monospace",
-                 sequence(
-                   notInsideMonospace,
-                   oneOrMore(ch('`')),
-                   toggleInsideMonospace,
-                   oneOrMore(proxy("chunk")),
-                   zeroOrMore(
-                     sequence(
-                       testNot(string("`\"")),
-                       ch('`')
-                     )
-                   ),
-                   toggleInsideMonospace
-                 )
-               )
-        ;
-    }
-
     private Rule notInsideMark() {
         return () -> ctx -> !ctx.getRoot().getBooleanAttribute("insideMark", false);
     }
@@ -608,39 +426,6 @@ public class TextRules extends BaseRules {
                      ),
                      testNot(unsetInsideMark)
                    )
-                 )
-               )
-        ;
-    }
-
-    @Deprecated
-    private Rule markold() {
-        /* strict rule
-        return node("mark",
-                sequence(
-                    ch('#'),
-                    oneOrMore(proxy("chunk")),
-                    ch('#')
-                ));
-                */
-
-        // permissive rule
-        Rule toggleInsideMark = () -> ctx -> {
-            boolean b = ctx.getParent().getBooleanAttribute("insideMark", false);
-            ctx.getParent().setAttribute("insideMark", !b);
-            return true;
-        };
-
-        Rule notInsideMark = () -> ctx -> !ctx.getParent().getBooleanAttribute("insideMark", false);
-
-        return node("mark",
-                 sequence(
-                   notInsideMark,
-                   oneOrMore(ch('#')),
-                   toggleInsideMark,
-                   oneOrMore(proxy("chunk")),
-                   zeroOrMore(ch('#')),
-                   toggleInsideMark
                  )
                )
         ;
