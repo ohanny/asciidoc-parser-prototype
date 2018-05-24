@@ -377,4 +377,8 @@ public class MatcherContext {
     public MatcherContext getParent() {
         return parent;
     }
+
+    public MatcherContext getRoot() {
+        return root;
+    }
 }

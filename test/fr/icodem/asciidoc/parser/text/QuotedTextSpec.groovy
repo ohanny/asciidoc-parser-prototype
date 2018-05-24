@@ -105,13 +105,13 @@ class QuotedTextSpec extends TextSpecification {
 
     def "end of phrase should be bold"() {
         given:
-        String input = "it's a *nice day"
+        String input = "it's a *nice day*"
 
         when:
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e   d a y)))"
+        result.tree == "(formattedText (text i t ' s   a  ) (bold * (text n i c e   d a y) *))"
     }
 
     def "italic phrase"() {
@@ -160,13 +160,13 @@ class QuotedTextSpec extends TextSpecification {
 
     def "end of phrase should be italic"() {
         given:
-        String input = "it's a _nice day"
+        String input = "it's a _nice day_"
 
         when:
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e   d a y)))"
+        result.tree == "(formattedText (text i t ' s   a  ) (italic _ (text n i c e   d a y) _))"
     }
 
     def "bold italic word within a phrase"() {
@@ -207,7 +207,7 @@ class QuotedTextSpec extends TextSpecification {
         String input = "-*2016*"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
         result.tree == "(formattedText (text -) (bold * (text 2 0 1 6) *))"
@@ -218,7 +218,7 @@ class QuotedTextSpec extends TextSpecification {
         String input = "*bold *"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
         result.tree == "(formattedText (bold * (text b o l d  ) *))"
@@ -229,7 +229,7 @@ class QuotedTextSpec extends TextSpecification {
         String input = "*9*-to-*5*"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
         result.tree == "(formattedText (bold * (text 9) *) (text - t o -) (bold * (text 5) *))"
@@ -262,7 +262,7 @@ class QuotedTextSpec extends TextSpecification {
         String input = "the E=MC^2^ formula"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
         result.tree == "(formattedText (text t h e   E = M C) (superscript ^ (text 2) ^) (text   f o r m u l a))"
@@ -270,7 +270,7 @@ class QuotedTextSpec extends TextSpecification {
 
     def "superscript word"() {
         given:
-        String input = "the 1^rst^ day";
+        String input = "the 1^rst^ day"
 
         when:
         ParsingResult result = parse(input)
@@ -347,79 +347,79 @@ class QuotedTextSpec extends TextSpecification {
 
     def "monospace italic words within a phrase"() {
         given:
-        String input = "Enter the `_adb devices_` command";
+        String input = "Enter the `_adb devices_` command"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text E n t e r   t h e  ) (monospace ` (italic _ (text a d b   d e v i c e s) _) `) (text   c o m m a n d))";
+        result.tree == "(formattedText (text E n t e r   t h e  ) (monospace ` (italic _ (text a d b   d e v i c e s) _) `) (text   c o m m a n d))"
     }
 
     def "marked phrase"() {
         given:
-        String input = "#it's a nice day#";
+        String input = "#it's a nice day#"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (mark # (text i t ' s   a   n i c e   d a y) #))";
+        result.tree == "(formattedText (mark # (text i t ' s   a   n i c e   d a y) #))"
     }
 
     def "marked word within a phrase"() {
         given:
-        String input = "it's a #nice# day";
+        String input = "it's a #nice# day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (mark # (text n i c e) #) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (mark # (text n i c e) #) (text   d a y))"
     }
 
     def "two marked words within a phrase"() {
         given:
-        String input = "it's a #nice# and #sunny# day";
+        String input = "it's a #nice# and #sunny# day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (mark # (text n i c e) #) (text   a n d  ) (mark # (text s u n n y) #) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (mark # (text n i c e) #) (text   a n d  ) (mark # (text s u n n y) #) (text   d a y))"
     }
 
     def "end of phrase should be marked"() {
         given:
-        String input = "it's a #nice day";
+        String input = "it's a #nice day#"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (mark # (text n i c e   d a y)))";
+        result.tree == "(formattedText (text i t ' s   a  ) (mark # (text n i c e   d a y) #))"
     }
 
     def "marked word delimited with several hash"() {
         given:
-        String input = "it's a ##nice### day";
+        String input = "it's a ##nice### day"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text i t ' s   a  ) (mark # # (text n i c e) # # #) (text   d a y))";
+        result.tree == "(formattedText (text i t ' s   a  ) (mark # # (text n i c e) # # #) (text   d a y))"
     }
 
     def "marked bold words within a phrase"() {
         given:
-        String input = "Enter the #*adb devices*# command";
+        String input = "Enter the #*adb devices*# command"
 
         when:
-        ParsingResult result = parse(input);
+        ParsingResult result = parse(input)
 
         then:
-        result.tree == "(formattedText (text E n t e r   t h e  ) (mark # (bold * (text a d b   d e v i c e s) *) #) (text   c o m m a n d))";
+        result.tree == "(formattedText (text E n t e r   t h e  ) (mark # (bold * (text a d b   d e v i c e s) *) #) (text   c o m m a n d))"
     }
 
 }

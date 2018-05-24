@@ -15,7 +15,7 @@ class BasicTextSpec extends TextSpecification {
         result.tree == "(formattedText (text S o m e   t e x t))"
     }
 
-    def "text like programming instruction"() {
+    def "programming instruction"() {
         given:
         String input = "a = b + c;"
 
@@ -35,6 +35,28 @@ class BasicTextSpec extends TextSpecification {
 
         then:
         result.tree == "(formattedText (monospace ` (text v a l 2   + =   v a l 1 ;) `) (text   é q u i v a l e n t   à  ) (monospace ` (text v a l 2   =   v a l 2   +   v a l 1 ;) `))"
+    }
+
+    def "text with special characters"() {
+        given:
+        String input = "+ - * / % _ # ~ ^"
+
+        when:
+        ParsingResult result = parse(input)
+
+        then:
+        result.tree == "(formattedText (text +   -   *   /   %   _   #   ~   ^))"
+    }
+
+    def "text with special characters monospaced"() {
+        given:
+        String input = "`+` `-` `*` `/` `%` `_` `#` `~` `^`"
+
+        when:
+        ParsingResult result = parse(input)
+
+        then:
+        result.tree == "(formattedText (monospace ` (text +) `) (text  ) (monospace ` (text -) `) (text  ) (monospace ` (text *) `) (text  ) (monospace ` (text /) `) (text  ) (monospace ` (text %) `) (text  ) (monospace ` (text _) `) (text  ) (monospace ` (text #) `) (text  ) (monospace ` (text ~) `) (text  ) (monospace ` (text ^) `))"
     }
 
 }
