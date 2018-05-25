@@ -7,6 +7,7 @@ public class TextListenerDelegate extends AbstractDelegate {
     private AsciidocHandler handler;
 
     private MarkContext currentMark;
+
     private static class MarkContext {
         AttributeList attributeList;
 
@@ -37,6 +38,11 @@ public class TextListenerDelegate extends AbstractDelegate {
         text = text.replace("\\_", "_");
 
         handler.writeText(text);
+    }
+
+    public void xmlEntity(String text) {
+        handler.writeText(text);
+        System.out.println("TEXT => " + text);
     }
 
     // image

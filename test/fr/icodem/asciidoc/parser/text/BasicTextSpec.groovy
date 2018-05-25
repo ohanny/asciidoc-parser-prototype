@@ -59,7 +59,7 @@ class BasicTextSpec extends TextSpecification {
         result.tree == "(formattedText (monospace ` (text +) `) (text  ) (monospace ` (text -) `) (text  ) (monospace ` (text *) `) (text  ) (monospace ` (text /) `) (text  ) (monospace ` (text %) `) (text  ) (monospace ` (text _) `) (text  ) (monospace ` (text #) `) (text  ) (monospace ` (text ~) `) (text  ) (monospace ` (text ^) `))"
     }
 
-    def "text with xml entity"() {
+    def "text with xml predefined entity"() {
         given:
         String input = "hello &nbsp; world"
 
@@ -68,6 +68,28 @@ class BasicTextSpec extends TextSpecification {
 
         then:
         result.tree == "(formattedText (text h e l l o   (xmlEntity & n b s p ;)   w o r l d))"
+    }
+
+    def "text with xml decimal entity"() {
+        given:
+        String input = "hello &#160; world"
+
+        when:
+        ParsingResult result = parse(input)
+
+        then:
+        result.tree == "(formattedText (text h e l l o   (xmlEntity & # 1 6 0 ;)   w o r l d))"
+    }
+
+    def "text with xml hexadecimal entity"() {
+        given:
+        String input = "hello &#xa9; world"
+
+        when:
+        ParsingResult result = parse(input)
+
+        then:
+        result.tree == "(formattedText (text h e l l o   (xmlEntity & # x a 9 ;)   w o r l d))"
     }
 
 }

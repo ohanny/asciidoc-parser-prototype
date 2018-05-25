@@ -36,6 +36,9 @@ public class TextListener implements ParseTreeListener {
             case "xrefLabel":
                 delegate.xrefLabel(new String(chars));
                 break;
+            case "xmlEntity":
+                delegate.xmlEntity(new String(chars));
+                break;
         }
     }
 

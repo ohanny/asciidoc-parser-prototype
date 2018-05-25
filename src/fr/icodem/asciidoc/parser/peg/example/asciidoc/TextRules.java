@@ -485,7 +485,7 @@ public class TextRules extends BaseRules {
         return
           sequence(
             string("&#"),
-            times(anyOf("0123456789"), 4),
+            oneOrMore(anyOf("0123456789")),
             ch(';')
           )
         ;
@@ -495,7 +495,7 @@ public class TextRules extends BaseRules {
         return
           sequence(
             string("&#x"),
-            times(anyOf("0123456789abcdefABCDEF"), 4),
+            oneOrMore(anyOf("0123456789abcdefABCDEF")),
             ch(';')
           )
         ;
