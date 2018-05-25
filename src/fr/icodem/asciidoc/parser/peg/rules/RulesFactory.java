@@ -95,6 +95,8 @@ public interface RulesFactory {
 
     Rule times(char c, int times);
 
+    Rule times(Rule rule, int times);
+
     /**
      * Creates a rule that supplies a {@link StringMatcher string matcher}
      * @param string the string to be matched

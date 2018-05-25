@@ -151,6 +151,10 @@ public class BaseRules {
         return factory.times(c, times);
     }
 
+    protected Rule times(Rule rule, int times) {
+        return factory.times(rule, times);
+    }
+
     /**
      * Creates a string rule.
      * @see DefaultRulesFactory#string(String)

@@ -59,4 +59,15 @@ class BasicTextSpec extends TextSpecification {
         result.tree == "(formattedText (monospace ` (text +) `) (text  ) (monospace ` (text -) `) (text  ) (monospace ` (text *) `) (text  ) (monospace ` (text /) `) (text  ) (monospace ` (text %) `) (text  ) (monospace ` (text _) `) (text  ) (monospace ` (text #) `) (text  ) (monospace ` (text ~) `) (text  ) (monospace ` (text ^) `))"
     }
 
+    def "text with xml entity"() {
+        given:
+        String input = "hello &nbsp; world"
+
+        when:
+        ParsingResult result = parse(input)
+
+        then:
+        result.tree == "(formattedText (text h e l l o   (xmlEntity & n b s p ;)   w o r l d))"
+    }
+
 }

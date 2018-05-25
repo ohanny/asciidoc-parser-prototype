@@ -59,25 +59,6 @@ public class TextRules extends BaseRules {
         ;
     }
 
-    private Rule chunkold() {
-        return named("chunk",
-                 oneOrMore(
-                   firstOf(
-                     attListAndMark(),
-                     macro(),
-                     xref(),
-                     text(),
-                     bold(),
-                     italic(),
-                     subscript(),
-                     superscript(),
-                     monospace()
-                   )
-                 )
-               )
-        ;
-    }
-
     private Rule text() {
         return node("text",
                  oneOrMore(
@@ -90,6 +71,8 @@ public class TextRules extends BaseRules {
                      string("\\_"),
                      string("\\`"),
                      string("\\#"),
+                     string("\\&"),
+                     xmlEntity(),
                      sequence(
                        test(ch('*')),
                        notInsideBold(),
@@ -483,6 +466,48 @@ public class TextRules extends BaseRules {
         return node("xrefLabel",
                  oneOrMore(noneOf(",<>\r\n"))
                )
+        ;
+    }
+
+    private Rule xmlEntity() {
+        return
+          node("xmlEntity",
+            firstOf(
+              xmlEntityCharacterDecimalReference(),
+              xmlEntityCharacterHexadecimalReference(),
+              xmlPredefinedEntity()
+            )
+          )
+        ;
+    }
+
+    private Rule xmlEntityCharacterDecimalReference() {
+        return
+          sequence(
+            string("&#"),
+            times(anyOf("0123456789"), 4),
+            ch(';')
+          )
+        ;
+    }
+
+    private Rule xmlEntityCharacterHexadecimalReference() {
+        return
+          sequence(
+            string("&#x"),
+            times(anyOf("0123456789abcdefABCDEF"), 4),
+            ch(';')
+          )
+        ;
+    }
+
+    private Rule xmlPredefinedEntity() {
+        return
+          sequence(
+            ch('&'),
+            oneOrMore(anyOf("abcdefghijklmnopqrstuvwxyz")),
+            ch(';')
+          )
         ;
     }
 }

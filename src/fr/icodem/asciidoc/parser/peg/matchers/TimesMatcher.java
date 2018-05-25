@@ -4,26 +4,31 @@ import fr.icodem.asciidoc.parser.peg.Chars;
 import fr.icodem.asciidoc.parser.peg.MatcherContext;
 
 /**
- * A {@link Matcher matcher} matching a single character n times
+ * A {@link Matcher matcher} matching a rule n times
  */
 public class TimesMatcher implements Matcher {
 
-    private char character;
+    private Matcher matcher;
     private int times;
     private String label;
 
     public TimesMatcher(char c, int times) {
-        this.character = c;
+        this.matcher = new CharMatcher(c);
         this.times = times;
-        this.label = "times [" + Chars.toString(character) + ", " + times + "]";
+        this.label = "times [" + Chars.toString(c) + ", " + times + "]";
+    }
+
+    public TimesMatcher(Matcher matcher, int times) {
+        this.matcher = matcher;
+        this.times = times;
+        this.label = "times [" + matcher.getLabel() + ", " + times + "]";
     }
 
     @Override
     public boolean match(MatcherContext context) {
 
         for (int i = 0; i < times; i++) {
-            char currentChar = context.getNextChar();
-            if (currentChar != character) {
+            if (!matcher.match(context)) {
                 return false;
             }
         }
