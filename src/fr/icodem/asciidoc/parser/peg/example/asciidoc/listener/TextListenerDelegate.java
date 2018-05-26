@@ -42,7 +42,6 @@ public class TextListenerDelegate extends AbstractDelegate {
 
     public void xmlEntity(String text) {
         handler.writeText(text);
-        System.out.println("TEXT => " + text);
     }
 
     // image
