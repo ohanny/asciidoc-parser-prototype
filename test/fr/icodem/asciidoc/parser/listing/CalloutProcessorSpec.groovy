@@ -22,7 +22,7 @@ class CalloutProcessorSpec extends Specification {
         context.callouts[0].line == 1
         context.callouts[0].num == 1
 
-        context.length == input.length() - 4
+        context.length == input.length() - 3
 
     }
 

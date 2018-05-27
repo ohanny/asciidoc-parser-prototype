@@ -37,7 +37,8 @@ public class CalloutProcessor {
     private boolean callout() {
         calloutNumber[0] = Chars.NULL;
         calloutNumber[1] = Chars.NULL;
-        return optionalBlank() && matchGT() && matchNumber() && matchLT() && optionalBlank();
+        return optionalBlank() && matchGT() && matchNumber() && matchLT();
+//        return optionalBlank() && matchGT() && matchNumber() && matchLT() && optionalBlank();
     }
 
     private boolean optionalBlank() {
