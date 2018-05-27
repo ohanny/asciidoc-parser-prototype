@@ -4,6 +4,14 @@ public class CodePoint {
     private int line;
     private int column;
 
+    @Override
+    public String toString() {
+        return "CodePoint{" +
+                "line=" + line +
+                ", column=" + column +
+                '}';
+    }
+
     public static CodePoint ofLine(int line) {
         CodePoint cp = new CodePoint();
         cp.line = line;

@@ -10,6 +10,19 @@ public class HighlightParameter {
     private boolean mark;
     private boolean highlight;
 
+    @Override
+    public String toString() {
+        return "HighlightParameter{" +
+                "from=" + from +
+                ", to=" + to +
+                ", not=" + not +
+                ", important=" + important +
+                ", comment=" + comment +
+                ", mark=" + mark +
+                ", highlight=" + highlight +
+                '}';
+    }
+
     public static HighlightParameter normal(CodePoint from, CodePoint to) {
         HighlightParameter param = new HighlightParameter();
         param.from = from;
@@ -45,6 +58,19 @@ public class HighlightParameter {
     public static HighlightParameter highlight(CodePoint from, CodePoint to) {
         HighlightParameter param = normal(from, to);
         param.highlight = true;
+        return param;
+    }
+
+    public HighlightParameter derive(CodePoint from, CodePoint to) {
+        HighlightParameter param = new HighlightParameter();
+        param.not = not;
+        param.important = important;
+        param.comment = comment;
+        param.mark = mark;
+        param.highlight = highlight;
+        param.from = from;
+        param.to = to;
+
         return param;
     }
 

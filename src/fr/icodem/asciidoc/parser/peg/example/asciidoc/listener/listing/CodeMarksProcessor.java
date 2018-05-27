@@ -48,6 +48,12 @@ public class CodeMarksProcessor {
                     if (posInLine >= p.getFrom().getColumn() - 1 && posInLine <= p.getTo().getColumn() - 1) {
                         return p;
                     }
+                    else if (posInLine == 0 && p.getFrom().getColumn() == -1 && p.getTo().getLine() == -1 && p.getTo().getColumn() == -1) {
+                        return p.derive(
+                                CodePoint.ofPoint(line.lineNumber, 1),
+                                CodePoint.ofPoint(line.lineNumber, line.length)
+                        );
+                    }
                 }
             }
 
@@ -142,6 +148,8 @@ public class CodeMarksProcessor {
     }
 
     private boolean paramsForLine(HighlightParameter p, int lineNumber) {
+        //System.out.println(lineNumber + " => " + (p.getFrom().getLine() <= lineNumber && p.getTo().getLine() >= lineNumber) + " || " + (p.getFrom().getLine() == lineNumber && p.getTo().getLine() == -1));
+
         return (p.getFrom().getLine() <= lineNumber && p.getTo().getLine() >= lineNumber)
                 || (p.getFrom().getLine() == lineNumber && p.getTo().getLine() == -1);
     }

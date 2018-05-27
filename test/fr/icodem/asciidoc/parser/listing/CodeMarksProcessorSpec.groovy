@@ -188,5 +188,34 @@ console.log(str);
 
     }
 
+    def "mark entire line" () {
+        given:
+        String input = '''\
+let str = "hello";
+'''
+
+        List<LineContext> lines = [
+                LineContext.of(1, input.chars, 0, 18)
+        ]
+
+        List<HighlightParameter> params = [
+                HighlightParameter.mark(CodePoint.ofLine(1), CodePoint.ofLine(1))
+        ]
+
+        when:
+        processor.process(lines, params)
+
+        then:
+        lines[0].chunks != null
+        lines[0].chunks.size() == 1
+
+        LineChunkContext chunk0 = lines[0].chunks[0]
+        chunk0.text == "let str = \"hello\";"
+        chunk0.not == false
+        chunk0.important == false
+        chunk0.comment == false
+        chunk0.mark == false
+        chunk0.highlight == false
+    }
 
 }

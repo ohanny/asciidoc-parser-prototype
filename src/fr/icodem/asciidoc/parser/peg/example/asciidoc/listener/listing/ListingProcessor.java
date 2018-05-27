@@ -22,7 +22,6 @@ public class ListingProcessor {
 
     public Listing process(String title, char[] input, boolean source, String language, boolean linenums, boolean highlight, List<HighlightParameter> highlightParams) {
 
-
         List<LineContext> lines = splitLinesProcessor.process(input);
 
         lines.stream()
