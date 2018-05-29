@@ -371,15 +371,6 @@ public class TextRules extends BaseRules {
         ;
     }
 
-    private Rule traceChar(String message, boolean match) {
-        return () -> ctx -> {
-            ctx.mark();
-            System.out.println(message + " => " + ctx.getNextChar());
-            ctx.reset();
-            return match;
-        };
-    }
-
     private Rule notInsideMark() {
         return () -> ctx -> !ctx.getRoot().getBooleanAttribute("insideMark", false);
     }

@@ -270,6 +270,15 @@ public class BaseRules {
         });
     }
 
+    protected Rule traceChar(String message, boolean match) {
+        return () -> ctx -> {
+            ctx.mark();
+            System.out.println(message + " => " + ctx.getNextChar());
+            ctx.reset();
+            return match;
+        };
+    }
+
     protected Rule debug(Rule rule) {
         return action(rule, ctx -> System.out.println(new String(ctx.extract())));
     }

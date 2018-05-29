@@ -434,13 +434,26 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule list() {
-        return node("list", sequence(
-                listItem(),
-                zeroOrMore(sequence(
-                        zeroOrMore(firstOf(sequence(isCurrentCharNotEOI(), bl(false)), attributeList())),// TODO add attribute list
-                        listItem()
-                ))
-        ));
+        return
+          node("list",
+            sequence(
+              listItem(),
+              zeroOrMore(
+                sequence(
+                  zeroOrMore(
+                    firstOf(
+                      sequence(
+                        isCurrentCharNotEOI(),
+                        bl(false)
+                      ),
+                      attributeList() // TODO add attribute list
+                    )
+                  ),
+                  listItem()
+                )
+              )
+            )
+          );
     }
 
     private Rule listItem() {
@@ -705,23 +718,26 @@ public class BlockRules extends BaseRules {
     }
 
     private Rule exampleBlock() {
-        return node("exampleBlock",
-                sequence(
-                        exampleBlockDelimiter(),
-                        zeroOrMore(
-                                firstOf(
-                                        list(),
-                                        listingBlock(),
-                                        literalBlock(),
-                                        //exampleBlock(),
-                                        table(),
-                                        labeledList(),
-                                        sequence(paragraph(), optional(nl()))
-                                )
-                        ),
-                        exampleBlockDelimiter()
+        return
+          node("exampleBlock",
+            sequence(
+              exampleBlockDelimiter(),
+              zeroOrMore(
+                firstOf(
+                  bl(),
+                  attributeList(),
+                  list(),
+                  listingBlock(),
+                  literalBlock(),
+                  //exampleBlock(),
+                  table(),
+                  labeledList(),
+                  sequence(paragraph(), optional(nl()))
                 )
-        );
+              ),
+              exampleBlockDelimiter()
+            )
+          );
     }
 
     private Rule exampleBlockDelimiter() {
