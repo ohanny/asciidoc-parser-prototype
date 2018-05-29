@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    AdmonitionSpec.class,
+    AdmonitionParagraphSpec.class,
     TableSpec.class,
     LabeledListSpec.class
 })

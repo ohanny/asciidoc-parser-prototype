@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.block
 
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult
 
-class AdmonitionSpec extends BlockSpecification {
+class AdmonitionParagraphSpec extends BlockSpecification {
 
     def "note admonition"() {
         given:
