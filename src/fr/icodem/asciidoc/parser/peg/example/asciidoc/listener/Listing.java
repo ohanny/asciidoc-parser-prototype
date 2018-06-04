@@ -13,15 +13,17 @@ public class Listing {
         private boolean important;
         private boolean comment;
         private boolean mark;
+        private boolean strong;
         private boolean highlight;
 
-        public static LineChunk of(String text, boolean not, boolean important, boolean comment, boolean mark, boolean highlight) {
+        public static LineChunk of(String text, boolean not, boolean important, boolean comment, boolean mark, boolean strong, boolean highlight) {
             LineChunk chunk = new LineChunk();
             chunk.text = text;
             chunk.not = not;
             chunk.important = important;
             chunk.comment = comment;
             chunk.mark = mark;
+            chunk.strong = strong;
             chunk.highlight = highlight;
 
             return chunk;
@@ -44,11 +46,15 @@ public class Listing {
         }
 
         public boolean isNotMarked() {
-            return !(important || mark || comment);
+            return !(important || mark || strong || comment);
         }
 
         public boolean isMark() {
             return mark;
+        }
+
+        public boolean isStrong() {
+            return strong;
         }
 
         public boolean isHighlight() {

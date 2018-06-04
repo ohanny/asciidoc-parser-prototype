@@ -313,6 +313,11 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
                   append(MARK.start())
                     .append(c.getText())
                     .append(MARK.end())
+                ).
+                runIf(c.isStrong(), () ->
+                  append(STRONG.start())
+                    .append(c.getText())
+                    .append(STRONG.end())
                 )
                 .runIf(c.isImportant(), () ->
                   append(MARK.start("class", "important"))

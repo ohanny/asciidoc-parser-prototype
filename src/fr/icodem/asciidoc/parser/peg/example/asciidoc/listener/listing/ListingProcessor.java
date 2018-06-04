@@ -40,7 +40,7 @@ public class ListingProcessor {
                 l.chunks
                  .stream()
                  .forEach(lc ->
-                     chunks.add(Listing.LineChunk.of(lc.getText(), lc.isNot(), lc.isImportant(), lc.isComment(), lc.isMark(), lc.isHighlight()))
+                     chunks.add(Listing.LineChunk.of(lc.getText(), lc.isNot(), lc.isImportant(), lc.isComment(), lc.isMark(), lc.isStrong(), lc.isHighlight()))
                  );
 
                  listingLines.add(Listing.Line.of(l.lineNumber, l.getText(), l.callouts, chunks));

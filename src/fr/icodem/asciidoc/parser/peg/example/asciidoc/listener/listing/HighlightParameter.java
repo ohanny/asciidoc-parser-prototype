@@ -8,6 +8,7 @@ public class HighlightParameter {
     private boolean important;
     private boolean comment;
     private boolean mark;
+    private boolean strong;
     private boolean highlight;
 
     @Override
@@ -19,6 +20,7 @@ public class HighlightParameter {
                 ", important=" + important +
                 ", comment=" + comment +
                 ", mark=" + mark +
+                ", strong=" + strong +
                 ", highlight=" + highlight +
                 '}';
     }
@@ -52,6 +54,12 @@ public class HighlightParameter {
     public static HighlightParameter mark(CodePoint from, CodePoint to) {
         HighlightParameter param = normal(from, to);
         param.mark = true;
+        return param;
+    }
+
+    public static HighlightParameter strong(CodePoint from, CodePoint to) {
+        HighlightParameter param = normal(from, to);
+        param.strong = true;
         return param;
     }
 
@@ -96,6 +104,10 @@ public class HighlightParameter {
 
     public boolean isMark() {
         return mark;
+    }
+
+    public boolean isStrong() {
+        return strong;
     }
 
     public boolean isHighlight() {

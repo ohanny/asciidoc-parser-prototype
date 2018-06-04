@@ -9,6 +9,7 @@ public class LineChunkContext {
     private boolean important;
     private boolean comment;
     private boolean mark;
+    private boolean strong;
     private boolean highlight;
 
     public static LineChunkContext of(char[] data, int offset, int length) {
@@ -40,6 +41,11 @@ public class LineChunkContext {
         return this;
     }
 
+    public LineChunkContext strong() {
+        this.strong = true;
+        return this;
+    }
+
     public LineChunkContext highlight() {
         this.highlight = true;
         return this;
@@ -63,6 +69,10 @@ public class LineChunkContext {
 
     public boolean isMark() {
         return mark;
+    }
+
+    public boolean isStrong() {
+        return strong;
     }
 
     public boolean isHighlight() {

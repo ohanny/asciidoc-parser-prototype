@@ -75,7 +75,8 @@ public class HighlightRules extends BaseRules {
                      firstOf(
                        important(),
                        comment(),
-                       mark()
+                       mark(),
+                       strong()
                      )
                    ),
                    optional(ch(';'))
@@ -173,6 +174,13 @@ public class HighlightRules extends BaseRules {
     private Rule mark() {
         return node("mark",
                  ch('m')
+               )
+        ;
+    }
+
+    private Rule strong() {
+        return node("strong",
+                 ch('s')
                )
         ;
     }
