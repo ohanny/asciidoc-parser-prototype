@@ -11,6 +11,8 @@ public class HighlightParameter {
     private boolean strong;
     private boolean highlight;
 
+    private int markLevel;
+
     @Override
     public String toString() {
         return "HighlightParameter{" +
@@ -22,6 +24,7 @@ public class HighlightParameter {
                 ", mark=" + mark +
                 ", strong=" + strong +
                 ", highlight=" + highlight +
+                ", markLevel=" + markLevel +
                 '}';
     }
 
@@ -51,9 +54,10 @@ public class HighlightParameter {
         return param;
     }
 
-    public static HighlightParameter mark(CodePoint from, CodePoint to) {
+    public static HighlightParameter mark(CodePoint from, CodePoint to, int markLevel) {
         HighlightParameter param = normal(from, to);
         param.mark = true;
+        param.markLevel = markLevel;
         return param;
     }
 
@@ -78,6 +82,7 @@ public class HighlightParameter {
         param.highlight = highlight;
         param.from = from;
         param.to = to;
+        param.markLevel = markLevel;
 
         return param;
     }
@@ -112,5 +117,9 @@ public class HighlightParameter {
 
     public boolean isHighlight() {
         return highlight;
+    }
+
+    public int getMarkLevel() {
+        return markLevel;
     }
 }

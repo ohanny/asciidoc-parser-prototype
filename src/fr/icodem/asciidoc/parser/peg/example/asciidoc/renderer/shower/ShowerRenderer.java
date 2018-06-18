@@ -309,8 +309,13 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .forEach(listing.getLines(), (line, index) ->
             append(CODE.start("class", getListingCodeClass(listing.getLanguage(), line)))
               .forEach(line.getLineChunks(), c ->
-                runIf(c.isMark(), () ->
+                runIf(c.isMark() && c.getMarkLevel() == 0, () ->
                   append(MARK.start())
+                    .append(c.getText())
+                    .append(MARK.end())
+                ).
+                runIf(c.isMark() && c.getMarkLevel() > 0, () ->
+                  append(MARK.start("class", "mark" + c.getMarkLevel()))
                     .append(c.getText())
                     .append(MARK.end())
                 ).

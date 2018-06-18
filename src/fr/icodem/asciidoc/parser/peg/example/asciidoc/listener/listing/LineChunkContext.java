@@ -11,6 +11,7 @@ public class LineChunkContext {
     private boolean mark;
     private boolean strong;
     private boolean highlight;
+    private int markLevel;
 
     public static LineChunkContext of(char[] data, int offset, int length) {
         LineChunkContext chunk = new LineChunkContext();
@@ -36,8 +37,9 @@ public class LineChunkContext {
         return this;
     }
 
-    public LineChunkContext mark() {
+    public LineChunkContext mark(int markLevel) {
         this.mark = true;
+        this.markLevel = markLevel;
         return this;
     }
 
@@ -77,5 +79,9 @@ public class LineChunkContext {
 
     public boolean isHighlight() {
         return highlight;
+    }
+
+    public int getMarkLevel() {
+        return markLevel;
     }
 }

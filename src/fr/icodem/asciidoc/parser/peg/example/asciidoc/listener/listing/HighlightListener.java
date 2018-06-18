@@ -18,21 +18,34 @@ public class HighlightListener implements ParseTreeListener {
     public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {
         switch (context.getNodeName()) {
             case "lineFrom":
-                delegate.lineFrom(Integer.parseInt(new String(chars)));
+                delegate.lineFrom(getInt(chars, startIndex, endIndex));
                 break;
 
             case "lineTo":
-                delegate.lineTo(Integer.parseInt(new String(chars)));
+                delegate.lineTo(getInt(chars, startIndex, endIndex));
                 break;
 
             case "columnFrom":
-                delegate.columnFrom(Integer.parseInt(new String(chars)));
+                delegate.columnFrom(getInt(chars, startIndex, endIndex));
                 break;
 
             case "columnTo":
-                delegate.columnTo(Integer.parseInt(new String(chars)));
+                delegate.columnTo(getInt(chars, startIndex, endIndex));
+                break;
+
+            case "markLevel":
+                delegate.markLevel(getInt(chars, startIndex, endIndex));
                 break;
         }
+    }
+
+    private String getString(char[] chars, int startIndex, int endIndex) {
+        //return new String(chars, startIndex, endIndex);
+        return new String(chars);// TODO recycle char tab => add offset + length (cf SAX)
+    }
+
+    private int getInt(char[] chars, int startIndex, int endIndex) {
+        return Integer.parseInt(getString(chars, startIndex, endIndex));
     }
 
     @Override

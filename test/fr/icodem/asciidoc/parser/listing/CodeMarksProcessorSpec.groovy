@@ -49,7 +49,7 @@ let str = "hello";
         ]
 
         List<HighlightParameter> params = [
-            HighlightParameter.mark(CodePoint.ofPoint(1, 5), CodePoint.ofPoint(1, 7))
+            HighlightParameter.mark(CodePoint.ofPoint(1, 5), CodePoint.ofPoint(1, 7), 0)
         ]
 
         when:
@@ -95,8 +95,8 @@ let str = "hello";
         ]
 
         List<HighlightParameter> params = [
-            HighlightParameter.mark(CodePoint.ofPoint(1, 5), CodePoint.ofPoint(1, 7)),
-            HighlightParameter.mark(CodePoint.ofPoint(1, 12), CodePoint.ofPoint(1, 16))
+            HighlightParameter.mark(CodePoint.ofPoint(1, 5), CodePoint.ofPoint(1, 7), 0),
+            HighlightParameter.mark(CodePoint.ofPoint(1, 12), CodePoint.ofPoint(1, 16), 0)
         ]
 
         when:
@@ -199,7 +199,7 @@ let str = "hello";
         ]
 
         List<HighlightParameter> params = [
-                HighlightParameter.mark(CodePoint.ofLine(1), CodePoint.ofLine(1))
+                HighlightParameter.mark(CodePoint.ofLine(1), CodePoint.ofLine(1), 0)
         ]
 
         when:

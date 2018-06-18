@@ -25,7 +25,9 @@ public class CodeMarksProcessor {
 
             if (param.isImportant()) chunk.important();
             else if (param.isComment()) chunk.comment();
-            else if (param.isMark()) chunk.mark();
+            else if (param.isMark()) {
+                chunk.mark(param.getMarkLevel());
+            }
             else if (param.isStrong()) chunk.strong();
             else if (param.isHighlight()) chunk.highlight();
 

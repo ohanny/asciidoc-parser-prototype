@@ -15,8 +15,10 @@ public class Listing {
         private boolean mark;
         private boolean strong;
         private boolean highlight;
+        private int markLevel;
 
-        public static LineChunk of(String text, boolean not, boolean important, boolean comment, boolean mark, boolean strong, boolean highlight) {
+        public static LineChunk of(String text, boolean not, boolean important, boolean comment,
+                                   boolean mark, boolean strong, boolean highlight, int markLevel) {
             LineChunk chunk = new LineChunk();
             chunk.text = text;
             chunk.not = not;
@@ -25,6 +27,7 @@ public class Listing {
             chunk.mark = mark;
             chunk.strong = strong;
             chunk.highlight = highlight;
+            chunk.markLevel = markLevel;
 
             return chunk;
         }
@@ -59,6 +62,10 @@ public class Listing {
 
         public boolean isHighlight() {
             return highlight;
+        }
+
+        public int getMarkLevel() {
+            return markLevel;
         }
     }
 

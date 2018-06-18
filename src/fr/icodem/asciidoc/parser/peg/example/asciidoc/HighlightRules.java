@@ -173,7 +173,17 @@ public class HighlightRules extends BaseRules {
 
     private Rule mark() {
         return node("mark",
-                 ch('m')
+                 sequence(
+                   ch('m'),
+                   optional(markLevel())
+                 )
+               )
+        ;
+    }
+
+    private Rule markLevel() {
+        return node("markLevel",
+                 anyOf("123456789")
                )
         ;
     }
