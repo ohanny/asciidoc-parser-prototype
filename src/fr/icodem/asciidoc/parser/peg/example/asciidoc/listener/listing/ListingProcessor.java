@@ -28,26 +28,39 @@ public class ListingProcessor {
              .forEach(l -> calloutProcessor.processCallouts(l));
 
         codeMarksProcessor.process(lines, highlightParams);
-
         replacementProcessor.process(lines);
 
         // result
         List<Listing.Line> listingLines = new LinkedList<>();
         lines.stream()
              .forEach(l -> {
-                List<Listing.LineChunk> chunks = new LinkedList<>();
 
-                l.chunks
-                 .stream()
-                 .forEach(lc ->
-                     chunks.add(Listing.LineChunk.of(lc.getText(), lc.isNot(), lc.isImportant(), lc.isComment(), lc.isMark(), lc.isStrong(), lc.isHighlight(), lc.getMarkLevel()))
-                 );
+                 List<Listing.LineChunk> chunks =
+                         l.chunks
+                          .stream()
+                          .map(lc -> transform(lc))
+                          .collect(Collectors.toList());
 
                  listingLines.add(Listing.Line.of(l.lineNumber, l.getText(), l.callouts, chunks));
              });
 
-
         return Listing.of(title, listingLines, source, language, linenums, highlight);
+    }
+
+
+
+    private Listing.LineChunk transform(LineChunkContext chunk) {
+        List<Listing.LineChunk> nestedChunks = null;
+        if (chunk.getChunks() != null) {
+            nestedChunks =
+                    chunk.getChunks()
+                      .stream()
+                      .map(lc -> transform(lc))
+                      .collect(Collectors.toList());
+        }
+
+        return Listing.LineChunk.of(chunk.getText(), chunk.isNot(), chunk.isImportant(), chunk.isComment(), chunk.isMark(),
+                                    chunk.isStrong(), chunk.isHighlight(), chunk.getMarkLevel(), nestedChunks);
     }
 
 }

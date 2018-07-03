@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing.ListingCallout;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,8 +18,11 @@ public class Listing {
         private boolean highlight;
         private int markLevel;
 
+        private List<LineChunk> chunks;
+
         public static LineChunk of(String text, boolean not, boolean important, boolean comment,
-                                   boolean mark, boolean strong, boolean highlight, int markLevel) {
+                                   boolean mark, boolean strong, boolean highlight, int markLevel,
+                                   List<LineChunk> chunks) {
             LineChunk chunk = new LineChunk();
             chunk.text = text;
             chunk.not = not;
@@ -28,6 +32,7 @@ public class Listing {
             chunk.strong = strong;
             chunk.highlight = highlight;
             chunk.markLevel = markLevel;
+            chunk.chunks = chunks;
 
             return chunk;
         }
@@ -66,6 +71,10 @@ public class Listing {
 
         public int getMarkLevel() {
             return markLevel;
+        }
+
+        public List<LineChunk> getChunks() {
+            return chunks;
         }
     }
 

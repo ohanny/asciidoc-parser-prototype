@@ -13,6 +13,8 @@ public class HighlightParameter {
 
     private int markLevel;
 
+    private boolean processed;
+
     @Override
     public String toString() {
         return "HighlightParameter{" +
@@ -25,6 +27,7 @@ public class HighlightParameter {
                 ", strong=" + strong +
                 ", highlight=" + highlight +
                 ", markLevel=" + markLevel +
+                ", processed=" + processed +
                 '}';
     }
 
@@ -87,6 +90,10 @@ public class HighlightParameter {
         return param;
     }
 
+    public void markAsProcessed() {
+        processed = true;
+    }
+
     public CodePoint getFrom() {
         return from;
     }
@@ -121,5 +128,9 @@ public class HighlightParameter {
 
     public int getMarkLevel() {
         return markLevel;
+    }
+
+    public boolean isProcessed() {
+        return processed;
     }
 }

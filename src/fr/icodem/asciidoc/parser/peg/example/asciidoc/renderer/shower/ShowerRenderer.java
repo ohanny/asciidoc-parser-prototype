@@ -293,6 +293,20 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
 
     @Override
     public void writeListingBlock(Listing listing, AttributeList attList) {
+
+        listing.getLines()
+                .stream()
+                .forEach(l -> {
+                    l.getLineChunks().forEach(c -> {
+                        System.out.println("# " + c.getText());
+                        if (c.getChunks() != null) {
+                            c.getChunks().stream().forEach(cc -> System.out.println("\t@ " + cc.getText()));
+                        }
+                    });
+                });
+
+
+
         indent()
                 .append(DIV.start("class", getMoreClasses("listingblock", attList), "style", styleBuilder().reset(attList).addPosition().style()))
                 .nl()
@@ -308,36 +322,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .append(PRE.start("class", getMoreClasses(getListingPreClass(listing), attList)))
           .forEach(listing.getLines(), (line, index) ->
             append(CODE.start("class", getListingCodeClass(listing.getLanguage(), line)))
-              .forEach(line.getLineChunks(), c ->
-                runIf(c.isMark() && c.getMarkLevel() == 0, () ->
-                  append(MARK.start())
-                    .append(c.getText())
-                    .append(MARK.end())
-                ).
-                runIf(c.isMark() && c.getMarkLevel() > 0, () ->
-                  append(MARK.start("class", "mark" + c.getMarkLevel()))
-                    .append(c.getText())
-                    .append(MARK.end())
-                ).
-                runIf(c.isStrong(), () ->
-                  append(STRONG.start())
-                    .append(c.getText())
-                    .append(STRONG.end())
-                )
-                .runIf(c.isImportant(), () ->
-                  append(MARK.start("class", "important"))
-                    .append(c.getText())
-                    .append(MARK.end())
-                )
-                .runIf(c.isComment(), () ->
-                  append(SPAN.start("class", "comment"))
-                    .append(c.getText())
-                    .append(SPAN.end())
-                )
-                .runIf(c.isNotMarked(), () ->
-                  append(c.getText())
-                )
-              )
+              .forEach(line.getLineChunks(), this::writeListingLineChunk)
               .writeListingCallout(line)
               .append(CODE.end())
               .runIf(listing.getLines().size() - 1 != index, () -> nl())
@@ -345,6 +330,48 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .append(PRE.end())
           .nl()
         ;
+    }
+
+    private void writeListingLineChunk(Listing.LineChunk chunk) {
+        runIf(chunk.isMark() && chunk.getMarkLevel() == 0, () ->
+                append(MARK.start())
+                        .writeTextOrChunks(chunk)
+                        .append(MARK.end())
+        ).
+        runIf(chunk.isMark() && chunk.getMarkLevel() > 0, () ->
+                append(MARK.start("class", "mark" + chunk.getMarkLevel()))
+                        .writeTextOrChunks(chunk)
+                        .append(MARK.end())
+        ).
+        runIf(chunk.isStrong(), () ->
+                append(STRONG.start())
+                        .writeTextOrChunks(chunk)
+                        .append(STRONG.end())
+        )
+        .runIf(chunk.isImportant(), () ->
+                append(MARK.start("class", "important"))
+                        .writeTextOrChunks(chunk)
+                        .append(MARK.end())
+        )
+        .runIf(chunk.isComment(), () ->
+                append(SPAN.start("class", "comment"))
+                        .writeTextOrChunks(chunk)
+                        .append(SPAN.end())
+        )
+        .runIf(chunk.isNotMarked(), () ->
+                writeTextOrChunks(chunk)
+        );
+    }
+
+    private ShowerRenderer writeTextOrChunks(Listing.LineChunk chunk) {
+        if (chunk.getChunks() == null) {
+            append(chunk.getText());
+        } else {
+            chunk.getChunks()
+                 .stream()
+                 .forEach(this::writeListingLineChunk);
+        }
+        return this;
     }
 
     @Override

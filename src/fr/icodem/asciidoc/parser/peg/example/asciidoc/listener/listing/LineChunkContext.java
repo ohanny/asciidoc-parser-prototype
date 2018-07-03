@@ -1,9 +1,14 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing;
 
+import java.util.List;
+
 public class LineChunkContext {
     char[] data;
     int offset;
     int length;
+
+    int columnFrom;
+    int columnTo;
 
     private boolean not;
     private boolean important;
@@ -13,11 +18,15 @@ public class LineChunkContext {
     private boolean highlight;
     private int markLevel;
 
-    public static LineChunkContext of(char[] data, int offset, int length) {
+    List<LineChunkContext> chunks; // nested chunks
+
+    public static LineChunkContext of(char[] data, int offset, int length, int columnFrom, int columnTo) {
         LineChunkContext chunk = new LineChunkContext();
         chunk.data = data;
         chunk.offset = offset;
         chunk.length = length;
+        chunk.columnFrom = columnFrom;
+        chunk.columnTo = columnTo;
 
         return chunk;
     }
@@ -84,4 +93,18 @@ public class LineChunkContext {
     public int getMarkLevel() {
         return markLevel;
     }
+
+    public int getColumnFrom() {
+        return columnFrom;
+    }
+
+    public int getColumnTo() {
+        return columnTo;
+    }
+
+
+    public List<LineChunkContext> getChunks() {
+        return chunks;
+    }
+
 }

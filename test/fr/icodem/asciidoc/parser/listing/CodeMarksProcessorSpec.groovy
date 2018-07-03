@@ -195,11 +195,11 @@ let str = "hello";
 '''
 
         List<LineContext> lines = [
-                LineContext.of(1, input.chars, 0, 18)
+            LineContext.of(1, input.chars, 0, 18)
         ]
 
         List<HighlightParameter> params = [
-                HighlightParameter.mark(CodePoint.ofLine(1), CodePoint.ofLine(1), 0)
+            HighlightParameter.mark(CodePoint.ofLine(1), CodePoint.ofLine(1), 0)
         ]
 
         when:
@@ -214,8 +214,79 @@ let str = "hello";
         chunk0.not == false
         chunk0.important == false
         chunk0.comment == false
-        chunk0.mark == false
+        chunk0.mark == true
         chunk0.highlight == false
+    }
+
+    def "one nested mark" () {
+        given:
+        String input = '''\
+let str = "hello";
+'''
+
+        List<LineContext> lines = [
+            LineContext.of(1, input.chars, 0, 18)
+        ]
+
+        List<HighlightParameter> params = [
+            HighlightParameter.mark(CodePoint.ofPoint(1, 1), CodePoint.ofPoint(1, 17), 0),
+            HighlightParameter.strong(CodePoint.ofPoint(1, 5), CodePoint.ofPoint(1, 7))
+        ]
+
+        when:
+        processor.process(lines, params)
+
+        then:
+        lines[0].chunks != null
+        lines[0].chunks.size() == 2
+
+        LineChunkContext chunk0 = lines[0].chunks[0]
+        chunk0.text == "let str = \"hello\""
+        chunk0.not == false
+        chunk0.important == false
+        chunk0.comment == false
+        chunk0.mark == true
+        chunk0.highlight == false
+        chunk0.strong == false
+
+        chunk0.chunks != null
+        chunk0.chunks.size() == 3
+
+        LineChunkContext chunk0_0 = chunk0.chunks[0]
+        chunk0_0.text == "let "
+        chunk0_0.not == false
+        chunk0_0.important == false
+        chunk0_0.comment == false
+        chunk0_0.mark == false
+        chunk0_0.highlight == false
+        chunk0_0.strong == false
+
+        LineChunkContext chunk0_1 = chunk0.chunks[1]
+        chunk0_1.text == "str"
+        chunk0_1.not == false
+        chunk0_1.important == false
+        chunk0_1.comment == false
+        chunk0_1.mark == false
+        chunk0_1.highlight == false
+        chunk0_1.strong == true
+
+        LineChunkContext chunk0_2 = chunk0.chunks[2]
+        chunk0_2.text == " = \"hello\""
+        chunk0_2.not == false
+        chunk0_2.important == false
+        chunk0_2.comment == false
+        chunk0_2.mark == false
+        chunk0_2.highlight == false
+        chunk0_2.strong == false
+
+        LineChunkContext chunk1 = lines[0].chunks[1]
+        chunk1.text == ";"
+        chunk1.not == false
+        chunk1.important == false
+        chunk1.comment == false
+        chunk1.mark == false
+        chunk1.highlight == false
+        chunk1.strong == false
     }
 
 }
