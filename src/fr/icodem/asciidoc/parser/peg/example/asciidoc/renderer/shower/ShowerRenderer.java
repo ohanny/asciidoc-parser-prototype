@@ -293,25 +293,11 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
 
     @Override
     public void writeListingBlock(Listing listing, AttributeList attList) {
-
-        listing.getLines()
-                .stream()
-                .forEach(l -> {
-                    l.getLineChunks().forEach(c -> {
-                        System.out.println("# " + c.getText());
-                        if (c.getChunks() != null) {
-                            c.getChunks().stream().forEach(cc -> System.out.println("\t@ " + cc.getText()));
-                        }
-                    });
-                });
-
-
-
         indent()
-                .append(DIV.start("class", getMoreClasses("listingblock", attList), "style", styleBuilder().reset(attList).addPosition().style()))
-                .nl()
-                .incIndent()
-                .indent();
+          .append(DIV.start("class", getMoreClasses("listingblock", attList), "style", styleBuilder().reset(attList).addPosition().style()))
+          .nl()
+          .incIndent()
+          .indent();
 
         runIf(listing.getTitle() != null, () ->
           append(DIV.start("class", "title listingblock"))

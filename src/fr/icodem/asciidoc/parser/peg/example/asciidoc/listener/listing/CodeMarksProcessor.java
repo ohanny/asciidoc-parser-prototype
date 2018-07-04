@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-// TODO Naive implementation. This class needs to be re-implemented when highlight rules are well defined.
 public class CodeMarksProcessor {
     public void process(List<LineContext> lines, List<HighlightParameter> params) {
         lines.forEach(l -> processLine(l, params));
@@ -41,6 +40,10 @@ public class CodeMarksProcessor {
         if (par.getTo().getColumn() == -1) {
             changed = true;
             to = CodePoint.ofPoint(line.lineNumber, line.length);
+        }
+        if (par.getTo().getLine() == -1) {
+            changed = true;
+            to = CodePoint.ofPoint(from.getLine(), to.getColumn());
         }
 
         if (changed) return par.derive(from, to);

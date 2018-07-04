@@ -82,6 +82,7 @@ public class HighlightParameter {
         param.important = important;
         param.comment = comment;
         param.mark = mark;
+        param.strong = strong;
         param.highlight = highlight;
         param.from = from;
         param.to = to;
