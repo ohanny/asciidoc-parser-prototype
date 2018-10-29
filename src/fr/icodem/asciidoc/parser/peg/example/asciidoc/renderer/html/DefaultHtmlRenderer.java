@@ -764,13 +764,19 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void startUnorderedList(int level, AttributeList attList) {
+    public void startUnorderedList(int level, AttributeList attList, String title) {
         runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
             .indent()
             .append(DIV.start("class", "ulist", "style", styleBuilder().reset(attList).addPosition().addSize().style()))
             .nl()
             .incIndent()
             .indent()
+            .runIf(level == 1 && title != null, () ->
+              append(DIV.start("class", "title"))
+                .append(title)
+                .append(DIV.end())
+                .nl()
+            )
             .append(UL.start())
             .nl()
             .incIndent();

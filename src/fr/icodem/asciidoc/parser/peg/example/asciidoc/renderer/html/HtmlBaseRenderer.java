@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 
+
+// TODO s'inspirer de JHtml
 public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implements AsciidocRenderer, AsciidocHandler {
 
     private BlockRules rules; // TODO inject

@@ -81,6 +81,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
         ListContext parent;
         ListContext root;
         AttributeList attList;
+        String title;
 
         static ListContext empty() {
             ListContext ctx = new ListContext();
@@ -641,6 +642,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
 
     public void enterList() {
         currentList = ListContext.empty();
+        currentList.title = consumeBlockTitle();
         handler.startList();
     }
 
@@ -725,7 +727,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
                 currentList.type = ListType.Unordered;
                 currentList.bullets = times;
                 currentList.attList = consumeAttList();
-                handler.startUnorderedList(currentList.level, currentList.attList);
+                handler.startUnorderedList(currentList.level, currentList.attList, currentList.title);
             } else if (dots > 0) {
                 currentList.type = ListType.Ordered;
                 currentList.bullets = dots;
