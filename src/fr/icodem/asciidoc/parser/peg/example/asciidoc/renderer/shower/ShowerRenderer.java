@@ -43,7 +43,8 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     protected ShowerRenderer includeStylesheets() {
         AttributeEntry iconsAtt = getAttributeEntry("icons");
         indent()
-          .append(LINK.tag("rel", "stylesheet", "href", "shower/styles/screen-16x10.css"))
+          .append(LINK.tag("rel", "stylesheet", "href", "shower/styles/styles.css"))
+          //.append(LINK.tag("rel", "stylesheet", "href", "shower/styles/screen-16x10.css"))
           .nl()
           .runIf("font".equals(iconsAtt.getValue()), () ->
             indent()
@@ -59,6 +60,9 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .incIndent()
           .indent()
           .append(".slide pre.nolinenums code:not(:only-child)::before {content: none;}")
+          .nl()
+          .indent()
+          .append(".shower { --slide-ratio: calc(16 / 10); }")
           .nl()
           .decIndent()
           .indent()
