@@ -79,7 +79,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     @Override
     public void endDocument() {
         indent()
-          .append(DIV.start("class", "progress"))
+          .append(DIV.start("class", "progress")).append(DIV.end())
           .nl()
           .indent()
           .append(SCRIPT.start("src", "shower/shower.min.js"))
