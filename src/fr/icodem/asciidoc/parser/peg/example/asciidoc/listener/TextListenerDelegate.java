@@ -2,13 +2,11 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.UrlUtils;
 
-public class TextListenerDelegate extends AbstractDelegate {
+public abstract class TextListenerDelegate extends AbstractDelegate {
 
-    private AsciidocHandler handler;
+    protected MarkContext currentMark;
 
-    private MarkContext currentMark;
-
-    private static class MarkContext {
+    protected static class MarkContext {
         AttributeList attributeList;
 
         static MarkContext of(AttributeList attList) {
@@ -19,7 +17,7 @@ public class TextListenerDelegate extends AbstractDelegate {
     }
 
     XRefContext currentXRef;
-    private static class XRefContext {
+    protected static class XRefContext {
         String label;
         String value;
         boolean internal;
@@ -29,19 +27,20 @@ public class TextListenerDelegate extends AbstractDelegate {
         }
     }
 
-    public TextListenerDelegate(AsciidocHandler handler, AttributeEntries attributeEntries) {
+    public TextListenerDelegate(AttributeEntries attributeEntries) {
         super(attributeEntries);
-        this.handler = handler;
     }
 
     public void text(String text) {
         text = text.replace("\\_", "_");
 
-        handler.writeText(text);
+        writeText(text);
     }
 
+    protected void writeText(String text) {}
+
     public void xmlEntity(String text) {
-        handler.writeText(text);
+        writeText(text);
     }
 
     // image
@@ -56,53 +55,31 @@ public class TextListenerDelegate extends AbstractDelegate {
     }
 
     // markup methods
-    public void enterBold() {
-        handler.startBold();
-    }
+    public void enterBold() {}
 
-    public void exitBold() {
-        handler.endBold();
-    }
+    public void exitBold() {}
 
-    public void enterItalic() {
-        handler.startItalic();
-    }
+    public void enterItalic() {}
 
-    public void exitItalic() {
-        handler.endItalic();
-    }
+    public void exitItalic() {}
 
-    public void enterSubscript() {
-        handler.startSubscript();
-    }
+    public void enterSubscript() {}
 
-    public void exitSubscript() {
-        handler.endSubscript();
-    }
+    public void exitSubscript() {}
 
-    public void enterSuperscript() {
-        handler.startSuperscript();
-    }
+    public void enterSuperscript() {}
 
-    public void exitSuperscript() {
-        handler.endSuperscript();
-    }
+    public void exitSuperscript() {}
 
-    public void enterMonospace() {
-        handler.startMonospace();
-    }
+    public void enterMonospace() {}
 
-    public void exitMonospace() {
-        handler.endMonospace();
-    }
+    public void exitMonospace() {}
 
     public void enterMark() {
         currentMark = MarkContext.of(consumeAttList());
-        handler.startMark(currentMark.attributeList);
     }
 
     public void exitMark() {
-        handler.endMark(currentMark.attributeList);
         currentMark = null;
     }
 
@@ -120,7 +97,8 @@ public class TextListenerDelegate extends AbstractDelegate {
     }
 
     public void exitXRef() {
-        handler.xref(XRef.of(currentXRef.value, currentXRef.label, currentXRef.internal));
         currentXRef = null;
     }
+
+
 }

@@ -5,10 +5,10 @@ import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 
 public class TextListener implements ParseTreeListener {
 
-    private TextListenerDelegate delegate;
+    private TextListenerDelegate1 delegate;
 
     public TextListener(AsciidocHandler handler, AttributeEntries attributeEntries) {
-        this.delegate = new TextListenerDelegate(handler, attributeEntries);
+        this.delegate = new TextListenerDelegate1(handler, attributeEntries);
     }
 
     @Override

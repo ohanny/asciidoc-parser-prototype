@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
+import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,7 +47,7 @@ public abstract class AbstractDelegate {
 
     protected AttributeList consumeAttList() {
         if (this.attList.isEmpty()) return null;
-        AttributeList attList = AttributeList.of(this.attList);
+        AttributeList attList = AttributeList.of(Collections.unmodifiableList(this.attList));
         clearAttList();
         return attList;
     }
