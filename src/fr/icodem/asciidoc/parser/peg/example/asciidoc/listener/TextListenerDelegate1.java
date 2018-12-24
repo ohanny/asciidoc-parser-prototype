@@ -10,54 +10,15 @@ public class TextListenerDelegate1 extends TextListenerDelegate {
 
     private AsciidocHandler handler;
 
-    /*
-    private MarkContext currentMark;
-
-    private static class MarkContext {
-        AttributeList attributeList;
-
-        static MarkContext of(AttributeList attList) {
-            MarkContext mark = new MarkContext();
-            mark.attributeList = attList;
-            return mark;
-        }
-    }
-
-    XRefContext currentXRef;
-    private static class XRefContext {
-        String label;
-        String value;
-        boolean internal;
-
-        static XRefContext empty() {
-            return new XRefContext();
-        }
-    }
-    */
-
     public TextListenerDelegate1(AsciidocHandler handler, AttributeEntries attributeEntries) {
         super(attributeEntries);
         this.handler = handler;
     }
 
-    /*
-    public void text(String text) {
-        text = text.replace("\\_", "_");
-
-        handler.writeText(text);
-    }
-    */
-
     @Override
     protected void writeText(String text) {
         handler.writeText(text);
     }
-
-//    @Override
-//    public void xmlEntity(String text) {
-//        handler.writeText(text);
-//    }
-
 
     // markup methods
     @Override
