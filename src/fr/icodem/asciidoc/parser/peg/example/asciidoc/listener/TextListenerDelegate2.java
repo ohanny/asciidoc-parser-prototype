@@ -1,112 +1,17 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 
-import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedList;
+
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.FormattedText.ChunkType.*;
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.FormattedText.*;
 
 /**
  * Build a formatted text object
  */
 public class TextListenerDelegate2 extends TextListenerDelegate {
 
-    private enum ChunkType {
-        Normal, Bold, Italic, Monospace, Subscript, Superscript, Mark
-    }
-
-    public static class Chunk {
-        protected ChunkType type;
-        protected MarkContext mark;
-
-        public Chunk(ChunkType type) {
-            this.type = type;
-        }
-
-        public ChunkType getType() {
-            return type;
-        }
-
-        public void setType(ChunkType type) {
-            this.type = type;
-        }
-
-        public MarkContext getMark() {
-            return mark;
-        }
-
-        public void setMark(MarkContext mark) {
-            this.mark = mark;
-        }
-    }
-
-    public static class TextChunk extends Chunk {
-        private String text;
-
-        public TextChunk(ChunkType type) {
-            super(type);
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
-    }
-
-    public static class XRefChunk extends Chunk {
-        private XRef xref;
-
-        public XRefChunk(ChunkType type) {
-            super(type);
-        }
-
-        public XRef getXref() {
-            return xref;
-        }
-
-        public void setXref(XRef xref) {
-            this.xref = xref;
-        }
-    }
-
-    public static class CompositeChunk extends Chunk {
-        private Deque<Chunk> chunks;
-
-        public CompositeChunk(ChunkType type) {
-            super(type);
-            chunks = new LinkedList<>();
-        }
-
-        public Deque<Chunk> getChunks() {
-            return chunks;
-        }
-
-        public void addFirst(Chunk chunk) {
-            chunks.addFirst(chunk);
-        }
-
-        public Chunk getFirst() {
-            return chunks.getFirst();
-        }
-
-        public void addAll(Collection<Chunk> chunks) {
-            this.chunks.addAll(chunks);
-        }
-    }
-
-    public static class FormattedText {
-        private Chunk root;
-
-        public FormattedText(Chunk root) {
-            this.root = root;
-        }
-
-        public Chunk getRoot() {
-            return root;
-        }
-    }
 
     private Deque<Chunk> stack;
 
@@ -137,7 +42,7 @@ public class TextListenerDelegate2 extends TextListenerDelegate {
     private void peekOrAddNew(ChunkType type, MarkContext mark) {
         Chunk chunk = peek();
         if (chunk == null || !chunk.type.equals(type)) {
-            chunk = new TextChunk(type);
+            chunk = textChunk(type);
             chunk.setMark(mark);
             push(chunk);
         }
@@ -148,8 +53,8 @@ public class TextListenerDelegate2 extends TextListenerDelegate {
             return new FormattedText(pop());
         } else {
             Chunk first = stack.getFirst();
-            CompositeChunk composite = new CompositeChunk(first.type);
-            first.type = ChunkType.Normal;
+            CompositeChunk composite = compositeChunk(first.type);
+            first.type = Normal;
             composite.addAll(stack);
             stack.clear();
 
@@ -161,11 +66,11 @@ public class TextListenerDelegate2 extends TextListenerDelegate {
     protected void writeText(String text) {
         Chunk last = peek();
         TextChunk chunk = null;
-        if (last instanceof TextChunk && ((TextChunk) last).text == null) {
+        if (last instanceof TextChunk && ((TextChunk) last).getText() == null) {
             chunk = (TextChunk) last;
         }
         if (chunk == null) {
-            chunk = new TextChunk(ChunkType.Normal);
+            chunk = normalTextChunk();
             push(chunk);
         }
         chunk.setText(text);
@@ -174,77 +79,77 @@ public class TextListenerDelegate2 extends TextListenerDelegate {
     // markup methods
     @Override
     public void enterBold() {
-        peekOrAddNew(ChunkType.Bold);
+        peekOrAddNew(Bold);
     }
 
     @Override
     public void exitBold() {
-        exit(ChunkType.Bold);
+        exit(Bold);
     }
 
     private void exit(ChunkType type) {
         if (!peek().type.equals(type)) {
-            CompositeChunk composite = new CompositeChunk(type);
+            CompositeChunk composite = compositeChunk(type);
             do {
                 composite.addFirst(pop());
             } while (composite.getFirst().type != type);
-            composite.getFirst().type = ChunkType.Normal;
+            composite.getFirst().normal();
             push(composite);
         }
     }
 
     @Override
     public void enterItalic() {
-        peekOrAddNew(ChunkType.Italic);
+        peekOrAddNew(Italic);
     }
 
     @Override
     public void exitItalic() {
-        exit(ChunkType.Italic);
+        exit(Italic);
     }
 
     @Override
     public void enterSubscript() {
-        peekOrAddNew(ChunkType.Subscript);
+        peekOrAddNew(Subscript);
     }
 
     @Override
     public void exitSubscript() {
-        exit(ChunkType.Subscript);
+        exit(Subscript);
     }
 
     @Override
     public void enterSuperscript() {
-        peekOrAddNew(ChunkType.Superscript);
+        peekOrAddNew(Superscript);
     }
 
     @Override
     public void exitSuperscript() {
-        exit(ChunkType.Superscript);
+        exit(Superscript);
     }
 
     @Override
     public void enterMonospace() {
-        peekOrAddNew(ChunkType.Monospace);
+        peekOrAddNew(Monospace);
     }
 
     @Override
     public void exitMonospace() {
-        exit(ChunkType.Monospace);
+        exit(Monospace);
     }
 
     public void enterMark() {
         super.enterMark();
-        peekOrAddNew(ChunkType.Mark, currentMark);
+        peekOrAddNew(Mark, currentMark);
     }
 
     public void exitMark() {
         super.exitMark();
-        exit(ChunkType.Mark);
+        exit(Mark);
     }
 
     public void exitXRef() {
-        XRefChunk chunk = new XRefChunk(ChunkType.Normal);
+        XRefChunk chunk = xrefChunk(Normal);
         chunk.setXref(XRef.of(currentXRef.value, currentXRef.label, currentXRef.internal));
         push(chunk);
         super.exitXRef();

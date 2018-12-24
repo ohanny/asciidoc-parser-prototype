@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser.text
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.AttributeEntries
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.FormattedText
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.TextListenerDelegate2
 import spock.lang.Specification
 
@@ -19,9 +20,9 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.TextChunk
-        def chunk = (TextListenerDelegate2.TextChunk)result.root
-        chunk.type == TextListenerDelegate2.ChunkType.Normal
+        result.root instanceof FormattedText.TextChunk
+        def chunk = (FormattedText.TextChunk)result.root
+        chunk.type == FormattedText.ChunkType.Normal
         chunk.text == text
     }
 
@@ -39,9 +40,9 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.TextChunk
-        def chunk = (TextListenerDelegate2.TextChunk)result.root
-        chunk.type == TextListenerDelegate2.ChunkType.Bold
+        result.root instanceof FormattedText.TextChunk
+        def chunk = (FormattedText.TextChunk)result.root
+        chunk.type == FormattedText.ChunkType.Bold
         chunk.text == text
     }
 
@@ -58,9 +59,9 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.TextChunk
-        def chunk = (TextListenerDelegate2.TextChunk)result.root
-        chunk.type == TextListenerDelegate2.ChunkType.Italic
+        result.root instanceof FormattedText.TextChunk
+        def chunk = (FormattedText.TextChunk)result.root
+        chunk.type == FormattedText.ChunkType.Italic
         chunk.text == text
     }
 
@@ -77,9 +78,9 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.TextChunk
-        def chunk = (TextListenerDelegate2.TextChunk)result.root
-        chunk.type == TextListenerDelegate2.ChunkType.Subscript
+        result.root instanceof FormattedText.TextChunk
+        def chunk = (FormattedText.TextChunk)result.root
+        chunk.type == FormattedText.ChunkType.Subscript
         chunk.text == text
     }
 
@@ -96,9 +97,9 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.TextChunk
-        def chunk = (TextListenerDelegate2.TextChunk)result.root
-        chunk.type == TextListenerDelegate2.ChunkType.Superscript
+        result.root instanceof FormattedText.TextChunk
+        def chunk = (FormattedText.TextChunk)result.root
+        chunk.type == FormattedText.ChunkType.Superscript
         chunk.mark == null
         chunk.text == text
     }
@@ -116,9 +117,9 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.TextChunk
-        def chunk = (TextListenerDelegate2.TextChunk)result.root
-        chunk.type == TextListenerDelegate2.ChunkType.Monospace
+        result.root instanceof FormattedText.TextChunk
+        def chunk = (FormattedText.TextChunk)result.root
+        chunk.type == FormattedText.ChunkType.Monospace
         chunk.mark == null
         chunk.text == text
     }
@@ -136,9 +137,9 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.TextChunk
-        def chunk = (TextListenerDelegate2.TextChunk)result.root
-        chunk.type == TextListenerDelegate2.ChunkType.Mark
+        result.root instanceof FormattedText.TextChunk
+        def chunk = (FormattedText.TextChunk)result.root
+        chunk.type == FormattedText.ChunkType.Mark
         chunk.mark != null
         chunk.text == text
     }
@@ -158,9 +159,9 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.XRefChunk
-        def chunk = (TextListenerDelegate2.XRefChunk)result.root
-        chunk.type == TextListenerDelegate2.ChunkType.Normal
+        result.root instanceof FormattedText.XRefChunk
+        def chunk = (FormattedText.XRefChunk)result.root
+        chunk.type == FormattedText.ChunkType.Normal
         chunk.mark == null
         chunk.xref != null
         chunk.xref.value == "colors"
@@ -184,24 +185,24 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.CompositeChunk
-        def chunk = (TextListenerDelegate2.CompositeChunk)result.root
+        result.root instanceof FormattedText.CompositeChunk
+        def chunk = (FormattedText.CompositeChunk)result.root
         chunk.chunks != null
         chunk.chunks.size() == 3
 
-        chunk.chunks[0] instanceof TextListenerDelegate2.TextChunk
-        def chunk1 = (TextListenerDelegate2.TextChunk)chunk.chunks[0]
-        chunk1.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[0] instanceof FormattedText.TextChunk
+        def chunk1 = (FormattedText.TextChunk)chunk.chunks[0]
+        chunk1.type == FormattedText.ChunkType.Normal
         chunk1.text == "The "
 
-        chunk.chunks[1] instanceof TextListenerDelegate2.TextChunk
-        def chunk2 = (TextListenerDelegate2.TextChunk)chunk.chunks[1]
-        chunk2.type == TextListenerDelegate2.ChunkType.Bold
+        chunk.chunks[1] instanceof FormattedText.TextChunk
+        def chunk2 = (FormattedText.TextChunk)chunk.chunks[1]
+        chunk2.type == FormattedText.ChunkType.Bold
         chunk2.text == "sky"
 
-        chunk.chunks[2] instanceof TextListenerDelegate2.TextChunk
-        def chunk3 = (TextListenerDelegate2.TextChunk)chunk.chunks[2]
-        chunk3.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[2] instanceof FormattedText.TextChunk
+        def chunk3 = (FormattedText.TextChunk)chunk.chunks[2]
+        chunk3.type == FormattedText.ChunkType.Normal
         chunk3.text == " is blue and the grass is green"
 
     }
@@ -223,24 +224,24 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.CompositeChunk
-        def chunk = (TextListenerDelegate2.CompositeChunk)result.root
+        result.root instanceof FormattedText.CompositeChunk
+        def chunk = (FormattedText.CompositeChunk)result.root
         chunk.chunks != null
         chunk.chunks.size() == 3
 
-        chunk.chunks[0] instanceof TextListenerDelegate2.TextChunk
-        def chunk1 = (TextListenerDelegate2.TextChunk)chunk.chunks[0]
-        chunk1.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[0] instanceof FormattedText.TextChunk
+        def chunk1 = (FormattedText.TextChunk)chunk.chunks[0]
+        chunk1.type == FormattedText.ChunkType.Normal
         chunk1.text == "The "
 
-        chunk.chunks[1] instanceof TextListenerDelegate2.TextChunk
-        def chunk2 = (TextListenerDelegate2.TextChunk)chunk.chunks[1]
-        chunk2.type == TextListenerDelegate2.ChunkType.Italic
+        chunk.chunks[1] instanceof FormattedText.TextChunk
+        def chunk2 = (FormattedText.TextChunk)chunk.chunks[1]
+        chunk2.type == FormattedText.ChunkType.Italic
         chunk2.text == "sky"
 
-        chunk.chunks[2] instanceof TextListenerDelegate2.TextChunk
-        def chunk3 = (TextListenerDelegate2.TextChunk)chunk.chunks[2]
-        chunk3.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[2] instanceof FormattedText.TextChunk
+        def chunk3 = (FormattedText.TextChunk)chunk.chunks[2]
+        chunk3.type == FormattedText.ChunkType.Normal
         chunk3.text == " is blue and the grass is green"
 
     }
@@ -267,27 +268,27 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.CompositeChunk
-        def chunk = (TextListenerDelegate2.CompositeChunk)result.root
+        result.root instanceof FormattedText.CompositeChunk
+        def chunk = (FormattedText.CompositeChunk)result.root
         chunk.chunks != null
         chunk.chunks.size() == 3
 
-        chunk.chunks[0] instanceof TextListenerDelegate2.TextChunk
-        def chunk1 = (TextListenerDelegate2.TextChunk)chunk.chunks[0]
-        chunk1.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[0] instanceof FormattedText.TextChunk
+        def chunk1 = (FormattedText.TextChunk)chunk.chunks[0]
+        chunk1.type == FormattedText.ChunkType.Normal
         chunk1.text == "The "
 
-        chunk.chunks[1] instanceof TextListenerDelegate2.XRefChunk
-        def chunk2 = (TextListenerDelegate2.XRefChunk)chunk.chunks[1]
-        chunk2.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[1] instanceof FormattedText.XRefChunk
+        def chunk2 = (FormattedText.XRefChunk)chunk.chunks[1]
+        chunk2.type == FormattedText.ChunkType.Normal
         chunk2.mark == null
         chunk2.xref != null
         chunk2.xref.value == part2Value
         chunk2.xref.label == part2Label
 
-        chunk.chunks[2] instanceof TextListenerDelegate2.TextChunk
-        def chunk3 = (TextListenerDelegate2.TextChunk)chunk.chunks[2]
-        chunk3.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[2] instanceof FormattedText.TextChunk
+        def chunk3 = (FormattedText.TextChunk)chunk.chunks[2]
+        chunk3.type == FormattedText.ChunkType.Normal
         chunk3.text == " is blue and the grass is green"
 
     }
@@ -311,25 +312,25 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.CompositeChunk
-        def chunk = (TextListenerDelegate2.CompositeChunk)result.root
+        result.root instanceof FormattedText.CompositeChunk
+        def chunk = (FormattedText.CompositeChunk)result.root
         chunk.chunks != null
         chunk.chunks.size() == 3
 
-        chunk.chunks[0] instanceof TextListenerDelegate2.TextChunk
-        def chunk1 = (TextListenerDelegate2.TextChunk)chunk.chunks[0]
-        chunk1.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[0] instanceof FormattedText.TextChunk
+        def chunk1 = (FormattedText.TextChunk)chunk.chunks[0]
+        chunk1.type == FormattedText.ChunkType.Normal
         chunk1.text == "The "
 
-        chunk.chunks[1] instanceof TextListenerDelegate2.TextChunk
-        def chunk2 = (TextListenerDelegate2.TextChunk)chunk.chunks[1]
-        chunk2.type == TextListenerDelegate2.ChunkType.Mark
+        chunk.chunks[1] instanceof FormattedText.TextChunk
+        def chunk2 = (FormattedText.TextChunk)chunk.chunks[1]
+        chunk2.type == FormattedText.ChunkType.Mark
         chunk2.mark != null
         chunk2.text == "sky"
 
-        chunk.chunks[2] instanceof TextListenerDelegate2.TextChunk
-        def chunk3 = (TextListenerDelegate2.TextChunk)chunk.chunks[2]
-        chunk3.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[2] instanceof FormattedText.TextChunk
+        def chunk3 = (FormattedText.TextChunk)chunk.chunks[2]
+        chunk3.type == FormattedText.ChunkType.Normal
         chunk3.text == " is blue and the grass is green"
 
     }
@@ -356,37 +357,37 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.CompositeChunk
-        def chunk = (TextListenerDelegate2.CompositeChunk)result.root
+        result.root instanceof FormattedText.CompositeChunk
+        def chunk = (FormattedText.CompositeChunk)result.root
         chunk.chunks != null
         chunk.chunks.size() == 3
 
-        chunk.chunks[0] instanceof TextListenerDelegate2.TextChunk
-        def chunk1 = (TextListenerDelegate2.TextChunk)chunk.chunks[0]
-        chunk1.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[0] instanceof FormattedText.TextChunk
+        def chunk1 = (FormattedText.TextChunk)chunk.chunks[0]
+        chunk1.type == FormattedText.ChunkType.Normal
         chunk1.text == "The "
 
 
-        chunk.chunks[1] instanceof TextListenerDelegate2.CompositeChunk
-        def chunk2 = (TextListenerDelegate2.CompositeChunk)chunk.chunks[1]
-        chunk2.type == TextListenerDelegate2.ChunkType.Bold
+        chunk.chunks[1] instanceof FormattedText.CompositeChunk
+        def chunk2 = (FormattedText.CompositeChunk)chunk.chunks[1]
+        chunk2.type == FormattedText.ChunkType.Bold
         chunk2.chunks != null
         chunk2.chunks.size() == 2
 
-        chunk2.chunks[0] instanceof TextListenerDelegate2.TextChunk
-        def chunk2_1 = (TextListenerDelegate2.TextChunk)chunk2.chunks[0]
-        chunk2_1.type == TextListenerDelegate2.ChunkType.Normal
+        chunk2.chunks[0] instanceof FormattedText.TextChunk
+        def chunk2_1 = (FormattedText.TextChunk)chunk2.chunks[0]
+        chunk2_1.type == FormattedText.ChunkType.Normal
         chunk2_1.text == "sky"
 
-        chunk2.chunks[1] instanceof TextListenerDelegate2.TextChunk
-        def chunk2_2 = (TextListenerDelegate2.TextChunk)chunk2.chunks[1]
-        chunk2_2.type == TextListenerDelegate2.ChunkType.Italic
+        chunk2.chunks[1] instanceof FormattedText.TextChunk
+        def chunk2_2 = (FormattedText.TextChunk)chunk2.chunks[1]
+        chunk2_2.type == FormattedText.ChunkType.Italic
         chunk2_2.text == " is blue"
 
 
-        chunk.chunks[2] instanceof TextListenerDelegate2.TextChunk
-        def chunk3 = (TextListenerDelegate2.TextChunk)chunk.chunks[2]
-        chunk3.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[2] instanceof FormattedText.TextChunk
+        def chunk3 = (FormattedText.TextChunk)chunk.chunks[2]
+        chunk3.type == FormattedText.ChunkType.Normal
         chunk3.text == " and the grass is green"
 
     }
@@ -413,37 +414,37 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.CompositeChunk
-        def chunk = (TextListenerDelegate2.CompositeChunk)result.root
+        result.root instanceof FormattedText.CompositeChunk
+        def chunk = (FormattedText.CompositeChunk)result.root
         chunk.chunks != null
         chunk.chunks.size() == 3
 
-        chunk.chunks[0] instanceof TextListenerDelegate2.TextChunk
-        def chunk1 = (TextListenerDelegate2.TextChunk)chunk.chunks[0]
-        chunk1.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[0] instanceof FormattedText.TextChunk
+        def chunk1 = (FormattedText.TextChunk)chunk.chunks[0]
+        chunk1.type == FormattedText.ChunkType.Normal
         chunk1.text == "The "
 
 
-        chunk.chunks[1] instanceof TextListenerDelegate2.CompositeChunk
-        def chunk2 = (TextListenerDelegate2.CompositeChunk)chunk.chunks[1]
-        chunk2.type == TextListenerDelegate2.ChunkType.Italic
+        chunk.chunks[1] instanceof FormattedText.CompositeChunk
+        def chunk2 = (FormattedText.CompositeChunk)chunk.chunks[1]
+        chunk2.type == FormattedText.ChunkType.Italic
         chunk2.chunks != null
         chunk2.chunks.size() == 2
 
-        chunk2.chunks[0] instanceof TextListenerDelegate2.TextChunk
-        def chunk2_1 = (TextListenerDelegate2.TextChunk)chunk2.chunks[0]
-        chunk2_1.type == TextListenerDelegate2.ChunkType.Normal
+        chunk2.chunks[0] instanceof FormattedText.TextChunk
+        def chunk2_1 = (FormattedText.TextChunk)chunk2.chunks[0]
+        chunk2_1.type == FormattedText.ChunkType.Normal
         chunk2_1.text == "sky"
 
-        chunk2.chunks[1] instanceof TextListenerDelegate2.TextChunk
-        def chunk2_2 = (TextListenerDelegate2.TextChunk)chunk2.chunks[1]
-        chunk2_2.type == TextListenerDelegate2.ChunkType.Bold
+        chunk2.chunks[1] instanceof FormattedText.TextChunk
+        def chunk2_2 = (FormattedText.TextChunk)chunk2.chunks[1]
+        chunk2_2.type == FormattedText.ChunkType.Bold
         chunk2_2.text == " is blue"
 
 
-        chunk.chunks[2] instanceof TextListenerDelegate2.TextChunk
-        def chunk3 = (TextListenerDelegate2.TextChunk)chunk.chunks[2]
-        chunk3.type == TextListenerDelegate2.ChunkType.Normal
+        chunk.chunks[2] instanceof FormattedText.TextChunk
+        def chunk3 = (FormattedText.TextChunk)chunk.chunks[2]
+        chunk3.type == FormattedText.ChunkType.Normal
         chunk3.text == " and the grass is green"
 
     }
@@ -484,62 +485,62 @@ class TextListenerDelegateSpec extends Specification {
         then:
         result != null
         result.root != null
-        result.root instanceof TextListenerDelegate2.CompositeChunk
-        def chunk = (TextListenerDelegate2.CompositeChunk)result.root
+        result.root instanceof FormattedText.CompositeChunk
+        def chunk = (FormattedText.CompositeChunk)result.root
         chunk.chunks != null
         chunk.chunks.size() == 3
 
-        chunk.chunks[0] instanceof TextListenerDelegate2.TextChunk
-        chunk.chunks[1] instanceof TextListenerDelegate2.CompositeChunk
-        chunk.chunks[2] instanceof TextListenerDelegate2.CompositeChunk
+        chunk.chunks[0] instanceof FormattedText.TextChunk
+        chunk.chunks[1] instanceof FormattedText.CompositeChunk
+        chunk.chunks[2] instanceof FormattedText.CompositeChunk
 
-        def chunk1 = (TextListenerDelegate2.TextChunk)chunk.chunks[0]
-        chunk1.type == TextListenerDelegate2.ChunkType.Normal
+        def chunk1 = (FormattedText.TextChunk)chunk.chunks[0]
+        chunk1.type == FormattedText.ChunkType.Normal
         chunk1.text == "The "
 
-        def chunk2 = (TextListenerDelegate2.CompositeChunk)chunk.chunks[1]
-        chunk2.type == TextListenerDelegate2.ChunkType.Bold
+        def chunk2 = (FormattedText.CompositeChunk)chunk.chunks[1]
+        chunk2.type == FormattedText.ChunkType.Bold
         chunk2.chunks != null
         chunk2.chunks.size() == 3
 
-        def chunk3 = (TextListenerDelegate2.CompositeChunk)chunk.chunks[2]
-        chunk3.type == TextListenerDelegate2.ChunkType.Italic
+        def chunk3 = (FormattedText.CompositeChunk)chunk.chunks[2]
+        chunk3.type == FormattedText.ChunkType.Italic
         chunk3.chunks != null
         chunk3.chunks.size() == 3
 
-        def chunk2_1 = (TextListenerDelegate2.TextChunk)chunk2.chunks[0]
-        chunk2_1.type == TextListenerDelegate2.ChunkType.Normal
+        def chunk2_1 = (FormattedText.TextChunk)chunk2.chunks[0]
+        chunk2_1.type == FormattedText.ChunkType.Normal
         chunk2_1.text == "sky"
 
-        def chunk2_2 = (TextListenerDelegate2.TextChunk)chunk2.chunks[1]
-        chunk2_2.type == TextListenerDelegate2.ChunkType.Superscript
+        def chunk2_2 = (FormattedText.TextChunk)chunk2.chunks[1]
+        chunk2_2.type == FormattedText.ChunkType.Superscript
         chunk2_2.text == " is blue"
 
-        def chunk2_3 = (TextListenerDelegate2.TextChunk)chunk2.chunks[2]
-        chunk2_3.type == TextListenerDelegate2.ChunkType.Normal
+        def chunk2_3 = (FormattedText.TextChunk)chunk2.chunks[2]
+        chunk2_3.type == FormattedText.ChunkType.Normal
         chunk2_3.text == " and "
 
 
-        def chunk3_1 = (TextListenerDelegate2.TextChunk)chunk3.chunks[0]
-        chunk3_1.type == TextListenerDelegate2.ChunkType.Normal
+        def chunk3_1 = (FormattedText.TextChunk)chunk3.chunks[0]
+        chunk3_1.type == FormattedText.ChunkType.Normal
         chunk3_1.text == " the "
 
-        def chunk3_2 = (TextListenerDelegate2.CompositeChunk)chunk3.chunks[1]
-        chunk3_2.type == TextListenerDelegate2.ChunkType.Subscript
+        def chunk3_2 = (FormattedText.CompositeChunk)chunk3.chunks[1]
+        chunk3_2.type == FormattedText.ChunkType.Subscript
         chunk3_2.chunks != null
         chunk3_2.chunks.size() == 2
 
-        def chunk3_3 = (TextListenerDelegate2.TextChunk)chunk3.chunks[2]
-        chunk3_3.type == TextListenerDelegate2.ChunkType.Normal
+        def chunk3_3 = (FormattedText.TextChunk)chunk3.chunks[2]
+        chunk3_3.type == FormattedText.ChunkType.Normal
         chunk3_3.text == " green"
 
 
-        def chunk3_2_1 = (TextListenerDelegate2.TextChunk)chunk3_2.chunks[0]
-        chunk3_2_1.type == TextListenerDelegate2.ChunkType.Normal
+        def chunk3_2_1 = (FormattedText.TextChunk)chunk3_2.chunks[0]
+        chunk3_2_1.type == FormattedText.ChunkType.Normal
         chunk3_2_1.text == " grass "
 
-        def chunk3_2_2 = (TextListenerDelegate2.TextChunk)chunk3_2.chunks[1]
-        chunk3_2_2.type == TextListenerDelegate2.ChunkType.Monospace
+        def chunk3_2_2 = (FormattedText.TextChunk)chunk3_2.chunks[1]
+        chunk3_2_2.type == FormattedText.ChunkType.Monospace
         chunk3_2_2.text == "is"
 
     }
