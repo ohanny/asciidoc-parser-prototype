@@ -1,8 +1,5 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.UrlUtils;
-
-
 /**
  * Delegates to Asciidoc handler
  */
