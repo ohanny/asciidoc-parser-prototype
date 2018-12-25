@@ -301,14 +301,10 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .append(DIV.start("class", getMoreClasses("listingblock", attList), "style", styleBuilder().reset(attList).addPosition().style()))
           .nl()
           .incIndent()
-          .indent();
-
-        runIf(listing.getTitle() != null, () ->
-          append(DIV.start("class", "title listingblock"))
-            .append(listing.getTitle())
-            .append(DIV.end())
-            .nl()
-        )
+          .runIf(listing.getTitle() != null, () ->
+                writeListingTitle(listing.getTitle())
+          )
+          .indent()
           .append(PRE.start("class", getMoreClasses(getListingPreClass(listing), attList)))
           .forEach(listing.getLines(), (line, index) ->
             append(CODE.start("class", getListingCodeClass(listing.getLanguage(), line)))
@@ -391,7 +387,9 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
                 .runIf(image.getTitle() != null, () ->
                         indent()
                         .append(FIGCAPTION.start())
-                        .append(image.getTitle())
+                        .nl().incIndent()
+                        .append(() -> writeBlockTitle(image.getTitle()))
+                        .decIndent().indent()
                         .append(FIGCAPTION.end())
                         .nl()
                 )
@@ -400,6 +398,14 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
                 .append(FIGURE.end())
                 .nl()
         ;
+    }
+
+    protected void writeListingTitle(FormattedText title) {
+        indent()
+          .append(DIV.start("class", "title listingblock"))
+          .append(() -> writeFormattedText(title))
+          .append(DIV.end())
+          .nl();
     }
 
 

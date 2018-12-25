@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing;
 
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.FormattedText;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Listing;
 
 import java.util.Collections;
@@ -20,7 +21,7 @@ public class ListingProcessor {
 
     private ListingProcessor() {}
 
-    public Listing process(String title, char[] input, boolean source, String language, boolean linenums, boolean highlight, List<HighlightParameter> highlightParams) {
+    public Listing process(FormattedText title, char[] input, boolean source, String language, boolean linenums, boolean highlight, List<HighlightParameter> highlightParams) {
 
         List<LineContext> lines = splitLinesProcessor.process(input);
 

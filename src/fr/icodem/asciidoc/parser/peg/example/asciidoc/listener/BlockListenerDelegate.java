@@ -81,7 +81,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
         ListContext parent;
         ListContext root;
         AttributeList attList;
-        String title;
+        FormattedText title;
 
         static ListContext empty() {
             ListContext ctx = new ListContext();
@@ -324,7 +324,7 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
     private AttributeEntry currentAttributeEntry;
-    private String currentBlockTitle;
+    private char[] currentBlockTitle;
 
     public BlockListenerDelegate(AsciidocHandler handler, AttributeEntries attributeEntries) {
         super(attributeEntries);
@@ -401,23 +401,54 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
     public void formattedText(char[] chars) {// TODO optimize this code by using singletons
+        parseInlineText(chars, 1);
+    }
+
+    private FormattedText parseInlineText(char[] chars, int delegateType) {
         //System.out.println("formattedText() => " + new String(chars));
         TextRules rules = new TextRules(attributeEntries);// TODO inject rules
         rules.withFactory(defaultRulesFactory());
+
+        TextListenerDelegate delegate = null;
+        switch (delegateType) {
+            case 1:
+                delegate = new TextListenerDelegate1(handler, attributeEntries);
+                break;
+
+            case 2:
+                delegate = new TextListenerDelegate2(handler, attributeEntries);
+                break;
+        }
+
+
         ParsingResult result = new ParseRunner(rules, rules::formattedText)
                 //.trace()
-                .parse(new StringReader(new String(chars)), new TextListener(handler, attributeEntries), null, null);
+                .parse(new StringReader(new String(chars)), new TextListener(delegate), null, null);
+//        ParsingResult result = new ParseRunner(rules, rules::formattedText)
+//                //.trace()
+//                .parse(new StringReader(new String(chars)), new TextListener(handler, attributeEntries), null, null);
         // TODO optimize new StringReader(new String(chars))
 
+        if (delegateType == 1) {
+            return null;
+        }
+
+        return ((TextListenerDelegate2)delegate).getFormattedText();
     }
 
-    public void blockTitleValue(String text) {// TODO not yet tested
-        currentBlockTitle = text;
+    public void blockTitleValue(char[] chars) {// TODO not yet tested
+        currentBlockTitle = chars;
     }
 
-    private String consumeBlockTitle() {
-        String title = currentBlockTitle;
-        currentBlockTitle = null;
+    private FormattedText consumeBlockTitle() {
+        FormattedText title = null;
+
+        //String title = currentBlockTitle == null?null:new String(currentBlockTitle);
+
+        if (currentBlockTitle != null) {
+            title = parseInlineText(currentBlockTitle, 2);
+            currentBlockTitle = null;
+        }
         return title;
     }
 

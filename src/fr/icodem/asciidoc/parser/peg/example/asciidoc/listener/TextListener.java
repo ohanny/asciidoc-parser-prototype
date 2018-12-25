@@ -5,11 +5,15 @@ import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
 
 public class TextListener implements ParseTreeListener {
 
-    private TextListenerDelegate1 delegate;
+    private TextListenerDelegate delegate;
 
-    public TextListener(AsciidocHandler handler, AttributeEntries attributeEntries) {
-        this.delegate = new TextListenerDelegate1(handler, attributeEntries);
+    public TextListener(TextListenerDelegate delegate) {
+        this.delegate = delegate;
     }
+
+//    public TextListener(AsciidocHandler handler, AttributeEntries attributeEntries) {
+//        this.delegate = new TextListenerDelegate1(handler, attributeEntries);
+//    }
 
     @Override
     public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {

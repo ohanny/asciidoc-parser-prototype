@@ -160,11 +160,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             .append(DIV.end())
             .nl()
             .runIf(image.getTitle() != null, () ->
-              indent()
-                .append(DIV.start("class", "title"))
-                .append(image.getTitle())
-                .append(DIV.end())
-                .nl()
+              writeBlockTitle(image.getTitle())
             )
           .decIndent()
           .indent()
@@ -764,19 +760,16 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void startUnorderedList(int level, AttributeList attList, String title) {
+    public void startUnorderedList(int level, AttributeList attList, FormattedText title) {
         runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
             .indent()
             .append(DIV.start("class", "ulist", "style", styleBuilder().reset(attList).addPosition().addSize().style()))
             .nl()
             .incIndent()
-            .indent()
             .runIf(level == 1 && title != null, () ->
-              append(DIV.start("class", "title"))
-                .append(title)
-                .append(DIV.end())
-                .nl()
+              writeBlockTitle(title)
             )
+            .indent()
             .append(UL.start())
             .nl()
             .incIndent();
@@ -1074,13 +1067,10 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .append(DIV.start("class", getMoreClasses("listingblock", attList)))
           .nl()
           .incIndent()
-          .indent()
           .runIf(listing.getTitle() != null, () ->
-              append(DIV.start("class", "title"))
-                  .append(listing.getTitle())
-                  .append(DIV.end())
-                  .nl()
+              writeBlockTitle(listing.getTitle())
           )
+          .indent()
           .append(DIV.start("class", "content"))
           .nl()
           .incIndent()
@@ -1321,4 +1311,42 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .append(xref.getLabel())
           .append(A.end());
     }
+
+    protected void writeBlockTitle(FormattedText title) {
+        indent()
+          .append(DIV.start("class", "title"))
+          .append(() -> writeFormattedText(title))
+          .append(DIV.end())
+          .nl();
+    }
+
+    protected void writeFormattedText(FormattedText text) {
+        writeChunk(text.getRoot());
+    }
+
+    private void writeChunk(FormattedText.Chunk chunk) {
+        if (chunk instanceof FormattedText.TextChunk) {
+            writeTextChunk((FormattedText.TextChunk) chunk);
+        }
+        else if (chunk instanceof FormattedText.XRefChunk) {
+            writeXRefChunk((FormattedText.XRefChunk) chunk);
+        }
+        else if (chunk instanceof FormattedText.CompositeChunk) {
+            writeCompositeChunk((FormattedText.CompositeChunk) chunk);
+        }
+    }
+
+    private void writeTextChunk(FormattedText.TextChunk chunk) {
+        append(chunk.getText());
+    }
+
+    private void writeXRefChunk(FormattedText.XRefChunk chunk) {
+        xref(chunk.getXref());
+    }
+
+    private void writeCompositeChunk(FormattedText.CompositeChunk chunk) {
+        chunk.getChunks()
+             .forEach(this::writeChunk);
+    }
+
 }

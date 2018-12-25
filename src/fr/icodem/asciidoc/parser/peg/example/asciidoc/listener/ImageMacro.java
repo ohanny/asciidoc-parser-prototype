@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener;
 
 public class ImageMacro extends Macro {
 
-    private String title;
+    private FormattedText title;
 
     ImageMacro() {}
 
@@ -21,11 +21,11 @@ public class ImageMacro extends Macro {
         return alt;
     }
 
-    public String getTitle() {
+    public FormattedText getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(FormattedText title) {
         this.title = title;
     }
 }

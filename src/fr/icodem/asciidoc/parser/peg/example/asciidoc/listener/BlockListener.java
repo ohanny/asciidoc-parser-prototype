@@ -42,7 +42,7 @@ public class BlockListener implements ParseTreeListener {
                 delegate.sectionTitle(new String(chars));
                 break;
             case "blockTitleValue":
-                delegate.blockTitleValue(new String(chars));
+                delegate.blockTitleValue(chars);
                 break;
             case "paragraph":
             case "listItemValue":

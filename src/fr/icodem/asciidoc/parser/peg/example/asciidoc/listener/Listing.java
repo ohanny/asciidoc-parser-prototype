@@ -112,18 +112,18 @@ public class Listing {
         }
     }
 
-    private String title;
+    private FormattedText title;
     private List<Line> lines;
     private boolean source;
     private String language;
     private boolean linenums;
     private boolean highlight;
 
-    public static Listing of(String title, List<Line> lines, boolean source, String language, boolean linenums, boolean highlight) {
+    public static Listing of(FormattedText title, List<Line> lines, boolean source, String language, boolean linenums, boolean highlight) {
         return new Listing(title, lines, source, language, linenums, highlight);
     }
 
-    private Listing(String title, List<Line> lines, boolean source, String language, boolean linenums, boolean highlight) {
+    private Listing(FormattedText title, List<Line> lines, boolean source, String language, boolean linenums, boolean highlight) {
         this.title = title;
         this.lines = lines;
         this.source = source;
@@ -132,7 +132,7 @@ public class Listing {
         this.highlight = highlight;
     }
 
-    public String getTitle() {
+    public FormattedText getTitle() {
         return title;
     }
 
