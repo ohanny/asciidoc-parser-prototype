@@ -6,13 +6,17 @@ public abstract class TextListenerDelegate extends AbstractDelegate {
 
     protected MarkContext currentMark;
 
-    protected static class MarkContext {
+    public static class MarkContext {
         AttributeList attributeList;
 
         static MarkContext of(AttributeList attList) {
             MarkContext mark = new MarkContext();
             mark.attributeList = attList;
             return mark;
+        }
+
+        public AttributeList getAttributeList() {
+            return attributeList;
         }
     }
 

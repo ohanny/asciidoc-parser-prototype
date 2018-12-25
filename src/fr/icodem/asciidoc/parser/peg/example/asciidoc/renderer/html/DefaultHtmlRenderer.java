@@ -1322,6 +1322,10 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     private void writeChunk(FormattedText.Chunk chunk) {
+        applyChunkFormat(chunk);
+    }
+
+    private void writeTypedChunk(FormattedText.Chunk chunk) {
         if (chunk instanceof FormattedText.TextChunk) {
             writeTextChunk((FormattedText.TextChunk) chunk);
         }
@@ -1344,6 +1348,44 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     private void writeCompositeChunk(FormattedText.CompositeChunk chunk) {
         chunk.getChunks()
              .forEach(this::writeChunk);
+    }
+
+    private void applyChunkFormat(FormattedText.Chunk chunk) {
+        switch (chunk.getType()) {
+            case Normal:
+                writeTypedChunk(chunk);
+                break;
+            case Bold:
+                startBold();
+                writeTypedChunk(chunk);
+                endBold();
+                break;
+            case Italic:
+                startItalic();
+                writeTypedChunk(chunk);
+                endItalic();
+                break;
+            case Monospace:
+                startMonospace();
+                writeTypedChunk(chunk);
+                endMonospace();
+                break;
+            case Subscript:
+                startSubscript();
+                writeTypedChunk(chunk);
+                endSubscript();
+                break;
+            case Superscript:
+                startSuperscript();
+                writeTypedChunk(chunk);
+                endSuperscript();
+                break;
+            case Mark:
+                startMark(chunk.getMark().getAttributeList());
+                writeTypedChunk(chunk);
+                endMark(chunk.getMark().getAttributeList());
+                break;
+        }
     }
 
 }
