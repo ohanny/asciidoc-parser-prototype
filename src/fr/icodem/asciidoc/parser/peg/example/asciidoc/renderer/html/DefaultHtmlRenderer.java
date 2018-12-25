@@ -4,9 +4,6 @@ import fr.icodem.asciidoc.backend.html.HtmlTag;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.renderer.DocumentWriter;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -94,7 +91,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     private void processTocItem(TocItem item) {
         indent()
           .append(LI.start())
-          .runIf(item.getChildren().size() > 0, () ->
+          .appendIf(item.getChildren().size() > 0, () ->
               nl()
                 .incIndent()
                 .indent()
@@ -116,7 +113,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
                 .append(LI.end())
                 .nl()
           )
-        .runIf(item.getChildren().size() == 0, () ->
+        .appendIf(item.getChildren().size() == 0, () ->
             append(A.start("href", "#" + item.getRef()))
             .append(item.getTitle())
             .append(A.end())
@@ -159,7 +156,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             .indent()
             .append(DIV.end())
             .nl()
-            .runIf(image.getTitle() != null, () ->
+            .appendIf(image.getTitle() != null, () ->
               writeBlockTitle(image.getTitle())
             )
           .decIndent()
@@ -266,7 +263,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .indent()
           .append(LINK.tag("rel", "stylesheet", "href", "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700"))
           .nl()
-          .runIf("font".equals(iconsAtt.getValue()), () ->
+          .appendIf("font".equals(iconsAtt.getValue()), () ->
             indent()
               .append(LINK.tag("rel", "stylesheet", "href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css"))
               .nl()
@@ -285,7 +282,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         boolean highlightjs = isAttributeValueEqualTo("source-highlighter", "highlightjs");
         boolean highlightSelective = isAttributeEnabled("highlight-selective");
 
-        runIf(highlightjs, () ->
+        appendIf(highlightjs, () ->
           indent()
             .append(LINK.tag("rel", "stylesheet", "href", getAttributeEntryValue("highligthjs-style")))
             .nl()
@@ -293,14 +290,14 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             .append(SCRIPT.start("src", getAttributeEntryValue("highligthjs-script")))
             .append(SCRIPT.end())
             .nl()
-            .runIf(!highlightSelective, () ->
+            .appendIf(!highlightSelective, () ->
               indent()
                 .append(SCRIPT.start())
                 .append("hljs.initHighlightingOnLoad();")
                 .append(SCRIPT.end())
                 .nl()
               )
-            .runIf(highlightSelective, () ->
+            .appendIf(highlightSelective, () ->
               indent()
                 .append(SCRIPT.start())
                 .nl()
@@ -353,7 +350,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .append(TITLE.end())
           .nl()
           .bufferOff()
-          .runIf(!tocAtt.isDisabled(), () -> markOnWriter("TOC"))
+          .appendIf(!tocAtt.isDisabled(), () -> markOnWriter("TOC"))
           .decIndent()
           .indent()
           .append(DIV.end())
@@ -400,7 +397,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
               .append(SPAN.end())
               .append(BR.tag())
               .nl()
-              .runIf(a.getAddress() != null, () -> {
+              .appendIf(a.getAddress() != null, () -> {
                 String href = a.getAddress();
                 if (!(href.startsWith("http://") || href.startsWith("https://"))) {
                   href = "mailto:" + href;
@@ -451,8 +448,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     @Override
     public void startContent() {
-        runIf(!hasHeader, () -> bufferOff())
-          .runIf(!contentStarted, () ->
+        appendIf(!hasHeader, () -> bufferOff())
+          .appendIf(!contentStarted, () ->
             indent()
               .append(DIV.start("id", "content"))
               .incIndent()
@@ -488,7 +485,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
                 .append(title)
                 .append(titleHeader.end())
                 .nl()
-                .runIf(level == 2, () ->
+                .appendIf(level == 2, () ->
                         indent()
                                 .append(DIV.start("class", "sectionbody"))
                                 .nl()
@@ -498,7 +495,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     @Override
     public void endSection(int level) {
-        runIf(level == 2, () ->
+        appendIf(level == 2, () ->
           decIndent()
             .indent()
             .append(DIV.end())
@@ -555,11 +552,11 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 //                .nl()
 //                .incIndent()
 //                .indent()
-//                .runIf("font".equals(icons), () ->
+//                .appendIf("font".equals(icons), () ->
 //                    append(I.start("class", "fa icon-" + admonition, "title", ADMONITIONS.getProperty(admonition)))
 //                      .append(I.end())
 //                )
-//                .runIf(!"font".equals(icons), () ->
+//                .appendIf(!"font".equals(icons), () ->
 //                    append(DIV.start("class", "title"))
 //                      .append(ADMONITIONS.getProperty(admonition))
 //                      .append(DIV.end())
@@ -627,11 +624,11 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
                 .nl()
                 .incIndent()
                 .indent()
-                .runIf("font".equals(icons), () ->
+                .appendIf("font".equals(icons), () ->
                         append(I.start("class", "fa icon-" + admonition, "title", ADMONITIONS.getProperty(admonition)))
                                 .append(I.end())
                 )
-                .runIf(!"font".equals(icons), () ->
+                .appendIf(!"font".equals(icons), () ->
                         append(DIV.start("class", "title"))
                                 .append(ADMONITIONS.getProperty(admonition))
                                 .append(DIV.end())
@@ -693,7 +690,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .append(attribution)
           .append(BR.tag())
           .nl()
-          .runIf(citationTitle != null, () ->
+          .appendIf(citationTitle != null, () ->
             indent()
               .append(CITE.start())
               .append(citationTitle)
@@ -735,7 +732,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         String olStyle = css.getOrderedListNumerationStyleName();
         String olType = css.getOrderedListNumerationType();
 
-        runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
+        appendIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
             .indent()
             .append(DIV.start("class", divStyles))
             .nl()
@@ -756,17 +753,17 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             .indent()
             .append(DIV.end())
             .nl()
-            .runIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
+            .appendIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
     }
 
     @Override
     public void startUnorderedList(int level, AttributeList attList, FormattedText title) {
-        runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
+        appendIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
             .indent()
             .append(DIV.start("class", "ulist", "style", styleBuilder().reset(attList).addPosition().addSize().style()))
             .nl()
             .incIndent()
-            .runIf(level == 1 && title != null, () ->
+            .appendIf(level == 1 && title != null, () ->
               writeBlockTitle(title)
             )
             .indent()
@@ -785,7 +782,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
             .indent()
             .append(DIV.end())
             .nl()
-            .runIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
+            .appendIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
     }
 
     @Override
@@ -928,8 +925,8 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         String style = sb.toString();
 
         indent()
-            .runIf(style.length() > 0, () -> append(COL.tag("style", style)))
-            .runIf(style.length() == 0, () -> append(COL.tag()))
+            .appendIf(style.length() > 0, () -> append(COL.tag("style", style)))
+            .appendIf(style.length() == 0, () -> append(COL.tag()))
             .nl();
     }
 
@@ -1067,7 +1064,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .append(DIV.start("class", getMoreClasses("listingblock", attList)))
           .nl()
           .incIndent()
-          .runIf(listing.getTitle() != null, () ->
+          .appendIf(listing.getTitle() != null, () ->
               writeBlockTitle(listing.getTitle())
           )
           .indent()
@@ -1076,17 +1073,17 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .incIndent()
           .indent()
           .append(PRE.start("class", preClass))
-          //.runIf(preClass != null, () -> append(PRE.start("class", preClass)))
-          //.runIf(preClass == null, () -> append(PRE.start()))
-          .runIf(language != null, () ->
+          //.appendIf(preClass != null, () -> append(PRE.start("class", preClass)))
+          //.appendIf(preClass == null, () -> append(PRE.start()))
+          .appendIf(language != null, () ->
             append(CODE.start("class", "language-" + language, "data-lang", language))
           )
           .forEach(listing.getLines(), (line, index) ->
              append(line.getText())
                  .writeListingCallout(line)
-               .runIf(listing.getLines().size() - 1 != index, () -> nl())
+               .appendIf(listing.getLines().size() - 1 != index, () -> nl())
           )
-          .runIf(language != null, () ->
+          .appendIf(language != null, () ->
             append(CODE.end())
           )
           .append(PRE.end())

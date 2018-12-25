@@ -46,7 +46,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .append(LINK.tag("rel", "stylesheet", "href", "shower/styles/styles.css"))
           //.append(LINK.tag("rel", "stylesheet", "href", "shower/styles/screen-16x10.css"))
           .nl()
-          .runIf("font".equals(iconsAtt.getValue()), () ->
+          .appendIf("font".equals(iconsAtt.getValue()), () ->
             indent()
               .append(LINK.tag("rel", "stylesheet", "href", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css"))
               .nl()
@@ -112,7 +112,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .append(TITLE.end())
           .nl()
           .bufferOff()
-          .runIf(!tocAtt.isDisabled(), () -> markOnWriter("TOC")) // TODO how to deal with toc ?
+          .appendIf(!tocAtt.isDisabled(), () -> markOnWriter("TOC")) // TODO how to deal with toc ?
           .bufferOn()
           .mark("preamble")
           .decIndent()
@@ -201,7 +201,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
 
     @Override
     public void startOrderedList(int level, AttributeList atts) {
-        runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
+        appendIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
           .indent()
           .append(OL.start())
           .nl()
@@ -214,13 +214,13 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .indent()
           .append(OL.end())
           .nl()
-          .runIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
+          .appendIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
     }
 
     /*
     @Override
     public void startUnorderedList(int level, AttributeList attList) {
-        runIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
+        appendIf(level > 1, () -> moveTo("BeforeEndLI" + (level-1)))
           .indent()
           .append(UL.start())
           .nl()
@@ -233,7 +233,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .indent()
           .append(UL.end())
           .nl()
-          .runIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
+          .appendIf(level > 1, () -> moveTo("AfterEndLI" + (level-1)));
     }*/
 
     @Override
@@ -243,8 +243,8 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
                                     && level == 1 && position > 1;
 
         indent()
-          .runIf(addNextClass, () -> append(LI.start("class", "next")))
-          .runIf(!addNextClass, () -> append(LI.start()));
+          .appendIf(addNextClass, () -> append(LI.start("class", "next")))
+          .appendIf(!addNextClass, () -> append(LI.start()));
     }
 
     @Override
@@ -301,7 +301,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .append(DIV.start("class", getMoreClasses("listingblock", attList), "style", styleBuilder().reset(attList).addPosition().style()))
           .nl()
           .incIndent()
-          .runIf(listing.getTitle() != null, () ->
+          .appendIf(listing.getTitle() != null, () ->
                 writeListingTitle(listing.getTitle())
           )
           .indent()
@@ -311,7 +311,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
               .forEach(line.getLineChunks(), this::writeListingLineChunk)
               .writeListingCallout(line)
               .append(CODE.end())
-              .runIf(listing.getLines().size() - 1 != index, () -> nl())
+              .appendIf(listing.getLines().size() - 1 != index, () -> nl())
           )
           .append(PRE.end())
           .nl()
@@ -319,32 +319,32 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     }
 
     private void writeListingLineChunk(Listing.LineChunk chunk) {
-        runIf(chunk.isMark() && chunk.getMarkLevel() == 0, () ->
+        appendIf(chunk.isMark() && chunk.getMarkLevel() == 0, () ->
                 append(MARK.start())
                         .writeTextOrChunks(chunk)
                         .append(MARK.end())
         ).
-        runIf(chunk.isMark() && chunk.getMarkLevel() > 0, () ->
+                appendIf(chunk.isMark() && chunk.getMarkLevel() > 0, () ->
                 append(MARK.start("class", "mark" + chunk.getMarkLevel()))
                         .writeTextOrChunks(chunk)
                         .append(MARK.end())
         ).
-        runIf(chunk.isStrong(), () ->
+                appendIf(chunk.isStrong(), () ->
                 append(STRONG.start())
                         .writeTextOrChunks(chunk)
                         .append(STRONG.end())
         )
-        .runIf(chunk.isImportant(), () ->
+        .appendIf(chunk.isImportant(), () ->
                 append(MARK.start("class", "important"))
                         .writeTextOrChunks(chunk)
                         .append(MARK.end())
         )
-        .runIf(chunk.isComment(), () ->
+        .appendIf(chunk.isComment(), () ->
                 append(SPAN.start("class", "comment"))
                         .writeTextOrChunks(chunk)
                         .append(SPAN.end())
         )
-        .runIf(chunk.isNotMarked(), () ->
+        .appendIf(chunk.isNotMarked(), () ->
                 writeTextOrChunks(chunk)
         );
     }
@@ -384,7 +384,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
                 .append(IMG.tag("src", image.getTarget(), "alt", image.getAlternateText(),
                         "style", styleBuilder().reset(image.getBlockAttributes()).addSize().style()))
                 .nl()
-                .runIf(image.getTitle() != null, () ->
+                .appendIf(image.getTitle() != null, () ->
                         indent()
                         .append(FIGCAPTION.start())
                         .nl().incIndent()

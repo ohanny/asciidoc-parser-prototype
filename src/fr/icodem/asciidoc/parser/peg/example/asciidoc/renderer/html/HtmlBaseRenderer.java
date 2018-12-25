@@ -132,7 +132,7 @@ public abstract class HtmlBaseRenderer<HR extends HtmlBaseRenderer<HR>> implemen
         return (HR)this;
     }
 
-    protected HR runIf(boolean condition, Runnable runnable) {
+    protected HR appendIf(boolean condition, Runnable runnable) {
         if (condition) runnable.run();
         return (HR)this;
     }
