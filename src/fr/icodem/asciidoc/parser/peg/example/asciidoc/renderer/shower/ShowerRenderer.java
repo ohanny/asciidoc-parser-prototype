@@ -302,7 +302,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .nl()
           .incIndent()
           .appendIf(listing.getTitle() != null, () ->
-                writeListingTitle(listing.getTitle())
+                writeBlockTitle(listing.getTitle())
           )
           .indent()
           .append(PRE.start("class", getMoreClasses(getListingPreClass(listing), attList)))
@@ -399,14 +399,5 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
                 .nl()
         ;
     }
-
-    protected void writeListingTitle(FormattedText title) {
-        indent()
-          .append(DIV.start("class", "title listingblock"))
-          .append(() -> writeFormattedText(title))
-          .append(DIV.end())
-          .nl();
-    }
-
 
 }
