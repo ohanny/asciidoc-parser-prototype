@@ -119,7 +119,9 @@ public class CodeMarksProcessor {
             else if (param.isComment()) chunk.comment();
             else if (param.isMark()) {
                 chunk.mark(param.getMarkLevel());
-            } else if (param.isStrong()) chunk.strong();
+            } else if (param.isStrong()) {
+                chunk.strong(param.getStrongLevel());
+            }
             else if (param.isHighlight()) chunk.highlight();
 
             chunks.add(chunk);

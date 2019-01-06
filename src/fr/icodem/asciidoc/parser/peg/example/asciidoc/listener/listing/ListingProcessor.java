@@ -61,7 +61,7 @@ public class ListingProcessor {
         }
 
         return Listing.LineChunk.of(chunk.getText(), chunk.isNot(), chunk.isImportant(), chunk.isComment(), chunk.isMark(),
-                                    chunk.isStrong(), chunk.isHighlight(), chunk.getMarkLevel(), nestedChunks);
+                                    chunk.isStrong(), chunk.isHighlight(), chunk.getMarkLevel(), chunk.getStrongLevel(), nestedChunks);
     }
 
 }

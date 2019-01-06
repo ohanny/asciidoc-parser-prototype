@@ -12,6 +12,7 @@ public class HighlightParameter {
     private boolean highlight;
 
     private int markLevel;
+    private int strongLevel;
 
     private boolean processed;
 
@@ -27,6 +28,7 @@ public class HighlightParameter {
                 ", strong=" + strong +
                 ", highlight=" + highlight +
                 ", markLevel=" + markLevel +
+                ", strongLevel=" + strongLevel +
                 ", processed=" + processed +
                 '}';
     }
@@ -64,9 +66,10 @@ public class HighlightParameter {
         return param;
     }
 
-    public static HighlightParameter strong(CodePoint from, CodePoint to) {
+    public static HighlightParameter strong(CodePoint from, CodePoint to, int strongLevel) {
         HighlightParameter param = normal(from, to);
         param.strong = true;
+        param.strongLevel = strongLevel;
         return param;
     }
 
@@ -87,6 +90,7 @@ public class HighlightParameter {
         param.from = from;
         param.to = to;
         param.markLevel = markLevel;
+        param.strongLevel = strongLevel;
 
         return param;
     }
@@ -129,6 +133,10 @@ public class HighlightParameter {
 
     public int getMarkLevel() {
         return markLevel;
+    }
+
+    public int getStrongLevel() {
+        return strongLevel;
     }
 
     public boolean isProcessed() {

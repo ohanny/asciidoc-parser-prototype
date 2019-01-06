@@ -122,7 +122,7 @@ public enum HtmlTag {
             case H6: return buildStartTag("h6", attributes);
             case A: return buildStartTag("a", attributes);
             case SPAN: return buildStartTag("span", attributes);
-            case STRONG: return "<strong>";
+            case STRONG: return buildStartTag("strong", attributes);
             case EM: return "<em>";
             case SUB: return "<sub>";
             case SUP: return "<sup>";

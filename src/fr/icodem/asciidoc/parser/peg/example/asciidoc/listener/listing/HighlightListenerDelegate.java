@@ -24,6 +24,7 @@ public class HighlightListenerDelegate {
         boolean mark;
         boolean strong;
         int markLevel;
+        int strongLevel;
     }
 
     public HighlightListenerDelegate(Consumer<List<HighlightParameter>> consumer) {
@@ -64,7 +65,7 @@ public class HighlightListenerDelegate {
                 return HighlightParameter.mark(from, to, ctx.markLevel);
             }
             else if (ctx.strong) {
-                return HighlightParameter.strong(from, to);
+                return HighlightParameter.strong(from, to, ctx.strongLevel);
             }
             else if (ctx.columnFrom == -1 && ctx.columnTo == -1) {
                 return HighlightParameter.highlight(from, to);
@@ -125,4 +126,7 @@ public class HighlightListenerDelegate {
         currentParameter.strong = true;
     }
 
+    public void strongLevel(int level) {
+        currentParameter.strongLevel = level;
+    }
 }

@@ -319,20 +319,27 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
     }
 
     private void writeListingLineChunk(Listing.LineChunk chunk) {
+
+
         appendIf(chunk.isMark() && chunk.getMarkLevel() == 0, () ->
                 append(MARK.start())
                         .writeTextOrChunks(chunk)
                         .append(MARK.end())
-        ).
-                appendIf(chunk.isMark() && chunk.getMarkLevel() > 0, () ->
+        )
+        .appendIf(chunk.isMark() && chunk.getMarkLevel() > 0, () ->
                 append(MARK.start("class", "mark" + chunk.getMarkLevel()))
                         .writeTextOrChunks(chunk)
                         .append(MARK.end())
-        ).
-                appendIf(chunk.isStrong(), () ->
+        )
+        .appendIf(chunk.isStrong() && chunk.getStrongLevel() == 0, () ->
                 append(STRONG.start())
                         .writeTextOrChunks(chunk)
                         .append(STRONG.end())
+        )
+        .appendIf(chunk.isStrong() && chunk.getStrongLevel() > 0, () ->
+                append(STRONG.start("class", "strong" + chunk.getStrongLevel()))
+                         .writeTextOrChunks(chunk)
+                         .append(STRONG.end())
         )
         .appendIf(chunk.isImportant(), () ->
                 append(MARK.start("class", "important"))

@@ -17,6 +17,7 @@ public class LineChunkContext {
     private boolean strong;
     private boolean highlight;
     private int markLevel;
+    private int strongLevel;
 
     List<LineChunkContext> chunks; // nested chunks
 
@@ -52,8 +53,9 @@ public class LineChunkContext {
         return this;
     }
 
-    public LineChunkContext strong() {
+    public LineChunkContext strong(int strongLevel) {
         this.strong = true;
+        this.strongLevel = strongLevel;
         return this;
     }
 
@@ -92,6 +94,10 @@ public class LineChunkContext {
 
     public int getMarkLevel() {
         return markLevel;
+    }
+
+    public int getStrongLevel() {
+        return strongLevel;
     }
 
     public int getColumnFrom() {

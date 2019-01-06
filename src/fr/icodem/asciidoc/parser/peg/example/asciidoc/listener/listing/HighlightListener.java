@@ -36,6 +36,10 @@ public class HighlightListener implements ParseTreeListener {
             case "markLevel":
                 delegate.markLevel(getInt(chars, startIndex, endIndex));
                 break;
+
+            case "strongLevel":
+                delegate.strongLevel(getInt(chars, startIndex, endIndex));
+                break;
         }
     }
 

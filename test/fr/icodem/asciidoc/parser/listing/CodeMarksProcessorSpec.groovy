@@ -230,7 +230,7 @@ let str = "hello";
 
         List<HighlightParameter> params = [
             HighlightParameter.mark(CodePoint.ofPoint(1, 1), CodePoint.ofPoint(1, 17), 0),
-            HighlightParameter.strong(CodePoint.ofPoint(1, 5), CodePoint.ofPoint(1, 7))
+            HighlightParameter.strong(CodePoint.ofPoint(1, 5), CodePoint.ofPoint(1, 7), 0)
         ]
 
         when:

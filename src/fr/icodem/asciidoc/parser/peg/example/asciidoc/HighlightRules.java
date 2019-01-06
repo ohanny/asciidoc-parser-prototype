@@ -190,7 +190,17 @@ public class HighlightRules extends BaseRules {
 
     private Rule strong() {
         return node("strong",
-                 ch('s')
+                 sequence(
+                   ch('s'),
+                   optional(strongLevel())
+                 )
+               )
+        ;
+    }
+
+    private Rule strongLevel() {
+        return node("strongLevel",
+                anyOf("123456789")
                )
         ;
     }
