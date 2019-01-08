@@ -968,9 +968,11 @@ public class BlockListenerDelegate extends AbstractDelegate {
     }
 
     public void enterSidebar() {
+        AttributeList attList = consumeAttList();
+
         currentSidebar = SidebarContext.empty();
         currentSidebar.title = consumeBlockTitle();
-        handler.startSidebar(currentSidebar.title);
+        handler.startSidebar(currentSidebar.title, attList);
     }
 
     public void exitSidebar() {
