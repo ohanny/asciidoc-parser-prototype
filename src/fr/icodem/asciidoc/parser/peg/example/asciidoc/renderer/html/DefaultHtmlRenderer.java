@@ -1224,7 +1224,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     @Override
     public void startSidebar(FormattedText title, AttributeList attList) {
         indent()
-          .append(DIV.start("class", "sidebarblock", "style", styleBuilder().reset(attList).addPosition().addSize().style()))
+          .append(DIV.start("class", getMoreClasses("sidebarblock", attList), "style", styleBuilder().reset(attList).addPosition().addSize().style()))
           .nl()
           .incIndent()
           .indent()
