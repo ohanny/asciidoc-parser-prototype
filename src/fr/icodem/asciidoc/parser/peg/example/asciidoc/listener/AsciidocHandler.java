@@ -124,6 +124,9 @@ public interface AsciidocHandler {
     void startExample(String admonition, String icons, AttributeList attList);
     void endExample(String admonition);
 
+    void startSidebar(FormattedText title);
+    void endSidebar();
+
     // Inline text
     void startBold();
     void endBold();

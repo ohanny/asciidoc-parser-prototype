@@ -199,6 +199,9 @@ public class BlockListener implements ParseTreeListener {
             case "exampleBlock":
                 delegate.enterExample();
                 break;
+            case "sidebarBlock":
+                delegate.enterSidebar();
+                break;
         }
 
     }
@@ -280,6 +283,9 @@ public class BlockListener implements ParseTreeListener {
                 break;
             case "exampleBlock":
                 delegate.exitExample();
+                break;
+            case "sidebarBlock":
+                delegate.exitSidebar();
                 break;
 
         }

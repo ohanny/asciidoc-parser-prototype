@@ -314,12 +314,23 @@ public class BlockListenerDelegate extends AbstractDelegate {
         String admonition;
         String icons;
 
-        static ExampleContext of (String admonition, String icons) {
+        static ExampleContext of(String admonition, String icons) {
             ExampleContext example = new ExampleContext();
             example.admonition = admonition;
             example.icons = icons;
 
             return example;
+        }
+    }
+
+    private SidebarContext currentSidebar;
+    private static class SidebarContext {
+        FormattedText title;
+
+        static SidebarContext empty() {
+            SidebarContext sidebar = new SidebarContext();
+
+            return sidebar;
         }
     }
 
@@ -954,6 +965,17 @@ public class BlockListenerDelegate extends AbstractDelegate {
     public void exitExample() {
         handler.endExample(currentExample.admonition);
         currentExample = null;
+    }
+
+    public void enterSidebar() {
+        currentSidebar = SidebarContext.empty();
+        currentSidebar.title = consumeBlockTitle();
+        handler.startSidebar(currentSidebar.title);
+    }
+
+    public void exitSidebar() {
+        handler.endSidebar();
+        currentSidebar = null;
     }
 
 }

@@ -1221,6 +1221,31 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     }
 
+    @Override
+    public void startSidebar(FormattedText title) {
+        indent()
+          .append(DIV.start("class", "sidebarblock"))
+          .nl()
+          .incIndent()
+          .indent()
+          .append(DIV.start("class", "content"))
+          .incIndent()
+          .nl()
+          .appendIf(title != null, () -> writeBlockTitle(title));
+    }
+
+    @Override
+    public void endSidebar() {
+        decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl()
+          .decIndent()
+          .indent()
+          .append(DIV.end())
+          .nl();
+    }
+
     /* **********************************************/
     // Inline text
     /* **********************************************/

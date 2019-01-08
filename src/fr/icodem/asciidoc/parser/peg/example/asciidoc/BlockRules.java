@@ -130,6 +130,7 @@ public class BlockRules extends BaseRules {
                 exampleBlock(),
                 table(),
                 labeledList(),
+                sidebarBlock(),
                 sequence(paragraph(), optional(nl()))
         ));
     }
@@ -161,7 +162,7 @@ public class BlockRules extends BaseRules {
                    optional(admonition()),
                    oneOrMore(
                      firstOf(
-                       noneOf("= \t/+\r\n"),
+                       noneOf("*= \t/+\r\n"),
                        blank(),
                        sequence(
                          newLine(),
@@ -177,6 +178,7 @@ public class BlockRules extends BaseRules {
                          ch('+')
                        ),
                        sequence(testNot(exampleBlockDelimiter()), ch('=')),
+                       sequence(testNot(sidebarBlockDelimiter()), ch('*')),
                        sequence(testNot(() -> ctx -> ctx.getBooleanAttribute("fromList", false)), ch('+'))
                      )
                    ),
@@ -744,6 +746,38 @@ public class BlockRules extends BaseRules {
         return node("exampleBlockDelimiter", sequence(
                     test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), // TODO replace
                     string("===="), // TODO ntimes
+                    optional(blank()), // TODO replace with blanks
+                    firstOf(newLine(), eoi())
+                ));
+    }
+
+    private Rule sidebarBlock() {
+        return
+          node("sidebarBlock",
+            sequence(
+              sidebarBlockDelimiter(),
+              zeroOrMore(
+                firstOf(
+                  bl(),
+                  attributeList(),
+                  list(),
+                  listingBlock(),
+                  literalBlock(),
+                  exampleBlock(),
+                  table(),
+                  labeledList(),
+                  sequence(paragraph(), optional(nl()))
+                )
+              ),
+              sidebarBlockDelimiter()
+            )
+          );
+    }
+
+    private Rule sidebarBlockDelimiter() {
+        return node("sidebarBlockDelimiter", sequence(
+                    test(sequence(firstOf(any(), eoi()), isFirstCharInLine())), // TODO replace
+                    string("****"), // TODO ntimes
                     optional(blank()), // TODO replace with blanks
                     firstOf(newLine(), eoi())
                 ));
