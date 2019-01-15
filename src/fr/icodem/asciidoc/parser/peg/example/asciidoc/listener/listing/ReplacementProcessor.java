@@ -3,7 +3,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.listing;
 import java.util.List;
 
 public class ReplacementProcessor {
-    private char[] buffer = new char[1024];
+    private char[] buffer = new char[2048]; // TODO size should be incremented as needed
     private int position;
 
     public void process(List<LineContext> lines) {
