@@ -29,6 +29,9 @@ public class ReplacementProcessor {
                 case '&':
                     position += copy(ListingConstants.AMP, buffer, position);
                     break;
+                case '€':
+                    position += copy(ListingConstants.EURO, buffer, position);
+                    break;
                 default:
                     buffer[position] = c;
                     position++;
