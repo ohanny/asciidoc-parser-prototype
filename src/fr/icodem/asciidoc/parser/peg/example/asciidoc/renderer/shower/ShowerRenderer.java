@@ -10,6 +10,9 @@ import java.util.function.Consumer;
 import static fr.icodem.asciidoc.backend.html.HtmlTag.*;
 
 public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
+
+    private int slideCount;
+
     private ShowerRenderer(DocumentWriter writer) {
         super(writer);
         startSection = this::startFirstSection;
@@ -152,7 +155,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
 
     private void startFirstSection(AttributeList attList) {
         indent()
-          .append(SECTION.start("class", getMoreClasses("slide", attList)))
+          .append(SECTION.start("class", getMoreClasses("slide", attList), "data-slide-index", Integer.toString(++slideCount)))
           .nl()
           .incIndent()
         ;
@@ -166,7 +169,7 @@ public class ShowerRenderer extends DefaultHtmlRenderer<ShowerRenderer> {
           .append(SECTION.end())
           .nl()
           .indent()
-          .append(SECTION.start("class", getMoreClasses("slide", attList)))
+          .append(SECTION.start("class", getMoreClasses("slide", attList), "data-slide-index", Integer.toString(++slideCount)))
           .nl()
           .incIndent()
         ;
