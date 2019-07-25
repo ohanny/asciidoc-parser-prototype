@@ -491,7 +491,6 @@ public class BlockListenerDelegate extends AbstractDelegate {
         currentAttributeEntry.setValue(value);
     }
 
-
     // document and header methods
     public void enterDocument() {
         handler.startDocument();

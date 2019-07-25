@@ -126,9 +126,16 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     /* **********************************************/
     // Text
     /* **********************************************/
+    private String replaceSpecialCharacters(String text) { // TODO temporaire
+        text = text.replaceAll("&", "&amp;");
+        text = text.replaceAll("<", "&lt;");
+        text = text.replaceAll(">", "&gt;");
+        return text;
+    }
 
     @Override
     public void writeText(String text) {
+        text = replaceSpecialCharacters(text);
         append(text);
     }
 
@@ -368,7 +375,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
 
     @Override
     public void writeDocumentTitle(String title) {
-        this.title = title;
+        this.title = replaceSpecialCharacters(title);
         append(title);
     }
 
@@ -482,7 +489,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
         HtmlTag titleHeader = getTitleHeader(level);
         indent()
                 .append(titleHeader.start("id", ref))
-                .append(title)
+                .append(replaceSpecialCharacters(title))
                 .append(titleHeader.end())
                 .nl()
                 .appendIf(level == 2, () ->
@@ -693,7 +700,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
           .appendIf(citationTitle != null, () ->
             indent()
               .append(CITE.start())
-              .append(citationTitle)
+              .append(replaceSpecialCharacters(citationTitle))
               .append(CITE.end())
               .nl()
           )
@@ -1363,7 +1370,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     private void writeTextChunk(FormattedText.TextChunk chunk) {
-        append(chunk.getText());
+        append(replaceSpecialCharacters(chunk.getText()));
     }
 
     private void writeXRefChunk(FormattedText.XRefChunk chunk) {

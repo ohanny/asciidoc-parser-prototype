@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser;
 
+import fr.icodem.asciidoc.handler.dom.DomHandlerTestSuite;
 import fr.icodem.asciidoc.parser.antlr.GrammarTestSuite;
 import fr.icodem.asciidoc.parser.listing.ListingProcessorSpec;
 import fr.icodem.asciidoc.renderer.*;
@@ -11,7 +12,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         GrammarTestSuite.class,
         ParserTestSuite.class,
-        RendererTestSuite.class
+        RendererTestSuite.class,
+        DomHandlerTestSuite.class
 })
 public class AllTestSuite {
 }
