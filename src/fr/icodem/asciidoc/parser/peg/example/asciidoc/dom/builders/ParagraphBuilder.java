@@ -20,7 +20,7 @@ public class ParagraphBuilder implements TextBlockBuilder {
 
     @Override
     public Paragraph build() {
-        Paragraph p = Paragraph.of(Text.of(text), admonition);
+        Paragraph p = Paragraph.of(attributeList, Text.of(text), admonition);
         return p;
     }
 

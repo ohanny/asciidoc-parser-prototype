@@ -8,11 +8,10 @@ class AttributeEntrySpec extends DomHandlerBaseSpec {
 
     def "default attribute entry"() {
         given:
-        DocumentModelBuilder builder = getBuilder()
         String input = ""
 
         when:
-        Document doc = builder.build(input)
+        Document doc = getBuilder().build(input)
 
         then:
         doc != null
@@ -26,11 +25,10 @@ class AttributeEntrySpec extends DomHandlerBaseSpec {
 
     def "one attribute entry"() {
         given:
-        DocumentModelBuilder builder = getBuilder()
         String input = ":att1: value1"
 
         when:
-        Document doc = builder.build(input)
+        Document doc = getBuilder().build(input)
 
         then:
         doc != null
@@ -44,14 +42,13 @@ class AttributeEntrySpec extends DomHandlerBaseSpec {
 
     def "two attribute entries"() {
         given:
-        DocumentModelBuilder builder = getBuilder()
         String input = '''\
 :att1: value1
 :att2: value2
 '''
 
         when:
-        Document doc = builder.build(input)
+        Document doc = getBuilder().build(input)
 
         then:
         doc != null
@@ -71,13 +68,12 @@ class AttributeEntrySpec extends DomHandlerBaseSpec {
 
     def "unset attribute with leading bang"() {
         given:
-        DocumentModelBuilder builder = getBuilder()
         String input = '''\
 :!doctitle:
 '''
 
         when:
-        Document doc = builder.build(input)
+        Document doc = getBuilder().build(input)
 
         then:
         doc != null

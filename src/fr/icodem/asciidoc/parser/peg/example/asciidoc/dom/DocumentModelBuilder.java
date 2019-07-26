@@ -20,10 +20,11 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private BlockRules2 rules;
 
     private AttributeEntries attributeEntries;
-    protected List<Attribute> attList;
+    //protected List<Attribute> attList;
 
     // builders
     private AttributeEntryBuilder attributeEntryBuilder;
+    private AttributeListBuilder attributeListBuilder;
     private DocumentBuilder documentBuilder;
     private AuthorsBuilder authorsBuilder;
     private RevisionInfoBuilder revisionInfoBuilder;
@@ -43,7 +44,8 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         builder.attributeEntries = attributeEntries;
         builder.rules = new BlockRules2(attributeEntries);
         builder.rules.withFactory(defaultRulesFactory());
-        builder.attList = new LinkedList<>();
+        //builder.attList = new LinkedList<>();
+        builder.attributeListBuilder = AttributeListBuilder.newBuilder();
 
         return builder;
     }
@@ -74,7 +76,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // attribute entries
     @Override
     public void enterAttributeEntry() {
-        attributeEntryBuilder.reset();
+        attributeEntryBuilder.clear();
     }
 
     @Override
@@ -108,16 +110,74 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     }
 
     // attribute list
-    private AttributeList consumeAttList() {
-        if (this.attList.isEmpty()) return null;
-        AttributeList attList = AttributeList.of(Collections.unmodifiableList(this.attList));
-        clearAttList();
-        return attList;
+//    private AttributeList consumeAttList() {
+//        if (this.attList.isEmpty()) return null;
+//        AttributeList attList = AttributeList.of(Collections.unmodifiableList(this.attList));
+//        clearAttList();
+//        return attList;
+//    }
+
+//    private void clearAttList() {
+//        attList.clear();
+//    }
+
+    @Override
+    public void attributeName(String name) {
+        attributeListBuilder.setAttributeName(name);
+//        textObjects.pop()
+//                .setValue(value);
     }
 
-    private void clearAttList() {
-        attList.clear();
+    @Override
+    public void attributeValue(String value) {
+        attributeListBuilder.setAttributeValue(value);
+//        textObjects.pop()
+//                .setValue(value);
     }
+
+    @Override
+    public void enterIdAttribute() {
+//        Text text = Text.empty();
+//        attList.add(Attribute.of("id", text));
+//        textObjects.push(text);
+        attributeListBuilder.addIdAttribute();
+    }
+
+    @Override
+    public void enterRoleAttribute() {
+        //Text text = Text.empty();
+        //attList.add(Attribute.of("role", text));
+        //textObjects.push(text);
+        attributeListBuilder.addRoleAttribute();
+    }
+
+    @Override
+    public void enterOptionAttribute() {
+        //Text text = Text.empty();
+        //attList.add(Attribute.of("options", text));
+        //textObjects.push(text);
+        attributeListBuilder.addOptionAttribute();
+    }
+
+    @Override
+    public void enterPositionalAttribute() {
+        //Text value = Text.empty();
+        //attList.add(Attribute.of((String)null, value));
+        //textObjects.push(value);
+        attributeListBuilder.addPositionalAttribute();
+    }
+
+    @Override
+    public void enterNamedAttribute() {
+        attributeListBuilder.addNamedAttribute();
+//        Text name = Text.empty();
+//        Text value = Text.empty();
+//        attList.add(Attribute.of(name, value));
+//
+//        textObjects.push(value);
+//        textObjects.push(name);
+    }
+
 
 
     // text
@@ -214,7 +274,8 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
             currentSection = firstSection;
         }
 
-        currentSection.setAttList(consumeAttList());
+        //currentSection.setAttList(consumeAttList());
+        currentSection.setAttList(attributeListBuilder.consume());
         //handler.startSection(level, currentSection.attList);
     }
 
@@ -267,7 +328,8 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterParagraph(String admonition) {
         admonition = admonition == null?null:admonition.toLowerCase();
-        AttributeList attList = consumeAttList();
+        //AttributeList attList = consumeAttList();
+        AttributeList attList = attributeListBuilder.consume();
 
         paragraphBuilder = ParagraphBuilder.of(admonition, attList);
         currentTextBlockBuilder = paragraphBuilder;

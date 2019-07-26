@@ -25,15 +25,16 @@ public class AttributeList {
 
         // collect positional attributes
         positionalAttributes = attList.stream()
-                .filter(att -> att.getName() == null)
-                .map(att -> (String)att.getValue())
+                .filter(Attribute::isPositionalAttribute)
+                .map(Attribute::getName)
                 .collect(Collectors.toList());
 
         // id attribute
         attList.stream()
-                .filter(att -> "id".equals(att.getName()))
+                .filter(Attribute::isIdAttribute)
+                //.filter(att -> "id".equals(att.getName()))
                 .findFirst()
-                .ifPresent(att -> id = (String)att.getValue());
+                .ifPresent(att -> id = att.getName());
 
         // first positional attribute
         positionalAttributes.stream()
@@ -42,27 +43,35 @@ public class AttributeList {
 
         // collect roles
         roles = attList.stream()
-                .filter(att -> "role".equals(att.getName()))
-                .map(att -> (String)att.getValue())
+                .filter(Attribute::isRoleAttribute)
+                //.filter(att -> "role".equals(att.getName()))
+                .map(Attribute::getName)
                 .collect(Collectors.toSet());
 
         // collect options
         options = attList.stream()
-                .filter(att -> "options".equals(att.getName()))
-                .map(att -> (String)att.getValue())
+                .filter(Attribute::isOptionAttribute)
+                //.filter(att -> "options".equals(att.getName()))
+                .map(Attribute::getName)
                 .collect(Collectors.toSet());
 
         // attribute list to map
-        Predicate<Attribute> attPredicate = att -> !"role".equals(att.getName())
-                && !"options".equals(att.getName())
-                && !"id".equals(att.getName())
-                && att.getName() != null;
+//        Predicate<Attribute> attPredicate = att -> !"role".equals(att.getName())
+//                && !"options".equals(att.getName())
+//                && !"id".equals(att.getName())
+//                && att.getName() != null;
+//        attributes = attList.stream()
+//                .filter(attPredicate)
+//                .collect(Collectors.toMap(
+//                        Attribute::getName,
+//                        att -> att,
+//                        (att1, att2) -> att2));// merger : last wins
         attributes = attList.stream()
-                .filter(attPredicate)
+                .filter(Attribute::isNamedAttribute)
                 .collect(Collectors.toMap(
                         Attribute::getName,
                         att -> att,
-                        (att1, att2) -> att2));// merger : last wins
+                        (att1, att2) -> att2)); // merger : last wins
     }
 
     public String getFirstPositionalAttribute() {

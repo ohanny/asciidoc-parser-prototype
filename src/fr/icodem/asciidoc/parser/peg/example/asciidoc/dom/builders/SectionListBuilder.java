@@ -13,7 +13,6 @@ public class SectionListBuilder {
 
         SectionBuilder current = first;
         while (current != null) {
-            //Section section = Section.of(current.getLevel(), Title.of(current.getTitle()), null);
             sections.add(current.build());
             current = current.getNext();
         }

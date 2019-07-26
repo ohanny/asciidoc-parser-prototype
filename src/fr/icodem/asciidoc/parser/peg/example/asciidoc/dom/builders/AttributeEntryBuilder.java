@@ -11,7 +11,7 @@ public class AttributeEntryBuilder {
         return AttributeEntry.of(name, value, disabled);
     }
 
-    public void reset() {
+    public void clear() {
         this.name = null;
         this.value = null;
         this.disabled = false;

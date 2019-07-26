@@ -11,8 +11,8 @@ import org.junit.runners.Suite;
   RevisionInfoSpec.class,
   SectionSpec.class,
   ParagraphSpec.class,
-  AdmonitionParagraphSpec.class
+  AdmonitionParagraphSpec.class,
+  AttributeListSpec.class
 })
 
-public class DomHandlerTestSuite {
-}
+public class DomHandlerTestSuite { }
