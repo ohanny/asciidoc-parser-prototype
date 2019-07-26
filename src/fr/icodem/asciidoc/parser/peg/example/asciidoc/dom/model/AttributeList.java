@@ -3,7 +3,6 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class AttributeList {
@@ -32,7 +31,6 @@ public class AttributeList {
         // id attribute
         attList.stream()
                 .filter(Attribute::isIdAttribute)
-                //.filter(att -> "id".equals(att.getName()))
                 .findFirst()
                 .ifPresent(att -> id = att.getName());
 
@@ -44,28 +42,16 @@ public class AttributeList {
         // collect roles
         roles = attList.stream()
                 .filter(Attribute::isRoleAttribute)
-                //.filter(att -> "role".equals(att.getName()))
                 .map(Attribute::getName)
                 .collect(Collectors.toSet());
 
         // collect options
         options = attList.stream()
                 .filter(Attribute::isOptionAttribute)
-                //.filter(att -> "options".equals(att.getName()))
                 .map(Attribute::getName)
                 .collect(Collectors.toSet());
 
         // attribute list to map
-//        Predicate<Attribute> attPredicate = att -> !"role".equals(att.getName())
-//                && !"options".equals(att.getName())
-//                && !"id".equals(att.getName())
-//                && att.getName() != null;
-//        attributes = attList.stream()
-//                .filter(attPredicate)
-//                .collect(Collectors.toMap(
-//                        Attribute::getName,
-//                        att -> att,
-//                        (att1, att2) -> att2));// merger : last wins
         attributes = attList.stream()
                 .filter(Attribute::isNamedAttribute)
                 .collect(Collectors.toMap(
@@ -99,7 +85,7 @@ public class AttributeList {
     public String getStringValue(String name, String defaultValue) {
         Attribute att = getAttribute(name);
         if (att != null) {
-            return (String) att.getValue();
+            return att.getValue();
         }
 
         return defaultValue;
