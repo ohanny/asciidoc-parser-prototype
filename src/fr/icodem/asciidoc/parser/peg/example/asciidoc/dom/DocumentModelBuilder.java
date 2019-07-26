@@ -31,6 +31,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private SectionBuilder firstSection;
     private SectionBuilder currentSection;
     private ParagraphBuilder paragraphBuilder;
+    private QuoteBuilder quoteBuilder;
 
 
     private TextBlockBuilder currentTextBlockBuilder;
@@ -328,36 +329,24 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterParagraph(String admonition) {
         admonition = admonition == null?null:admonition.toLowerCase();
-        //AttributeList attList = consumeAttList();
         AttributeList attList = attributeListBuilder.consume();
 
-        paragraphBuilder = ParagraphBuilder.of(admonition, attList);
-        currentTextBlockBuilder = paragraphBuilder;
         if (attList != null && "quote".equals(attList.getFirstPositionalAttribute())) {
-            paragraphBuilder.setQuoted(true);
-        }
-
-        if (!paragraphBuilder.isQuoted()) {
-            String icons = getAttributeEntry("icons").getValue();
-            //handler.startParagraph(admonition, icons, currentParagraph.attributeList);
-        } else {
             String attribution = attList.getSecondPositionalAttribute();
             String citationTitle = attList.getThirdPositionalAttribute();
-            //currentQuote = BlockListenerDelegate.QuoteContext.of(attribution, citationTitle);
-            //handler.startQuote(attribution, citationTitle);
+            quoteBuilder = QuoteBuilder.of(attribution, citationTitle, attList);
+            currentTextBlockBuilder = quoteBuilder;
+        } else {
+            paragraphBuilder = ParagraphBuilder.of(admonition, attList);
+            currentTextBlockBuilder = paragraphBuilder;
         }
     }
 
     @Override
     public void exitParagraph() {
-        if (!paragraphBuilder.isQuoted()) {
-            //handler.endParagraph(currentParagraph.admonition);
-        } else {
-            //handler.endQuote(currentQuote.attribution, currentQuote.citationTitle);
-            //currentQuote = null;
-        }
+        currentSection.addBlock(currentTextBlockBuilder);
 
-        currentSection.addBlock(paragraphBuilder);
+        quoteBuilder = null;
         paragraphBuilder = null;
         currentTextBlockBuilder = null;
     }

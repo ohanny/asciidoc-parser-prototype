@@ -31,10 +31,10 @@ public class Attribute {
         return att;
     }
 
-    public static Attribute positionalAttribute(String name) {
+    public static Attribute positionalAttribute(String value) {
         Attribute att = new Attribute();
         att.type = Type.Positional;
-        att.setName(name);
+        att.setValue(value);
 
         return att;
     }

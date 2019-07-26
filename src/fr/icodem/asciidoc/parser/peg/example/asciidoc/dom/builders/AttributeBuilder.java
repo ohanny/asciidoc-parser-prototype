@@ -59,7 +59,7 @@ public class AttributeBuilder {
                 att = Attribute.optionAttribute(name);
                 break;
             case Positional:
-                att = Attribute.positionalAttribute(name);
+                att = Attribute.positionalAttribute(value);
                 break;
             case Named:
                 att = Attribute.namedAttribute(name, value);

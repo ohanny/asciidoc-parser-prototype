@@ -7,7 +7,6 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Text;
 public class ParagraphBuilder implements TextBlockBuilder {
     private String admonition;
     private AttributeList attributeList;
-    private boolean quoted;
     private String text;
 
     public static ParagraphBuilder of(String admonition, AttributeList attList) {
@@ -45,11 +44,4 @@ public class ParagraphBuilder implements TextBlockBuilder {
         this.attributeList = attributeList;
     }
 
-    public boolean isQuoted() {
-        return quoted;
-    }
-
-    public void setQuoted(boolean quoted) {
-        this.quoted = quoted;
-    }
 }

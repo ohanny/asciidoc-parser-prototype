@@ -25,7 +25,7 @@ public class AttributeList {
         // collect positional attributes
         positionalAttributes = attList.stream()
                 .filter(Attribute::isPositionalAttribute)
-                .map(Attribute::getName)
+                .map(Attribute::getValue)
                 .collect(Collectors.toList());
 
         // id attribute
