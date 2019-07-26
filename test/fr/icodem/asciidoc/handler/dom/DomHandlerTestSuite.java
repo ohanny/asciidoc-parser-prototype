@@ -10,7 +10,8 @@ import org.junit.runners.Suite;
   AuthorSpec.class,
   RevisionInfoSpec.class,
   SectionSpec.class,
-  ParagraphSpec.class
+  ParagraphSpec.class,
+  AdmonitionParagraphSpec.class
 })
 
 public class DomHandlerTestSuite {

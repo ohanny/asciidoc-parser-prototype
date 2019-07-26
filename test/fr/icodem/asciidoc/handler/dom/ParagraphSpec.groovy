@@ -31,9 +31,11 @@ This is other content
         doc.sections[0].blocks[0] != null
         doc.sections[0].blocks[0].text != null
         doc.sections[0].blocks[0].text.content == 'This is some content'
+        doc.sections[0].blocks[0].admonition == null
         doc.sections[0].blocks[1] != null
         doc.sections[0].blocks[1].text != null
         doc.sections[0].blocks[1].text.content == 'This is other content'
+        doc.sections[0].blocks[1].admonition == null
 
     }
 
@@ -64,12 +66,14 @@ This is other content
         doc.sections[0].blocks[0] != null
         doc.sections[0].blocks[0].text != null
         doc.sections[0].blocks[0].text.content == 'This is some content'
+        doc.sections[0].blocks[0].admonition == null
 
         doc.sections[1].blocks != null
         doc.sections[1].blocks.size() == 1
         doc.sections[1].blocks[0] != null
         doc.sections[1].blocks[0].text != null
         doc.sections[1].blocks[0].text.content == 'This is other content'
+        doc.sections[1].blocks[0].admonition == null
 
     }
 
