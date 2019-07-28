@@ -1,5 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom;
 
+import fr.icodem.asciidoc.parser.ListType;
+import fr.icodem.asciidoc.parser.antlr.AsciidocParser;
 import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
@@ -32,12 +34,16 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private SectionBuilder currentSection;
     private ParagraphBuilder paragraphBuilder;
     private QuoteBuilder quoteBuilder;
+    private ListBlockBuilder listBlockBuilder;
 
 
-    private TextBlockBuilder currentTextBlockBuilder;
+    //private TextBlockBuilder currentTextBlockBuilder;
+    private Deque<TextBlockBuilder> textBlockBuilders;
 
     // computed refs : helps avoid duplicates
     private Map<String, Integer> refs = new HashMap<>();
+
+    private char[] currentBlockTitle;
 
 
     public static DocumentModelBuilder newDocumentBuilder(AttributeEntries attributeEntries) {
@@ -47,6 +53,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         builder.rules.withFactory(defaultRulesFactory());
         //builder.attList = new LinkedList<>();
         builder.attributeListBuilder = AttributeListBuilder.newBuilder();
+        builder.textBlockBuilders = new LinkedList<>();
 
         return builder;
     }
@@ -71,6 +78,19 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
             ref = ref + "_" + count;
         }
         return ref;
+    }
+
+    // block title
+    @Override
+    public void blockTitleValue(char[] chars) {// TODO not yet tested
+        currentBlockTitle = chars;
+    }
+
+    private String consumeBlockTitle() {
+        String title = currentBlockTitle == null?null:new String(currentBlockTitle);
+        currentBlockTitle = null;
+
+        return title;
     }
 
 
@@ -184,7 +204,11 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // text
     @Override
     public void formattedText(char[] chars) {
-        if (currentTextBlockBuilder != null) currentTextBlockBuilder.setText(new String(chars));
+        //if (currentTextBlockBuilder != null) currentTextBlockBuilder.setText(new String(chars));
+        TextBlockBuilder builder = textBlockBuilders.peekLast();
+        if (builder != null) {
+            builder.setText(new String(chars));
+        }
     }
 
     // document
@@ -335,19 +359,158 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
             String attribution = attList.getSecondPositionalAttribute();
             String citationTitle = attList.getThirdPositionalAttribute();
             quoteBuilder = QuoteBuilder.of(attribution, citationTitle, attList);
-            currentTextBlockBuilder = quoteBuilder;
+            //currentTextBlockBuilder = quoteBuilder;
+            textBlockBuilders.addLast(quoteBuilder);
         } else {
             paragraphBuilder = ParagraphBuilder.of(admonition, attList);
-            currentTextBlockBuilder = paragraphBuilder;
+            //currentTextBlockBuilder = paragraphBuilder;
+            textBlockBuilders.addLast(paragraphBuilder);
         }
     }
 
     @Override
     public void exitParagraph() {
-        currentSection.addBlock(currentTextBlockBuilder);
+        BlockBuilder block = textBlockBuilders.removeLast();
+        currentSection.addBlock(block);
 
         quoteBuilder = null;
         paragraphBuilder = null;
-        currentTextBlockBuilder = null;
+        //currentTextBlockBuilder = null;
     }
+
+    // list block
+    @Override
+    public void enterList() {
+        listBlockBuilder = ListBlockBuilder.root(consumeBlockTitle());
+//        listBlockBuilder = ListBlockBuilder.newBuilder();
+//        listBlockBuilder.setTitle(consumeBlockTitle());
+
+//        currentList = ListContext.empty();
+//        currentList.title = consumeBlockTitle();
+//        handler.startList();
+    }
+
+    @Override
+    public void exitList() {
+        currentSection.addBlock(listBlockBuilder);
+        listBlockBuilder = null;
+//        while (currentList != null) {
+//            if (currentList.type == ListType.Unordered) {
+//                handler.endUnorderedList(currentList.level);
+//            } else if (currentList.type == ListType.Ordered) {
+//                handler.endOrderedList(currentList.level);
+//            }
+//            currentList = currentList.parent;
+//        }
+//        handler.endList();
+    }
+
+    @Override
+    public void enterListItem(NodeContext context) {
+        int times = context.getIntAttribute("times.count", -1);
+        int dots = context.getIntAttribute("dots.count", -1);
+
+        ListItemBuilder builder = listBlockBuilder.newListItem(times, dots, attributeListBuilder.consume());
+        textBlockBuilders.addLast(builder);
+
+        /*
+        int times, dots = 0;
+        if ((times = context.getIntAttribute("times.count", -1)) > 0) {
+            if (listBlockBuilder.isUnordered()) {
+                if (times == listBlockBuilder.getBullets()) {
+
+                } else if (times > listBlockBuilder.getBullets()) {
+                    listBlockBuilder = ListBlockBuilder.withParent(listBlockBuilder);
+                    listBlockBuilder.setBullets(times);
+                } else if (times < listBlockBuilder.getBullets()) {
+                    while (times < listBlockBuilder.getBullets() && listBlockBuilder.getLevel() > 1) {
+                        //handler.endUnorderedList(currentList.level);
+                        listBlockBuilder = listBlockBuilder.getParent();
+                    }
+                }
+            } else if (listBlockBuilder.isOrdered()) {
+                if (times > listBlockBuilder.getBullets()) {
+                    listBlockBuilder = ListBlockBuilder.withParent(listBlockBuilder);
+                    listBlockBuilder.setBullets(times);
+                } else {
+                    // find parent with same type and level
+                    ListBlockBuilder ancestorWithSameLevel = listBlockBuilder.findParentListWithTypeAndLevel(ListBlockBuilder.Type.Unordered, times);
+                    if (ancestorWithSameLevel == null) {
+                        listBlockBuilder = ListBlockBuilder.withParent(listBlockBuilder);
+                        listBlockBuilder.setBullets(times);
+                    } else {
+                        ListBlockBuilder parent = listBlockBuilder.getParent();
+                        while (listBlockBuilder != parent) {
+                            //handler.endUnorderedList(currentList.level);
+                            listBlockBuilder = listBlockBuilder.getParent();
+                        }
+                    }
+                }
+            }
+        } else if ((dots = context.getIntAttribute("dots.count", -1)) > 0) {
+            if (listBlockBuilder.isOrdered()) {
+                if (dots == currentList.bullets) {
+
+                } else if (dots > currentList.bullets) {
+                    currentList = ListContext.withParent(currentList);
+                    currentList.bullets = dots;
+                } else if (dots < currentList.bullets) {
+                    while (dots < currentList.bullets && currentList.level > 1) {
+                        handler.endOrderedList(currentList.level);
+                        currentList = currentList.parent;
+                    }
+                }
+            } else if (listBlockBuilder.isUnordered()) {
+                // find parent with same type and level
+                ListContext ancestorWithSameLevel = findParentListWithTypeAndLevel(currentList, ListType.Ordered, dots);
+                if (ancestorWithSameLevel == null) {
+                    currentList = ListContext.withParent(currentList);
+                    currentList.bullets = dots;
+                } else {
+                    ListContext parent = currentList.parent;
+                    while (currentList != parent) {
+                        handler.endUnorderedList(currentList.level);
+                        currentList = currentList.parent;
+                    }
+                }
+            }
+        }
+
+
+        if (currentList.type == null) {
+            if (times > 0) {
+                currentList.type = ListType.Unordered;
+                currentList.bullets = times;
+                currentList.attList = consumeAttList();
+                handler.startUnorderedList(currentList.level, currentList.attList, currentList.title);
+            } else if (dots > 0) {
+                currentList.type = ListType.Ordered;
+                currentList.bullets = dots;
+                currentList.attList = consumeAttList();
+                handler.startOrderedList(currentList.level, currentList.attList);
+            }
+        }
+        handler.startListItem(currentList.level, ++currentList.itemCount, currentList.attList);
+        clearAttList();
+
+         */
+    }
+
+
+    @Override
+    public void exitListItem() {
+        //handler.endListItem(currentList.level);
+        textBlockBuilders.removeLast();
+    }
+
+    @Override
+    public void enterListItemValue() {
+        //handler.startListItemValue();
+    }
+
+    @Override
+    public void exitListItemValue() {
+        //handler.endListItemValue();
+    }
+
 }
