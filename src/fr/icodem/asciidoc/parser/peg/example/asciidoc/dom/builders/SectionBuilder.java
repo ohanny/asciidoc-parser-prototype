@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SectionBuilder {
+public class SectionBuilder implements BlockContainer {
     private int level;
     private String title;
     private String ref;
@@ -47,6 +47,7 @@ public class SectionBuilder {
         return section;
     }
 
+    @Override
     public void addBlock(BlockBuilder builder) {
         this.blocks.add(builder);
     }

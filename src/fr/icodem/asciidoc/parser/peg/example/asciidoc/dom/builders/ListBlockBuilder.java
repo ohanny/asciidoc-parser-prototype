@@ -58,6 +58,7 @@ public class ListBlockBuilder implements BlockBuilder {
         builder.root = builder;
         builder.current = builder;
         builder.items = new ArrayList<>();
+        builder.level = 1;
 
         return builder;
     }
@@ -69,7 +70,7 @@ public class ListBlockBuilder implements BlockBuilder {
         if (parent != null) {
             builder.parent = parent;
             builder.level = parent.level + 1;
-        } else { // TODO checkh case null
+        } else { // TODO check case null
             builder.level = 1;
         }
         return builder;
@@ -87,6 +88,7 @@ public class ListBlockBuilder implements BlockBuilder {
     }
 
     public ListItemBuilder newListItem(int times, int dots, AttributeList attList) {
+
         if (times  > 0) {
             if (current.isUnordered()) {
                 if (times == current.bullets) {
@@ -94,6 +96,7 @@ public class ListBlockBuilder implements BlockBuilder {
                 } else if (times > current.bullets) {
                     current = withParent(current);
                     current.bullets = times;
+                    addCurrentToParentBlock();
                 } else if (times < current.bullets) {
                     while (times < current.bullets && current.level > 1) {
                         //handler.endUnorderedList(currentList.level);
@@ -104,12 +107,14 @@ public class ListBlockBuilder implements BlockBuilder {
                 if (times > current.bullets) {
                     current = withParent(current);
                     current.bullets = times;
+                    addCurrentToParentBlock();
                 } else {
                     // find parent with same type and level
                     ListBlockBuilder ancestorWithSameLevel = current.findParentListWithTypeAndLevel(Type.Unordered, times);
                     if (ancestorWithSameLevel == null) {
                         current = withParent(current);
                         current.bullets = times;
+                        addCurrentToParentBlock();
                     } else {
                         ListBlockBuilder parent = current.parent;
                         while (current != parent) {
@@ -126,6 +131,7 @@ public class ListBlockBuilder implements BlockBuilder {
                 } else if (dots > current.bullets) {
                     current = withParent(current);
                     current.bullets = dots;
+                    addCurrentToParentBlock();
                 } else if (dots < current.bullets) {
                     while (dots < current.bullets && current.level > 1) {
                         // handler.endOrderedList(current.level);
@@ -133,16 +139,23 @@ public class ListBlockBuilder implements BlockBuilder {
                     }
                 }
             } else if (current.isUnordered()) {
-                // find parent with same type and level
-                ListBlockBuilder ancestorWithSameLevel = current.findParentListWithTypeAndLevel(Type.Ordered, dots);
-                if (ancestorWithSameLevel == null) {
+                if (dots > current.bullets) {
                     current = withParent(current);
                     current.bullets = dots;
+                    addCurrentToParentBlock();
                 } else {
-                    ListBlockBuilder parent = current.parent;
-                    while (current != parent) {
-                        //handler.endUnorderedList(currentList.level);
-                        current = current.parent;
+                    // find parent with same type and level
+                    ListBlockBuilder ancestorWithSameLevel = current.findParentListWithTypeAndLevel(Type.Ordered, dots);
+                    if (ancestorWithSameLevel == null) {
+                        current = withParent(current);
+                        current.bullets = dots;
+                        addCurrentToParentBlock();
+                    } else {
+                        ListBlockBuilder parent = current.parent;
+                        while (current != parent) {
+                            //handler.endUnorderedList(currentList.level);
+                            current = current.parent;
+                        }
                     }
                 }
             }
@@ -165,13 +178,19 @@ public class ListBlockBuilder implements BlockBuilder {
             }
         }
 
+
         ListItemBuilder builder = ListItemBuilder.newBuilder();
-        items.add(builder);
+        current.items.add(builder);
 
         //handler.startListItem(currentList.level, ++currentList.itemCount, currentList.attList);
         //clearAttList();
 
         return builder;
+    }
+
+    private void addCurrentToParentBlock() {
+        ListItemBuilder lastListItem = current.parent.items.get(current.parent.items.size() - 1);
+        lastListItem.addBlock(current);
     }
 
     private boolean isOrdered() {

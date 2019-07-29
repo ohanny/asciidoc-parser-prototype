@@ -1,11 +1,11 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom;
 
-import fr.icodem.asciidoc.parser.ListType;
-import fr.icodem.asciidoc.parser.antlr.AsciidocParser;
 import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.*;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.BlockListenerDelegate;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntries;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntry;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.AsciidocHandler2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.BlockListener2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.rules2.BlockRules2;
@@ -13,7 +13,10 @@ import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
 import java.io.StringReader;
-import java.util.*;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 import static java.lang.Math.min;
@@ -39,6 +42,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     //private TextBlockBuilder currentTextBlockBuilder;
     private Deque<TextBlockBuilder> textBlockBuilders;
+    private Deque<BlockContainer> blockContainers;
 
     // computed refs : helps avoid duplicates
     private Map<String, Integer> refs = new HashMap<>();
@@ -54,6 +58,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         //builder.attList = new LinkedList<>();
         builder.attributeListBuilder = AttributeListBuilder.newBuilder();
         builder.textBlockBuilders = new LinkedList<>();
+        builder.blockContainers = new LinkedList<>();
 
         return builder;
     }
@@ -302,6 +307,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         //currentSection.setAttList(consumeAttList());
         currentSection.setAttList(attributeListBuilder.consume());
         //handler.startSection(level, currentSection.attList);
+        blockContainers.addLast(currentSection);
     }
 
     @Override
@@ -325,15 +331,19 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         SectionBuilder parent = null;
         if (newSectionLevel == currentSection.getLevel()) {
             //handler.endSection(currentSection.getLevel());
+            closeSection();
             parent = currentSection.getParent();
         } else if (newSectionLevel < currentSection.getLevel()) {
             //handler.endSection(currentSection.getLevel());
+            closeSection();
             SectionBuilder p = currentSection.getParent();
             while (p != null) {
                 if (p.getLevel() > newSectionLevel) {
+                    closeSection();
                     //handler.endSection(p.getLevel());
                     p = p.getParent();
                 } else if (p.getLevel() == newSectionLevel) {
+                    closeSection();
                     //handler.endSection(p.getLevel());
                     parent = p.getParent();
                     break;
@@ -347,6 +357,10 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         }
 
         return parent;
+    }
+
+    private void closeSection() {
+        this.blockContainers.removeLast();
     }
 
     // paragraph
@@ -371,7 +385,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void exitParagraph() {
         BlockBuilder block = textBlockBuilders.removeLast();
-        currentSection.addBlock(block);
+        blockContainers.peekLast().addBlock(block);
 
         quoteBuilder = null;
         paragraphBuilder = null;
@@ -412,6 +426,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
         ListItemBuilder builder = listBlockBuilder.newListItem(times, dots, attributeListBuilder.consume());
         textBlockBuilders.addLast(builder);
+        blockContainers.addLast(builder);
 
         /*
         int times, dots = 0;
@@ -501,6 +516,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void exitListItem() {
         //handler.endListItem(currentList.level);
         textBlockBuilders.removeLast();
+        blockContainers.removeLast();
     }
 
     @Override
