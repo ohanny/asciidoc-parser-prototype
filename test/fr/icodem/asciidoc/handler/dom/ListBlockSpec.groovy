@@ -5,6 +5,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ElementType
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListBlock
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListItem
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Paragraph
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Quote
 
 class ListBlockSpec extends DomHandlerBaseSpec {
@@ -141,6 +142,69 @@ class ListBlockSpec extends DomHandlerBaseSpec {
 
         block.items[1].text.content == 'Two'
         block.items[1].type == ElementType.ListItem
+        block.items[2].text.content == 'Three'
+        block.items[2].type == ElementType.ListItem
+
+    }
+
+    def "unordered list with nested paragraph"() {
+        given:
+        String input = '''\
+= Unordered List
+
+== Section 1
+
+* One
+** One A
+** One B
+* Two
++
+Some text
+
+* Three
+'''
+
+        when:
+        Document doc = getBuilder().build(input)
+
+        then:
+        doc != null
+        doc.header != null
+        doc.sections != null
+        doc.sections.size() == 1
+
+        doc.sections[0].blocks != null
+        doc.sections[0].blocks.size() == 1
+        doc.sections[0].blocks[0] != null
+
+        doc.sections[0].blocks[0] instanceof ListBlock
+        ListBlock block = doc.sections[0].blocks[0]
+        block.title == null
+        block.type == ElementType.UnorderedList
+        block.items != null
+        block.items.size() == 3
+
+        block.items[0].text.content == 'One'
+        block.items[0].type == ElementType.ListItem
+
+        block.items[0].blocks != null
+        block.items[0].blocks.size() == 1
+        block.items[0].blocks[0] instanceof ListBlock
+        block.items[0].blocks[0].type == ElementType.UnorderedList
+        block.items[0].blocks[0].items != null
+        block.items[0].blocks[0].items.size() == 2
+        block.items[0].blocks[0].items[0] != null
+        block.items[0].blocks[0].items[0].text.content == 'One A'
+        block.items[0].blocks[0].items[1] != null
+        block.items[0].blocks[0].items[1].text.content == 'One B'
+
+        block.items[1].text.content == 'Two'
+        block.items[1].type == ElementType.ListItem
+        block.items[1].blocks != null
+        block.items[1].blocks.size() == 1
+        block.items[1].blocks[0] instanceof Paragraph
+        block.items[1].blocks[0].text.content == 'Some text'
+
         block.items[2].text.content == 'Three'
         block.items[2].type == ElementType.ListItem
 
