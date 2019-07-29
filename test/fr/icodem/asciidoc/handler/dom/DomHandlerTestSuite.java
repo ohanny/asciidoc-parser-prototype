@@ -14,7 +14,8 @@ import org.junit.runners.Suite;
   AdmonitionParagraphSpec.class,
   AttributeListSpec.class,
   ListBlockSpec.class,
-  LiteralBlockSpec.class
+  LiteralBlockSpec.class,
+  ExampleBlockSpec.class
 })
 
 public class DomHandlerTestSuite { }

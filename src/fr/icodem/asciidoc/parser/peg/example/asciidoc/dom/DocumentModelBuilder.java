@@ -39,6 +39,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private QuoteBuilder quoteBuilder;
     private ListBlockBuilder listBlockBuilder;
     private LiteralBlockBuilder literalBlockBuilder;
+    private ExampleBlockBuilder exampleBlockBuilder;
 
 
     //private TextBlockBuilder currentTextBlockBuilder;
@@ -543,5 +544,24 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         blockContainers.peekLast().addBlock(block);
 
         literalBlockBuilder = null;
+    }
+
+    // example block
+    @Override
+    public void enterExample() {
+        exampleBlockBuilder = ExampleBlockBuilder.newBuilder();
+        blockContainers.addLast(exampleBlockBuilder);
+    }
+
+    @Override
+    public void exitExample() {
+        blockContainers.removeLast();
+
+        BlockContainer container = blockContainers.peekLast();
+        if (container != null) {
+            container.addBlock(exampleBlockBuilder);
+        }
+
+        exampleBlockBuilder = null;
     }
 }
