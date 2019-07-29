@@ -164,6 +164,10 @@ public interface AsciidocHandler2 {
 
     default void exitSidebar() {}
 
+    default void enterLiteralBlock() {}
+
+    default void exitLiteralBlock() {}
+
 
     // TODO replace with exitDocument
     default void postProcess() {}

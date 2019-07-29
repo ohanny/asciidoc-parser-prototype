@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.handler.dom
 
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Paragraph
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Quote
 
 class ParagraphSpec extends DomHandlerBaseSpec {
@@ -30,10 +31,12 @@ This is other content
         doc.sections[0].blocks != null
         doc.sections[0].blocks.size() == 2
         doc.sections[0].blocks[0] != null
+        doc.sections[0].blocks[0] instanceof Paragraph
         doc.sections[0].blocks[0].text != null
         doc.sections[0].blocks[0].text.content == 'This is some content'
         doc.sections[0].blocks[0].admonition == null
         doc.sections[0].blocks[1] != null
+        doc.sections[0].blocks[0] instanceof Paragraph
         doc.sections[0].blocks[1].text != null
         doc.sections[0].blocks[1].text.content == 'This is other content'
         doc.sections[0].blocks[1].admonition == null
@@ -65,6 +68,7 @@ This is other content
         doc.sections[0].blocks != null
         doc.sections[0].blocks.size() == 1
         doc.sections[0].blocks[0] != null
+        doc.sections[0].blocks[0] instanceof Paragraph
         doc.sections[0].blocks[0].text != null
         doc.sections[0].blocks[0].text.content == 'This is some content'
         doc.sections[0].blocks[0].admonition == null
@@ -72,6 +76,7 @@ This is other content
         doc.sections[1].blocks != null
         doc.sections[1].blocks.size() == 1
         doc.sections[1].blocks[0] != null
+        doc.sections[0].blocks[0] instanceof Paragraph
         doc.sections[1].blocks[0].text != null
         doc.sections[1].blocks[0].text.content == 'This is other content'
         doc.sections[1].blocks[0].admonition == null

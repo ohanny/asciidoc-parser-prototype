@@ -46,6 +46,7 @@ public class BlockListener2 implements ParseTreeListener {
             case "paragraph":
             case "listItemValue":
             case "labeledListItemTitle":
+            case "literalBlock":
                 handler.formattedText(chars);
                 break;
             case "labeledListItemContent":
@@ -207,6 +208,9 @@ public class BlockListener2 implements ParseTreeListener {
             case "sidebarBlock":
                 handler.enterSidebar();
                 break;
+            case "literalBlock":
+                handler.enterLiteralBlock();
+                break;
         }
 
     }
@@ -297,6 +301,9 @@ public class BlockListener2 implements ParseTreeListener {
                 break;
             case "sidebarBlock":
                 handler.exitSidebar();
+                break;
+            case "literalBlock":
+                handler.exitLiteralBlock();
                 break;
 
         }
