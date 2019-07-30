@@ -8,6 +8,7 @@ public class ListingBlock extends TextBlock {
 
     public static ListingBlock of(AttributeList attList, Text text, List<Callout> callouts) {
         ListingBlock block = new ListingBlock();
+        block.type = ElementType.Listing;
         block.attributeList = attList;
         block.text = text;
         block.callouts = callouts;

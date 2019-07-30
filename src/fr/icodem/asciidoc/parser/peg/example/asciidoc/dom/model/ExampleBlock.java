@@ -7,6 +7,7 @@ public class ExampleBlock extends Block {
 
     public static ExampleBlock of(List<Block> blocks) {
         ExampleBlock block = new ExampleBlock();
+        block.type = ElementType.Example;
         block.blocks = blocks;
 
         return block;
