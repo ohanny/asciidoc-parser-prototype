@@ -488,6 +488,7 @@ public class BlockRules2 extends BaseRules {
         ));
     }
 
+    // TODO rename to description list
     private Rule labeledList() {
         return node("labeledList",
                  sequence(
