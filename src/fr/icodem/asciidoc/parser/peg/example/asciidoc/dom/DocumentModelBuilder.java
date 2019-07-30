@@ -548,7 +548,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // example block
     @Override
     public void enterExample() {
-        exampleBlockBuilder = ExampleBlockBuilder.newBuilder();
+        exampleBlockBuilder = ExampleBlockBuilder.newBuilder(attributeListBuilder.consume());
         blockContainers.addLast(exampleBlockBuilder);
     }
 
