@@ -2,10 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom;
 
 import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.*;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntries;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntry;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.AsciidocHandler2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.BlockListener2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.rules2.BlockRules2;
@@ -559,9 +556,9 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         blockContainers.removeLast();
 
         BlockContainer container = blockContainers.peekLast();
-        if (container != null) {
+        //if (container != null) {
             container.addBlock(exampleBlockBuilder);
-        }
+        //}
 
         exampleBlockBuilder = null;
     }
@@ -602,4 +599,10 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         listingBlockBuilder.setCalloutNumber(nb);
     }
 
+    // horizontal rule
+    @Override
+    public void horizontalRule() {
+        BlockContainer container = blockContainers.peekLast();
+        container.addBlock(HorizontalRuleBuilder.newBuilder());
+    }
 }

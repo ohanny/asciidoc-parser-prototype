@@ -16,7 +16,8 @@ import org.junit.runners.Suite;
   ListBlockSpec.class,
   LiteralBlockSpec.class,
   ExampleBlockSpec.class,
-  ListingBlockSpec.class
+  ListingBlockSpec.class,
+  HorizontalRuleSpec.class
 })
 
 public class DomHandlerTestSuite { }
