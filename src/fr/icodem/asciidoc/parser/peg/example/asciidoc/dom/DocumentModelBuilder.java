@@ -573,12 +573,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         textBlockBuilders.addLast(listingBlockBuilder);
     }
 
-//    @Override
-//    public void listingBlock(char[] chars) {
-//        listingBlockBuilder = ListingBlockBuilder.newBuilder();
-//        listingBlockBuilder.setText(new String(chars));
-//    }
-
     @Override
     public void exitListingBlock() {
         BlockBuilder block = textBlockBuilders.removeLast();
@@ -592,11 +586,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void enterCallouts() {
         listingBlockBuilder.newCallouts();
     }
-
-//    @Override
-//    public void exitCallouts() {
-//
-//    }
 
     @Override
     public void enterCallout() {
@@ -612,15 +601,5 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void calloutNumber(String nb) {
         listingBlockBuilder.setCalloutNumber(nb);
     }
-
-//    @Override
-//    public void enterCalloutText() {
-//
-//    }
-//
-//    @Override
-//    public void exitCalloutText() {
-//
-//    }
 
 }
