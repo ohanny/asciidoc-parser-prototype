@@ -35,6 +35,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private ParagraphBuilder paragraphBuilder;
     private QuoteBuilder quoteBuilder;
     private ListBlockBuilder listBlockBuilder;
+    private LabeledListBuilder labeledListBuilder;
     private LiteralBlockBuilder literalBlockBuilder;
     private ExampleBlockBuilder exampleBlockBuilder;
     private SidebarBuilder sidebarBuilder;
@@ -42,7 +43,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
 
     //private TextBlockBuilder currentTextBlockBuilder;
-    private Deque<TextBlockBuilder> textBlockBuilders;
+    private Deque<TextBlockBuilder> textBlockBuilders; // TODO replace with interface TextContent
     private Deque<BlockContainer> blockContainers;
 
     // computed refs : helps avoid duplicates
@@ -528,6 +529,83 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void exitListItemValue() {
         //handler.endListItemValue();
+    }
+
+    // labeled list
+    @Override
+    public void enterLabeledList() {
+        labeledListBuilder = LabeledListBuilder.newBuilder();
+        blockContainers.peekLast().addBlock(labeledListBuilder);
+    }
+
+    @Override
+    public void exitLabeledList() {
+        labeledListBuilder = null;
+    }
+
+    @Override
+    public void enterLabeledListItem() {
+        labeledListBuilder.newItem();
+    }
+
+    @Override
+    public void exitLabeledListItem() {
+
+    }
+
+    @Override
+    public void enterLabeledListItemTitle() {
+        this.textBlockBuilders.addLast(
+                new TextBlockBuilder() {
+                    @Override
+                    public void setText(String text) {
+                        labeledListBuilder.setItemTitle(text);
+                    }
+
+                    @Override
+                    public Block build() {
+                        return null;
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void exitLabeledListItemTitle() {
+        this.textBlockBuilders.removeLast();
+    }
+
+
+    @Override
+    public void enterLabeledListItemContent() {
+
+    }
+
+    @Override
+    public void exitLabeledListItemContent() {
+
+    }
+
+    @Override
+    public void enterLabeledListItemSimpleContent() {
+        this.textBlockBuilders.addLast(
+                new TextBlockBuilder() {
+                    @Override
+                    public void setText(String text) {
+                        labeledListBuilder.setItemContent(text);
+                    }
+
+                    @Override
+                    public Block build() {
+                        return null;
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void exitLabeledListItemSimpleContent() {
+        this.textBlockBuilders.removeLast();
     }
 
     // literal block
