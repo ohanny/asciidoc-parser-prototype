@@ -40,6 +40,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private ListBlockBuilder listBlockBuilder;
     private LiteralBlockBuilder literalBlockBuilder;
     private ExampleBlockBuilder exampleBlockBuilder;
+    private ListingBlockBuilder listingBlockBuilder;
 
 
     //private TextBlockBuilder currentTextBlockBuilder;
@@ -564,4 +565,62 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
         exampleBlockBuilder = null;
     }
+
+    // listing block
+    @Override
+    public void enterListingBlock() {
+        listingBlockBuilder = ListingBlockBuilder.newBuilder(attributeListBuilder.consume());
+        textBlockBuilders.addLast(listingBlockBuilder);
+    }
+
+//    @Override
+//    public void listingBlock(char[] chars) {
+//        listingBlockBuilder = ListingBlockBuilder.newBuilder();
+//        listingBlockBuilder.setText(new String(chars));
+//    }
+
+    @Override
+    public void exitListingBlock() {
+        BlockBuilder block = textBlockBuilders.removeLast();
+        blockContainers.peekLast().addBlock(block);
+
+        listingBlockBuilder = null;
+    }
+
+    // callouts
+    @Override
+    public void enterCallouts() {
+        listingBlockBuilder.newCallouts();
+    }
+
+//    @Override
+//    public void exitCallouts() {
+//
+//    }
+
+    @Override
+    public void enterCallout() {
+        textBlockBuilders.addLast(listingBlockBuilder.addCallout());
+    }
+
+    @Override
+    public void exitCallout() {
+        textBlockBuilders.removeLast();
+    }
+
+    @Override
+    public void calloutNumber(String nb) {
+        listingBlockBuilder.setCalloutNumber(nb);
+    }
+
+//    @Override
+//    public void enterCalloutText() {
+//
+//    }
+//
+//    @Override
+//    public void exitCalloutText() {
+//
+//    }
+
 }

@@ -138,7 +138,9 @@ public interface AsciidocHandler2 {
 
     default void tableBlock(String text) {}
 
-    default void listingBlock(char[] chars) {}
+    // default void listingBlock(char[] chars) {}
+
+    default void enterListingBlock() {}
 
     default void exitListingBlock() {}
 
