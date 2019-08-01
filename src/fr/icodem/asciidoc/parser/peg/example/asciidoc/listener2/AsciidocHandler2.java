@@ -132,9 +132,9 @@ public interface AsciidocHandler2 {
 
     default void exitTable() {}
 
-    default void enterTableRow() {}
+    //default void enterTableRow() {}
 
-    default void exitTableRow() {}
+    //default void exitTableRow() {}
 
     default void enterTableCell(int lineNumber) {}
 

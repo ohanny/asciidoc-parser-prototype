@@ -22,7 +22,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private BlockRules2 rules;
 
     private AttributeEntries attributeEntries;
-    //protected List<Attribute> attList;
 
     // builders
     private AttributeEntryBuilder attributeEntryBuilder;
@@ -40,6 +39,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private ExampleBlockBuilder exampleBlockBuilder;
     private SidebarBuilder sidebarBuilder;
     private ListingBlockBuilder listingBlockBuilder;
+    private TableBuilder tableBuilder;
 
 
     //private TextBlockBuilder currentTextBlockBuilder;
@@ -698,5 +698,46 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void horizontalRule() {
         BlockContainer container = blockContainers.peekLast();
         container.addBlock(HorizontalRuleBuilder.newBuilder());
+    }
+
+    // table
+    @Override
+    public void enterTable(int lineNumber) {
+        System.out.println("enterTable.lineNumber = " + lineNumber);
+        tableBuilder = TableBuilder.newBuilder(attributeListBuilder.consume(), lineNumber);
+
+        BlockContainer container = blockContainers.peekLast();
+        container.addBlock(tableBuilder);
+    }
+
+    @Override
+    public void exitTable() {
+        tableBuilder = null;
+    }
+
+//    @Override
+//    public void enterTableRow() {
+//        tableBuilder.addRow();
+//        System.out.println("enterTableRow()");
+//    }
+//
+//    @Override
+//    public void exitTableRow() {
+//
+//    }
+
+    @Override
+    public void enterTableCell(int lineNumber) {
+        tableBuilder.addCell(lineNumber);
+    }
+
+    @Override
+    public void exitTableCell() {
+
+    }
+
+    @Override
+    public void tableBlock(String text) {
+        tableBuilder.setContent(text);
     }
 }

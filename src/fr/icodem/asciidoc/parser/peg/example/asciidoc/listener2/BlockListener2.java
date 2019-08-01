@@ -194,9 +194,9 @@ public class BlockListener2 implements ParseTreeListener {
             case "table" :
                 handler.enterTable(context.getIntAttribute("lineNumber", -1));
                 break;
-            case "tableRow" :
-                handler.enterTableRow();
-                break;
+//            case "tableRow" :
+//                handler.enterTableRow();
+//                break;
             case "tableCell" :
                 handler.enterTableCell(context.getIntAttribute("lineNumber", -1));
                 break;
@@ -291,9 +291,9 @@ public class BlockListener2 implements ParseTreeListener {
             case "table" :
                 handler.exitTable();
                 break;
-            case "tableRow" :
-                handler.exitTableRow();
-                break;
+//            case "tableRow" :
+//                handler.exitTableRow();
+//                break;
             case "tableCell" :
                 handler.exitTableCell();
                 break;

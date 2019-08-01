@@ -1,24 +1,22 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.TableCell;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Text;
 
 public class TableCellBuilder implements BlockBuilder {
-    private String text;
-    private TableCellBuilder next;
+    private String content;
 
-    public static TableCellBuilder empty() {
+    public static TableCellBuilder newBuilder() {
         TableCellBuilder cell = new TableCellBuilder();
-        return cell;
-    }
-
-    public static TableCellBuilder withParent(TableCellBuilder parent) {
-        TableCellBuilder cell = TableCellBuilder.empty();
-        parent.next = cell;
         return cell;
     }
 
     @Override
     public TableCell build() {
-        return null;
+        return TableCell.of(Text.of(content), 0, 0);
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
