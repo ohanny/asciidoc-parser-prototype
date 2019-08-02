@@ -82,6 +82,10 @@ public class AttributeList {
         return attributes.get(name);
     }
 
+    public String getStringValue(String name) {
+        return getStringValue(name, null);
+    }
+
     public String getStringValue(String name, String defaultValue) {
         Attribute att = getAttribute(name);
         if (att != null) {

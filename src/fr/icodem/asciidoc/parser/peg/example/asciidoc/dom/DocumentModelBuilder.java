@@ -703,7 +703,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // table
     @Override
     public void enterTable(int lineNumber) {
-        System.out.println("enterTable.lineNumber = " + lineNumber);
         tableBuilder = TableBuilder.newBuilder(attributeListBuilder.consume(), lineNumber);
 
         BlockContainer container = blockContainers.peekLast();
@@ -712,6 +711,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void exitTable() {
+        tableBuilder.tableEnd();
         tableBuilder = null;
     }
 

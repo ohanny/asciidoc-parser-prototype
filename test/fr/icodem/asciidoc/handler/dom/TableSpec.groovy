@@ -8,7 +8,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Table
 
 class TableSpec extends DomHandlerBaseSpec {
 
-    def "one row, cells on the same line"() {
+    def "one row"() {
         given:
         String input = '''\
 = Table
@@ -64,7 +64,7 @@ class TableSpec extends DomHandlerBaseSpec {
 
     }
 
-    def "one row, cells on two lines"() {
+    def "two rows on consecutive lines"() {
         given:
         String input = '''\
 = Table
@@ -94,34 +94,32 @@ class TableSpec extends DomHandlerBaseSpec {
         doc.sections[0].blocks[0] instanceof Table
 
         doc.sections[0].blocks[0].columns != null
-        doc.sections[0].blocks[0].columns.size() == 2
+        doc.sections[0].blocks[0].columns.size() == 1
         doc.sections[0].blocks[0].columns[0] != null
-        doc.sections[0].blocks[0].columns[0].width == 50
-        doc.sections[0].blocks[0].columns[1] != null
-        doc.sections[0].blocks[0].columns[1].width == 50
+        doc.sections[0].blocks[0].columns[0].width == 100
 
         doc.sections[0].blocks[0].header == null
         doc.sections[0].blocks[0].footer == null
 
         doc.sections[0].blocks[0].body != null
-        doc.sections[0].blocks[0].body.size() == 1
+        doc.sections[0].blocks[0].body.size() == 2
         doc.sections[0].blocks[0].body[0] != null
         doc.sections[0].blocks[0].body[0].cells != null
-        doc.sections[0].blocks[0].body[0].cells.size() == 2
+        doc.sections[0].blocks[0].body[0].cells.size() == 1
         doc.sections[0].blocks[0].body[0].cells[0] != null
         doc.sections[0].blocks[0].body[0].cells[0].rowspan == 0
         doc.sections[0].blocks[0].body[0].cells[0].colspan == 0
         doc.sections[0].blocks[0].body[0].cells[0].text != null
         doc.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
-        doc.sections[0].blocks[0].body[0].cells[1] != null
-        doc.sections[0].blocks[0].body[0].cells[1].rowspan == 0
-        doc.sections[0].blocks[0].body[0].cells[1].colspan == 0
-        doc.sections[0].blocks[0].body[0].cells[1].text != null
-        doc.sections[0].blocks[0].body[0].cells[1].text.content == 'Cell 2'
+        doc.sections[0].blocks[0].body[1].cells[0] != null
+        doc.sections[0].blocks[0].body[1].cells[0].rowspan == 0
+        doc.sections[0].blocks[0].body[1].cells[0].colspan == 0
+        doc.sections[0].blocks[0].body[1].cells[0].text != null
+        doc.sections[0].blocks[0].body[1].cells[0].text.content == 'Cell 2'
 
     }
 
-    def "two rows"() {
+    def "two rows separated by a blank line"() {
         given:
         String input = '''\
 = Table

@@ -14,28 +14,63 @@ public class TableBuilder implements BlockBuilder {
 
     private AttributeList attList;
 
+    private int tableLineNumber;
     private int firstLineNumber;
     private int currentLineNumber;
     private boolean firstRow;
 
+    private int cellCount;
+    private int columnsCount;
+    private boolean columnsCountInitialized;
     private Deque<TableColumnBuilder> columns;
     private Deque<TableRowBuilder> rows;
 
-    public static TableBuilder newBuilder(AttributeList attList, int firstLineNumber) {
+    public static TableBuilder newBuilder(AttributeList attList, int tableLineNumber) {
         TableBuilder builder = new TableBuilder();
-        builder.firstLineNumber = firstLineNumber;
-        builder.currentLineNumber = firstLineNumber;
+        builder.attList = attList;
+        builder.tableLineNumber = tableLineNumber;
+        builder.firstLineNumber = -1;
+        builder.currentLineNumber = -1;
         builder.firstRow = true;
         builder.columns = new LinkedList<>();
         builder.rows = new LinkedList<>();
 
+        builder.checkColsAttribute();
+
         return builder;
+    }
+
+    private String getAttributeValue(String name) {
+        return (attList == null)?null : attList.getStringValue("cols");
+    }
+
+    // columns are initialized if 'cols' attribute is present
+    private void checkColsAttribute() {
+        String cols = getAttributeValue("cols");
+        if (cols != null) {
+            columnsCount = Integer.parseInt(cols);
+            columnsCountInitialized = true;
+            initColumns();
+        }
+    }
+
+    private void initColumns() {
+        for (int i = 0; i < columnsCount; i++) {
+            columns.addLast(TableColumnBuilder.newBuilder());
+        }
+
+        computeColumnWidth();
+    }
+
+    private void computeColumnWidth() {
+        if (attList == null || !attList.hasOption("autowidth")) {
+            double width = 100.0 / columns.size();
+            columns.forEach(c -> c.setWidth(width));
+        }
     }
 
     @Override
     public Table build() {
-        computeColumnWidth();
-
         List<TableRow> rows = this.rows
                 .stream()
                 .map(TableRowBuilder::build)
@@ -50,23 +85,59 @@ public class TableBuilder implements BlockBuilder {
     }
 
     public void addCell(int lineNumber) {
-        if (isNewRow(lineNumber)) {
+        boolean newLine = updateLineNumber(lineNumber);
+
+        if (isNewRow()) {
             addRow();
+            checkColumnCount();
+            cellCount = 1;
+        } else {
+            cellCount++;
         }
 
-        TableRowBuilder row = getLastRow();
-        row.addCell();
+        getLastRow().addCell();
 
-        if (rows.size() == 1) {
-            addColumn();
+        if (isFirstLine() && !columnsCountInitialized) {
+            columnsCount++;
         }
 
         this.currentLineNumber = lineNumber;
 
     }
 
-    private boolean isNewRow(int lineNumber) {
-        return lineNumber > currentLineNumber + 1;
+    // return true if new line
+    private boolean updateLineNumber(int lineNumber) {
+        if (this.firstLineNumber == -1) {
+            this.firstLineNumber = lineNumber;
+        }
+
+        boolean newLine = false;
+        if (lineNumber > this.currentLineNumber) {
+            this.currentLineNumber = lineNumber;
+            newLine = true;
+        }
+
+        return newLine;
+    }
+
+    private boolean isFirstLine() {
+        return currentLineNumber == firstLineNumber;
+    }
+
+    private void checkColumnCount() {
+        if (columnsCountInitialized) return;
+
+        if (!isFirstLine()) {
+            columnsCountInitialized = true;
+        }
+    }
+
+    private boolean isNewRow() {
+        if (columnsCountInitialized) {
+            return cellCount == columnsCount;
+        }
+
+        return rows.isEmpty() || !isFirstLine();
     }
 
     private void addRow() {
@@ -77,19 +148,12 @@ public class TableBuilder implements BlockBuilder {
         return rows.peekLast();
     }
 
-    private void addColumn() {
-        columns.addLast(TableColumnBuilder.newBuilder());
-    }
-
-    private void computeColumnWidth() {
-        if (attList == null || !attList.hasOption("autowidth")) {
-            double width = 100.0 / columns.size();
-            columns.forEach(c -> c.setWidth(width));
-        }
-    }
-
     public void setContent(String content) {
         getLastRow().setContent(content);
+    }
+
+    public void tableEnd() {
+        initColumns();
     }
 
 }
