@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 public class TableRowBuilder implements BlockBuilder {
 
+    private boolean header;
+    private boolean footer;
     private Deque<TableCellBuilder> cells;
 
     public static TableRowBuilder newBuilder() {
@@ -39,6 +41,26 @@ public class TableRowBuilder implements BlockBuilder {
 
     public void setContent(String content) {
         getLastCell().setContent(content);
+    }
+
+    public boolean isHeader() {
+        return header;
+    }
+
+    public void setHeader(boolean header) {
+        this.header = header;
+    }
+
+    public boolean isFooter() {
+        return footer;
+    }
+
+    public void setFooter(boolean footer) {
+        this.footer = footer;
+    }
+
+    public boolean isBody() {
+        return !header && !footer;
     }
 
 }

@@ -43,8 +43,8 @@ class TableSpec extends DomHandlerBaseSpec {
         doc.sections[0].blocks[0].columns[1] != null
         doc.sections[0].blocks[0].columns[1].width == 50
 
-        doc.sections[0].blocks[0].header == null
-        doc.sections[0].blocks[0].footer == null
+        doc.sections[0].blocks[0].header.empty
+        doc.sections[0].blocks[0].footer.empty
 
         doc.sections[0].blocks[0].body != null
         doc.sections[0].blocks[0].body.size() == 1
@@ -98,8 +98,8 @@ class TableSpec extends DomHandlerBaseSpec {
         doc.sections[0].blocks[0].columns[0] != null
         doc.sections[0].blocks[0].columns[0].width == 100
 
-        doc.sections[0].blocks[0].header == null
-        doc.sections[0].blocks[0].footer == null
+        doc.sections[0].blocks[0].header.empty
+        doc.sections[0].blocks[0].footer.empty
 
         doc.sections[0].blocks[0].body != null
         doc.sections[0].blocks[0].body.size() == 2
@@ -156,8 +156,8 @@ class TableSpec extends DomHandlerBaseSpec {
         doc.sections[0].blocks[0].columns[1] != null
         doc.sections[0].blocks[0].columns[1].width == 50
 
-        doc.sections[0].blocks[0].header == null
-        doc.sections[0].blocks[0].footer == null
+        doc.sections[0].blocks[0].header.empty
+        doc.sections[0].blocks[0].footer.empty
 
         doc.sections[0].blocks[0].body != null
         doc.sections[0].blocks[0].body.size() == 2
@@ -189,6 +189,71 @@ class TableSpec extends DomHandlerBaseSpec {
         doc.sections[0].blocks[0].body[1].cells[1].colspan == 0
         doc.sections[0].blocks[0].body[1].cells[1].text != null
         doc.sections[0].blocks[0].body[1].cells[1].text.content == 'Cell 4'
+
+    }
+
+    def "implicit header row"() {
+        given:
+        String input = '''\
+= Table
+
+== Section 1
+|===
+|Title 1|Title 2
+
+|Cell 1|Cell 2
+
+|===
+====
+'''
+
+        when:
+        Document doc = getBuilder().build(input)
+
+        then:
+        doc != null
+        doc.header != null
+        doc.sections != null
+        doc.sections.size() == 1
+
+        doc.sections[0].blocks != null
+        doc.sections[0].blocks.size() == 1
+        doc.sections[0].blocks[0] != null
+        doc.sections[0].blocks[0] instanceof Table
+
+        doc.sections[0].blocks[0].header.size() == 1
+
+        doc.sections[0].blocks[0].header[0] != null
+        doc.sections[0].blocks[0].header[0].cells != null
+        doc.sections[0].blocks[0].header[0].cells.size() == 2
+        doc.sections[0].blocks[0].header[0].cells[0] != null
+        doc.sections[0].blocks[0].header[0].cells[0].rowspan == 0
+        doc.sections[0].blocks[0].header[0].cells[0].colspan == 0
+        doc.sections[0].blocks[0].header[0].cells[0].text != null
+        doc.sections[0].blocks[0].header[0].cells[0].text.content == 'Title 1'
+        doc.sections[0].blocks[0].header[0].cells[1] != null
+        doc.sections[0].blocks[0].header[0].cells[1].rowspan == 0
+        doc.sections[0].blocks[0].header[0].cells[1].colspan == 0
+        doc.sections[0].blocks[0].header[0].cells[1].text != null
+        doc.sections[0].blocks[0].header[0].cells[1].text.content == 'Title 2'
+
+        doc.sections[0].blocks[0].footer.empty
+
+        doc.sections[0].blocks[0].body.size() == 1
+
+        doc.sections[0].blocks[0].body[0] != null
+        doc.sections[0].blocks[0].body[0].cells != null
+        doc.sections[0].blocks[0].body[0].cells.size() == 2
+        doc.sections[0].blocks[0].body[0].cells[0] != null
+        doc.sections[0].blocks[0].body[0].cells[0].rowspan == 0
+        doc.sections[0].blocks[0].body[0].cells[0].colspan == 0
+        doc.sections[0].blocks[0].body[0].cells[0].text != null
+        doc.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
+        doc.sections[0].blocks[0].body[0].cells[1] != null
+        doc.sections[0].blocks[0].body[0].cells[1].rowspan == 0
+        doc.sections[0].blocks[0].body[0].cells[1].colspan == 0
+        doc.sections[0].blocks[0].body[0].cells[1].text != null
+        doc.sections[0].blocks[0].body[0].cells[1].text.content == 'Cell 2'
 
     }
 

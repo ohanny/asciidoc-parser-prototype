@@ -17,7 +17,9 @@ public class TableBuilder implements BlockBuilder {
     private int tableLineNumber;
     private int firstLineNumber;
     private int currentLineNumber;
-    private boolean firstRow;
+    private int previousLineNumber;
+    private boolean firstRowOnFirstLine;
+    private boolean headerChecked;
 
     private int cellCount;
     private int columnsCount;
@@ -31,13 +33,40 @@ public class TableBuilder implements BlockBuilder {
         builder.tableLineNumber = tableLineNumber;
         builder.firstLineNumber = -1;
         builder.currentLineNumber = -1;
-        builder.firstRow = true;
         builder.columns = new LinkedList<>();
         builder.rows = new LinkedList<>();
 
         builder.checkColsAttribute();
 
         return builder;
+    }
+
+    @Override
+    public Table build() {
+        List<TableRow> header = this.rows
+                .stream()
+                .filter(TableRowBuilder::isHeader)
+                .map(TableRowBuilder::build)
+                .collect(Collectors.toList());
+
+        List<TableRow> footer = this.rows
+                .stream()
+                .filter(TableRowBuilder::isFooter)
+                .map(TableRowBuilder::build)
+                .collect(Collectors.toList());
+
+        List<TableRow> body = this.rows
+                .stream()
+                .filter(TableRowBuilder::isBody)
+                .map(TableRowBuilder::build)
+                .collect(Collectors.toList());
+
+        List<TableColumn> columns = this.columns
+                .stream()
+                .map(TableColumnBuilder::build)
+                .collect(Collectors.toList());
+
+        return Table.of(columns, header, footer, body);
     }
 
     private String getAttributeValue(String name) {
@@ -69,21 +98,6 @@ public class TableBuilder implements BlockBuilder {
         }
     }
 
-    @Override
-    public Table build() {
-        List<TableRow> rows = this.rows
-                .stream()
-                .map(TableRowBuilder::build)
-                .collect(Collectors.toList());
-
-        List<TableColumn> columns = this.columns
-                .stream()
-                .map(TableColumnBuilder::build)
-                .collect(Collectors.toList());
-
-        return Table.of(columns, null, null, rows);
-    }
-
     public void addCell(int lineNumber) {
         boolean newLine = updateLineNumber(lineNumber);
 
@@ -97,11 +111,11 @@ public class TableBuilder implements BlockBuilder {
 
         getLastRow().addCell();
 
-        if (isFirstLine() && !columnsCountInitialized) {
+        if (isFirstNonBlankLine() && !columnsCountInitialized) {
             columnsCount++;
         }
 
-        this.currentLineNumber = lineNumber;
+        //this.currentLineNumber = lineNumber;
 
     }
 
@@ -113,6 +127,7 @@ public class TableBuilder implements BlockBuilder {
 
         boolean newLine = false;
         if (lineNumber > this.currentLineNumber) {
+            this.previousLineNumber = this.currentLineNumber;
             this.currentLineNumber = lineNumber;
             newLine = true;
         }
@@ -121,13 +136,17 @@ public class TableBuilder implements BlockBuilder {
     }
 
     private boolean isFirstLine() {
+        return currentLineNumber == tableLineNumber + 1;
+    }
+
+    private boolean isFirstNonBlankLine() {
         return currentLineNumber == firstLineNumber;
     }
 
     private void checkColumnCount() {
         if (columnsCountInitialized) return;
 
-        if (!isFirstLine()) {
+        if (!isFirstNonBlankLine()) {
             columnsCountInitialized = true;
         }
     }
@@ -137,11 +156,29 @@ public class TableBuilder implements BlockBuilder {
             return cellCount == columnsCount;
         }
 
-        return rows.isEmpty() || !isFirstLine();
+        return rows.isEmpty() || !isFirstNonBlankLine();
     }
 
     private void addRow() {
+        checkHeader();
+
         rows.addLast(TableRowBuilder.newBuilder());
+
+        if (rows.size() == 1 && isFirstLine()) {
+            firstRowOnFirstLine = true;
+        }
+    }
+
+    private void checkHeader() {
+        if (headerChecked || previousLineNumber == -1) return;
+
+        if (currentLineNumber > previousLineNumber + 1) {
+            headerChecked = true;
+            if (firstRowOnFirstLine) {
+                rows.forEach(row -> row.setHeader(true));
+            }
+        }
+
     }
 
     private TableRowBuilder getLastRow() {
