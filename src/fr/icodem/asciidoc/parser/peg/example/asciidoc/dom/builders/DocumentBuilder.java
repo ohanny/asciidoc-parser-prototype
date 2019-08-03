@@ -9,6 +9,7 @@ public class DocumentBuilder {
     private String title;
     private List<Author> authors;
     private RevisionInfo revisionInfo;
+    private Preamble preamble;
 
     private List<Section> sections;
 
@@ -16,7 +17,7 @@ public class DocumentBuilder {
 
         DocumentHeader header = DocumentHeader.of(attributes, Title.of(title), authors, revisionInfo);
 
-        Document doc = Document.of(header, sections);
+        Document doc = Document.of(header, preamble, sections);
 
         return doc;
     }
@@ -35,6 +36,10 @@ public class DocumentBuilder {
 
     public void setRevisionInfo(RevisionInfo revisionInfo) {
         this.revisionInfo = revisionInfo;
+    }
+
+    public void setPreamble(Preamble preamble) {
+        this.preamble = preamble;
     }
 
     public void setSections(List<Section> sections) {

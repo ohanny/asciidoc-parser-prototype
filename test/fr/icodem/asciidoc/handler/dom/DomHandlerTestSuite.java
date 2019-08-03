@@ -20,7 +20,8 @@ import org.junit.runners.Suite;
   ListingBlockSpec.class,
   HorizontalRuleSpec.class,
   SidebarSpec.class,
-  TableSpec.class
+  TableSpec.class,
+  PreambleSpec.class
 })
 
 public class DomHandlerTestSuite { }

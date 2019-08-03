@@ -29,6 +29,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private DocumentBuilder documentBuilder;
     private AuthorsBuilder authorsBuilder;
     private RevisionInfoBuilder revisionInfoBuilder;
+    private PreambleBuilder preambleBuilder;
     private SectionBuilder firstSection;
     private SectionBuilder currentSection;
     private ParagraphBuilder paragraphBuilder;
@@ -280,6 +281,21 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         documentBuilder.setRevisionInfo(revisionInfoBuilder.build());
     }
 
+
+    @Override
+    public void enterPreamble() {
+        preambleBuilder = PreambleBuilder.newBuilder();
+        blockContainers.addLast(preambleBuilder);
+    }
+
+    @Override
+    public void exitPreamble() {
+        documentBuilder.setPreamble(preambleBuilder.build());
+
+        blockContainers.removeLast();
+        preambleBuilder = null;
+
+    }
 
     // content callback
     @Override
