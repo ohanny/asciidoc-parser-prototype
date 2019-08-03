@@ -115,8 +115,6 @@ public class TableBuilder implements BlockBuilder {
             columnsCount++;
         }
 
-        //this.currentLineNumber = lineNumber;
-
     }
 
     // return true if new line
