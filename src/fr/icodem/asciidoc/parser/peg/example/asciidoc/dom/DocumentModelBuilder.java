@@ -134,77 +134,39 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         attributeEntryBuilder.setValue(value);
     }
 
-    private AttributeEntry getAttributeEntry(String name) {
-        return attributeEntries.getAttribute(name);
-    }
-
-    // attribute list
-//    private AttributeList consumeAttList() {
-//        if (this.attList.isEmpty()) return null;
-//        AttributeList attList = AttributeList.of(Collections.unmodifiableList(this.attList));
-//        clearAttList();
-//        return attList;
-//    }
-
-//    private void clearAttList() {
-//        attList.clear();
-//    }
-
     @Override
     public void attributeName(String name) {
         attributeListBuilder.setAttributeName(name);
-//        textObjects.pop()
-//                .setValue(value);
     }
 
     @Override
     public void attributeValue(String value) {
         attributeListBuilder.setAttributeValue(value);
-//        textObjects.pop()
-//                .setValue(value);
     }
 
     @Override
     public void enterIdAttribute() {
-//        Text text = Text.empty();
-//        attList.add(Attribute.of("id", text));
-//        textObjects.push(text);
         attributeListBuilder.addIdAttribute();
     }
 
     @Override
     public void enterRoleAttribute() {
-        //Text text = Text.empty();
-        //attList.add(Attribute.of("role", text));
-        //textObjects.push(text);
         attributeListBuilder.addRoleAttribute();
     }
 
     @Override
     public void enterOptionAttribute() {
-        //Text text = Text.empty();
-        //attList.add(Attribute.of("options", text));
-        //textObjects.push(text);
         attributeListBuilder.addOptionAttribute();
     }
 
     @Override
     public void enterPositionalAttribute() {
-        //Text value = Text.empty();
-        //attList.add(Attribute.of((String)null, value));
-        //textObjects.push(value);
         attributeListBuilder.addPositionalAttribute();
     }
 
     @Override
     public void enterNamedAttribute() {
         attributeListBuilder.addNamedAttribute();
-//        Text name = Text.empty();
-//        Text value = Text.empty();
-//        attList.add(Attribute.of(name, value));
-//
-//        textObjects.push(value);
-//        textObjects.push(name);
     }
 
 
@@ -332,10 +294,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void sectionTitle(String title) {
         currentSection.setTitle(title);
         currentSection.setRef(textToRef(title));
-        //int level = currentSection.getLevel();
-        //String ref = currentSection.ref;
-        //AttributeList attList = currentSection.attList;
-        //handler.writeSectionTitle(level, title, ref, attList);
     }
 
     /**
@@ -414,27 +372,12 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterList() {
         listBlockBuilder = ListBlockBuilder.root(consumeBlockTitle());
-//        listBlockBuilder = ListBlockBuilder.newBuilder();
-//        listBlockBuilder.setTitle(consumeBlockTitle());
-
-//        currentList = ListContext.empty();
-//        currentList.title = consumeBlockTitle();
-//        handler.startList();
     }
 
     @Override
     public void exitList() {
         currentSection.addBlock(listBlockBuilder);
         listBlockBuilder = null;
-//        while (currentList != null) {
-//            if (currentList.type == ListType.Unordered) {
-//                handler.endUnorderedList(currentList.level);
-//            } else if (currentList.type == ListType.Ordered) {
-//                handler.endOrderedList(currentList.level);
-//            }
-//            currentList = currentList.parent;
-//        }
-//        handler.endList();
     }
 
     @Override
@@ -445,88 +388,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         ListItemBuilder builder = listBlockBuilder.newListItem(times, dots, attributeListBuilder.consume());
         textBlockBuilders.addLast(builder);
         blockContainers.addLast(builder);
-
-        /*
-        int times, dots = 0;
-        if ((times = context.getIntAttribute("times.count", -1)) > 0) {
-            if (listBlockBuilder.isUnordered()) {
-                if (times == listBlockBuilder.getBullets()) {
-
-                } else if (times > listBlockBuilder.getBullets()) {
-                    listBlockBuilder = ListBlockBuilder.withParent(listBlockBuilder);
-                    listBlockBuilder.setBullets(times);
-                } else if (times < listBlockBuilder.getBullets()) {
-                    while (times < listBlockBuilder.getBullets() && listBlockBuilder.getLevel() > 1) {
-                        //handler.endUnorderedList(currentList.level);
-                        listBlockBuilder = listBlockBuilder.getParent();
-                    }
-                }
-            } else if (listBlockBuilder.isOrdered()) {
-                if (times > listBlockBuilder.getBullets()) {
-                    listBlockBuilder = ListBlockBuilder.withParent(listBlockBuilder);
-                    listBlockBuilder.setBullets(times);
-                } else {
-                    // find parent with same type and level
-                    ListBlockBuilder ancestorWithSameLevel = listBlockBuilder.findParentListWithTypeAndLevel(ListBlockBuilder.Type.Unordered, times);
-                    if (ancestorWithSameLevel == null) {
-                        listBlockBuilder = ListBlockBuilder.withParent(listBlockBuilder);
-                        listBlockBuilder.setBullets(times);
-                    } else {
-                        ListBlockBuilder parent = listBlockBuilder.getParent();
-                        while (listBlockBuilder != parent) {
-                            //handler.endUnorderedList(currentList.level);
-                            listBlockBuilder = listBlockBuilder.getParent();
-                        }
-                    }
-                }
-            }
-        } else if ((dots = context.getIntAttribute("dots.count", -1)) > 0) {
-            if (listBlockBuilder.isOrdered()) {
-                if (dots == currentList.bullets) {
-
-                } else if (dots > currentList.bullets) {
-                    currentList = ListContext.withParent(currentList);
-                    currentList.bullets = dots;
-                } else if (dots < currentList.bullets) {
-                    while (dots < currentList.bullets && currentList.level > 1) {
-                        handler.endOrderedList(currentList.level);
-                        currentList = currentList.parent;
-                    }
-                }
-            } else if (listBlockBuilder.isUnordered()) {
-                // find parent with same type and level
-                ListContext ancestorWithSameLevel = findParentListWithTypeAndLevel(currentList, ListType.Ordered, dots);
-                if (ancestorWithSameLevel == null) {
-                    currentList = ListContext.withParent(currentList);
-                    currentList.bullets = dots;
-                } else {
-                    ListContext parent = currentList.parent;
-                    while (currentList != parent) {
-                        handler.endUnorderedList(currentList.level);
-                        currentList = currentList.parent;
-                    }
-                }
-            }
-        }
-
-
-        if (currentList.type == null) {
-            if (times > 0) {
-                currentList.type = ListType.Unordered;
-                currentList.bullets = times;
-                currentList.attList = consumeAttList();
-                handler.startUnorderedList(currentList.level, currentList.attList, currentList.title);
-            } else if (dots > 0) {
-                currentList.type = ListType.Ordered;
-                currentList.bullets = dots;
-                currentList.attList = consumeAttList();
-                handler.startOrderedList(currentList.level, currentList.attList);
-            }
-        }
-        handler.startListItem(currentList.level, ++currentList.itemCount, currentList.attList);
-        clearAttList();
-
-         */
     }
 
 
@@ -730,17 +591,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         tableBuilder.tableEnd();
         tableBuilder = null;
     }
-
-//    @Override
-//    public void enterTableRow() {
-//        tableBuilder.addRow();
-//        System.out.println("enterTableRow()");
-//    }
-//
-//    @Override
-//    public void exitTableRow() {
-//
-//    }
 
     @Override
     public void enterTableCell(int lineNumber) {
