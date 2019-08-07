@@ -30,7 +30,7 @@ This is some content
         doc.preamble.blocks[0].text != null
         doc.preamble.blocks[0].text.content == 'This is some content'
 
-        doc.sections == null
+        doc.content == null
 
 
     }

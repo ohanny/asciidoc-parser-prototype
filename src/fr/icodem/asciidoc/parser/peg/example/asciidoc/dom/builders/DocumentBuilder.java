@@ -14,13 +14,16 @@ public class DocumentBuilder {
 
     private ContentBuilder contentBuilder;
 
-    private List<Section> sections;
-
     public Document build() {
 
         DocumentHeader header = DocumentHeader.of(attributes, Title.of(title), authors, revisionInfo);
 
-        Document doc = Document.of(header, preamble, sections);
+        Content content = null;
+        if (contentBuilder != null) {
+            content = contentBuilder.build();
+        }
+
+        Document doc = Document.of(header, content, preamble);
 
         return doc;
     }
@@ -49,7 +52,4 @@ public class DocumentBuilder {
         this.contentBuilder = contentBuilder;
     }
 
-    public void setSections(List<Section> sections) {
-        this.sections = sections;
-    }
 }

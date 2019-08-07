@@ -24,15 +24,16 @@ title:: content
         then:
         doc != null
         doc.header != null
-        doc.sections != null
-        doc.sections.size() == 1
+        doc.content != null
+        doc.content.sections != null
+        doc.content.sections.size() == 1
 
-        doc.sections[0].blocks != null
-        doc.sections[0].blocks.size() == 1
-        doc.sections[0].blocks[0] != null
+        doc.content.sections[0].blocks != null
+        doc.content.sections[0].blocks.size() == 1
+        doc.content.sections[0].blocks[0] != null
 
-        doc.sections[0].blocks[0] instanceof LabeledList
-        LabeledList block = doc.sections[0].blocks[0]
+        doc.content.sections[0].blocks[0] instanceof LabeledList
+        LabeledList block = doc.content.sections[0].blocks[0]
         block.title == null
         block.type == ElementType.LabeledList
         block.items != null

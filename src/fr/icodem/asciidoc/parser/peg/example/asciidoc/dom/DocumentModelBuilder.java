@@ -248,8 +248,9 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void exitContent() {
-        documentBuilder.setSections(contentBuilder.build().getSections());
-        contentBuilder.exitDocument();
+        //documentBuilder.setSections(contentBuilder.build().getSections());
+        documentBuilder.setContentBuilder(contentBuilder);
+        contentBuilder.closeContent();
     }
 
     // section callbacks

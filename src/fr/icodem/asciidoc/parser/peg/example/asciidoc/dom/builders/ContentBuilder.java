@@ -93,7 +93,7 @@ public class ContentBuilder implements BlockBuilder {
     }
 
     // TODO rename ?
-    public void exitDocument() {
+    public void closeContent() {
         checkExitSection(-1);
     }
 

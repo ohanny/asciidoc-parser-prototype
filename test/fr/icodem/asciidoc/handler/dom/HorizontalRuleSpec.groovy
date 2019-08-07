@@ -26,14 +26,15 @@ Paragraph 2
         then:
         doc != null
         doc.header != null
-        doc.sections != null
-        doc.sections.size() == 1
+        doc.content != null
+        doc.content.sections != null
+        doc.content.sections.size() == 1
 
-        doc.sections[0].blocks != null
-        doc.sections[0].blocks.size() == 3
-        doc.sections[0].blocks[1] != null
-        doc.sections[0].blocks[1] instanceof HorizontalRule
-        doc.sections[0].blocks[1].type == ElementType.HorizontalRule
+        doc.content.sections[0].blocks != null
+        doc.content.sections[0].blocks.size() == 3
+        doc.content.sections[0].blocks[1] != null
+        doc.content.sections[0].blocks[1] instanceof HorizontalRule
+        doc.content.sections[0].blocks[1].type == ElementType.HorizontalRule
     }
 
 

@@ -28,39 +28,40 @@ class TableSpec extends DomHandlerBaseSpec {
         then:
         doc != null
         doc.header != null
-        doc.sections != null
-        doc.sections.size() == 1
+        doc.content != null
+        doc.content.sections != null
+        doc.content.sections.size() == 1
 
-        doc.sections[0].blocks != null
-        doc.sections[0].blocks.size() == 1
-        doc.sections[0].blocks[0] != null
-        doc.sections[0].blocks[0] instanceof Table
+        doc.content.sections[0].blocks != null
+        doc.content.sections[0].blocks.size() == 1
+        doc.content.sections[0].blocks[0] != null
+        doc.content.sections[0].blocks[0] instanceof Table
 
-        doc.sections[0].blocks[0].columns != null
-        doc.sections[0].blocks[0].columns.size() == 2
-        doc.sections[0].blocks[0].columns[0] != null
-        doc.sections[0].blocks[0].columns[0].width == 50
-        doc.sections[0].blocks[0].columns[1] != null
-        doc.sections[0].blocks[0].columns[1].width == 50
+        doc.content.sections[0].blocks[0].columns != null
+        doc.content.sections[0].blocks[0].columns.size() == 2
+        doc.content.sections[0].blocks[0].columns[0] != null
+        doc.content.sections[0].blocks[0].columns[0].width == 50
+        doc.content.sections[0].blocks[0].columns[1] != null
+        doc.content.sections[0].blocks[0].columns[1].width == 50
 
-        doc.sections[0].blocks[0].header.empty
-        doc.sections[0].blocks[0].footer.empty
+        doc.content.sections[0].blocks[0].header.empty
+        doc.content.sections[0].blocks[0].footer.empty
 
-        doc.sections[0].blocks[0].body != null
-        doc.sections[0].blocks[0].body.size() == 1
-        doc.sections[0].blocks[0].body[0] != null
-        doc.sections[0].blocks[0].body[0].cells != null
-        doc.sections[0].blocks[0].body[0].cells.size() == 2
-        doc.sections[0].blocks[0].body[0].cells[0] != null
-        doc.sections[0].blocks[0].body[0].cells[0].rowspan == 0
-        doc.sections[0].blocks[0].body[0].cells[0].colspan == 0
-        doc.sections[0].blocks[0].body[0].cells[0].text != null
-        doc.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
-        doc.sections[0].blocks[0].body[0].cells[1] != null
-        doc.sections[0].blocks[0].body[0].cells[1].rowspan == 0
-        doc.sections[0].blocks[0].body[0].cells[1].colspan == 0
-        doc.sections[0].blocks[0].body[0].cells[1].text != null
-        doc.sections[0].blocks[0].body[0].cells[1].text.content == 'Cell 2'
+        doc.content.sections[0].blocks[0].body != null
+        doc.content.sections[0].blocks[0].body.size() == 1
+        doc.content.sections[0].blocks[0].body[0] != null
+        doc.content.sections[0].blocks[0].body[0].cells != null
+        doc.content.sections[0].blocks[0].body[0].cells.size() == 2
+        doc.content.sections[0].blocks[0].body[0].cells[0] != null
+        doc.content.sections[0].blocks[0].body[0].cells[0].rowspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[0].colspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[0].text != null
+        doc.content.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
+        doc.content.sections[0].blocks[0].body[0].cells[1] != null
+        doc.content.sections[0].blocks[0].body[0].cells[1].rowspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[1].colspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[1].text != null
+        doc.content.sections[0].blocks[0].body[0].cells[1].text.content == 'Cell 2'
 
     }
 
@@ -85,37 +86,38 @@ class TableSpec extends DomHandlerBaseSpec {
         then:
         doc != null
         doc.header != null
-        doc.sections != null
-        doc.sections.size() == 1
+        doc.content != null
+        doc.content.sections != null
+        doc.content.sections.size() == 1
 
-        doc.sections[0].blocks != null
-        doc.sections[0].blocks.size() == 1
-        doc.sections[0].blocks[0] != null
-        doc.sections[0].blocks[0] instanceof Table
+        doc.content.sections[0].blocks != null
+        doc.content.sections[0].blocks.size() == 1
+        doc.content.sections[0].blocks[0] != null
+        doc.content.sections[0].blocks[0] instanceof Table
 
-        doc.sections[0].blocks[0].columns != null
-        doc.sections[0].blocks[0].columns.size() == 1
-        doc.sections[0].blocks[0].columns[0] != null
-        doc.sections[0].blocks[0].columns[0].width == 100
+        doc.content.sections[0].blocks[0].columns != null
+        doc.content.sections[0].blocks[0].columns.size() == 1
+        doc.content.sections[0].blocks[0].columns[0] != null
+        doc.content.sections[0].blocks[0].columns[0].width == 100
 
-        doc.sections[0].blocks[0].header.empty
-        doc.sections[0].blocks[0].footer.empty
+        doc.content.sections[0].blocks[0].header.empty
+        doc.content.sections[0].blocks[0].footer.empty
 
-        doc.sections[0].blocks[0].body != null
-        doc.sections[0].blocks[0].body.size() == 2
-        doc.sections[0].blocks[0].body[0] != null
-        doc.sections[0].blocks[0].body[0].cells != null
-        doc.sections[0].blocks[0].body[0].cells.size() == 1
-        doc.sections[0].blocks[0].body[0].cells[0] != null
-        doc.sections[0].blocks[0].body[0].cells[0].rowspan == 0
-        doc.sections[0].blocks[0].body[0].cells[0].colspan == 0
-        doc.sections[0].blocks[0].body[0].cells[0].text != null
-        doc.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
-        doc.sections[0].blocks[0].body[1].cells[0] != null
-        doc.sections[0].blocks[0].body[1].cells[0].rowspan == 0
-        doc.sections[0].blocks[0].body[1].cells[0].colspan == 0
-        doc.sections[0].blocks[0].body[1].cells[0].text != null
-        doc.sections[0].blocks[0].body[1].cells[0].text.content == 'Cell 2'
+        doc.content.sections[0].blocks[0].body != null
+        doc.content.sections[0].blocks[0].body.size() == 2
+        doc.content.sections[0].blocks[0].body[0] != null
+        doc.content.sections[0].blocks[0].body[0].cells != null
+        doc.content.sections[0].blocks[0].body[0].cells.size() == 1
+        doc.content.sections[0].blocks[0].body[0].cells[0] != null
+        doc.content.sections[0].blocks[0].body[0].cells[0].rowspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[0].colspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[0].text != null
+        doc.content.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
+        doc.content.sections[0].blocks[0].body[1].cells[0] != null
+        doc.content.sections[0].blocks[0].body[1].cells[0].rowspan == 0
+        doc.content.sections[0].blocks[0].body[1].cells[0].colspan == 0
+        doc.content.sections[0].blocks[0].body[1].cells[0].text != null
+        doc.content.sections[0].blocks[0].body[1].cells[0].text.content == 'Cell 2'
 
     }
 
@@ -141,54 +143,55 @@ class TableSpec extends DomHandlerBaseSpec {
         then:
         doc != null
         doc.header != null
-        doc.sections != null
-        doc.sections.size() == 1
+        doc.content != null
+        doc.content.sections != null
+        doc.content.sections.size() == 1
 
-        doc.sections[0].blocks != null
-        doc.sections[0].blocks.size() == 1
-        doc.sections[0].blocks[0] != null
-        doc.sections[0].blocks[0] instanceof Table
+        doc.content.sections[0].blocks != null
+        doc.content.sections[0].blocks.size() == 1
+        doc.content.sections[0].blocks[0] != null
+        doc.content.sections[0].blocks[0] instanceof Table
 
-        doc.sections[0].blocks[0].columns != null
-        doc.sections[0].blocks[0].columns.size() == 2
-        doc.sections[0].blocks[0].columns[0] != null
-        doc.sections[0].blocks[0].columns[0].width == 50
-        doc.sections[0].blocks[0].columns[1] != null
-        doc.sections[0].blocks[0].columns[1].width == 50
+        doc.content.sections[0].blocks[0].columns != null
+        doc.content.sections[0].blocks[0].columns.size() == 2
+        doc.content.sections[0].blocks[0].columns[0] != null
+        doc.content.sections[0].blocks[0].columns[0].width == 50
+        doc.content.sections[0].blocks[0].columns[1] != null
+        doc.content.sections[0].blocks[0].columns[1].width == 50
 
-        doc.sections[0].blocks[0].header.empty
-        doc.sections[0].blocks[0].footer.empty
+        doc.content.sections[0].blocks[0].header.empty
+        doc.content.sections[0].blocks[0].footer.empty
 
-        doc.sections[0].blocks[0].body != null
-        doc.sections[0].blocks[0].body.size() == 2
+        doc.content.sections[0].blocks[0].body != null
+        doc.content.sections[0].blocks[0].body.size() == 2
 
-        doc.sections[0].blocks[0].body[0] != null
-        doc.sections[0].blocks[0].body[0].cells != null
-        doc.sections[0].blocks[0].body[0].cells.size() == 2
-        doc.sections[0].blocks[0].body[0].cells[0] != null
-        doc.sections[0].blocks[0].body[0].cells[0].rowspan == 0
-        doc.sections[0].blocks[0].body[0].cells[0].colspan == 0
-        doc.sections[0].blocks[0].body[0].cells[0].text != null
-        doc.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
-        doc.sections[0].blocks[0].body[0].cells[1] != null
-        doc.sections[0].blocks[0].body[0].cells[1].rowspan == 0
-        doc.sections[0].blocks[0].body[0].cells[1].colspan == 0
-        doc.sections[0].blocks[0].body[0].cells[1].text != null
-        doc.sections[0].blocks[0].body[0].cells[1].text.content == 'Cell 2'
+        doc.content.sections[0].blocks[0].body[0] != null
+        doc.content.sections[0].blocks[0].body[0].cells != null
+        doc.content.sections[0].blocks[0].body[0].cells.size() == 2
+        doc.content.sections[0].blocks[0].body[0].cells[0] != null
+        doc.content.sections[0].blocks[0].body[0].cells[0].rowspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[0].colspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[0].text != null
+        doc.content.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
+        doc.content.sections[0].blocks[0].body[0].cells[1] != null
+        doc.content.sections[0].blocks[0].body[0].cells[1].rowspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[1].colspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[1].text != null
+        doc.content.sections[0].blocks[0].body[0].cells[1].text.content == 'Cell 2'
 
-        doc.sections[0].blocks[0].body[1] != null
-        doc.sections[0].blocks[0].body[1].cells != null
-        doc.sections[0].blocks[0].body[1].cells.size() == 2
-        doc.sections[0].blocks[0].body[1].cells[0] != null
-        doc.sections[0].blocks[0].body[1].cells[0].rowspan == 0
-        doc.sections[0].blocks[0].body[1].cells[0].colspan == 0
-        doc.sections[0].blocks[0].body[1].cells[0].text != null
-        doc.sections[0].blocks[0].body[1].cells[0].text.content == 'Cell 3'
-        doc.sections[0].blocks[0].body[1].cells[1] != null
-        doc.sections[0].blocks[0].body[1].cells[1].rowspan == 0
-        doc.sections[0].blocks[0].body[1].cells[1].colspan == 0
-        doc.sections[0].blocks[0].body[1].cells[1].text != null
-        doc.sections[0].blocks[0].body[1].cells[1].text.content == 'Cell 4'
+        doc.content.sections[0].blocks[0].body[1] != null
+        doc.content.sections[0].blocks[0].body[1].cells != null
+        doc.content.sections[0].blocks[0].body[1].cells.size() == 2
+        doc.content.sections[0].blocks[0].body[1].cells[0] != null
+        doc.content.sections[0].blocks[0].body[1].cells[0].rowspan == 0
+        doc.content.sections[0].blocks[0].body[1].cells[0].colspan == 0
+        doc.content.sections[0].blocks[0].body[1].cells[0].text != null
+        doc.content.sections[0].blocks[0].body[1].cells[0].text.content == 'Cell 3'
+        doc.content.sections[0].blocks[0].body[1].cells[1] != null
+        doc.content.sections[0].blocks[0].body[1].cells[1].rowspan == 0
+        doc.content.sections[0].blocks[0].body[1].cells[1].colspan == 0
+        doc.content.sections[0].blocks[0].body[1].cells[1].text != null
+        doc.content.sections[0].blocks[0].body[1].cells[1].text.content == 'Cell 4'
 
     }
 
@@ -213,47 +216,48 @@ class TableSpec extends DomHandlerBaseSpec {
         then:
         doc != null
         doc.header != null
-        doc.sections != null
-        doc.sections.size() == 1
+        doc.content != null
+        doc.content.sections != null
+        doc.content.sections.size() == 1
 
-        doc.sections[0].blocks != null
-        doc.sections[0].blocks.size() == 1
-        doc.sections[0].blocks[0] != null
-        doc.sections[0].blocks[0] instanceof Table
+        doc.content.sections[0].blocks != null
+        doc.content.sections[0].blocks.size() == 1
+        doc.content.sections[0].blocks[0] != null
+        doc.content.sections[0].blocks[0] instanceof Table
 
-        doc.sections[0].blocks[0].header.size() == 1
+        doc.content.sections[0].blocks[0].header.size() == 1
 
-        doc.sections[0].blocks[0].header[0] != null
-        doc.sections[0].blocks[0].header[0].cells != null
-        doc.sections[0].blocks[0].header[0].cells.size() == 2
-        doc.sections[0].blocks[0].header[0].cells[0] != null
-        doc.sections[0].blocks[0].header[0].cells[0].rowspan == 0
-        doc.sections[0].blocks[0].header[0].cells[0].colspan == 0
-        doc.sections[0].blocks[0].header[0].cells[0].text != null
-        doc.sections[0].blocks[0].header[0].cells[0].text.content == 'Title 1'
-        doc.sections[0].blocks[0].header[0].cells[1] != null
-        doc.sections[0].blocks[0].header[0].cells[1].rowspan == 0
-        doc.sections[0].blocks[0].header[0].cells[1].colspan == 0
-        doc.sections[0].blocks[0].header[0].cells[1].text != null
-        doc.sections[0].blocks[0].header[0].cells[1].text.content == 'Title 2'
+        doc.content.sections[0].blocks[0].header[0] != null
+        doc.content.sections[0].blocks[0].header[0].cells != null
+        doc.content.sections[0].blocks[0].header[0].cells.size() == 2
+        doc.content.sections[0].blocks[0].header[0].cells[0] != null
+        doc.content.sections[0].blocks[0].header[0].cells[0].rowspan == 0
+        doc.content.sections[0].blocks[0].header[0].cells[0].colspan == 0
+        doc.content.sections[0].blocks[0].header[0].cells[0].text != null
+        doc.content.sections[0].blocks[0].header[0].cells[0].text.content == 'Title 1'
+        doc.content.sections[0].blocks[0].header[0].cells[1] != null
+        doc.content.sections[0].blocks[0].header[0].cells[1].rowspan == 0
+        doc.content.sections[0].blocks[0].header[0].cells[1].colspan == 0
+        doc.content.sections[0].blocks[0].header[0].cells[1].text != null
+        doc.content.sections[0].blocks[0].header[0].cells[1].text.content == 'Title 2'
 
-        doc.sections[0].blocks[0].footer.empty
+        doc.content.sections[0].blocks[0].footer.empty
 
-        doc.sections[0].blocks[0].body.size() == 1
+        doc.content.sections[0].blocks[0].body.size() == 1
 
-        doc.sections[0].blocks[0].body[0] != null
-        doc.sections[0].blocks[0].body[0].cells != null
-        doc.sections[0].blocks[0].body[0].cells.size() == 2
-        doc.sections[0].blocks[0].body[0].cells[0] != null
-        doc.sections[0].blocks[0].body[0].cells[0].rowspan == 0
-        doc.sections[0].blocks[0].body[0].cells[0].colspan == 0
-        doc.sections[0].blocks[0].body[0].cells[0].text != null
-        doc.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
-        doc.sections[0].blocks[0].body[0].cells[1] != null
-        doc.sections[0].blocks[0].body[0].cells[1].rowspan == 0
-        doc.sections[0].blocks[0].body[0].cells[1].colspan == 0
-        doc.sections[0].blocks[0].body[0].cells[1].text != null
-        doc.sections[0].blocks[0].body[0].cells[1].text.content == 'Cell 2'
+        doc.content.sections[0].blocks[0].body[0] != null
+        doc.content.sections[0].blocks[0].body[0].cells != null
+        doc.content.sections[0].blocks[0].body[0].cells.size() == 2
+        doc.content.sections[0].blocks[0].body[0].cells[0] != null
+        doc.content.sections[0].blocks[0].body[0].cells[0].rowspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[0].colspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[0].text != null
+        doc.content.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
+        doc.content.sections[0].blocks[0].body[0].cells[1] != null
+        doc.content.sections[0].blocks[0].body[0].cells[1].rowspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[1].colspan == 0
+        doc.content.sections[0].blocks[0].body[0].cells[1].text != null
+        doc.content.sections[0].blocks[0].body[0].cells[1].text.content == 'Cell 2'
 
     }
 

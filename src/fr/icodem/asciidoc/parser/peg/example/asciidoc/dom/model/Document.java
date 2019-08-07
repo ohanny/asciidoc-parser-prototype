@@ -5,13 +5,13 @@ import java.util.List;
 public class Document {
     private DocumentHeader header;
     private Preamble preamble;
-    private List<Section> sections;
+    private Content content;
 
-    public static Document of(DocumentHeader header, Preamble preamble, List<Section> sections) {
+    public static Document of(DocumentHeader header, Content content, Preamble preamble) {
         Document doc = new Document();
         doc.header = header;
+        doc.content = content;
         doc.preamble = preamble;
-        doc.sections = sections;
         return doc;
     }
 
@@ -19,12 +19,12 @@ public class Document {
         return header;
     }
 
-    public Preamble getPreamble() {
-        return preamble;
+    public Content getContent() {
+        return content;
     }
 
-    public List<Section> getSections() {
-        return sections;
+    public Preamble getPreamble() {
+        return preamble;
     }
 
 }
