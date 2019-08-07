@@ -9,7 +9,10 @@ public class DocumentBuilder {
     private String title;
     private List<Author> authors;
     private RevisionInfo revisionInfo;
+
     private Preamble preamble;
+
+    private ContentBuilder contentBuilder;
 
     private List<Section> sections;
 
@@ -40,6 +43,10 @@ public class DocumentBuilder {
 
     public void setPreamble(Preamble preamble) {
         this.preamble = preamble;
+    }
+
+    public void setContentBuilder(ContentBuilder contentBuilder) {
+        this.contentBuilder = contentBuilder;
     }
 
     public void setSections(List<Section> sections) {

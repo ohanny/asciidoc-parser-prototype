@@ -8,6 +8,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class SectionListBuilder {
+
+    public static SectionListBuilder newBuilder() {
+        return new SectionListBuilder();
+    }
+
     public List<Section> build(SectionBuilder first) {
         List<Section> sections = new ArrayList<>();
 
@@ -17,37 +22,39 @@ public class SectionListBuilder {
             current = current.getNext();
         }
 
+        System.out.println("SECTIONS: " + sections);
+
         return sections;
     }
 
-    private boolean isLeaf(SectionBuilder builder) {
-        return builder.getNext() == null || builder.getNext().getLevel() <= builder.getLevel();
-    }
+//    private boolean isLeaf(SectionBuilder builder) {
+//        return builder.getNext() == null || builder.getNext().getLevel() <= builder.getLevel();
+//    }
 
-    private boolean isLastChild(SectionBuilder builder) {
-        return builder.getNext() == null || builder.getNext().getLevel() < builder.getLevel();
-    }
+//    private boolean isLastChild(SectionBuilder builder) {
+//        return builder.getNext() == null || builder.getNext().getLevel() < builder.getLevel();
+//    }
 
-    private SectionBuilder getNextSibling(SectionBuilder builder) {
-        return null;
-    }
+//    private SectionBuilder getNextSibling(SectionBuilder builder) {
+//        return null;
+//    }
 
-    private List<Section> buildChildren(SectionBuilder builder) {
-        List<Section> children = null;
-        if (hasChildren(builder)) {
-            children = buildChildren(builder.getNext());
-        } else {
-            children = Collections.emptyList();
-        }
+//    private List<Section> buildChildren(SectionBuilder builder) {
+//        List<Section> children = null;
+//        if (hasChildren(builder)) {
+//            children = buildChildren(builder.getNext());
+//        } else {
+//            children = Collections.emptyList();
+//        }
+//
+//        return null;
+//    }
 
-        return null;
-    }
+//    private boolean hasChildren(SectionBuilder builder) {
+//        return builder.getNext() != null && builder.getNext().getLevel() > builder.getLevel();
+//    }
 
-    private boolean hasChildren(SectionBuilder builder) {
-        return builder.getNext() != null && builder.getNext().getLevel() > builder.getLevel();
-    }
-
-    private List<SectionBuilder> getChildren(SectionListBuilder builder) {
-        return null;
-    }
+//    private List<SectionBuilder> getChildren(SectionListBuilder builder) {
+//        return null;
+//    }
 }

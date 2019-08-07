@@ -30,8 +30,12 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private AuthorsBuilder authorsBuilder;
     private RevisionInfoBuilder revisionInfoBuilder;
     private PreambleBuilder preambleBuilder;
+
+    private ContentBuilder contentBuilder;
     private SectionBuilder firstSection;
     private SectionBuilder currentSection;
+
+
     private ParagraphBuilder paragraphBuilder;
     private QuoteBuilder quoteBuilder;
     private ListBlockBuilder listBlockBuilder;
@@ -42,11 +46,9 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private ListingBlockBuilder listingBlockBuilder;
     private TableBuilder tableBuilder;
 
+    private BuildState state;
 
-    //private TextBlockBuilder currentTextBlockBuilder;
-    private Deque<TextBlockBuilder> textBlockBuilders; // TODO replace with interface TextContent
-    private Deque<BlockContainer> blockContainers;
-
+    // TODO duplicate
     // computed refs : helps avoid duplicates
     private Map<String, Integer> refs = new HashMap<>();
 
@@ -60,8 +62,8 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         builder.rules.withFactory(defaultRulesFactory());
         //builder.attList = new LinkedList<>();
         builder.attributeListBuilder = AttributeListBuilder.newBuilder();
-        builder.textBlockBuilders = new LinkedList<>();
-        builder.blockContainers = new LinkedList<>();
+
+        builder.state = BuildState.newInstance();
 
         return builder;
     }
@@ -174,11 +176,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // text
     @Override
     public void formattedText(char[] chars) {
-        //if (currentTextBlockBuilder != null) currentTextBlockBuilder.setText(new String(chars));
-        TextBlockBuilder builder = textBlockBuilders.peekLast();
-        if (builder != null) {
-            builder.setText(new String(chars));
-        }
+        state.pushText(new String(chars));
     }
 
     // document
@@ -192,7 +190,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void exitDocument() {
-        checkExitSection(-1);
+        //checkExitSection(-1); TODO OLIV
     }
 
     @Override
@@ -247,23 +245,29 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterPreamble() {
         preambleBuilder = PreambleBuilder.newBuilder();
-        blockContainers.addLast(preambleBuilder);
+        state.pushContainer(preambleBuilder);
     }
 
     @Override
     public void exitPreamble() {
         documentBuilder.setPreamble(preambleBuilder.build());
-
-        blockContainers.removeLast();
+        state.popContainer();
         preambleBuilder = null;
 
     }
 
     // content callback
+
+
+    @Override
+    public void enterContent() {
+        contentBuilder = ContentBuilder.newBuilder(this::closeSection);
+    }
+
     @Override
     public void exitContent() {
-        SectionListBuilder builder = new SectionListBuilder();
-        documentBuilder.setSections(builder.build(firstSection));
+        documentBuilder.setSections(contentBuilder.build().getSections());
+        contentBuilder.exitDocument();
     }
 
     // section callbacks
@@ -271,72 +275,19 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void enterSection(NodeContext context) {
         int level = min(context.getIntAttribute("level", -1), 6);
 
-        // new section
-        if (firstSection != null) {
-            // close parents and get new section parent
-            SectionBuilder parent = checkExitSection(level);
+        SectionBuilder currentSection = contentBuilder.newSection(level, attributeListBuilder.consume());
 
-            SectionBuilder previous = currentSection;
-            currentSection = SectionBuilder.of(level, previous, parent);
-            previous.setNext(currentSection);
-        } else {
-            firstSection = SectionBuilder.of(level);
-            currentSection = firstSection;
-        }
 
-        //currentSection.setAttList(consumeAttList());
-        currentSection.setAttList(attributeListBuilder.consume());
-        //handler.startSection(level, currentSection.attList);
-        blockContainers.addLast(currentSection);
+        state.pushContainer(currentSection); // TODO move to section builder
     }
 
     @Override
     public void sectionTitle(String title) {
-        currentSection.setTitle(title);
-        currentSection.setRef(textToRef(title));
-    }
-
-    /**
-     *
-     * @param newSectionLevel new section level; -1 if not a new section, but the end of document
-     * @return the parent level
-     */
-    private SectionBuilder checkExitSection(int newSectionLevel) {
-        if (currentSection == null) return null;
-
-        SectionBuilder parent = null;
-        if (newSectionLevel == currentSection.getLevel()) {
-            //handler.endSection(currentSection.getLevel());
-            closeSection();
-            parent = currentSection.getParent();
-        } else if (newSectionLevel < currentSection.getLevel()) {
-            //handler.endSection(currentSection.getLevel());
-            closeSection();
-            SectionBuilder p = currentSection.getParent();
-            while (p != null) {
-                if (p.getLevel() > newSectionLevel) {
-                    closeSection();
-                    //handler.endSection(p.getLevel());
-                    p = p.getParent();
-                } else if (p.getLevel() == newSectionLevel) {
-                    closeSection();
-                    //handler.endSection(p.getLevel());
-                    parent = p.getParent();
-                    break;
-                } else {
-                    parent = p;
-                    break;
-                }
-            }
-        } else {
-            parent = currentSection;
-        }
-
-        return parent;
+        contentBuilder.setSectionTitle(title);
     }
 
     private void closeSection() {
-        this.blockContainers.removeLast();
+        state.popContainer();
     }
 
     // paragraph
@@ -349,35 +300,36 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
             String attribution = attList.getSecondPositionalAttribute();
             String citationTitle = attList.getThirdPositionalAttribute();
             quoteBuilder = QuoteBuilder.of(attribution, citationTitle, attList);
-            //currentTextBlockBuilder = quoteBuilder;
-            textBlockBuilders.addLast(quoteBuilder);
+            state.pushTextBlock(quoteBuilder);
         } else {
             paragraphBuilder = ParagraphBuilder.of(admonition, attList);
-            //currentTextBlockBuilder = paragraphBuilder;
-            textBlockBuilders.addLast(paragraphBuilder);
+            state.pushTextBlock(paragraphBuilder);
         }
     }
 
     @Override
     public void exitParagraph() {
-        BlockBuilder block = textBlockBuilders.removeLast();
-        blockContainers.peekLast().addBlock(block);
+        BlockBuilder block = paragraphBuilder;
+        block = (block == null) ? quoteBuilder:block;
+
+        state.pushBlockToContainer(block);
 
         quoteBuilder = null;
         paragraphBuilder = null;
-        //currentTextBlockBuilder = null;
     }
 
     // list block
     @Override
     public void enterList() {
         listBlockBuilder = ListBlockBuilder.root(consumeBlockTitle());
+        state.pushBlock(listBlockBuilder);
     }
 
     @Override
     public void exitList() {
-        currentSection.addBlock(listBlockBuilder);
+        state.pushBlockToContainer(listBlockBuilder);
         listBlockBuilder = null;
+        state.popBlock();
     }
 
     @Override
@@ -386,33 +338,34 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         int dots = context.getIntAttribute("dots.count", -1);
 
         ListItemBuilder builder = listBlockBuilder.newListItem(times, dots, attributeListBuilder.consume());
-        textBlockBuilders.addLast(builder);
-        blockContainers.addLast(builder);
+
+        state.pushTextBlock(builder);
+        state.pushContainer(builder);
     }
 
 
     @Override
     public void exitListItem() {
         //handler.endListItem(currentList.level);
-        textBlockBuilders.removeLast();
-        blockContainers.removeLast();
+        state.popTextBlock();
+        state.popContainer();
     }
 
-    @Override
-    public void enterListItemValue() {
-        //handler.startListItemValue();
-    }
-
-    @Override
-    public void exitListItemValue() {
-        //handler.endListItemValue();
-    }
+//    @Override
+//    public void enterListItemValue() {
+//        //handler.startListItemValue();
+//    }
+//
+//    @Override
+//    public void exitListItemValue() {
+//        //handler.endListItemValue();
+//    }
 
     // labeled list
     @Override
     public void enterLabeledList() {
         labeledListBuilder = LabeledListBuilder.newBuilder();
-        blockContainers.peekLast().addBlock(labeledListBuilder);
+        state.pushBlockToContainer(labeledListBuilder);
     }
 
     @Override
@@ -432,7 +385,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void enterLabeledListItemTitle() {
-        this.textBlockBuilders.addLast(
+        this.state.pushTextBlock(
                 new TextBlockBuilder() {
                     @Override
                     public void setText(String text) {
@@ -449,7 +402,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void exitLabeledListItemTitle() {
-        this.textBlockBuilders.removeLast();
+        state.popTextBlock();
     }
 
 
@@ -465,7 +418,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void enterLabeledListItemSimpleContent() {
-        this.textBlockBuilders.addLast(
+        state.pushTextBlock(
                 new TextBlockBuilder() {
                     @Override
                     public void setText(String text) {
@@ -482,20 +435,20 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void exitLabeledListItemSimpleContent() {
-        this.textBlockBuilders.removeLast();
+        state.popTextBlock();
     }
 
     // literal block
     @Override
     public void enterLiteralBlock() {
         literalBlockBuilder = LiteralBlockBuilder.newBuilder();
-        textBlockBuilders.addLast(literalBlockBuilder);
+        state.pushTextBlock(literalBlockBuilder);
     }
 
     @Override
     public void exitLiteralBlock() {
-        BlockBuilder block = textBlockBuilders.removeLast();
-        blockContainers.peekLast().addBlock(block);
+        BlockBuilder block = state.popTextBlock();
+        state.pushBlockToContainer(block);
 
         literalBlockBuilder = null;
     }
@@ -504,16 +457,13 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterExample() {
         exampleBlockBuilder = ExampleBlockBuilder.newBuilder(attributeListBuilder.consume());
-        blockContainers.addLast(exampleBlockBuilder);
+        state.pushContainer(exampleBlockBuilder);
     }
 
     @Override
     public void exitExample() {
-        blockContainers.removeLast();
-
-        BlockContainer container = blockContainers.peekLast();
-        container.addBlock(exampleBlockBuilder);
-
+        state.popContainer();
+        state.pushBlockToContainer(exampleBlockBuilder);
         exampleBlockBuilder = null;
     }
 
@@ -521,16 +471,13 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterSidebar() {
         sidebarBuilder = SidebarBuilder.newBuilder();
-        blockContainers.addLast(sidebarBuilder);
+        state.pushContainer(sidebarBuilder);
     }
 
     @Override
     public void exitSidebar() {
-        blockContainers.removeLast();
-
-        BlockContainer container = blockContainers.peekLast();
-        container.addBlock(sidebarBuilder);
-
+        state.popContainer();
+        state.pushBlockToContainer(sidebarBuilder);
         sidebarBuilder = null;
     }
 
@@ -538,13 +485,13 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterListingBlock() {
         listingBlockBuilder = ListingBlockBuilder.newBuilder(attributeListBuilder.consume());
-        textBlockBuilders.addLast(listingBlockBuilder);
+        state.pushTextBlock(listingBlockBuilder);
     }
 
     @Override
     public void exitListingBlock() {
-        BlockBuilder block = textBlockBuilders.removeLast();
-        blockContainers.peekLast().addBlock(block);
+        state.popTextBlock();
+        state.pushBlockToContainer(listingBlockBuilder);
 
         listingBlockBuilder = null;
     }
@@ -557,12 +504,12 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void enterCallout() {
-        textBlockBuilders.addLast(listingBlockBuilder.addCallout());
+        state.pushTextBlock(listingBlockBuilder.addCallout());
     }
 
     @Override
     public void exitCallout() {
-        textBlockBuilders.removeLast();
+        state.popTextBlock();
     }
 
     @Override
@@ -573,8 +520,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // horizontal rule
     @Override
     public void horizontalRule() {
-        BlockContainer container = blockContainers.peekLast();
-        container.addBlock(HorizontalRuleBuilder.newBuilder());
+        state.pushBlockToContainer(HorizontalRuleBuilder.newBuilder());
     }
 
     // table
@@ -582,8 +528,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void enterTable(int lineNumber) {
         tableBuilder = TableBuilder.newBuilder(attributeListBuilder.consume(), lineNumber);
 
-        BlockContainer container = blockContainers.peekLast();
-        container.addBlock(tableBuilder);
+        state.pushBlockToContainer(tableBuilder);
     }
 
     @Override
