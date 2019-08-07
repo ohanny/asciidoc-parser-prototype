@@ -11,13 +11,11 @@ public class ContentBuilder implements BlockBuilder {
     private SectionBuilder firstSection;
     private SectionBuilder currentSection;
     private SectionListBuilder sectionListBuilder;
-    private Runnable closeSectionCallback;
     private BuildState state;
 
-    public static ContentBuilder newBuilder(BuildState state, Runnable closeSectionCallback) {
+    public static ContentBuilder newBuilder(BuildState state) {
         ContentBuilder builder = new ContentBuilder();
         builder.state = state;
-        builder.closeSectionCallback = closeSectionCallback;
         builder.sectionListBuilder = SectionListBuilder.newBuilder();
 
         return builder;
@@ -86,7 +84,7 @@ public class ContentBuilder implements BlockBuilder {
     }
 
     private void closeSection() {
-        closeSectionCallback.run();
+        state.popContainer();
     }
 
     public void setSectionTitle(String title) {

@@ -60,7 +60,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         builder.attributeEntries = attributeEntries;
         builder.rules = new BlockRules2(attributeEntries);
         builder.rules.withFactory(defaultRulesFactory());
-        //builder.attList = new LinkedList<>();
         builder.attributeListBuilder = AttributeListBuilder.newBuilder();
 
         builder.state = BuildState.newInstance();
@@ -261,7 +260,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void enterContent() {
-        contentBuilder = ContentBuilder.newBuilder(state, this::closeSection);
+        contentBuilder = ContentBuilder.newBuilder(state);
     }
 
     @Override
@@ -280,10 +279,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void sectionTitle(String title) {
         contentBuilder.setSectionTitle(title);
-    }
-
-    private void closeSection() {
-        state.popContainer();
     }
 
     // paragraph
