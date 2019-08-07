@@ -89,20 +89,7 @@ public class ContentBuilder implements BlockBuilder {
 
     public void setSectionTitle(String title) {
         currentSection.setTitle(title);
-        currentSection.setRef(textToRef(title));
-    }
-
-    // TODO duplicate
-    // computed refs : helps avoid duplicates
-    private Map<String, Integer> refs = new HashMap<>();
-    private String textToRef(String text) {
-        String ref = text.toLowerCase().replaceAll("\\s+", "_");
-        int count = refs.getOrDefault(ref, 0);
-        refs.put(ref, ++count);
-        if (count > 1) {
-            ref = ref + "_" + count;
-        }
-        return ref;
+        currentSection.setRef(state.textToRef(title));
     }
 
     // TODO rename ?

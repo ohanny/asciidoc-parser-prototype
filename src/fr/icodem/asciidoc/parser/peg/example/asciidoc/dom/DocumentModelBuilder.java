@@ -48,10 +48,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     private BuildState state;
 
-    // TODO duplicate
-    // computed refs : helps avoid duplicates
-    private Map<String, Integer> refs = new HashMap<>();
-
     private char[] currentBlockTitle;
 
 
@@ -77,16 +73,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         listener.postProcess(); // TODO à remplacer par exitDocument
 
         return documentBuilder==null?null:documentBuilder.build();
-    }
-
-    private String textToRef(String text) {
-        String ref = text.toLowerCase().replaceAll("\\s+", "_");
-        int count = refs.getOrDefault(ref, 0);
-        refs.put(ref, ++count);
-        if (count > 1) {
-            ref = ref + "_" + count;
-        }
-        return ref;
     }
 
     // block title
