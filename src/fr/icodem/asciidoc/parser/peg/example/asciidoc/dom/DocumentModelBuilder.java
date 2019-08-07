@@ -32,9 +32,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private PreambleBuilder preambleBuilder;
 
     private ContentBuilder contentBuilder;
-    private SectionBuilder firstSection;
-    private SectionBuilder currentSection;
-
 
     private ParagraphBuilder paragraphBuilder;
     private QuoteBuilder quoteBuilder;
