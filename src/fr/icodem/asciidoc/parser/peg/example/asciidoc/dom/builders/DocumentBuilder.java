@@ -10,8 +10,6 @@ public class DocumentBuilder {
     private List<Author> authors;
     private RevisionInfo revisionInfo;
 
-    private Preamble preamble;
-
     private ContentBuilder contentBuilder;
 
     public Document build() {
@@ -23,7 +21,7 @@ public class DocumentBuilder {
             content = contentBuilder.build();
         }
 
-        Document doc = Document.of(header, content, preamble);
+        Document doc = Document.of(header, content);
 
         return doc;
     }
@@ -42,10 +40,6 @@ public class DocumentBuilder {
 
     public void setRevisionInfo(RevisionInfo revisionInfo) {
         this.revisionInfo = revisionInfo;
-    }
-
-    public void setPreamble(Preamble preamble) {
-        this.preamble = preamble;
     }
 
     public void setContentBuilder(ContentBuilder contentBuilder) {

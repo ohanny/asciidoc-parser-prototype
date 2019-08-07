@@ -2,16 +2,16 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Content;
-
-import java.util.HashMap;
-import java.util.Map;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Preamble;
 
 public class ContentBuilder implements BlockBuilder {
 
+    private BuildState state;
+
+    private PreambleBuilder preambleBuilder;
     private SectionBuilder firstSection;
     private SectionBuilder currentSection;
     private SectionListBuilder sectionListBuilder;
-    private BuildState state;
 
     public static ContentBuilder newBuilder(BuildState state) {
         ContentBuilder builder = new ContentBuilder();
@@ -23,8 +23,19 @@ public class ContentBuilder implements BlockBuilder {
 
     @Override
     public Content build() {
+        Preamble preamble = (preambleBuilder == null) ? null : preambleBuilder.build();
+
         // TODO check null ?
-        return sectionListBuilder == null ? null : Content.of(sectionListBuilder.build(firstSection));
+        return sectionListBuilder == null ? null : Content.of(preamble, sectionListBuilder.build(firstSection));
+    }
+
+    public void addPreamble() {
+        preambleBuilder = PreambleBuilder.newBuilder();
+        state.pushContainer(preambleBuilder);
+    }
+
+    public void closePreamble() {
+        state.popContainer();
     }
 
     public void newSection(int level, AttributeList attList) {
@@ -92,7 +103,6 @@ public class ContentBuilder implements BlockBuilder {
         currentSection.setRef(state.textToRef(title));
     }
 
-    // TODO rename ?
     public void closeContent() {
         checkExitSection(-1);
     }

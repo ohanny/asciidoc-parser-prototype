@@ -16,7 +16,7 @@ public class SectionBuilder implements BlockContainer {
     private AttributeList attList;
 
     private SectionBuilder next;
-    private SectionBuilder previous;
+    private SectionBuilder previous; // TODO to be removed
     private SectionBuilder parent;
 
     private List<BlockBuilder> blocks;

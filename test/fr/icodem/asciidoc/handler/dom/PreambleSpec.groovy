@@ -22,16 +22,14 @@ This is some content
         then:
         doc != null
         doc.header != null
+        doc.content != null
 
-        doc.preamble != null
-        doc.preamble.blocks != null
-        doc.preamble.blocks.size() == 1
-        doc.preamble.blocks[0] instanceof Paragraph
-        doc.preamble.blocks[0].text != null
-        doc.preamble.blocks[0].text.content == 'This is some content'
-
-        doc.content == null
-
+        doc.content.preamble != null
+        doc.content.preamble.blocks != null
+        doc.content.preamble.blocks.size() == 1
+        doc.content.preamble.blocks[0] instanceof Paragraph
+        doc.content.preamble.blocks[0].text != null
+        doc.content.preamble.blocks[0].text.content == 'This is some content'
 
     }
 

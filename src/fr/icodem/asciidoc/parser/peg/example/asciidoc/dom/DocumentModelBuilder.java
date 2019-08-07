@@ -29,7 +29,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private DocumentBuilder documentBuilder;
     private AuthorsBuilder authorsBuilder;
     private RevisionInfoBuilder revisionInfoBuilder;
-    private PreambleBuilder preambleBuilder;
 
     private ContentBuilder contentBuilder;
 
@@ -226,16 +225,20 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void enterPreamble() {
-        preambleBuilder = PreambleBuilder.newBuilder();
-        state.pushContainer(preambleBuilder);
+        //preambleBuilder = PreambleBuilder.newBuilder();
+        //state.pushContainer(preambleBuilder);
+        contentBuilder = ContentBuilder.newBuilder(state);
+        documentBuilder.setContentBuilder(contentBuilder);
+
+        contentBuilder.addPreamble();
     }
 
     @Override
     public void exitPreamble() {
-        documentBuilder.setPreamble(preambleBuilder.build());
-        state.popContainer();
-        preambleBuilder = null;
-
+//        documentBuilder.setPreamble(preambleBuilder.build());
+//        state.popContainer();
+//        preambleBuilder = null;
+        contentBuilder.closePreamble();
     }
 
     // content callback
@@ -243,13 +246,15 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void enterContent() {
-        contentBuilder = ContentBuilder.newBuilder(state);
+        if (contentBuilder == null) {
+            contentBuilder = ContentBuilder.newBuilder(state);
+            documentBuilder.setContentBuilder(contentBuilder);
+        }
     }
 
     @Override
     public void exitContent() {
-        //documentBuilder.setSections(contentBuilder.build().getSections());
-        documentBuilder.setContentBuilder(contentBuilder);
+        //documentBuilder.setContentBuilder(contentBuilder);
         contentBuilder.closeContent();
     }
 
