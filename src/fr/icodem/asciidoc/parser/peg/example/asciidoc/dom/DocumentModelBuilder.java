@@ -261,7 +261,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void enterContent() {
-        contentBuilder = ContentBuilder.newBuilder(this::closeSection);
+        contentBuilder = ContentBuilder.newBuilder(state, this::closeSection);
     }
 
     @Override
@@ -274,11 +274,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterSection(NodeContext context) {
         int level = min(context.getIntAttribute("level", -1), 6);
-
-        SectionBuilder currentSection = contentBuilder.newSection(level, attributeListBuilder.consume());
-
-
-        state.pushContainer(currentSection); // TODO move to section builder
+        contentBuilder.newSection(level, attributeListBuilder.consume());
     }
 
     @Override

@@ -12,9 +12,11 @@ public class ContentBuilder implements BlockBuilder {
     private SectionBuilder currentSection;
     private SectionListBuilder sectionListBuilder;
     private Runnable closeSectionCallback;
+    private BuildState state;
 
-    public static ContentBuilder newBuilder(Runnable closeSectionCallback) {
+    public static ContentBuilder newBuilder(BuildState state, Runnable closeSectionCallback) {
         ContentBuilder builder = new ContentBuilder();
+        builder.state = state;
         builder.closeSectionCallback = closeSectionCallback;
         builder.sectionListBuilder = SectionListBuilder.newBuilder();
 
@@ -27,7 +29,7 @@ public class ContentBuilder implements BlockBuilder {
         return sectionListBuilder == null ? null : Content.of(sectionListBuilder.build(firstSection));
     }
 
-    public SectionBuilder newSection(int level, AttributeList attList) {
+    public void newSection(int level, AttributeList attList) {
         if (firstSection != null) {
             // close parents and get new section parent
             SectionBuilder parent = checkExitSection(level);
@@ -40,10 +42,8 @@ public class ContentBuilder implements BlockBuilder {
             currentSection = firstSection;
         }
 
-        //currentSection.setAttList(consumeAttList());
         currentSection.setAttList(attList);
-
-        return currentSection;
+        state.pushContainer(currentSection);
     }
 
     /**
