@@ -21,17 +21,13 @@ import static java.lang.Math.min;
 public class DocumentModelBuilder implements AsciidocHandler2 {
     private BlockRules2 rules;
 
-    private AttributeEntries attributeEntries;
+    private BuildState state;
 
     // builders
     private DocumentBuilder documentBuilder;
 
     private AttributeEntryBuilder attributeEntryBuilder;
     private AttributeListBuilder attributeListBuilder;
-
-    private HeaderBuilder headerBuilder;
-    //private AuthorsBuilder authorsBuilder;
-    //private RevisionInfoBuilder revisionInfoBuilder;
 
     private ParagraphBuilder paragraphBuilder;
     private QuoteBuilder quoteBuilder;
@@ -43,7 +39,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private ListingBlockBuilder listingBlockBuilder;
     private TableBuilder tableBuilder;
 
-    private BuildState state;
 
     private char[] currentBlockTitle;
 
@@ -52,7 +47,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         BuildState state = BuildState.newInstance(attributeEntries);
 
         DocumentModelBuilder builder = new DocumentModelBuilder();
-        builder.attributeEntries = attributeEntries;
+        //builder.attributeEntries = attributeEntries;
         builder.rules = new BlockRules2(attributeEntries);
         builder.rules.withFactory(defaultRulesFactory());
         builder.attributeListBuilder = AttributeListBuilder.newBuilder();
@@ -63,7 +58,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     }
 
     public Document build(String text) {
-        final BlockListener2 listener = new BlockListener2(this, attributeEntries);
+        final BlockListener2 listener = new BlockListener2(this, state.getAttributeEntries());
 
         ParsingResult result = new ParseRunner(rules, rules::document)
                 //.trace()
@@ -104,7 +99,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void exitAttributeEntry() {
         AttributeEntry att = attributeEntryBuilder.build();
-        attributeEntries.addAttribute(att);
+        state.getAttributeEntries().addAttribute(att);
     }
 
     @Override
