@@ -47,7 +47,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         BuildState state = BuildState.newInstance(attributeEntries);
 
         DocumentModelBuilder builder = new DocumentModelBuilder();
-        //builder.attributeEntries = attributeEntries;
         builder.rules = new BlockRules2(attributeEntries);
         builder.rules.withFactory(defaultRulesFactory());
         builder.attributeListBuilder = AttributeListBuilder.newBuilder();
