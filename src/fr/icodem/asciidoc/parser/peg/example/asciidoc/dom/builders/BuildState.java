@@ -1,11 +1,15 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntries;
+
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 public class BuildState {
+    private AttributeEntries attributeEntries;
+
     private Deque<BlockBuilder> blockBuilders;
     //private TextBlockBuilder currentTextBlockBuilder;
     private Deque<TextBlockBuilder> textBlockBuilders; // TODO replace with interface TextContent
@@ -13,13 +17,18 @@ public class BuildState {
 
     private Map<String, Integer> refs = new HashMap<>();
 
-    public static BuildState newInstance() {
+    public static BuildState newInstance(AttributeEntries attributeEntries) {
         BuildState state = new BuildState();
+        state.attributeEntries = attributeEntries;
         state.blockBuilders = new LinkedList<>();
         state.textBlockBuilders = new LinkedList<>();
         state.blockContainers = new LinkedList<>();
 
         return state;
+    }
+
+    public AttributeEntries getAttributeEntries() {
+        return attributeEntries;
     }
 
     public void pushBlock(BlockBuilder builder) {

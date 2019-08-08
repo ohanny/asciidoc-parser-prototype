@@ -5,21 +5,30 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 import java.util.List;
 
 public class DocumentBuilder {
-    private AttributeEntries attributes;
-    private String title;
-    private List<Author> authors;
-    private RevisionInfo revisionInfo;
+    private BuildState state;
 
+    //private AttributeEntries attributes;
+    //private String title;
+    //private List<Author> authors;
+    //private RevisionInfo revisionInfo;
+
+    private HeaderBuilder headerBuilder;
     private ContentBuilder contentBuilder;
+
+    public static DocumentBuilder newBuilder(BuildState state) {
+        DocumentBuilder builder = new DocumentBuilder();
+        builder.state = state;
+        builder.headerBuilder = HeaderBuilder.newBuilder(state);
+        builder.contentBuilder = ContentBuilder.newBuilder(state);
+
+        return builder;
+    }
 
     public Document build() {
 
-        DocumentHeader header = DocumentHeader.of(attributes, Title.of(title), authors, revisionInfo);
-
-        Content content = null;
-        if (contentBuilder != null) {
-            content = contentBuilder.build();
-        }
+        //Header header = Header.of(attributes, Title.of(title), authors, revisionInfo);
+        Header header = headerBuilder.build();
+        Content content = contentBuilder.build();
 
         Document doc = Document.of(header, content);
 
@@ -27,23 +36,34 @@ public class DocumentBuilder {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        //this.title = title;
+        headerBuilder.setTitle(title);
     }
 
-    public void setAttributes(AttributeEntries attributes) {
-        this.attributes = attributes;
+//    public void setAttributes(AttributeEntries attributes) {
+//        this.attributes = attributes;
+//        //headerBuilder.setAttributes(attributes);
+//    }
+
+//    public void setAuthors(List<Author> authors) {
+//        this.authors = authors;
+//    }
+//
+//    public void setRevisionInfo(RevisionInfo revisionInfo) {
+//        this.revisionInfo = revisionInfo;
+//    }
+
+//    public HeaderBuilder addHeader() {
+//        headerBuilder = HeaderBuilder.newBuilder();
+//        return headerBuilder;
+//    }
+
+    // TODO change
+    public ContentBuilder getContentBuilder() {
+        return contentBuilder;
     }
 
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
+    public HeaderBuilder getHeaderBuilder() {
+        return headerBuilder;
     }
-
-    public void setRevisionInfo(RevisionInfo revisionInfo) {
-        this.revisionInfo = revisionInfo;
-    }
-
-    public void setContentBuilder(ContentBuilder contentBuilder) {
-        this.contentBuilder = contentBuilder;
-    }
-
 }

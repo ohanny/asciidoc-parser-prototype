@@ -8,6 +8,10 @@ public class RevisionInfoBuilder {
     private String number;
     private String remark;
 
+    public static RevisionInfoBuilder newBuilder() {
+        return new RevisionInfoBuilder();
+    }
+
     public RevisionInfo build() {
         return RevisionInfo.of(date.trim(), number, remark); // TODO reprendre le trim
     }

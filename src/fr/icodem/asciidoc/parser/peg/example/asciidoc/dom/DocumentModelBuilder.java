@@ -24,13 +24,14 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private AttributeEntries attributeEntries;
 
     // builders
+    private DocumentBuilder documentBuilder;
+
     private AttributeEntryBuilder attributeEntryBuilder;
     private AttributeListBuilder attributeListBuilder;
-    private DocumentBuilder documentBuilder;
-    private AuthorsBuilder authorsBuilder;
-    private RevisionInfoBuilder revisionInfoBuilder;
 
-    private ContentBuilder contentBuilder;
+    private HeaderBuilder headerBuilder;
+    //private AuthorsBuilder authorsBuilder;
+    //private RevisionInfoBuilder revisionInfoBuilder;
 
     private ParagraphBuilder paragraphBuilder;
     private QuoteBuilder quoteBuilder;
@@ -48,13 +49,15 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
 
     public static DocumentModelBuilder newDocumentBuilder(AttributeEntries attributeEntries) {
+        BuildState state = BuildState.newInstance(attributeEntries);
+
         DocumentModelBuilder builder = new DocumentModelBuilder();
         builder.attributeEntries = attributeEntries;
         builder.rules = new BlockRules2(attributeEntries);
         builder.rules.withFactory(defaultRulesFactory());
         builder.attributeListBuilder = AttributeListBuilder.newBuilder();
 
-        builder.state = BuildState.newInstance();
+        builder.state = state;
 
         return builder;
     }
@@ -165,8 +168,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterDocument() {
         attributeEntryBuilder = new AttributeEntryBuilder();
-        documentBuilder = new DocumentBuilder();
-        documentBuilder.setAttributes(attributeEntries);
+        documentBuilder = DocumentBuilder.newBuilder(state);
     }
 
     @Override
@@ -181,93 +183,75 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     // author callbacks
     public void enterAuthors() {
-        authorsBuilder = new AuthorsBuilder();
-        authorsBuilder.init();
     }
 
     @Override
     public void exitAuthors() {
-        documentBuilder.setAuthors(authorsBuilder.build());
     }
 
     @Override
     public void authorName(String name) {
-        authorsBuilder.setName(name);
+        documentBuilder.getHeaderBuilder().setAuthorName(name);
     }
 
     @Override
     public void authorAddress(String email) {
-        authorsBuilder.setEmail(email);
+        documentBuilder.getHeaderBuilder().setAuthorEmail(email);
     }
 
     @Override
     public void exitAuthor() {
-        authorsBuilder.buildAuthor();
+        documentBuilder.getHeaderBuilder().closeAuthor();
     }
 
     // revision info callbacks
 
     @Override
     public void enterRevisionInfo() {
-        revisionInfoBuilder = new RevisionInfoBuilder();
+        documentBuilder.getHeaderBuilder().addRevisionInfo();
     }
 
     @Override @Deprecated // TODO à revoir pour décomposer en date, number, remark
     public void revisionInfo(String line) {
-        revisionInfoBuilder.setDate(line);
+        documentBuilder.getHeaderBuilder().setRevisionInfoDate(line);
     }
 
     @Override
     public void exitRevisionInfo() {
-        documentBuilder.setRevisionInfo(revisionInfoBuilder.build());
     }
 
 
     @Override
     public void enterPreamble() {
-        //preambleBuilder = PreambleBuilder.newBuilder();
-        //state.pushContainer(preambleBuilder);
-        contentBuilder = ContentBuilder.newBuilder(state);
-        documentBuilder.setContentBuilder(contentBuilder);
-
-        contentBuilder.addPreamble();
+        documentBuilder.getContentBuilder().addPreamble();
     }
 
     @Override
     public void exitPreamble() {
-//        documentBuilder.setPreamble(preambleBuilder.build());
-//        state.popContainer();
-//        preambleBuilder = null;
-        contentBuilder.closePreamble();
+        documentBuilder.getContentBuilder().closePreamble();
     }
 
     // content callback
 
-
     @Override
     public void enterContent() {
-        if (contentBuilder == null) {
-            contentBuilder = ContentBuilder.newBuilder(state);
-            documentBuilder.setContentBuilder(contentBuilder);
-        }
     }
 
     @Override
     public void exitContent() {
-        //documentBuilder.setContentBuilder(contentBuilder);
-        contentBuilder.closeContent();
+        documentBuilder.getContentBuilder().closeContent();
     }
 
     // section callbacks
     @Override
     public void enterSection(NodeContext context) {
         int level = min(context.getIntAttribute("level", -1), 6);
-        contentBuilder.newSection(level, attributeListBuilder.consume());
+        documentBuilder.getContentBuilder().newSection(level, attributeListBuilder.consume());
     }
 
     @Override
     public void sectionTitle(String title) {
-        contentBuilder.setSectionTitle(title);
+        documentBuilder.getContentBuilder().setSectionTitle(title);
     }
 
     // paragraph

@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Author;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,8 +15,11 @@ public class AuthorsBuilder {
     private String name;
     private String email;
 
-    public void init() {
-        authors = new LinkedList<>();
+    public static AuthorsBuilder newBuilder() {
+        AuthorsBuilder builder = new AuthorsBuilder();
+        builder.authors = new ArrayList<>();
+
+        return builder;
     }
 
     private void resetAuthorData() {
