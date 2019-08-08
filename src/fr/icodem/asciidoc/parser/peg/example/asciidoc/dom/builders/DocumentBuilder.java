@@ -5,14 +5,11 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 import java.util.List;
 
 public class DocumentBuilder {
-    private BuildState state;
-
     private HeaderBuilder headerBuilder;
     private ContentBuilder contentBuilder;
 
     public static DocumentBuilder newBuilder(BuildState state) {
         DocumentBuilder builder = new DocumentBuilder();
-        builder.state = state;
         builder.headerBuilder = HeaderBuilder.newBuilder(state);
         builder.contentBuilder = ContentBuilder.newBuilder(state);
 

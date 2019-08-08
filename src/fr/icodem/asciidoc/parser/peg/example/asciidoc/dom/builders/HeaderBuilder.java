@@ -31,10 +31,6 @@ public class HeaderBuilder {
         this.title = title;
     }
 
-    //    public void addAuthors() {
-//        authorsBuilder = AuthorsBuilder.newBuilder();
-//    }
-
     public void setAuthorName(String name) {
         authorsBuilder.setName(name);
     }

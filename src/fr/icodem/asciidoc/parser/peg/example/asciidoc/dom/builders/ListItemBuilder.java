@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ListItemBuilder implements TextBlockBuilder, BlockContainer {
+public class ListItemBuilder implements BlockBuilder, TextContainer, BlockContainer {
     private String text;
 
     private List<BlockBuilder> blocks;

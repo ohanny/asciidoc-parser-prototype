@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ListingBlockBuilder implements TextBlockBuilder {
+public class ListingBlockBuilder implements BlockBuilder, TextContainer {
 
     private AttributeList attributeList;
     private String text;

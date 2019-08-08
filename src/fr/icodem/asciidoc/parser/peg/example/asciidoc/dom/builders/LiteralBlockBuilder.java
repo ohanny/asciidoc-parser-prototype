@@ -3,7 +3,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.LiteralBlock;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Text;
 
-public class LiteralBlockBuilder implements TextBlockBuilder {
+public class LiteralBlockBuilder implements BlockBuilder, TextContainer {
 
     private String text;
 

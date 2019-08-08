@@ -10,10 +10,6 @@ import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
 import java.io.StringReader;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 import static java.lang.Math.min;
@@ -235,11 +231,11 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
             String citationTitle = attList.getThirdPositionalAttribute();
             QuoteBuilder builder = QuoteBuilder.of(attribution, citationTitle, attList);
             state.pushBlock(builder);
-            state.pushTextBlock(builder);
+            state.pushTextContainer(builder);
         } else {
             ParagraphBuilder builder = ParagraphBuilder.of(admonition, attList);
             state.pushBlock(builder);
-            state.pushTextBlock(builder);
+            state.pushTextContainer(builder);
         }
     }
 
@@ -247,7 +243,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void exitParagraph() {
         BlockBuilder block = state.popBlock();
 
-        state.popTextBlock();
+        state.popTextContainer();
         state.pushBlockToContainer(block);
     }
 
@@ -272,16 +268,16 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         ListBlockBuilder parentBuilder = state.peekBlock();
         ListItemBuilder builder = parentBuilder.newListItem(times, dots, attributeListBuilder.consume());
 
-        state.pushTextBlock(builder);
-        state.pushContainer(builder);
+        state.pushTextContainer(builder);
+        state.pushBlockContainer(builder);
     }
 
 
     @Override
     public void exitListItem() {
         //handler.endListItem(currentList.level);
-        state.popTextBlock();
-        state.popContainer();
+        state.popTextContainer();
+        state.popBlockContainer();
     }
 
 //    @Override
@@ -321,24 +317,12 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterLabeledListItemTitle() {
         LabeledListBuilder builder = state.peekBlock();
-        this.state.pushTextBlock(
-                new TextBlockBuilder() {
-                    @Override
-                    public void setText(String text) {
-                        builder.setItemTitle(text);
-                    }
-
-                    @Override
-                    public Block build() {
-                        return null;
-                    }
-                }
-        );
+        this.state.pushTextContainer(builder::setItemTitle);
     }
 
     @Override
     public void exitLabeledListItemTitle() {
-        state.popTextBlock();
+        state.popTextContainer();
     }
 
 
@@ -355,24 +339,12 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterLabeledListItemSimpleContent() {
         LabeledListBuilder builder = state.peekBlock();
-        state.pushTextBlock(
-                new TextBlockBuilder() {
-                    @Override
-                    public void setText(String text) {
-                        builder.setItemContent(text);
-                    }
-
-                    @Override
-                    public Block build() {
-                        return null;
-                    }
-                }
-        );
+        state.pushTextContainer(builder::setItemContent);
     }
 
     @Override
     public void exitLabeledListItemSimpleContent() {
-        state.popTextBlock();
+        state.popTextContainer();
     }
 
     // literal block
@@ -380,13 +352,13 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void enterLiteralBlock() {
         LiteralBlockBuilder builder = LiteralBlockBuilder.newBuilder();
         state.pushBlock(builder);
-        state.pushTextBlock(builder);
+        state.pushTextContainer(builder);
     }
 
     @Override
     public void exitLiteralBlock() {
         LiteralBlockBuilder builder = state.popBlock();
-        state.popTextBlock();
+        state.popTextContainer();
         state.pushBlockToContainer(builder);
     }
 
@@ -395,13 +367,13 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void enterExample() {
         ExampleBlockBuilder builder = ExampleBlockBuilder.newBuilder(attributeListBuilder.consume());
         state.pushBlock(builder);
-        state.pushContainer(builder);
+        state.pushBlockContainer(builder);
     }
 
     @Override
     public void exitExample() {
         ExampleBlockBuilder builder = state.popBlock();
-        state.popContainer();
+        state.popBlockContainer();
         state.pushBlockToContainer(builder);
     }
 
@@ -410,13 +382,13 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void enterSidebar() {
         SidebarBuilder builder = SidebarBuilder.newBuilder();
         state.pushBlock(builder);
-        state.pushContainer(builder);
+        state.pushBlockContainer(builder);
     }
 
     @Override
     public void exitSidebar() {
         SidebarBuilder builder = state.peekBlock();
-        state.popContainer();
+        state.popBlockContainer();
         state.pushBlockToContainer(builder);
     }
 
@@ -425,13 +397,13 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     public void enterListingBlock() {
         ListingBlockBuilder builder = ListingBlockBuilder.newBuilder(attributeListBuilder.consume());
         state.pushBlock(builder);
-        state.pushTextBlock(builder);
+        state.pushTextContainer(builder);
     }
 
     @Override
     public void exitListingBlock() {
         ListingBlockBuilder builder = state.popBlock();
-        state.popTextBlock();
+        state.popTextContainer();
         state.pushBlockToContainer(builder);
     }
 
@@ -445,12 +417,12 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void enterCallout() {
         ListingBlockBuilder builder = state.peekBlock();
-        state.pushTextBlock(builder.addCallout());
+        state.pushTextContainer(builder.addCallout());
     }
 
     @Override
     public void exitCallout() {
-        state.popTextBlock();
+        state.popTextContainer();
     }
 
     @Override

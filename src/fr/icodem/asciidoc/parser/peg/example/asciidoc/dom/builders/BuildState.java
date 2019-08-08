@@ -11,19 +11,20 @@ public class BuildState {
     private AttributeEntries attributeEntries;
 
     private Deque<BlockBuilder> blockBuilders;
-    private Deque<TextBlockBuilder> textBlockBuilders; // TODO replace with interface TextContent
+    private Deque<TextContainer> textContainers;
     private Deque<BlockContainer> blockContainers;
 
     private char[] currentBlockTitle;
 
-    private Map<String, Integer> refs = new HashMap<>();
+    private Map<String, Integer> refs;
 
     public static BuildState newInstance(AttributeEntries attributeEntries) {
         BuildState state = new BuildState();
         state.attributeEntries = attributeEntries;
         state.blockBuilders = new LinkedList<>();
-        state.textBlockBuilders = new LinkedList<>();
+        state.textContainers = new LinkedList<>();
         state.blockContainers = new LinkedList<>();
+        state.refs = new HashMap<>();
 
         return state;
     }
@@ -45,9 +46,9 @@ public class BuildState {
     }
 
     public void pushText(String text) {
-        TextBlockBuilder builder = textBlockBuilders.peekLast();
-        if (builder != null) {
-            builder.setText(text);
+        TextContainer container = textContainers.peekLast();
+        if (container != null) {
+            container.setText(text);
         }
     }
 
@@ -55,20 +56,20 @@ public class BuildState {
         blockContainers.peekLast().addBlock(builder);
     }
 
-    public void pushContainer(BlockContainer container) {
+    public void pushBlockContainer(BlockContainer container) {
         blockContainers.addLast(container);
     }
 
-    public void popContainer() {
+    public void popBlockContainer() {
         blockContainers.removeLast();
     }
 
-    public void pushTextBlock(TextBlockBuilder block) {
-        textBlockBuilders.addLast(block);
+    public void pushTextContainer(TextContainer container) {// TODO rename
+        textContainers.addLast(container);
     }
 
-    public void popTextBlock() {
-        textBlockBuilders.removeLast();
+    public void popTextContainer() {
+        textContainers.removeLast();
     }
 
     public String textToRef(String text) {

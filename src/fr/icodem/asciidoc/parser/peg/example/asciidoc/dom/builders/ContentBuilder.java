@@ -31,11 +31,11 @@ public class ContentBuilder implements BlockBuilder {
 
     public void addPreamble() {
         preambleBuilder = PreambleBuilder.newBuilder();
-        state.pushContainer(preambleBuilder);
+        state.pushBlockContainer(preambleBuilder);
     }
 
     public void closePreamble() {
-        state.popContainer();
+        state.popBlockContainer();
     }
 
     public void newSection(int level, AttributeList attList) {
@@ -52,7 +52,7 @@ public class ContentBuilder implements BlockBuilder {
         }
 
         currentSection.setAttList(attList);
-        state.pushContainer(currentSection);
+        state.pushBlockContainer(currentSection);
     }
 
     /**
@@ -95,7 +95,7 @@ public class ContentBuilder implements BlockBuilder {
     }
 
     private void closeSection() {
-        state.popContainer();
+        state.popBlockContainer();
     }
 
     public void setSectionTitle(String title) {

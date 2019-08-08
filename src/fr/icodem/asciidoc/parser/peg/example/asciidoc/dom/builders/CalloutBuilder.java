@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Callout;
 
-public class CalloutBuilder implements TextBlockBuilder {
+public class CalloutBuilder implements BlockBuilder, TextContainer {
     private int number;
     private String text;
 
