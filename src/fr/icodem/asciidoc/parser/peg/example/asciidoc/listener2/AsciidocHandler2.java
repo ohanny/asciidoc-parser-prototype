@@ -175,9 +175,6 @@ public interface AsciidocHandler2 {
     default void exitLiteralBlock() {}
 
 
-    // TODO replace with exitDocument
-    //default void postProcess() {}
-
     // TODO to be refactored
     // inline text
     default void formattedText(char[] chars) {}
