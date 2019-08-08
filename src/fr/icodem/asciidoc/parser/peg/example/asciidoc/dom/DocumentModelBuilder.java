@@ -40,7 +40,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private TableBuilder tableBuilder;
 
 
-    private char[] currentBlockTitle;
+    //private char[] currentBlockTitle;
 
 
     public static DocumentModelBuilder newDocumentBuilder(AttributeEntries attributeEntries) {
@@ -71,16 +71,9 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // block title
     @Override
     public void blockTitleValue(char[] chars) {// TODO not yet tested
-        currentBlockTitle = chars;
+        //currentBlockTitle = chars;
+        state.setCurrentBlockTitle(chars);
     }
-
-    private String consumeBlockTitle() {
-        String title = currentBlockTitle == null?null:new String(currentBlockTitle);
-        currentBlockTitle = null;
-
-        return title;
-    }
-
 
     // attribute entries
     @Override
@@ -279,7 +272,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // list block
     @Override
     public void enterList() {
-        listBlockBuilder = ListBlockBuilder.root(consumeBlockTitle());
+        listBlockBuilder = ListBlockBuilder.root(state.consumeBlockTitle());
         state.pushBlock(listBlockBuilder);
     }
 

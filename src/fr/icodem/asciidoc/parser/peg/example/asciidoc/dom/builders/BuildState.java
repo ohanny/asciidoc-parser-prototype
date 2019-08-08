@@ -15,6 +15,8 @@ public class BuildState {
     private Deque<TextBlockBuilder> textBlockBuilders; // TODO replace with interface TextContent
     private Deque<BlockContainer> blockContainers;
 
+    private char[] currentBlockTitle;
+
     private Map<String, Integer> refs = new HashMap<>();
 
     public static BuildState newInstance(AttributeEntries attributeEntries) {
@@ -80,5 +82,15 @@ public class BuildState {
         return ref;
     }
 
+    public void setCurrentBlockTitle(char[] currentBlockTitle) {
+        this.currentBlockTitle = currentBlockTitle;
+    }
+
+    public String consumeBlockTitle() {
+        String title = currentBlockTitle == null?null:new String(currentBlockTitle);
+        currentBlockTitle = null;
+
+        return title;
+    }
 
 }
