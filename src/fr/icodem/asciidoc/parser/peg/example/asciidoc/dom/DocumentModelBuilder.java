@@ -29,17 +29,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private AttributeEntryBuilder attributeEntryBuilder;
     private AttributeListBuilder attributeListBuilder;
 
-    private ParagraphBuilder paragraphBuilder;
-    private QuoteBuilder quoteBuilder;
-    //private ListBlockBuilder listBlockBuilder;
-    //private LabeledListBuilder labeledListBuilder;
-    //private LiteralBlockBuilder literalBlockBuilder;
-    //private ExampleBlockBuilder exampleBlockBuilder;
-    //private SidebarBuilder sidebarBuilder;
-    //private ListingBlockBuilder listingBlockBuilder;
-    //private TableBuilder tableBuilder;
-
-
     public static DocumentModelBuilder newDocumentBuilder(AttributeEntries attributeEntries) {
         BuildState state = BuildState.newInstance(attributeEntries);
 
@@ -246,23 +235,22 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         if (attList != null && "quote".equals(attList.getFirstPositionalAttribute())) {
             String attribution = attList.getSecondPositionalAttribute();
             String citationTitle = attList.getThirdPositionalAttribute();
-            quoteBuilder = QuoteBuilder.of(attribution, citationTitle, attList);
-            state.pushTextBlock(quoteBuilder);
+            QuoteBuilder builder = QuoteBuilder.of(attribution, citationTitle, attList);
+            state.pushBlock(builder);
+            state.pushTextBlock(builder);
         } else {
-            paragraphBuilder = ParagraphBuilder.of(admonition, attList);
-            state.pushTextBlock(paragraphBuilder);
+            ParagraphBuilder builder = ParagraphBuilder.of(admonition, attList);
+            state.pushBlock(builder);
+            state.pushTextBlock(builder);
         }
     }
 
     @Override
     public void exitParagraph() {
-        BlockBuilder block = paragraphBuilder;
-        block = (block == null) ? quoteBuilder:block;
+        BlockBuilder block = state.popBlock();
 
+        state.popTextBlock();
         state.pushBlockToContainer(block);
-
-        quoteBuilder = null;
-        paragraphBuilder = null;
     }
 
     // list block

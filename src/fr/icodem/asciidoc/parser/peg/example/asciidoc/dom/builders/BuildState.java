@@ -11,7 +11,6 @@ public class BuildState {
     private AttributeEntries attributeEntries;
 
     private Deque<BlockBuilder> blockBuilders;
-    //private TextBlockBuilder currentTextBlockBuilder;
     private Deque<TextBlockBuilder> textBlockBuilders; // TODO replace with interface TextContent
     private Deque<BlockContainer> blockContainers;
 
@@ -64,16 +63,12 @@ public class BuildState {
         blockContainers.removeLast();
     }
 
-//    public BlockContainer peekContainer() {
-//        return blockContainers.peekLast();
-//    }
-
     public void pushTextBlock(TextBlockBuilder block) {
         textBlockBuilders.addLast(block);
     }
 
-    public TextBlockBuilder popTextBlock() { // TODO remove return
-        return textBlockBuilders.removeLast();
+    public void popTextBlock() {
+        textBlockBuilders.removeLast();
     }
 
     public String textToRef(String text) {
