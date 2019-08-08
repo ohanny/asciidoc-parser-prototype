@@ -49,8 +49,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
                 //.trace()
                 .parse(new StringReader(text), listener, null, null);
 
-        listener.postProcess(); // TODO à remplacer par exitDocument
-
         return documentBuilder==null?null:documentBuilder.build();
     }
 

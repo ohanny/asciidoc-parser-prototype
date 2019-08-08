@@ -176,7 +176,7 @@ public interface AsciidocHandler2 {
 
 
     // TODO replace with exitDocument
-    default void postProcess() {}
+    //default void postProcess() {}
 
     // TODO to be refactored
     // inline text

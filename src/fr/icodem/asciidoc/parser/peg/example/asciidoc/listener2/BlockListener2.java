@@ -319,7 +319,4 @@ public class BlockListener2 implements ParseTreeListener {
         }
     }
 
-    public void postProcess() {
-        handler.postProcess();
-    }
 }
