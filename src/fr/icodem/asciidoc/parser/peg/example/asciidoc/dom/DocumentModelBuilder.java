@@ -33,8 +33,8 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private QuoteBuilder quoteBuilder;
     private ListBlockBuilder listBlockBuilder;
     private LabeledListBuilder labeledListBuilder;
-    private LiteralBlockBuilder literalBlockBuilder;
-    private ExampleBlockBuilder exampleBlockBuilder;
+    //private LiteralBlockBuilder literalBlockBuilder;
+    //private ExampleBlockBuilder exampleBlockBuilder;
     //private SidebarBuilder sidebarBuilder;
     private ListingBlockBuilder listingBlockBuilder;
     //private TableBuilder tableBuilder;
@@ -388,30 +388,31 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // literal block
     @Override
     public void enterLiteralBlock() {
-        literalBlockBuilder = LiteralBlockBuilder.newBuilder();
-        state.pushTextBlock(literalBlockBuilder);
+        LiteralBlockBuilder builder = LiteralBlockBuilder.newBuilder();
+        state.pushBlock(builder);
+        state.pushTextBlock(builder);
     }
 
     @Override
     public void exitLiteralBlock() {
-        BlockBuilder block = state.popTextBlock();
-        state.pushBlockToContainer(block);
-
-        literalBlockBuilder = null;
+        LiteralBlockBuilder builder = state.popBlock();
+        state.popTextBlock();
+        state.pushBlockToContainer(builder);
     }
 
     // example block
     @Override
     public void enterExample() {
-        exampleBlockBuilder = ExampleBlockBuilder.newBuilder(attributeListBuilder.consume());
-        state.pushContainer(exampleBlockBuilder);
+        ExampleBlockBuilder builder = ExampleBlockBuilder.newBuilder(attributeListBuilder.consume());
+        state.pushBlock(builder);
+        state.pushContainer(builder);
     }
 
     @Override
     public void exitExample() {
+        ExampleBlockBuilder builder = state.popBlock();
         state.popContainer();
-        state.pushBlockToContainer(exampleBlockBuilder);
-        exampleBlockBuilder = null;
+        state.pushBlockToContainer(builder);
     }
 
     // sidebar
@@ -482,7 +483,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void exitTable() {
-        TableBuilder builder = state.peekBlock();
+        TableBuilder builder = state.popBlock();
         builder.tableEnd();
     }
 

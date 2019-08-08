@@ -37,8 +37,8 @@ public class BuildState {
         blockBuilders.addLast(builder);
     }
 
-    public void popBlock() {
-        blockBuilders.removeLast();
+    public <T extends BlockBuilder> T popBlock() {
+        return (T)blockBuilders.removeLast();
     }
 
     public <T extends BlockBuilder> T peekBlock() {
@@ -72,7 +72,7 @@ public class BuildState {
         textBlockBuilders.addLast(block);
     }
 
-    public TextBlockBuilder popTextBlock() {
+    public TextBlockBuilder popTextBlock() { // TODO remove return
         return textBlockBuilders.removeLast();
     }
 
