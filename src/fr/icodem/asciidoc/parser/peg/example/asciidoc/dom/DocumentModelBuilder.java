@@ -31,7 +31,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     private ParagraphBuilder paragraphBuilder;
     private QuoteBuilder quoteBuilder;
-    private ListBlockBuilder listBlockBuilder;
+    //private ListBlockBuilder listBlockBuilder;
     //private LabeledListBuilder labeledListBuilder;
     //private LiteralBlockBuilder literalBlockBuilder;
     //private ExampleBlockBuilder exampleBlockBuilder;
@@ -268,15 +268,14 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // list block
     @Override
     public void enterList() {
-        listBlockBuilder = ListBlockBuilder.root(state.consumeBlockTitle());
-        state.pushBlock(listBlockBuilder);
+        ListBlockBuilder builder = ListBlockBuilder.root(state.consumeBlockTitle());
+        state.pushBlock(builder);
     }
 
     @Override
     public void exitList() {
-        state.pushBlockToContainer(listBlockBuilder);
-        listBlockBuilder = null;
-        state.popBlock();
+        ListBlockBuilder builder = state.popBlock();
+        state.pushBlockToContainer(builder);
     }
 
     @Override
@@ -284,7 +283,8 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         int times = context.getIntAttribute("times.count", -1);
         int dots = context.getIntAttribute("dots.count", -1);
 
-        ListItemBuilder builder = listBlockBuilder.newListItem(times, dots, attributeListBuilder.consume());
+        ListBlockBuilder parentBuilder = state.peekBlock();
+        ListItemBuilder builder = parentBuilder.newListItem(times, dots, attributeListBuilder.consume());
 
         state.pushTextBlock(builder);
         state.pushContainer(builder);
