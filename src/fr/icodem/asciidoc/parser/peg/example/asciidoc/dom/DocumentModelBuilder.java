@@ -32,7 +32,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private ParagraphBuilder paragraphBuilder;
     private QuoteBuilder quoteBuilder;
     private ListBlockBuilder listBlockBuilder;
-    private LabeledListBuilder labeledListBuilder;
+    //private LabeledListBuilder labeledListBuilder;
     //private LiteralBlockBuilder literalBlockBuilder;
     //private ExampleBlockBuilder exampleBlockBuilder;
     //private SidebarBuilder sidebarBuilder;
@@ -311,18 +311,20 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // labeled list
     @Override
     public void enterLabeledList() {
-        labeledListBuilder = LabeledListBuilder.newBuilder();
-        state.pushBlockToContainer(labeledListBuilder);
+        LabeledListBuilder builder = LabeledListBuilder.newBuilder();
+        state.pushBlock(builder);
+        state.pushBlockToContainer(builder);
     }
 
     @Override
     public void exitLabeledList() {
-        labeledListBuilder = null;
+        state.popBlock();
     }
 
     @Override
     public void enterLabeledListItem() {
-        labeledListBuilder.newItem();
+        LabeledListBuilder builder = state.peekBlock();
+        builder.newItem();
     }
 
     @Override
@@ -332,11 +334,12 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void enterLabeledListItemTitle() {
+        LabeledListBuilder builder = state.peekBlock();
         this.state.pushTextBlock(
                 new TextBlockBuilder() {
                     @Override
                     public void setText(String text) {
-                        labeledListBuilder.setItemTitle(text);
+                        builder.setItemTitle(text);
                     }
 
                     @Override
@@ -365,11 +368,12 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void enterLabeledListItemSimpleContent() {
+        LabeledListBuilder builder = state.peekBlock();
         state.pushTextBlock(
                 new TextBlockBuilder() {
                     @Override
                     public void setText(String text) {
-                        labeledListBuilder.setItemContent(text);
+                        builder.setItemContent(text);
                     }
 
                     @Override
