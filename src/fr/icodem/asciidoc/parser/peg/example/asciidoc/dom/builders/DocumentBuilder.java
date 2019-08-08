@@ -7,11 +7,6 @@ import java.util.List;
 public class DocumentBuilder {
     private BuildState state;
 
-    //private AttributeEntries attributes;
-    //private String title;
-    //private List<Author> authors;
-    //private RevisionInfo revisionInfo;
-
     private HeaderBuilder headerBuilder;
     private ContentBuilder contentBuilder;
 
@@ -26,37 +21,15 @@ public class DocumentBuilder {
 
     public Document build() {
 
-        //Header header = Header.of(attributes, Title.of(title), authors, revisionInfo);
         Header header = headerBuilder.build();
         Content content = contentBuilder.build();
 
-        Document doc = Document.of(header, content);
-
-        return doc;
+        return Document.of(header, content);
     }
 
     public void setTitle(String title) {
-        //this.title = title;
         headerBuilder.setTitle(title);
     }
-
-//    public void setAttributes(AttributeEntries attributes) {
-//        this.attributes = attributes;
-//        //headerBuilder.setAttributes(attributes);
-//    }
-
-//    public void setAuthors(List<Author> authors) {
-//        this.authors = authors;
-//    }
-//
-//    public void setRevisionInfo(RevisionInfo revisionInfo) {
-//        this.revisionInfo = revisionInfo;
-//    }
-
-//    public HeaderBuilder addHeader() {
-//        headerBuilder = HeaderBuilder.newBuilder();
-//        return headerBuilder;
-//    }
 
     // TODO change
     public ContentBuilder getContentBuilder() {

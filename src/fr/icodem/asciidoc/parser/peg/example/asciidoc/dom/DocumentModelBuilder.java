@@ -37,10 +37,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private ExampleBlockBuilder exampleBlockBuilder;
     private SidebarBuilder sidebarBuilder;
     private ListingBlockBuilder listingBlockBuilder;
-    private TableBuilder tableBuilder;
-
-
-    //private char[] currentBlockTitle;
+    //private TableBuilder tableBuilder;
 
 
     public static DocumentModelBuilder newDocumentBuilder(AttributeEntries attributeEntries) {
@@ -71,7 +68,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // block title
     @Override
     public void blockTitleValue(char[] chars) {// TODO not yet tested
-        //currentBlockTitle = chars;
         state.setCurrentBlockTitle(chars);
     }
 
@@ -477,20 +473,22 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // table
     @Override
     public void enterTable(int lineNumber) {
-        tableBuilder = TableBuilder.newBuilder(attributeListBuilder.consume(), lineNumber);
+        TableBuilder builder = TableBuilder.newBuilder(attributeListBuilder.consume(), lineNumber);
 
-        state.pushBlockToContainer(tableBuilder);
+        state.pushBlock(builder);
+        state.pushBlockToContainer(builder);
     }
 
     @Override
     public void exitTable() {
-        tableBuilder.tableEnd();
-        tableBuilder = null;
+        TableBuilder builder = state.peekBlock();
+        builder.tableEnd();
     }
 
     @Override
     public void enterTableCell(int lineNumber) {
-        tableBuilder.addCell(lineNumber);
+        TableBuilder builder = state.peekBlock();
+        builder.addCell(lineNumber);
     }
 
     @Override
@@ -500,6 +498,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void tableBlock(String text) {
-        tableBuilder.setContent(text);
+        TableBuilder builder = state.peekBlock();
+        builder.setContent(text);
     }
 }

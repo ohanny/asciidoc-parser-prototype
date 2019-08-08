@@ -41,6 +41,10 @@ public class BuildState {
         blockBuilders.removeLast();
     }
 
+    public <T extends BlockBuilder> T peekBlock() {
+        return (T)blockBuilders.peekLast();
+    }
+
     public void pushText(String text) {
         TextBlockBuilder builder = textBlockBuilders.peekLast();
         if (builder != null) {
