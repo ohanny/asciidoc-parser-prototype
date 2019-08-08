@@ -35,7 +35,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     private LabeledListBuilder labeledListBuilder;
     private LiteralBlockBuilder literalBlockBuilder;
     private ExampleBlockBuilder exampleBlockBuilder;
-    private SidebarBuilder sidebarBuilder;
+    //private SidebarBuilder sidebarBuilder;
     private ListingBlockBuilder listingBlockBuilder;
     //private TableBuilder tableBuilder;
 
@@ -417,15 +417,16 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // sidebar
     @Override
     public void enterSidebar() {
-        sidebarBuilder = SidebarBuilder.newBuilder();
-        state.pushContainer(sidebarBuilder);
+        SidebarBuilder builder = SidebarBuilder.newBuilder();
+        state.pushBlock(builder);
+        state.pushContainer(builder);
     }
 
     @Override
     public void exitSidebar() {
+        SidebarBuilder builder = state.peekBlock();
         state.popContainer();
-        state.pushBlockToContainer(sidebarBuilder);
-        sidebarBuilder = null;
+        state.pushBlockToContainer(builder);
     }
 
     // listing block
