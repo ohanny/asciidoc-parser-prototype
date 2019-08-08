@@ -16,6 +16,7 @@ public class BuildState {
 
     private char[] currentBlockTitle;
 
+    // computed refs : helps avoid duplicates
     private Map<String, Integer> refs;
 
     public static BuildState newInstance(AttributeEntries attributeEntries) {
