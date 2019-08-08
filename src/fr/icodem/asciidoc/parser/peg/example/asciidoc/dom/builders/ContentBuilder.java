@@ -25,8 +25,7 @@ public class ContentBuilder implements BlockBuilder {
     public Content build() {
         Preamble preamble = (preambleBuilder == null) ? null : preambleBuilder.build();
 
-        // TODO check null ?
-        return sectionListBuilder == null ? null : Content.of(preamble, sectionListBuilder.build(firstSection));
+        return Content.of(preamble, sectionListBuilder.build(firstSection));
     }
 
     public void addPreamble() {
