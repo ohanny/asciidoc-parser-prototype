@@ -39,7 +39,7 @@ public class HorizontalRuleTest extends GrammarTest {
                 "'''",
 
                 /* expected */
-                "(document (content (horizontalRule ' ' ' <EOI>)))"
+                "(document (content (preamble (horizontalRule ' ' ' <EOI>))))"
             },
             {
                 /* message */
@@ -49,7 +49,7 @@ public class HorizontalRuleTest extends GrammarTest {
                 "'''\n",
 
                 /* expected */
-                "(document (content (horizontalRule ' ' ' \\n)) (bl <EOI>))"
+                "(document (content (preamble (horizontalRule ' ' ' \\n))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -63,7 +63,7 @@ public class HorizontalRuleTest extends GrammarTest {
                 "Block below",
 
                 /* expected */
-                "(document (content (block (paragraph B l o c k   a b o v e) (nl \\n)) (bl \\n) (horizontalRule ' ' ' \\n) (bl \\n) (block (paragraph B l o c k   b e l o w <EOI>))))"
+                "(document (content (preamble (block (paragraph B l o c k   a b o v e) (nl \\n)) (bl \\n) (horizontalRule ' ' ' \\n) (bl \\n) (block (paragraph B l o c k   b e l o w <EOI>)))))"
             }
         });
 

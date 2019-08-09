@@ -40,7 +40,7 @@ public class BlockIdTest extends GrammarTest {
                 "This is some content",
 
                 /* expected */
-                "(document (content (anchor [ [ (anchorId T h e I D) ] ] \\n) (block (paragraph T h i s   i s   s o m e   c o n t e n t <EOI>))))"
+                "(document (content (preamble (anchor [ [ (anchorId T h e I D) ] ] \\n) (block (paragraph T h i s   i s   s o m e   c o n t e n t <EOI>)))))"
             },
             {
                 /* message */
@@ -51,7 +51,7 @@ public class BlockIdTest extends GrammarTest {
                 "This is some content",
 
                 /* expected */
-                "(document (content (anchor [ [ (anchorId T h e I D) , (anchorLabel   T h e   l a b e l) ] ] \\n) (block (paragraph T h i s   i s   s o m e   c o n t e n t <EOI>))))"
+                "(document (content (preamble (anchor [ [ (anchorId T h e I D) , (anchorLabel   T h e   l a b e l) ] ] \\n) (block (paragraph T h i s   i s   s o m e   c o n t e n t <EOI>)))))"
             },
             {
                 /* message */
@@ -63,7 +63,7 @@ public class BlockIdTest extends GrammarTest {
                 "This is some content",
 
                 /* expected */
-                "(document (content (anchor [ [ (anchorId T h e I D) , (anchorLabel   T h e   l a b e l) ] ] \\n) (anchor [ [ (anchorId T h e I D 2) , (anchorLabel   T h e   l a b e l) ] ] \\n) (block (paragraph T h i s   i s   s o m e   c o n t e n t <EOI>))))"
+                "(document (content (preamble (anchor [ [ (anchorId T h e I D) , (anchorLabel   T h e   l a b e l) ] ] \\n) (anchor [ [ (anchorId T h e I D 2) , (anchorLabel   T h e   l a b e l) ] ] \\n) (block (paragraph T h i s   i s   s o m e   c o n t e n t <EOI>)))))"
             }
         });
 

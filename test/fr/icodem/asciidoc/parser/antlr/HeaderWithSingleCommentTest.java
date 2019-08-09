@@ -88,7 +88,7 @@ public class HeaderWithSingleCommentTest extends GrammarTest {
                 "Some text...",
 
                 /* expected */
-                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !))) (bl \\n) (preamble (block (paragraph S o m e   t e x t . . . <EOI>))))"
+                "(document (singleComment / /   T h i s   i s   a   c o m m e n t   \\n) (header (documentSection (documentTitle H e l l o ,   A s c i i D o c !))) (bl \\n) (content (preamble (block (paragraph S o m e   t e x t . . . <EOI>)))))"
             },
 
         });

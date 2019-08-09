@@ -39,7 +39,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":fruit: kiwi",
 
                 /* expected */
-                "(document (content (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) <EOI>)))"
+                "(document (content (preamble (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) <EOI>))))"
             },
             {
                 /* message */
@@ -49,7 +49,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":fruit: kiwi\n",
 
                 /* expected */
-                "(document (content (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n)) (bl <EOI>))"
+                "(document (content (preamble (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -60,7 +60,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":vegetable: cabbage",
 
                 /* expected */
-                "(document (content (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n) (attributeEntry : (attributeEntryName v e g e t a b l e) :   (attributeValueParts (attributeValuePart c a b b a g e)) <EOI>)))"
+                "(document (content (preamble (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n) (attributeEntry : (attributeEntryName v e g e t a b l e) :   (attributeValueParts (attributeValuePart c a b b a g e)) <EOI>))))"
             },
             {
                 /* message */
@@ -71,7 +71,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":vegetable: cabbage\n",
 
                 /* expected */
-                "(document (content (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n) (attributeEntry : (attributeEntryName v e g e t a b l e) :   (attributeValueParts (attributeValuePart c a b b a g e)) \\n)) (bl <EOI>))"
+                "(document (content (preamble (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i)) \\n) (attributeEntry : (attributeEntryName v e g e t a b l e) :   (attributeValueParts (attributeValuePart c a b b a g e)) \\n))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -81,7 +81,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":fruit:",
 
                 /* expected */
-                "(document (content (attributeEntry : (attributeEntryName f r u i t) : <EOI>)))"
+                "(document (content (preamble (attributeEntry : (attributeEntryName f r u i t) : <EOI>))))"
             },
             {
                 /* message */
@@ -92,7 +92,7 @@ public class AttributeEntryTest extends GrammarTest {
                 "fruit",
 
                 /* expected */
-                "(document (content (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i) + \\n (attributeValuePart f r u i t)) <EOI>)))"
+                "(document (content (preamble (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i) + \\n (attributeValuePart f r u i t)) <EOI>))))"
             },
             {
                 /* message */
@@ -103,7 +103,7 @@ public class AttributeEntryTest extends GrammarTest {
                 "   fruit",
 
                 /* expected */
-                "(document (content (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i) + \\n       (attributeValuePart f r u i t)) <EOI>)))"
+                "(document (content (preamble (attributeEntry : (attributeEntryName f r u i t) :   (attributeValueParts (attributeValuePart k i w i) + \\n       (attributeValuePart f r u i t)) <EOI>))))"
             },
             {
                 /* message */
@@ -113,7 +113,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":!fruit:",
 
                 /* expected */
-                "(document (content (attributeEntry : ! (attributeEntryName f r u i t) : <EOI>)))"
+                "(document (content (preamble (attributeEntry : ! (attributeEntryName f r u i t) : <EOI>))))"
             },
             {
                 /* message */
@@ -123,7 +123,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":fruit!:",
 
                 /* expected */
-                "(document (content (attributeEntry : (attributeEntryName f r u i t) ! : <EOI>)))"
+                "(document (content (preamble (attributeEntry : (attributeEntryName f r u i t) ! : <EOI>))))"
             },
             {
                 /* message */
@@ -155,7 +155,7 @@ public class AttributeEntryTest extends GrammarTest {
                 ":toc-title: Sommaire\n",
 
                 /* expected */
-                "(document (content (attributeEntry : (attributeEntryName t o c - t i t l e) :   (attributeValueParts (attributeValuePart S o m m a i r e)) \\n)) (bl <EOI>))"
+                "(document (content (preamble (attributeEntry : (attributeEntryName t o c - t i t l e) :   (attributeValueParts (attributeValuePart S o m m a i r e)) \\n))) (bl <EOI>))"
             }
         });
 

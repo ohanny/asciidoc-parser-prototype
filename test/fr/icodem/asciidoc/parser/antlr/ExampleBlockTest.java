@@ -41,7 +41,7 @@ public class ExampleBlockTest extends GrammarTest {
                 "====",
 
                 /* expected */
-                "(document (content (block (exampleBlock (exampleBlockDelimiter = = = = \\n) (paragraph S o m e   t e x t \\n) (exampleBlockDelimiter = = = = <EOI>)))))"
+                "(document (content (preamble (block (exampleBlock (exampleBlockDelimiter = = = = \\n) (paragraph S o m e   t e x t \\n) (exampleBlockDelimiter = = = = <EOI>))))))"
             }
         });
 

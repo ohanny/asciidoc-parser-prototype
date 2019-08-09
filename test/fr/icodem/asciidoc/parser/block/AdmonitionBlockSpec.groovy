@@ -17,7 +17,7 @@ a note
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(document (content (attributeList [ (positionalAttribute (attributeValue N O T E)) ] \\n) (block (exampleBlock (exampleBlockDelimiter = = = = \\n) (paragraph a   n o t e \\n) (exampleBlockDelimiter = = = = \\n)))) (bl <EOI>))"
+        result.tree == "(document (content (preamble (attributeList [ (positionalAttribute (attributeValue N O T E)) ] \\n) (block (exampleBlock (exampleBlockDelimiter = = = = \\n) (paragraph a   n o t e \\n) (exampleBlockDelimiter = = = = \\n))))) (bl <EOI>))"
     }
 
     def "admonition block with list inside"() {
@@ -37,7 +37,7 @@ a note
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(document (content (attributeList [ (positionalAttribute (attributeValue N O T E)) ] \\n) (block (exampleBlock (exampleBlockDelimiter = = = = \\n) (paragraph a   n o t e) (nl \\n) (bl \\n) (list (listItem *   (listItemValue o n e) \\n) (listItem *   (listItemValue t w o) \\n)) (bl \\n) (exampleBlockDelimiter = = = = \\n)))) (bl <EOI>))"
+        result.tree == "(document (content (preamble (attributeList [ (positionalAttribute (attributeValue N O T E)) ] \\n) (block (exampleBlock (exampleBlockDelimiter = = = = \\n) (paragraph a   n o t e) (nl \\n) (bl \\n) (list (listItem *   (listItemValue o n e) \\n) (listItem *   (listItemValue t w o) \\n)) (bl \\n) (exampleBlockDelimiter = = = = \\n))))) (bl <EOI>))"
     }
 
     def "admonition block with simple listing inside"() {
@@ -58,7 +58,7 @@ println('hello');
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(document (content (attributeList [ (positionalAttribute (attributeValue N O T E)) ] \\n) (block (exampleBlock (exampleBlockDelimiter = = = = \\n) (paragraph a   n o t e) (nl \\n) (bl \\n) (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' h e l l o ' ) ; \\n (listingBlockDelimiter - - - - \\n)) (bl \\n) (exampleBlockDelimiter = = = = \\n)))) (bl <EOI>))"
+        result.tree == "(document (content (preamble (attributeList [ (positionalAttribute (attributeValue N O T E)) ] \\n) (block (exampleBlock (exampleBlockDelimiter = = = = \\n) (paragraph a   n o t e) (nl \\n) (bl \\n) (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' h e l l o ' ) ; \\n (listingBlockDelimiter - - - - \\n)) (bl \\n) (exampleBlockDelimiter = = = = \\n))))) (bl <EOI>))"
     }
 
     def "admonition block with listing inside"() {
@@ -80,7 +80,7 @@ println('hello');
         ParsingResult result = parse(input)
 
         then:
-        result.tree == "(document (content (attributeList [ (positionalAttribute (attributeValue N O T E)) ] \\n) (block (exampleBlock (exampleBlockDelimiter = = = = \\n) (paragraph a   n o t e) (nl \\n) (bl \\n) (attributeList [ (positionalAttribute (attributeValue s o u r c e)) ] \\n) (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' h e l l o ' ) ; \\n (listingBlockDelimiter - - - - \\n)) (bl \\n) (exampleBlockDelimiter = = = = \\n)))) (bl <EOI>))"
+        result.tree == "(document (content (preamble (attributeList [ (positionalAttribute (attributeValue N O T E)) ] \\n) (block (exampleBlock (exampleBlockDelimiter = = = = \\n) (paragraph a   n o t e) (nl \\n) (bl \\n) (attributeList [ (positionalAttribute (attributeValue s o u r c e)) ] \\n) (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' h e l l o ' ) ; \\n (listingBlockDelimiter - - - - \\n)) (bl \\n) (exampleBlockDelimiter = = = = \\n))))) (bl <EOI>))"
     }
 
 

@@ -225,7 +225,7 @@ public class SectionTitleTest extends GrammarTest {
                 "== Title 2\n",
 
                 /* expected */
-                "(document (header (documentSection (documentTitle T i t l e   1))) (bl \\n) (content (attributeList [ (roleAttribute . (attributeName a t t 1)) ] \\n) (section = =   (sectionTitle T i t l e   2) \\n)) (bl <EOI>))"
+                "(document (header (documentSection (documentTitle T i t l e   1))) (bl \\n) (content (preamble (attributeList [ (roleAttribute . (attributeName a t t 1)) ] \\n)) (section = =   (sectionTitle T i t l e   2) \\n)) (bl <EOI>))"
             }
 
         });

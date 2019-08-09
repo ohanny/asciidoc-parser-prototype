@@ -133,6 +133,14 @@ public interface RulesFactory {
     Rule sequence(Rule... rules);
 
     /**
+     * Creates a rule that supplies a {@link AtLeastSequenceMatcher at least sequence matcher}
+     * @param  min min rules to be matched
+     * @param rules the rules to be matched
+     * @return the sequence rule
+     */
+    Rule atLeastSequence(int min, Rule... rules);
+
+    /**
      * Creates a rule that supplies a {@link TestMatcher test matcher}
      * @param rule the rule to be matched
      * @return the test rule

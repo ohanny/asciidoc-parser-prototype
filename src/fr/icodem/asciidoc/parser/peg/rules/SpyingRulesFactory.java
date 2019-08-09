@@ -130,6 +130,11 @@ public class SpyingRulesFactory extends DefaultRulesFactory {
     }
 
     @Override
+    public Rule atLeastSequence(int min, Rule... rules) {
+        return getSpyingRule(super.atLeastSequence(min, rules));
+    }
+
+    @Override
     public Rule test(Rule rule) {
         return getSpyingRule(super.test(rule));
     }

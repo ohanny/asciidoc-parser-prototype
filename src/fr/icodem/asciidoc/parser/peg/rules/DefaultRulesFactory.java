@@ -152,6 +152,11 @@ public class DefaultRulesFactory implements RulesFactory {
     }
 
     @Override
+    public Rule atLeastSequence(int min, Rule... rules) {
+        return () -> new AtLeastSequenceMatcher(min, rules);
+    }
+
+    @Override
     public Rule test(Rule rule) {
         return () -> new TestMatcher(rule);
     }

@@ -91,7 +91,7 @@ public class NoHeaderAndOneSectionWithContentTest extends GrammarTest {
                 "YYY",
 
                 /* expected */
-                "(document (content (block (paragraph X X X) (nl \\n)) (bl \\n) (section = =   (sectionTitle F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y <EOI>))))"
+                "(document (content (preamble (block (paragraph X X X) (nl \\n)) (bl \\n)) (section = =   (sectionTitle F i r s t   S e c t i o n) \\n) (bl \\n) (block (paragraph Z Z Z) (nl \\n)) (bl \\n) (block (paragraph Y Y Y <EOI>))))"
             }
 
 

@@ -41,7 +41,7 @@ public class ListingBlockTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (content (block (listingBlock (listingBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (listingBlockDelimiter - - - - <EOI>)))))"
+                "(document (content (preamble (block (listingBlock (listingBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (listingBlockDelimiter - - - - <EOI>))))))"
             },
             {
                 /* message */
@@ -53,7 +53,7 @@ public class ListingBlockTest extends GrammarTest {
                 "----\n",
 
                 /* expected */
-                "(document (content (block (listingBlock (listingBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (listingBlockDelimiter - - - - \\n)))) (bl <EOI>))"
+                "(document (content (preamble (block (listingBlock (listingBlockDelimiter - - - - \\n) i n t   a   =   1 0 ; \\n (listingBlockDelimiter - - - - \\n))))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -65,7 +65,7 @@ public class ListingBlockTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (content (block (listingBlock (listingBlockDelimiter - - - - \\n) i n t   a   =   - 1 0 ; \\n (listingBlockDelimiter - - - - <EOI>)))))"
+                "(document (content (preamble (block (listingBlock (listingBlockDelimiter - - - - \\n) i n t   a   =   - 1 0 ; \\n (listingBlockDelimiter - - - - <EOI>))))))"
             }
         });
 

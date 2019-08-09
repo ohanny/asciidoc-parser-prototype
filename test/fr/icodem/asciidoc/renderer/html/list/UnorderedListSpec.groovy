@@ -35,10 +35,10 @@ class UnorderedListSpec extends HtmlRendererSpecification {
         then:
         doc.select("div.ulist").size() == 2
         doc.select("div.ulist > ul").size() == 2
-        doc.select("div#content > div.ulist > ul > li").size() == 2
-        doc.select("div#content > div.ulist > ul > li > p")*.text() == ["Foo", "Blech"]
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li").size() == 1
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Boo"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li").size() == 2
+        doc.select("div#content > div#preamble > div.ulist > ul > li > p")*.text() == ["Foo", "Blech"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li").size() == 1
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Boo"]
     }
 
     def "nested elements (3) with asterisks"() {
@@ -55,12 +55,12 @@ class UnorderedListSpec extends HtmlRendererSpecification {
         then:
         doc.select("div.ulist").size() == 3
         doc.select("div.ulist > ul").size() == 3
-        doc.select("div#content > div.ulist > ul > li").size() == 2
-        doc.select("div#content > div.ulist > ul > li > p")*.text() == ["Foo", "Blech"]
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li").size() == 1
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Boo"]
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Snoo"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li").size() == 2
+        doc.select("div#content > div#preamble > div.ulist > ul > li > p")*.text() == ["Foo", "Blech"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li").size() == 1
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Boo"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Snoo"]
     }
 
 
@@ -79,14 +79,14 @@ class UnorderedListSpec extends HtmlRendererSpecification {
         then:
         doc.select("div.ulist").size() == 4
         doc.select("div.ulist > ul").size() == 4
-        doc.select("div#content > div.ulist > ul > li").size() == 2
-        doc.select("div#content > div.ulist > ul > li > p")*.text() == ["Foo", "Blech"]
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li").size() == 1
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Boo"]
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Snoo"]
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Froo"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li").size() == 2
+        doc.select("div#content > div#preamble > div.ulist > ul > li > p")*.text() == ["Foo", "Blech"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li").size() == 1
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Boo"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Snoo"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Froo"]
     }
 
     def "nested elements (5) with asterisks"() {
@@ -105,16 +105,16 @@ class UnorderedListSpec extends HtmlRendererSpecification {
         then:
         doc.select("div.ulist").size() == 5
         doc.select("div.ulist > ul").size() == 5
-        doc.select("div#content > div.ulist > ul > li").size() == 2
-        doc.select("div#content > div.ulist > ul > li > p")*.text() == ["Foo", "Blech"]
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li").size() == 1
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Boo"]
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Snoo"]
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Froo"]
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
-        doc.select("div#content > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Groo"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li").size() == 2
+        doc.select("div#content > div#preamble > div.ulist > ul > li > p")*.text() == ["Foo", "Blech"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li").size() == 1
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Boo"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Snoo"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Froo"]
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li").size() == 1
+        doc.select("div#content > div#preamble > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > div.ulist > ul > li > p")*.text() == ["Groo"]
     }
 
 }

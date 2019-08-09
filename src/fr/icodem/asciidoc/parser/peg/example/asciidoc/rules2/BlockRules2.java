@@ -66,8 +66,8 @@ public class BlockRules2 extends BaseRules {
                                    nl(),
                                    multiComment(),
                                    singleComment()
-                               )),
-                               optional(preamble())
+                               ))//,
+                               //optional(preamble())
                            )
                         ), optional(content()), optional(bl(true))));
     }
@@ -103,11 +103,12 @@ public class BlockRules2 extends BaseRules {
 
     private Rule preamble() {
         return node("preamble", sequence(
-                firstOf(macro(), block(false)),
+                firstOf(horizontalRule(), attributeEntry(), attributeList(), anchor(), blockTitle(), macro(), block(false)),
                 zeroOrMore(firstOf(
                         sequence(isCurrentCharNotEOI(), bl(false)),
                         nl(),
                         horizontalRule(),
+                        attributeEntry(), attributeList(), anchor(), blockTitle(),
                         macro(),
                         block(false)
                 ))
@@ -224,7 +225,7 @@ public class BlockRules2 extends BaseRules {
     }
 
     private Rule content() {
-        return node("content", oneOrMore(firstOf(
+        return node("content", atLeastSequence(1, preamble(), oneOrMore(firstOf(
                 sequence(isCurrentCharNotEOI(), bl(false)),
                 horizontalRule(),
                 attributeEntry(),
@@ -235,7 +236,7 @@ public class BlockRules2 extends BaseRules {
                 section(),
                 block(false),
                 nl()
-        )));
+        ))));
     }
 
     private Rule section() {

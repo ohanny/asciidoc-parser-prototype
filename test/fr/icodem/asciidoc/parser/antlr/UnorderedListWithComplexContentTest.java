@@ -40,7 +40,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 " and the sun",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n   a n d   t h e   s u n) <EOI>)))))"
+                "(document (content (preamble (block (list (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n   a n d   t h e   s u n) <EOI>))))))"
             },
             {
                 /* message */
@@ -51,7 +51,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "// and the sun",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n / /   a n d   t h e   s u n) <EOI>)))))"
+                "(document (content (preamble (block (list (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n / /   a n d   t h e   s u n) <EOI>))))))"
             },
             {
                 /* message */
@@ -68,7 +68,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 " and carrot",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n   a n d   t h e   s u n) \\n) (bl \\n) (listItem *   (listItemValue K i w i ,   k a k i \\n   a n d   k i w a i) \\n) (bl \\n) (listItem *   (listItemValue C a b b a g e ,   l e e k \\n   a n d   c a r r o t) <EOI>)))))"
+                "(document (content (preamble (block (list (listItem *   (listItemValue T h e   e a r t h ,   t h e   s e a \\n   a n d   t h e   s u n) \\n) (bl \\n) (listItem *   (listItemValue K i w i ,   k a k i \\n   a n d   k i w a i) \\n) (bl \\n) (listItem *   (listItemValue C a b b a g e ,   l e e k \\n   a n d   c a r r o t) <EOI>))))))"
             },
             {
                 /* message */
@@ -80,7 +80,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "Yes !\n",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !) (nl \\n))))))) (bl <EOI>))"
+                "(document (content (preamble (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !) (nl \\n)))))))) (bl <EOI>))"
             },
             {
                 /* message */
@@ -94,7 +94,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - <EOI>)))))))))"
+                "(document (content (preamble (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - <EOI>))))))))))"
             },
             {
                 /* message */
@@ -109,7 +109,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (attributeList [ (positionalAttribute (attributeValue s o u r c e)) ] \\n) (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - <EOI>)))))))))"
+                "(document (content (preamble (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (attributeList [ (positionalAttribute (attributeValue s o u r c e)) ] \\n) (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - <EOI>))))))))))"
             },
             {
                 /* message */
@@ -125,7 +125,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "----",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - <EOI>)))))))))"
+                "(document (content (preamble (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - <EOI>))))))))))"
             },
             {
                 /* message */
@@ -139,7 +139,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "Great !",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOI>))))))))"
+                "(document (content (preamble (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOI>)))))))))"
             },
             {
                 /* message */
@@ -157,7 +157,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "Great !",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - \\n)))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOI>))))))))"
+                "(document (content (preamble (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   ! \\n))) (listContinuation + \\n (block (listingBlock (listingBlockDelimiter - - - - \\n) p r i n t l n ( ' Y e s   ! ' ) \\n (listingBlockDelimiter - - - - \\n)))) (listContinuation + \\n (block (paragraph G r e a t   ! <EOI>)))))))))"
             },
             {
                 /* message */
@@ -171,7 +171,7 @@ public class UnorderedListWithComplexContentTest extends GrammarTest {
                 "* ...and the sky is blue",
 
                 /* expected */
-                "(document (content (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !) (nl \\n)))) (bl \\n) (listItem *   (listItemValue . . . a n d   t h e   s k y   i s   b l u e) <EOI>)))))"
+                "(document (content (preamble (block (list (listItem *   (listItemValue T h e   s u n   i s   s h i n i n g . . .) \\n (listContinuation + \\n (block (paragraph Y e s   !) (nl \\n)))) (bl \\n) (listItem *   (listItemValue . . . a n d   t h e   s k y   i s   b l u e) <EOI>))))))"
             }
         });
 

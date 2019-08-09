@@ -214,6 +214,14 @@ public class BaseRules {
     }
 
     /**
+     * Creates an at least sequence rule.
+     * @see DefaultRulesFactory#atLeastSequence(int, Rule...)
+     */
+    protected Rule atLeastSequence(int min, Rule... rules) {
+        return factory.atLeastSequence(min, rules);
+    }
+
+    /**
      * Creates a test rule.
      * @see DefaultRulesFactory#test(Rule)
      */
