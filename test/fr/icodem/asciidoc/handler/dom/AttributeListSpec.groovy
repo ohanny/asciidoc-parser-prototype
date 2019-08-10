@@ -34,8 +34,8 @@ This is some content
         doc.content.sections[0].blocks[0].text.content == 'This is some content'
         doc.content.sections[0].blocks[0].admonition == null
 
-        doc.content.sections[0].blocks[0].attributeList != null
-        doc.content.sections[0].blocks[0].attributeList.id == 'tiger'
+        doc.content.sections[0].blocks[0].attributes != null
+        doc.content.sections[0].blocks[0].attributes.id == 'tiger'
 
 
     }

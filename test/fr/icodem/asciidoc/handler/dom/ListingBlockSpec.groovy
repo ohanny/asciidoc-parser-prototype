@@ -61,9 +61,9 @@ int a = 10;
         doc.content.sections[0].blocks.size() == 1
         doc.content.sections[0].blocks[0] != null
         doc.content.sections[0].blocks[0] instanceof ListingBlock
-        doc.content.sections[0].blocks[0].attributeList != null
-        doc.content.sections[0].blocks[0].attributeList.firstPositionalAttribute == 'source'
-        doc.content.sections[0].blocks[0].attributeList.secondPositionalAttribute == 'java'
+        doc.content.sections[0].blocks[0].attributes != null
+        doc.content.sections[0].blocks[0].attributes.firstPositionalAttribute == 'source'
+        doc.content.sections[0].blocks[0].attributes.secondPositionalAttribute == 'java'
         doc.content.sections[0].blocks[0].text != null
         doc.content.sections[0].blocks[0].text.content == 'int a = 10;\n'
     }
@@ -97,9 +97,9 @@ int a = 10;
         doc.content.sections[0].blocks.size() == 1
         doc.content.sections[0].blocks[0] != null
         doc.content.sections[0].blocks[0] instanceof ListingBlock
-        doc.content.sections[0].blocks[0].attributeList != null
-        doc.content.sections[0].blocks[0].attributeList.firstPositionalAttribute == 'source'
-        doc.content.sections[0].blocks[0].attributeList.secondPositionalAttribute == 'java'
+        doc.content.sections[0].blocks[0].attributes != null
+        doc.content.sections[0].blocks[0].attributes.firstPositionalAttribute == 'source'
+        doc.content.sections[0].blocks[0].attributes.secondPositionalAttribute == 'java'
         doc.content.sections[0].blocks[0].text != null
         doc.content.sections[0].blocks[0].text.content == 'int a = 10;\n'
 

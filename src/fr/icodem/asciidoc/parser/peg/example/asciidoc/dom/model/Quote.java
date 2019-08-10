@@ -9,7 +9,7 @@ public class Quote extends TextBlock {
         quote.type = ElementType.Quote;
         quote.attribution = attribution;
         quote.citationTitle = citationTitle;
-        quote.attributeList = attList;
+        quote.attributes = attList;
         quote.text = text;
 
         return quote;

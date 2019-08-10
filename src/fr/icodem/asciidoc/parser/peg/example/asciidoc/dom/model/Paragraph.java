@@ -8,7 +8,7 @@ public class Paragraph extends TextBlock {
         p.type = ElementType.Paragraph;
         p.text = text;
         p.admonition = admonition;
-        p.attributeList = attList;
+        p.attributes = attList;
 
         return p;
     }

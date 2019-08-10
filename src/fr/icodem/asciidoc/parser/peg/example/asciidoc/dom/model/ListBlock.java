@@ -8,7 +8,7 @@ public class ListBlock extends Block {
 
     public static ListBlock of(AttributeList attList, ElementType type, List<ListItem> items) {
         ListBlock list = new ListBlock();
-        list.attributeList = attList;
+        list.attributes = attList;
         list.type = type;
         list.items = items;
 
