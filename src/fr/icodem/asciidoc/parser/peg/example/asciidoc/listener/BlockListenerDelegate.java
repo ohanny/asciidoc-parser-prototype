@@ -803,36 +803,36 @@ public class BlockListenerDelegate extends AbstractDelegate {
         handler.endListItemValue();
     }
 
-    public void enterLabeledList() {
-        handler.startLabeledList();
+    public void enterDescriptionList() {
+        handler.startDescriptionList();
     }
 
-    public void exitLabeledList() {
-        handler.endLabeledList();
+    public void exitDescriptionList() {
+        handler.endDescriptionList();
     }
 
-    public void enterLabeledListTitle() {
-        handler.startLabeledListItemTitle();
+    public void enterDescriptionListTitle() {
+        handler.startDescriptionListItemTitle();
     }
 
-    public void exitLabeledListTitle() {
-        handler.endLabeledListItemTitle();
+    public void exitDescriptionListTitle() {
+        handler.endDescriptionListItemTitle();
     }
 
-    public void enterLabeledListContent() {
-        handler.startLabeledListItemContent();
+    public void enterDescriptionListContent() {
+        handler.startDescriptionListItemContent();
     }
 
-    public void exitLabeledListContent() {
-        handler.endLabeledListItemContent();
+    public void exitDescriptionListContent() {
+        handler.endDescriptionListItemContent();
     }
 
-    public void enterLabeledListSimpleContent() {
-        handler.startLabeledListItemSimpleContent();
+    public void enterDescriptionListSimpleContent() {
+        handler.startDescriptionListItemSimpleContent();
     }
 
-    public void exitLabeledListSimpleContent() {
-        handler.endLabeledListItemSimpleContent();
+    public void exitDescriptionListSimpleContent() {
+        handler.endDescriptionListItemSimpleContent();
     }
 
     public void enterTable(int lineNumber) {

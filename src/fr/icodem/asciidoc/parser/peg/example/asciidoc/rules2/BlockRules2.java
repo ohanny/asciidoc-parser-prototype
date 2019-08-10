@@ -128,7 +128,7 @@ public class BlockRules2 extends BaseRules {
                 literalBlock(),
                 exampleBlock(),
                 table(),
-                labeledList(),
+                descriptionList(),
                 sidebarBlock(),
                 sequence(paragraph(), optional(nl()))
         ));
@@ -489,11 +489,10 @@ public class BlockRules2 extends BaseRules {
         ));
     }
 
-    // TODO rename to description list
-    private Rule labeledList() {
-        return node("labeledList",
+    private Rule descriptionList() {
+        return node("descriptionList",
                  sequence(
-                   labeledListItem(),
+                   descriptionListItem(),
                    zeroOrMore(
                      sequence(
                        zeroOrMore(
@@ -505,7 +504,7 @@ public class BlockRules2 extends BaseRules {
                            attributeList()
                          )
                        ),
-                       labeledListItem()
+                       descriptionListItem()
                      )
                    )
                  )
@@ -513,11 +512,11 @@ public class BlockRules2 extends BaseRules {
         ;
     }
 
-    private Rule labeledListItem() {
-        return node("labeledListItem",
+    private Rule descriptionListItem() {
+        return node("descriptionListItem",
                  sequence(
                    optional(blank()),
-                   labeledListItemTitle(),
+                   descriptionListItemTitle(),
                    atLeast(':', 2),
                    firstOf(
                      sequence(
@@ -527,15 +526,15 @@ public class BlockRules2 extends BaseRules {
                      nl()
                    ),
                    zeroOrMore(bl()),
-                   labeledListItemContent(),
+                   descriptionListItemContent(),
                    optional(nl())
                  )
                )
         ;
     }
 
-    private Rule labeledListItemTitle() {
-        return node("labeledListItemTitle",
+    private Rule descriptionListItemTitle() {
+        return node("descriptionListItemTitle",
                  zeroOrMore(
                    sequence(
                      testNot(
@@ -559,8 +558,8 @@ public class BlockRules2 extends BaseRules {
 
     // Could be greatly simplified if content was always considered as block
     // => compatible with [horizontal] ?
-    private Rule labeledListItemContent() {
-        return node("labeledListItemContent",
+    private Rule descriptionListItemContent() {
+        return node("descriptionListItemContent",
                  firstOf(
                    sequence(
                      isNextCharAtBeginningOfLine(),
@@ -572,7 +571,7 @@ public class BlockRules2 extends BaseRules {
                          sequence(
                            isNextCharAtBeginningOfLine(),
                            optional(blank()),
-                           labeledListItemTitle(),
+                           descriptionListItemTitle(),
                            atLeast(':', 2),
                            firstOf(
                              sequence(
@@ -592,7 +591,7 @@ public class BlockRules2 extends BaseRules {
                                bl(),
                                bl(true),
                                sequence(
-                                 labeledListItemTitle(),
+                                 descriptionListItemTitle(),
                                  atLeast(':', 2),
                                  firstOf(
                                    sequence(
@@ -733,7 +732,7 @@ public class BlockRules2 extends BaseRules {
                   literalBlock(),
                   //exampleBlock(),
                   table(),
-                  labeledList(),
+                  descriptionList(),
                   sequence(paragraph(), optional(nl()))
                 )
               ),
@@ -765,7 +764,7 @@ public class BlockRules2 extends BaseRules {
                   literalBlock(),
                   exampleBlock(),
                   table(),
-                  labeledList(),
+                  descriptionList(),
                   sequence(paragraph(), optional(nl()))
                 )
               ),

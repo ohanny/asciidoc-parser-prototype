@@ -108,25 +108,25 @@ public interface AsciidocHandler2 {
 
     default void exitListItemValue() {}
 
-    default void enterLabeledList() {}
+    default void enterDescriptionList() {}
 
-    default void exitLabeledList() {}
+    default void exitDescriptionList() {}
 
-    default void enterLabeledListItem() {}
+    default void enterDescriptionListItem() {}
 
-    default void exitLabeledListItem() {}
+    default void exitDescriptionListItem() {}
 
-    default void enterLabeledListItemTitle() {}
+    default void enterDescriptionListItemTitle() {}
 
-    default void exitLabeledListItemTitle() {}
+    default void exitDescriptionListItemTitle() {}
 
-    default void enterLabeledListItemContent() {}
+    default void enterDescriptionListItemContent() {}
 
-    default void exitLabeledListItemContent() {}
+    default void exitDescriptionListItemContent() {}
 
-    default void enterLabeledListItemSimpleContent() {}
+    default void enterDescriptionListItemSimpleContent() {}
 
-    default void exitLabeledListItemSimpleContent() {}
+    default void exitDescriptionListItemSimpleContent() {}
 
     default void enterTable(int lineNumber) {}
 

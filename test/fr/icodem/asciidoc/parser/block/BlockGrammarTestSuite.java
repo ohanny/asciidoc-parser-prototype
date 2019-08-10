@@ -8,7 +8,7 @@ import org.junit.runners.Suite;
     AdmonitionParagraphSpec.class,
     AdmonitionBlockSpec.class,
     TableSpec.class,
-    LabeledListSpec.class,
+    DescriptionListSpec.class,
     SidebarBlockSpec.class
 })
 public class BlockGrammarTestSuite {

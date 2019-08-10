@@ -2,16 +2,14 @@ package fr.icodem.asciidoc.handler.dom
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ElementType
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.LabeledList
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListBlock
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Paragraph
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.DescriptionList
 
-class LabeledListSpec extends DomHandlerBaseSpec {
+class DescriptionListSpec extends DomHandlerBaseSpec {
 
-    def "simple labeled list"() {
+    def "simple description list"() {
         given:
         String input = '''\
-= Labeled List
+= Description List
 
 == Section 1
 
@@ -32,10 +30,10 @@ title:: content
         doc.content.sections[0].blocks.size() == 1
         doc.content.sections[0].blocks[0] != null
 
-        doc.content.sections[0].blocks[0] instanceof LabeledList
-        LabeledList block = doc.content.sections[0].blocks[0]
+        doc.content.sections[0].blocks[0] instanceof DescriptionList
+        DescriptionList block = doc.content.sections[0].blocks[0]
         block.title == null
-        block.type == ElementType.LabeledList
+        block.type == ElementType.DescriptionList
         block.items != null
         block.items.size() == 1
 

@@ -301,60 +301,60 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 //        //handler.endListItemValue();
 //    }
 
-    // labeled list
+    // description list
     @Override
-    public void enterLabeledList() {
-        LabeledListBuilder builder = LabeledListBuilder.newBuilder();
+    public void enterDescriptionList() {
+        DescriptionListBuilder builder = DescriptionListBuilder.newBuilder();
         state.pushBlock(builder);
         state.pushBlockToContainer(builder);
     }
 
     @Override
-    public void exitLabeledList() {
+    public void exitDescriptionList() {
         state.popBlock();
     }
 
     @Override
-    public void enterLabeledListItem() {
-        LabeledListBuilder builder = state.peekBlock();
+    public void enterDescriptionListItem() {
+        DescriptionListBuilder builder = state.peekBlock();
         builder.newItem();
     }
 
     @Override
-    public void exitLabeledListItem() {
+    public void exitDescriptionListItem() {
 
     }
 
     @Override
-    public void enterLabeledListItemTitle() {
-        LabeledListBuilder builder = state.peekBlock();
+    public void enterDescriptionListItemTitle() {
+        DescriptionListBuilder builder = state.peekBlock();
         this.state.pushTextContainer(builder::setItemTitle);
     }
 
     @Override
-    public void exitLabeledListItemTitle() {
+    public void exitDescriptionListItemTitle() {
         state.popTextContainer();
     }
 
 
     @Override
-    public void enterLabeledListItemContent() {
+    public void enterDescriptionListItemContent() {
 
     }
 
     @Override
-    public void exitLabeledListItemContent() {
+    public void exitDescriptionListItemContent() {
 
     }
 
     @Override
-    public void enterLabeledListItemSimpleContent() {
-        LabeledListBuilder builder = state.peekBlock();
+    public void enterDescriptionListItemSimpleContent() {
+        DescriptionListBuilder builder = state.peekBlock();
         state.pushTextContainer(builder::setItemContent);
     }
 
     @Override
-    public void exitLabeledListItemSimpleContent() {
+    public void exitDescriptionListItemSimpleContent() {
         state.popTextContainer();
     }
 

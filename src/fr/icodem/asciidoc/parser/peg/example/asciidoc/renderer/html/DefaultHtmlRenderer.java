@@ -823,7 +823,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void startLabeledList() {
+    public void startDescriptionList() {
         indent()
             .append(DIV.start("class", "dlist"))
             .nl()
@@ -835,7 +835,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void endLabeledList() {
+    public void endDescriptionList() {
         decIndent()
             .indent()
             .append(DL.end())
@@ -847,19 +847,19 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void startLabeledListItemTitle() {
+    public void startDescriptionListItemTitle() {
         indent()
             .append(DT.start("class", "hdlist1"));
     }
 
     @Override
-    public void endLabeledListItemTitle() {
+    public void endDescriptionListItemTitle() {
         append(DT.end())
             .nl();
     }
 
     @Override
-    public void startLabeledListItemContent() {
+    public void startDescriptionListItemContent() {
         indent()
             .append(DD.start())
             .nl()
@@ -867,7 +867,7 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void endLabeledListItemContent() {
+    public void endDescriptionListItemContent() {
         decIndent()
             .indent()
             .append(DD.end())
@@ -875,13 +875,13 @@ public class DefaultHtmlRenderer<DHR extends DefaultHtmlRenderer<DHR>> extends H
     }
 
     @Override
-    public void startLabeledListItemSimpleContent() {
+    public void startDescriptionListItemSimpleContent() {
         indent()
             .append(P.start());
     }
 
     @Override
-    public void endLabeledListItemSimpleContent() {
+    public void endDescriptionListItemSimpleContent() {
         append(P.end())
             .nl();
     }

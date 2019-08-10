@@ -1,10 +1,10 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model;
 
-public class LabeledListItem extends Block {
+public class DescriptionListItem extends Block {
     private Text content;
 
-    public static LabeledListItem of(Title title, Text content) {
-        LabeledListItem item = new LabeledListItem();
+    public static DescriptionListItem of(Title title, Text content) {
+        DescriptionListItem item = new DescriptionListItem();
         item.title = title;
         item.content = content;
 

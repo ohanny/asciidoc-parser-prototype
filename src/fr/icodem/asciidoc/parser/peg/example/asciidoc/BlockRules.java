@@ -8,8 +8,6 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.SourceResolver;
 import fr.icodem.asciidoc.parser.peg.rules.Rule;
 import fr.icodem.asciidoc.parser.peg.rules.RulesFactory;
 
-import java.util.function.Supplier;
-
 public class BlockRules extends BaseRules {
 
     private CommonRules commonRules;
@@ -131,7 +129,7 @@ public class BlockRules extends BaseRules {
                 literalBlock(),
                 exampleBlock(),
                 table(),
-                labeledList(),
+                descriptionList(),
                 sidebarBlock(),
                 sequence(paragraph(), optional(nl()))
         ));
@@ -492,10 +490,10 @@ public class BlockRules extends BaseRules {
         ));
     }
 
-    private Rule labeledList() {
-        return node("labeledList",
+    private Rule descriptionList() {
+        return node("descriptionList",
                  sequence(
-                   labeledListItem(),
+                   descriptionListItem(),
                    zeroOrMore(
                      sequence(
                        zeroOrMore(
@@ -507,7 +505,7 @@ public class BlockRules extends BaseRules {
                            attributeList()
                          )
                        ),
-                       labeledListItem()
+                       descriptionListItem()
                      )
                    )
                  )
@@ -515,11 +513,11 @@ public class BlockRules extends BaseRules {
         ;
     }
 
-    private Rule labeledListItem() {
-        return node("labeledListItem",
+    private Rule descriptionListItem() {
+        return node("descriptionListItem",
                  sequence(
                    optional(blank()),
-                   labeledListItemTitle(),
+                   descriptionListItemTitle(),
                    atLeast(':', 2),
                    firstOf(
                      sequence(
@@ -529,15 +527,15 @@ public class BlockRules extends BaseRules {
                      nl()
                    ),
                    zeroOrMore(bl()),
-                   labeledListItemContent(),
+                   descriptionListItemContent(),
                    optional(nl())
                  )
                )
         ;
     }
 
-    private Rule labeledListItemTitle() {
-        return node("labeledListItemTitle",
+    private Rule descriptionListItemTitle() {
+        return node("descriptionListItemTitle",
                  zeroOrMore(
                    sequence(
                      testNot(
@@ -561,8 +559,8 @@ public class BlockRules extends BaseRules {
 
     // Could be greatly simplified if content was always considered as block
     // => compatible with [horizontal] ?
-    private Rule labeledListItemContent() {
-        return node("labeledListItemContent",
+    private Rule descriptionListItemContent() {
+        return node("descriptionListItemContent",
                  firstOf(
                    sequence(
                      isNextCharAtBeginningOfLine(),
@@ -574,7 +572,7 @@ public class BlockRules extends BaseRules {
                          sequence(
                            isNextCharAtBeginningOfLine(),
                            optional(blank()),
-                           labeledListItemTitle(),
+                           descriptionListItemTitle(),
                            atLeast(':', 2),
                            firstOf(
                              sequence(
@@ -594,7 +592,7 @@ public class BlockRules extends BaseRules {
                                bl(),
                                bl(true),
                                sequence(
-                                 labeledListItemTitle(),
+                                 descriptionListItemTitle(),
                                  atLeast(':', 2),
                                  firstOf(
                                    sequence(
@@ -735,7 +733,7 @@ public class BlockRules extends BaseRules {
                   literalBlock(),
                   //exampleBlock(),
                   table(),
-                  labeledList(),
+                  descriptionList(),
                   sequence(paragraph(), optional(nl()))
                 )
               ),
@@ -767,7 +765,7 @@ public class BlockRules extends BaseRules {
                   literalBlock(),
                   exampleBlock(),
                   table(),
-                  labeledList(),
+                  descriptionList(),
                   sequence(paragraph(), optional(nl()))
                 )
               ),

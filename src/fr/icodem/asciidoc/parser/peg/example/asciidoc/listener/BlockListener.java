@@ -46,13 +46,13 @@ public class BlockListener implements ParseTreeListener {
                 break;
             case "paragraph":
             case "listItemValue":
-            case "labeledListItemTitle":
+            case "descriptionListItemTitle":
                 delegate.formattedText(chars);
                 break;
-            case "labeledListItemContent":
-                delegate.enterLabeledListSimpleContent();
+            case "descriptionListItemContent":
+                delegate.enterDescriptionListSimpleContent();
                 delegate.formattedText(chars);
-                delegate.exitLabeledListSimpleContent();
+                delegate.exitDescriptionListSimpleContent();
                 break;
             case "authorName":
                 delegate.authorName(new String(chars));
@@ -172,14 +172,14 @@ public class BlockListener implements ParseTreeListener {
             case "listItemValue" :
                 delegate.enterListItemValue();
                 break;
-            case "labeledList" :
-                delegate.enterLabeledList();
+            case "descriptionList" :
+                delegate.enterDescriptionList();
                 break;
-            case "labeledListItemTitle" :
-                delegate.enterLabeledListTitle();
+            case "descriptionListItemTitle" :
+                delegate.enterDescriptionListTitle();
                 break;
-            case "labeledListItemContent" :
-                delegate.enterLabeledListContent();
+            case "descriptionListItemContent" :
+                delegate.enterDescriptionListContent();
                 break;
             case "table" :
                 delegate.enterTable(context.getIntAttribute("lineNumber", -1));
@@ -254,14 +254,14 @@ public class BlockListener implements ParseTreeListener {
             case "listItemValue" :
                 delegate.exitListItemValue();
                 break;
-            case "labeledList" :
-                delegate.exitLabeledList();
+            case "descriptionList" :
+                delegate.exitDescriptionList();
                 break;
-            case "labeledListItemTitle" :
-                delegate.exitLabeledListTitle();
+            case "descriptionListItemTitle" :
+                delegate.exitDescriptionListTitle();
                 break;
-            case "labeledListItemContent" :
-                delegate.exitLabeledListContent();
+            case "descriptionListItemContent" :
+                delegate.exitDescriptionListContent();
                 break;
             case "table" :
                 delegate.exitTable();

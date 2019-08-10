@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.LabeledListItem;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.DescriptionListItem;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Text;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Title;
 
@@ -14,8 +14,8 @@ public class LabeledListItemBuilder implements BlockBuilder {
     }
 
     @Override
-    public LabeledListItem build() {
-        return LabeledListItem.of(Title.of(title), Text.of(content));
+    public DescriptionListItem build() {
+        return DescriptionListItem.of(Title.of(title), Text.of(content));
     }
 
     public void setTitle(String title) {

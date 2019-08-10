@@ -14,7 +14,7 @@ import org.junit.runners.Suite;
   AdmonitionParagraphSpec.class,
   AttributeListSpec.class,
   ListBlockSpec.class,
-  LabeledListSpec.class,
+  DescriptionListSpec.class,
   LiteralBlockSpec.class,
   ExampleBlockSpec.class,
   ListingBlockSpec.class,

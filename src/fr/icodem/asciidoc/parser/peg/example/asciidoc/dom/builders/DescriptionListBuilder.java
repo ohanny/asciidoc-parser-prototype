@@ -1,32 +1,32 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.LabeledList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.LabeledListItem;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.DescriptionList;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.DescriptionListItem;
 
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LabeledListBuilder implements BlockBuilder {
+public class DescriptionListBuilder implements BlockBuilder {
 
     private Deque<LabeledListItemBuilder> items;
 
-    public static LabeledListBuilder newBuilder() {
-        LabeledListBuilder builder = new LabeledListBuilder();
+    public static DescriptionListBuilder newBuilder() {
+        DescriptionListBuilder builder = new DescriptionListBuilder();
         builder.items = new LinkedList<>();
 
         return builder;
     }
 
     @Override
-    public LabeledList build() {
-        List<LabeledListItem> items = this.items
+    public DescriptionList build() {
+        List<DescriptionListItem> items = this.items
                 .stream()
                 .map(LabeledListItemBuilder::build)
                 .collect(Collectors.toList());
 
-        return LabeledList.of(items);
+        return DescriptionList.of(items);
     }
 
     public void newItem() {

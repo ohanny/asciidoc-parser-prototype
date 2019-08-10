@@ -45,15 +45,15 @@ public class BlockListener2 implements ParseTreeListener {
                 break;
             case "paragraph":
             case "listItemValue":
-            case "labeledListItemTitle":
+            case "descriptionListItemTitle":
             case "literalBlock":
             case "listingBlock":
                 handler.formattedText(chars);
                 break;
-            case "labeledListItemContent":
-                handler.enterLabeledListItemSimpleContent();
+            case "descriptionListItemContent":
+                handler.enterDescriptionListItemSimpleContent();
                 handler.formattedText(chars);
-                handler.exitLabeledListItemSimpleContent();
+                handler.exitDescriptionListItemSimpleContent();
                 break;
             case "authorName":
                 handler.authorName(new String(chars));
@@ -179,17 +179,17 @@ public class BlockListener2 implements ParseTreeListener {
             case "listItemValue" :
                 handler.enterListItemValue();
                 break;
-            case "labeledList" :
-                handler.enterLabeledList();
+            case "descriptionList" :
+                handler.enterDescriptionList();
                 break;
-            case "labeledListItem" :
-                handler.enterLabeledListItem();
+            case "descriptionListItem" :
+                handler.enterDescriptionListItem();
                 break;
-            case "labeledListItemTitle" :
-                handler.enterLabeledListItemTitle();
+            case "descriptionListItemTitle" :
+                handler.enterDescriptionListItemTitle();
                 break;
-            case "labeledListItemContent" :
-                handler.enterLabeledListItemContent();
+            case "descriptionListItemContent" :
+                handler.enterDescriptionListItemContent();
                 break;
             case "table" :
                 handler.enterTable(context.getIntAttribute("lineNumber", -1));
@@ -276,17 +276,17 @@ public class BlockListener2 implements ParseTreeListener {
             case "listItemValue" :
                 handler.exitListItemValue();
                 break;
-            case "labeledList" :
-                handler.exitLabeledList();
+            case "descriptionList" :
+                handler.exitDescriptionList();
                 break;
-            case "labeledListItem" :
-                handler.exitLabeledListItem();
+            case "descriptionListItem" :
+                handler.exitDescriptionListItem();
                 break;
-            case "labeledListItemTitle" :
-                handler.exitLabeledListItemTitle();
+            case "descriptionListItemTitle" :
+                handler.exitDescriptionListItemTitle();
                 break;
-            case "labeledListItemContent" :
-                handler.exitLabeledListItemContent();
+            case "descriptionListItemContent" :
+                handler.exitDescriptionListItemContent();
                 break;
             case "table" :
                 handler.exitTable();
