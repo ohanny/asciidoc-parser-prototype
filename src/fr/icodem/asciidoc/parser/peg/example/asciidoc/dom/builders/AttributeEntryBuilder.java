@@ -7,6 +7,10 @@ public class AttributeEntryBuilder {
     private String value;
     private boolean disabled;
 
+    public static AttributeEntryBuilder newBuilder() {
+        return new AttributeEntryBuilder();
+    }
+
     public AttributeEntry build() {
         return AttributeEntry.of(name, value, disabled);
     }

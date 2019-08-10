@@ -15,9 +15,12 @@ class AttributeEntrySpec extends DomHandlerBaseSpec {
 
         then:
         doc != null
-        doc.header != null
-        doc.header.attributes != null
-        AttributeEntry att = doc.header.attributes.getAttribute("doctitle")
+
+        doc.header == null
+        //doc.header != null
+        //doc.header.attributes != null
+        //AttributeEntry att = doc.header.attributes.getAttribute("doctitle")
+        AttributeEntry att = doc.attributes.getAttribute("doctitle")
         att.name == "doctitle"
         att.value == "Untitled"
         att.disabled == false
@@ -32,9 +35,9 @@ class AttributeEntrySpec extends DomHandlerBaseSpec {
 
         then:
         doc != null
-        doc.header != null
-        doc.header.attributes != null
-        AttributeEntry att = doc.header.attributes.getAttribute("att1")
+        doc.header == null
+        doc.attributes != null
+        AttributeEntry att = doc.attributes.getAttribute("att1")
         att.name == "att1"
         att.value == "value1"
         att.disabled == false
@@ -52,15 +55,15 @@ class AttributeEntrySpec extends DomHandlerBaseSpec {
 
         then:
         doc != null
-        doc.header != null
-        doc.header.attributes != null
+        doc.header == null
+        doc.attributes != null
 
-        AttributeEntry att1 = doc.header.attributes.getAttribute("att1")
+        AttributeEntry att1 = doc.attributes.getAttribute("att1")
         att1.name == "att1"
         att1.value == "value1"
         att1.disabled == false
 
-        AttributeEntry att2 = doc.header.attributes.getAttribute("att2")
+        AttributeEntry att2 = doc.attributes.getAttribute("att2")
         att2.name == "att2"
         att2.value == "value2"
         att2.disabled == false
@@ -77,10 +80,10 @@ class AttributeEntrySpec extends DomHandlerBaseSpec {
 
         then:
         doc != null
-        doc.header != null
-        doc.header.attributes != null
+        doc.header == null
+        doc.attributes != null
 
-        AttributeEntry att = doc.header.attributes.getAttribute("doctitle")
+        AttributeEntry att = doc.attributes.getAttribute("doctitle")
         att.name == "doctitle"
         att.disabled == true
 

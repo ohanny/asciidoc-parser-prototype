@@ -5,37 +5,34 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 import java.util.List;
 
 public class DocumentBuilder {
+    private BuildState state;
     private HeaderBuilder headerBuilder;
     private ContentBuilder contentBuilder;
 
     public static DocumentBuilder newBuilder(BuildState state) {
         DocumentBuilder builder = new DocumentBuilder();
-        builder.headerBuilder = HeaderBuilder.newBuilder(state);
-        builder.contentBuilder = ContentBuilder.newBuilder(state);
+        builder.state = state;
 
         return builder;
     }
 
     public Document build() {
+        Header header = headerBuilder == null ? null : headerBuilder.build();
+        Content content = contentBuilder == null ? null : contentBuilder.build();
 
-        Header header = headerBuilder.build();
-        Content content = contentBuilder.build();
-
-        return Document.of(header, content);
+        return Document.of(state.getAttributeEntries(), header, content);
     }
 
     public void setTitle(String title) {
         headerBuilder.setTitle(title);
     }
 
-    // TODO change
-    public ContentBuilder getContentBuilder() {
-        return contentBuilder;
+    public ContentBuilder addContent() {
+        return contentBuilder = ContentBuilder.newBuilder(state);
     }
 
-    public HeaderBuilder getHeaderBuilder() {
-        return headerBuilder;
+    public HeaderBuilder addHeader() {
+        return headerBuilder = HeaderBuilder.newBuilder();
     }
-
 
 }

@@ -5,16 +5,13 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 import java.util.List;
 
 public class HeaderBuilder {
-    private BuildState state;
-
     private String title;
 
     private AuthorsBuilder authorsBuilder;
     private RevisionInfoBuilder revisionInfoBuilder;
 
-    public static HeaderBuilder newBuilder(BuildState state) {
+    public static HeaderBuilder newBuilder() {
         HeaderBuilder builder = new HeaderBuilder();
-        builder.state = state;
         builder.authorsBuilder = AuthorsBuilder.newBuilder();
 
         return builder;
@@ -24,7 +21,7 @@ public class HeaderBuilder {
         List<Author> authors = authorsBuilder.build();
         RevisionInfo revisionInfo = revisionInfoBuilder == null ? null : revisionInfoBuilder.build();
 
-        return Header.of(state.getAttributeEntries(), Title.of(title), authors, revisionInfo);
+        return Header.of(Title.of(title), authors, revisionInfo);
     }
 
     public void setTitle(String title) {

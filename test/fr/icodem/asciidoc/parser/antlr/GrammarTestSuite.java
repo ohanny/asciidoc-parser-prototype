@@ -33,6 +33,7 @@ import org.junit.runners.Suite;
     CellFormatingTableTest.class,
     AuthorLineTest.class,
     PreambleTest.class,
+    DocumentTest.class,
     BlockGrammarTestSuite.class,
     TextGrammarTestSuite.class
 })

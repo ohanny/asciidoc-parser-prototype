@@ -21,6 +21,8 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     // builders
     private DocumentBuilder documentBuilder;
+    private HeaderBuilder headerBuilder;
+    private ContentBuilder contentBuilder;
 
     private AttributeEntryBuilder attributeEntryBuilder;
     private AttributeListBuilder attributeListBuilder;
@@ -130,10 +132,9 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     }
 
     // document
-
     @Override
     public void enterDocument() {
-        attributeEntryBuilder = new AttributeEntryBuilder();
+        attributeEntryBuilder = AttributeEntryBuilder.newBuilder();
         documentBuilder = DocumentBuilder.newBuilder(state);
     }
 
@@ -142,12 +143,23 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         //checkExitSection(-1); TODO OLIV
     }
 
+    // header
+    @Override
+    public void enterHeader() {
+        headerBuilder = documentBuilder.addHeader();
+    }
+
+    @Override
+    public void exitHeader() {
+
+    }
+
     @Override
     public void documentTitle(String text) {
         documentBuilder.setTitle(text);
     }
 
-    // author callbacks
+    // authors
     public void enterAuthors() {
     }
 
@@ -157,67 +169,66 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void authorName(String name) {
-        documentBuilder.getHeaderBuilder().setAuthorName(name);
+        headerBuilder.setAuthorName(name);
     }
 
     @Override
     public void authorAddress(String email) {
-        documentBuilder.getHeaderBuilder().setAuthorEmail(email);
+        headerBuilder.setAuthorEmail(email);
     }
 
     @Override
     public void exitAuthor() {
-        documentBuilder.getHeaderBuilder().closeAuthor();
+        headerBuilder.closeAuthor();
     }
 
-    // revision info callbacks
-
+    // revision info
     @Override
     public void enterRevisionInfo() {
-        documentBuilder.getHeaderBuilder().addRevisionInfo();
+        headerBuilder.addRevisionInfo();
     }
 
     @Override @Deprecated // TODO à revoir pour décomposer en date, number, remark
     public void revisionInfo(String line) {
-        documentBuilder.getHeaderBuilder().setRevisionInfoDate(line);
+        headerBuilder.setRevisionInfoDate(line);
     }
 
     @Override
     public void exitRevisionInfo() {
     }
 
-
-    @Override
-    public void enterPreamble() {
-        documentBuilder.getContentBuilder().addPreamble();
-    }
-
-    @Override
-    public void exitPreamble() {
-        documentBuilder.getContentBuilder().closePreamble();
-    }
-
-    // content callback
-
+    // content
     @Override
     public void enterContent() {
+        contentBuilder = documentBuilder.addContent();
     }
 
     @Override
     public void exitContent() {
-        documentBuilder.getContentBuilder().closeContent();
+        contentBuilder.closeContent();
     }
 
-    // section callbacks
+    // preamble
+    @Override
+    public void enterPreamble() {
+        contentBuilder.addPreamble();
+    }
+
+    @Override
+    public void exitPreamble() {
+        contentBuilder.closePreamble();
+    }
+
+    // section
     @Override
     public void enterSection(NodeContext context) {
         int level = min(context.getIntAttribute("level", -1), 6);
-        documentBuilder.getContentBuilder().newSection(level, attributeListBuilder.consume());
+        contentBuilder.newSection(level, attributeListBuilder.consume());
     }
 
     @Override
     public void sectionTitle(String title) {
-        documentBuilder.getContentBuilder().setSectionTitle(title);
+        contentBuilder.setSectionTitle(title);
     }
 
     // paragraph

@@ -9,6 +9,7 @@ public class Section extends Block {
 
     public static Section of(int level, Title title, List<Block> blocks) {
         Section section = new Section();
+        section.type = ElementType.Section;
         section.level = level;
         section.title = title;
         section.blocks = blocks;
