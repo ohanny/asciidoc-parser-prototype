@@ -8,9 +8,10 @@ public class Table extends Block {
     private List<TableRow> footer;
     private List<TableRow> body;
 
-    public static Table of(List<TableColumn> columns, List<TableRow> header, List<TableRow> footer, List<TableRow> body) {
+    public static Table of(AttributeList attList, List<TableColumn> columns, List<TableRow> header, List<TableRow> footer, List<TableRow> body) {
         Table table = new Table();
         table.type = ElementType.Table;
+        table.attributes = attList;
         table.columns = columns;
         table.header = header;
         table.footer = footer;

@@ -1,9 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Block;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Section;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Title;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +18,17 @@ public class SectionBuilder implements BlockContainer {
 
     private List<BlockBuilder> blocks;
 
-    public static SectionBuilder of(int level) {
+    public static SectionBuilder of(AttributeList attList, int level) {
         SectionBuilder builder = new SectionBuilder();
+        builder.attList = attList;
         builder.level = level;
         builder.blocks = new ArrayList<>();
         return builder;
     }
 
-    public static SectionBuilder of(int level, SectionBuilder previous, SectionBuilder parent) {
+    public static SectionBuilder of(AttributeList attList, int level, SectionBuilder previous, SectionBuilder parent) {
         SectionBuilder builder = new SectionBuilder();
+        builder.attList = attList;
         builder.level = level;
         builder.previous = previous;
         builder.parent = parent;
@@ -43,7 +42,7 @@ public class SectionBuilder implements BlockContainer {
                                  .map(BlockBuilder::build)
                                  .collect(Collectors.toList());
 
-        Section section = Section.of(level, Title.of(title), blocks);
+        Section section = Section.of(attList, level, Title.of(title), blocks);
         return section;
     }
 
@@ -80,9 +79,9 @@ public class SectionBuilder implements BlockContainer {
 //        return attList;
 //    }
 
-    public void setAttList(AttributeList attList) {
-        this.attList = attList;
-    }
+    //public void setAttList(AttributeList attList) {
+    //    this.attList = attList;
+    //}
 
     public SectionBuilder getNext() {
         return next;

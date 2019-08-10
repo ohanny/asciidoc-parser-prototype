@@ -244,7 +244,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
             state.pushBlock(builder);
             state.pushTextContainer(builder);
         } else {
-            ParagraphBuilder builder = ParagraphBuilder.of(admonition, attList);
+            ParagraphBuilder builder = ParagraphBuilder.of(attList, admonition);
             state.pushBlock(builder);
             state.pushTextContainer(builder);
         }
@@ -391,7 +391,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // sidebar
     @Override
     public void enterSidebar() {
-        SidebarBuilder builder = SidebarBuilder.newBuilder();
+        SidebarBuilder builder = SidebarBuilder.newBuilder(attributeListBuilder.consume());
         state.pushBlock(builder);
         state.pushBlockContainer(builder);
     }

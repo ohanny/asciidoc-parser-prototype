@@ -5,12 +5,13 @@ import java.util.List;
 public class Sidebar extends Block {
     protected List<Block> blocks;
 
-    public static Sidebar of(List<Block> blocks) {
-        Sidebar block = new Sidebar();
-        block.type = ElementType.Sidebar;
-        block.blocks = blocks;
+    public static Sidebar of(AttributeList attList, List<Block> blocks) {
+        Sidebar sidebar = new Sidebar();
+        sidebar.type = ElementType.Sidebar;
+        sidebar.attributes = attList;
+        sidebar.blocks = blocks;
 
-        return block;
+        return sidebar;
     }
 
     public List<Block> getBlocks() {

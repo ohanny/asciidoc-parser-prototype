@@ -7,9 +7,9 @@ public class Quote extends TextBlock {
     public static Quote of(AttributeList attList, Text text, String attribution, String citationTitle) {
         Quote quote = new Quote();
         quote.type = ElementType.Quote;
+        quote.attributes = attList;
         quote.attribution = attribution;
         quote.citationTitle = citationTitle;
-        quote.attributes = attList;
         quote.text = text;
 
         return quote;

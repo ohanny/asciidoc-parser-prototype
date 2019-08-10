@@ -43,14 +43,14 @@ public class ContentBuilder implements BlockBuilder {
             SectionBuilder parent = checkExitSection(level);
 
             SectionBuilder previous = currentSection;
-            currentSection = SectionBuilder.of(level, previous, parent);
+            currentSection = SectionBuilder.of(attList, level, previous, parent);
             previous.setNext(currentSection);
         } else {
-            firstSection = SectionBuilder.of(level);
+            firstSection = SectionBuilder.of(attList, level);
             currentSection = firstSection;
         }
 
-        currentSection.setAttList(attList);
+        //currentSection.setAttList(attList);
         state.pushBlockContainer(currentSection);
     }
 

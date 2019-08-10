@@ -1,5 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Block;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Sidebar;
 
@@ -8,10 +9,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SidebarBuilder implements BlockBuilder, BlockContainer {
+    private AttributeList attList;
     private List<BlockBuilder> blocks;
 
-    public static SidebarBuilder newBuilder() {
+    public static SidebarBuilder newBuilder(AttributeList attList) {
         SidebarBuilder builder = new SidebarBuilder();
+        builder.attList = attList;
         builder.blocks = new ArrayList<>();
 
         return builder;
@@ -24,7 +27,7 @@ public class SidebarBuilder implements BlockBuilder, BlockContainer {
                 .map(BlockBuilder::build)
                 .collect(Collectors.toList());
 
-        return Sidebar.of(blocks);
+        return Sidebar.of(attList, blocks);
     }
 
     @Override

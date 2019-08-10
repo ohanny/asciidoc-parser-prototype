@@ -9,18 +9,17 @@ public class ParagraphBuilder implements BlockBuilder, TextContainer {
     private AttributeList attributeList;
     private String text;
 
-    public static ParagraphBuilder of(String admonition, AttributeList attList) {
+    public static ParagraphBuilder of(AttributeList attList, String admonition) {
         ParagraphBuilder builder = new ParagraphBuilder();
-        builder.admonition = admonition;
         builder.attributeList = attList;
+        builder.admonition = admonition;
 
         return builder;
     }
 
     @Override
     public Paragraph build() {
-        Paragraph p = Paragraph.of(attributeList, Text.of(text), admonition);
-        return p;
+        return Paragraph.of(attributeList, Text.of(text), admonition);
     }
 
     @Override

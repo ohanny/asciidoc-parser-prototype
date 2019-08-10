@@ -7,9 +7,10 @@ public class Section extends Block {
     protected Title title;
     protected List<Block> blocks;
 
-    public static Section of(int level, Title title, List<Block> blocks) {
+    public static Section of(AttributeList attList, int level, Title title, List<Block> blocks) {
         Section section = new Section();
         section.type = ElementType.Section;
+        section.attributes = attList;
         section.level = level;
         section.title = title;
         section.blocks = blocks;

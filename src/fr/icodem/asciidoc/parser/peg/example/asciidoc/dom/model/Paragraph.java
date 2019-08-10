@@ -6,9 +6,9 @@ public class Paragraph extends TextBlock {
     public static Paragraph of(AttributeList attList, Text text, String admonition) {
         Paragraph p = new Paragraph();
         p.type = ElementType.Paragraph;
+        p.attributes = attList;
         p.text = text;
         p.admonition = admonition;
-        p.attributes = attList;
 
         return p;
     }
