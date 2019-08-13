@@ -9,6 +9,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.rules2.BlockRules2;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
 import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
+import java.io.Reader;
 import java.io.StringReader;
 
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
@@ -50,6 +51,16 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         return documentBuilder==null?null:documentBuilder.build();
     }
 
+    public Document build(Reader reader) {
+        final BlockListener2 listener = new BlockListener2(this, state.getAttributeEntries());
+
+        ParsingResult result = new ParseRunner(rules, rules::document)
+                //.trace()
+                .parse(reader, listener, null, null);
+
+        return documentBuilder==null?null:documentBuilder.build();
+    }
+
     // block title
     @Override
     public void blockTitleValue(char[] chars) {// TODO not yet tested
@@ -78,6 +89,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void attributeEntryName(String name) {
         attributeEntryBuilder.setName(name);
+        System.out.println(name);
     }
 
     @Override

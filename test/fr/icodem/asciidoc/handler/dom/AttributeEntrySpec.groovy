@@ -17,9 +17,6 @@ class AttributeEntrySpec extends DomHandlerBaseSpec {
         doc != null
 
         doc.header == null
-        //doc.header != null
-        //doc.header.attributes != null
-        //AttributeEntry att = doc.header.attributes.getAttribute("doctitle")
         AttributeEntry att = doc.attributes.getAttribute("doctitle")
         att.name == "doctitle"
         att.value == "Untitled"

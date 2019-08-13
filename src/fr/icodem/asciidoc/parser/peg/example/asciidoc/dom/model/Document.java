@@ -13,6 +13,10 @@ public class Document {
         return doc;
     }
 
+    public boolean hasTitle() {
+        return header != null && header.getDocumentTitle() != null;
+    }
+
     public AttributeEntries getAttributes() {
         return attributes;
     }

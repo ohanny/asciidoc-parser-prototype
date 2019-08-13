@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class DescriptionListBuilder implements BlockBuilder {
 
-    private Deque<LabeledListItemBuilder> items;
+    private Deque<DescriptionListItemBuilder> items;
 
     public static DescriptionListBuilder newBuilder() {
         DescriptionListBuilder builder = new DescriptionListBuilder();
@@ -23,14 +23,14 @@ public class DescriptionListBuilder implements BlockBuilder {
     public DescriptionList build() {
         List<DescriptionListItem> items = this.items
                 .stream()
-                .map(LabeledListItemBuilder::build)
+                .map(DescriptionListItemBuilder::build)
                 .collect(Collectors.toList());
 
         return DescriptionList.of(items);
     }
 
     public void newItem() {
-        this.items.add(LabeledListItemBuilder.newBuilder());
+        this.items.add(DescriptionListItemBuilder.newBuilder());
     }
 
     public void setItemTitle(String title) {

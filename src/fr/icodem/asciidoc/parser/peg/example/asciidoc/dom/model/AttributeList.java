@@ -99,6 +99,10 @@ public class AttributeList {
         return options.contains(option);
     }
 
+    public boolean hasRole(String role) {
+        return roles.contains(role);
+    }
+
     public Set<String> getRoles() {
         return roles;
     }

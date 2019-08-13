@@ -4,13 +4,13 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.DescriptionListI
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Text;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Title;
 
-public class LabeledListItemBuilder implements BlockBuilder {
+public class DescriptionListItemBuilder implements BlockBuilder {
 
     private String title;
     private String content;
 
-    public static LabeledListItemBuilder newBuilder() {
-        return new LabeledListItemBuilder();
+    public static DescriptionListItemBuilder newBuilder() {
+        return new DescriptionListItemBuilder();
     }
 
     @Override

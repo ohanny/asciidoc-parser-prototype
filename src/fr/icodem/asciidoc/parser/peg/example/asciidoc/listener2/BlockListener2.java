@@ -19,8 +19,7 @@ public class BlockListener2 implements ParseTreeListener {
 
     @Override
     public void characters(NodeContext context, char[] chars, int startIndex, int endIndex) {// TODO recycle char tab => add offset + length (cf SAX)
-        //System.out.println("CHARS => " + new String(chars));
-
+        // System.out.println("CHARS " + context.getNodeName() + " => " + new String(chars));
         switch (context.getNodeName()) {
             case "attributeEntry":
                 handler.attributeEntry(new String(chars));
