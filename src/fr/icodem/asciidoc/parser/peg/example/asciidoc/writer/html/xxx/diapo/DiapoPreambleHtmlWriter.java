@@ -5,16 +5,35 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterSet;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.PreambleHtmlWriter;
 
-import java.io.IOException;
+import static fr.icodem.asciidoc.backend.html.HtmlTag.H1;
+import static fr.icodem.asciidoc.backend.html.HtmlTag.HEADER;
 
-public class DiapoPreambleHtmlWriter extends PreambleHtmlWriter {
+public class DiapoPreambleHtmlWriter extends PreambleHtmlWriter<DiapoPreambleHtmlWriter> {
 
     public DiapoPreambleHtmlWriter(Outputter outputter, WriterSet writers) {
         super(outputter, writers);
     }
 
     @Override
-    public void write(Preamble preamble) throws IOException {
+    protected void startPreamble(Preamble preamble) {
+        incIndent()
+          .indent().append(HEADER.start("class", "caption")).nl()
+          .incIndent()
+            .includeTitle()
+          .decIndent()
+        ;
+    }
 
+    private DiapoPreambleHtmlWriter includeTitle() {
+        if (!document.hasTitle()) return this;
+
+        String title = replaceSpecialCharacters(document.getHeader().getDocumentTitle().getText());
+        return indent()
+          .append(H1.start()).append(title).append(H1.end()).nl();
+    }
+
+    @Override
+    protected void endPreamble(Preamble preamble) {
+        indent().append(HEADER.end()).nl();
     }
 }

@@ -24,6 +24,7 @@ public class WriterSet {
     private TableHtmlWriter tableWriter;
     private TableRowHtmlWriter tableRowWriter;
     private TableCellHtmlWriter tableCellWriter;
+    private ListingHtmlWriter listingWriter;
     private QuoteHtmlWriter quoteWriter;
     private ExampleHtmlWriter exampleWriter;
     private LiteralHtmlWriter literalWriter;
@@ -51,6 +52,7 @@ public class WriterSet {
         tableWriter.setDocument(document);
         tableRowWriter.setDocument(document);
         tableCellWriter.setDocument(document);
+        listingWriter.setDocument(document);
         quoteWriter.setDocument(document);
         exampleWriter.setDocument(document);
         literalWriter.setDocument(document);
@@ -183,6 +185,14 @@ public class WriterSet {
 
     public void setTableCellWriter(TableCellHtmlWriter tableCellWriter) {
         this.tableCellWriter = tableCellWriter;
+    }
+
+    public ListingHtmlWriter getListingWriter() {
+        return listingWriter;
+    }
+
+    public void setListingWriter(ListingHtmlWriter listingWriter) {
+        this.listingWriter = listingWriter;
     }
 
     public QuoteHtmlWriter getQuoteWriter() {

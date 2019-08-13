@@ -1,7 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListBlock;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Listing;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListingBlock;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterSet;
 
@@ -13,5 +12,5 @@ public abstract class ListingHtmlWriter extends ModelHtmlWriter<ListingHtmlWrite
         super(outputter, writers);
     }
 
-    public abstract void write(Listing listing) throws IOException;
+    public abstract void write(ListingBlock listing) throws IOException;
 }

@@ -1,10 +1,12 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntry;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlWriter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterSet;
+
+import java.io.IOException;
+import java.util.List;
 
 public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWriter<MHW> {
     protected Document document;
@@ -35,6 +37,54 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
         return document.getAttributes().isAttributeEnabled(name);
     }
 
+    protected void writeBlocks(List<Block> blocks) throws IOException {
+        for (Block block : blocks) {
+            writeBlock(block);
+        }
+    }
+
+    protected void writeBlock(Block block) throws IOException {
+        switch (block.getType()) {
+            case Paragraph:
+                writers.getParagraphWriter().write((Paragraph) block);
+                break;
+            case UnorderedList:
+            case OrderedList:
+                writers.getListWriter().write((ListBlock) block);
+                break;
+            case DescriptionList:
+                writers.getDescriptionListWriter().write((DescriptionList) block);
+                break;
+            case Table:
+                writers.getTableWriter().write((Table) block);
+                break;
+            case Quote:
+                writers.getQuoteWriter().write((Quote) block);
+                break;
+            case Example:
+                writers.getExampleWriter().write((ExampleBlock) block);
+                break;
+            case Literal:
+                writers.getLiteralWriter().write((LiteralBlock) block);
+                break;
+            case Sidebar:
+                writers.getSidebarWriter().write((Sidebar) block);
+                break;
+            case Listing:
+                writers.getListingWriter().write((ListingBlock) block);
+                break;
+            case HorizontalRule:
+                writers.getHorizontalRuleWriter().write((HorizontalRule) block);
+                break;
+        }
+    }
+
+    protected String replaceSpecialCharacters(String text) { // TODO temporary
+        text = text.replaceAll("&", "&amp;");
+        text = text.replaceAll("<", "&lt;");
+        text = text.replaceAll(">", "&gt;");
+        return text;
+    }
 
     public DocumentHtmlWriter getDocumentWriter() {
         return writers.getDocumentWriter();
@@ -98,6 +148,10 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
 
     public TableCellHtmlWriter getTableCellWriter() {
         return writers.getTableCellWriter();
+    }
+
+    public ListingHtmlWriter getListingWriter() {
+        return writers.getListingWriter();
     }
 
     public QuoteHtmlWriter getQuoteWriter() {

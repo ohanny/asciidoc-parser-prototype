@@ -34,6 +34,7 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
         private BiFunction<Outputter, WriterSet, TableHtmlWriter> tableWriterFunc;
         private BiFunction<Outputter, WriterSet, TableRowHtmlWriter> tableRowWriterFunc;
         private BiFunction<Outputter, WriterSet, TableCellHtmlWriter> tableCellWriterFunc;
+        private BiFunction<Outputter, WriterSet, ListingHtmlWriter> listingWriterFunc;
         private BiFunction<Outputter, WriterSet, QuoteHtmlWriter> quoteWriterFunc;
         private BiFunction<Outputter, WriterSet, ExampleHtmlWriter> exampleWriterFunc;
         private BiFunction<Outputter, WriterSet, LiteralHtmlWriter> literalWriterFunc;
@@ -64,6 +65,7 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             writers.setTableWriter(tableWriterFunc.apply(outputter, writers));
             writers.setTableRowWriter(tableRowWriterFunc.apply(outputter, writers));
             writers.setTableCellWriter(tableCellWriterFunc.apply(outputter, writers));
+            writers.setListingWriter(listingWriterFunc.apply(outputter, writers));
             writers.setQuoteWriter(quoteWriterFunc.apply(outputter, writers));
             writers.setExampleWriter(exampleWriterFunc.apply(outputter, writers));
             writers.setLiteralWriter(literalWriterFunc.apply(outputter, writers));
@@ -155,6 +157,11 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             return this;
         }
 
+        public Builder withListingWriter(BiFunction<Outputter, WriterSet, ListingHtmlWriter> func) {
+            this.listingWriterFunc = func;
+            return this;
+        }
+
         public Builder withQuoteWriter(BiFunction<Outputter, WriterSet, QuoteHtmlWriter> func) {
             this.quoteWriterFunc = func;
             return this;
@@ -205,6 +212,7 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
                 .withTableRowWriter((outputter, writers) -> new DiapoTableRowHtmlWriter(outputter, writers))
                 .withTableRowWriter((outputter, writers) -> new DiapoTableRowHtmlWriter(outputter, writers))
                 .withTableCellWriter((outputter, writers) -> new DiapoTableCellHtmlWriter(outputter, writers))
+                .withListingWriter((outputter, writers) -> new DiapoListingHtmlWriter(outputter, writers))
                 .withQuoteWriter((outputter, writers) -> new DiapoQuoteHtmlWriter(outputter, writers))
                 .withExampleWriter((outputter, writers) -> new DiapoExampleHtmlWriter(outputter, writers))
                 .withLiteralWriter((outputter, writers) -> new DiapoLiteralHtmlWriter(outputter, writers))

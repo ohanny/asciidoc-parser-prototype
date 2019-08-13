@@ -5,8 +5,6 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterSet;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.DocumentHtmlWriter;
 
-import java.io.IOException;
-
 import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.*;
 
 public class DiapoDocumentHtmlWriter extends DocumentHtmlWriter<DiapoDocumentHtmlWriter> {
@@ -16,7 +14,7 @@ public class DiapoDocumentHtmlWriter extends DocumentHtmlWriter<DiapoDocumentHtm
     }
 
     @Override
-    protected void startDocument() throws IOException {
+    protected void startDocument() {
         append(DOCTYPE.tag()).nl()
           .append(HTML.start()).nl()
           .append(HEAD.start()).nl()
@@ -65,7 +63,7 @@ public class DiapoDocumentHtmlWriter extends DocumentHtmlWriter<DiapoDocumentHtm
     }
 
     @Override
-    protected void endDocument() throws IOException {
+    protected void endDocument() {
         decIndent().append(HTML.end());
     }
 
