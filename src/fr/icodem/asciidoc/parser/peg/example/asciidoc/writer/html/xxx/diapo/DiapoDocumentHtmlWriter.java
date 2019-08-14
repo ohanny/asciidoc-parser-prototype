@@ -2,15 +2,15 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.diapo;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntry;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterSet;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.DocumentHtmlWriter;
 
 import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.*;
 
 public class DiapoDocumentHtmlWriter extends DocumentHtmlWriter<DiapoDocumentHtmlWriter> {
 
-    public DiapoDocumentHtmlWriter(Outputter outputter, WriterSet writers) {
-        super(outputter, writers);
+    public DiapoDocumentHtmlWriter(Outputter outputter, WriterState state) {
+        super(outputter, state);
     }
 
     @Override
@@ -41,8 +41,8 @@ public class DiapoDocumentHtmlWriter extends DocumentHtmlWriter<DiapoDocumentHtm
     }
 
     protected DiapoDocumentHtmlWriter includeTitle() {
-        if (!document.hasTitle()) return this;
-        String title = document.getHeader().getDocumentTitle().getText();
+        if (!getDocument().hasTitle()) return this;
+        String title = getDocument().getHeader().getDocumentTitle().getText();
         return indent().append(TITLE.start()).append(title).append(TITLE.end()).nl();
     }
 

@@ -89,7 +89,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void attributeEntryName(String name) {
         attributeEntryBuilder.setName(name);
-        System.out.println(name);
     }
 
     @Override

@@ -1,16 +1,15 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Section;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlWriter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterSet;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 
 import java.io.IOException;
 
-public abstract class SectionHtmlWriter extends ModelHtmlWriter<SectionHtmlWriter> {
+public abstract class SectionHtmlWriter <DHW extends SectionHtmlWriter<DHW>> extends ModelHtmlWriter<DHW> {
 
-    public SectionHtmlWriter(Outputter outputter, WriterSet writers) {
-        super(outputter, writers);
+    public SectionHtmlWriter(Outputter outputter, WriterState state) {
+        super(outputter, state);
     }
 
     public void write(Section section) throws IOException {

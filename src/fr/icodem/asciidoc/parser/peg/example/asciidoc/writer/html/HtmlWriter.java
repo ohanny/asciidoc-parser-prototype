@@ -66,31 +66,11 @@ public abstract class HtmlWriter<HW extends HtmlWriter<HW>> {
     private final static String INDENT = "  ";
     
     private Outputter outputter;
+    protected WriterState state; // TODO dependency to model writer : to be refactored
 
-    //    private class Indenter {
-//        int level;
-//
-//        public Indenter() {}
-//
-//        public Indenter(int level) {
-//            this.level = level;
-//        }
-//
-//        void increment() {
-//            level++;
-//        }
-//
-//        void decrement() {
-//            level--;
-//        }
-//    }
-    
-    //private Indenter rootIndenter;
-    //private Indenter indenter;
-    private int indent;
-
-    public HtmlWriter(Outputter outputter) {
+    public HtmlWriter(Outputter outputter, WriterState state) {
         this.outputter = outputter;
+        this.state = state;
     }
 
     public HW append(String str) {
@@ -109,19 +89,19 @@ public abstract class HtmlWriter<HW extends HtmlWriter<HW>> {
     }
 
     public HW indent() {
-        for (int i = 0; i < indent; i++) {
+        for (int i = 0; i < state.getIndent(); i++) {
             append(INDENT);
         }
         return (HW)this;
     }
 
     public HW incIndent() {
-        indent++;
+        state.incIndent();
         return (HW)this;
     }
 
     public HW decIndent() {
-        indent--;
+        state.decIndent();
         return (HW)this;
     }
 

@@ -4,13 +4,14 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Content;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Section;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterSet;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 
 import java.io.IOException;
 
 public abstract class ContentHtmlWriter <DHW extends ContentHtmlWriter<DHW>> extends ModelHtmlWriter<DHW> {
 
-    public ContentHtmlWriter(Outputter outputter, WriterSet writers) {
-        super(outputter, writers);
+    public ContentHtmlWriter(Outputter outputter, WriterState state) {
+        super(outputter, state);
     }
 
     public void write(Content content) throws IOException {
@@ -23,11 +24,11 @@ public abstract class ContentHtmlWriter <DHW extends ContentHtmlWriter<DHW>> ext
 
     protected void writeContent(Content content) throws IOException {
         if (content.getPreamble() != null) {
-            writers.getPreambleWriter().write(content.getPreamble());
+            getWriters().getPreambleWriter().write(content.getPreamble());
         }
         if (content.getSections() != null) {
             for (Section section : content.getSections()) {
-                writers.getSectionWriter().write(section);
+                getWriters().getSectionWriter().write(section);
             }
         }
     }

@@ -14,62 +14,64 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
     private WriterSet writers;
 
     public static class Builder {
-        private BiFunction<Outputter, WriterSet, DocumentHtmlWriter> documentWriterFunc;
+        private BiFunction<Outputter, WriterState, DocumentHtmlWriter> documentWriterFunc;
 
-        private BiFunction<Outputter, WriterSet, HeaderHtmlWriter> headerWriterFunc;
-        private BiFunction<Outputter, WriterSet, RevisionInfoHtmlWriter> revisionInfoWriterFunc;
-        private BiFunction<Outputter, WriterSet, AuthorsHtmlWriter> authorsWriterFunc;
+        private BiFunction<Outputter, WriterState, HeaderHtmlWriter> headerWriterFunc;
+        private BiFunction<Outputter, WriterState, RevisionInfoHtmlWriter> revisionInfoWriterFunc;
+        private BiFunction<Outputter, WriterState, AuthorsHtmlWriter> authorsWriterFunc;
 
-        private BiFunction<Outputter, WriterSet, ContentHtmlWriter> contentWriterFunc;
-        private BiFunction<Outputter, WriterSet, PreambleHtmlWriter> preambleWriterFunc;
-        private BiFunction<Outputter, WriterSet, SectionHtmlWriter> sectionWriterFunc;
+        private BiFunction<Outputter, WriterState, ContentHtmlWriter> contentWriterFunc;
+        private BiFunction<Outputter, WriterState, PreambleHtmlWriter> preambleWriterFunc;
+        private BiFunction<Outputter, WriterState, SectionHtmlWriter> sectionWriterFunc;
 
-        private BiFunction<Outputter, WriterSet, HorizontalRuleHtmlWriter> horizontalRuleWriterFunc;
+        private BiFunction<Outputter, WriterState, HorizontalRuleHtmlWriter> horizontalRuleWriterFunc;
 
-        private BiFunction<Outputter, WriterSet, ParagraphHtmlWriter> paragraphWriterFunc;
-        private BiFunction<Outputter, WriterSet, ListHtmlWriter> listWriterFunc;
-        private BiFunction<Outputter, WriterSet, ListItemHtmlWriter> listItemWriterFunc;
-        private BiFunction<Outputter, WriterSet, DescriptionListHtmlWriter> descriptionListWriterFunc;
-        private BiFunction<Outputter, WriterSet, DescriptionListItemHtmlWriter> descriptionListItemWriterFunc;
-        private BiFunction<Outputter, WriterSet, TableHtmlWriter> tableWriterFunc;
-        private BiFunction<Outputter, WriterSet, TableRowHtmlWriter> tableRowWriterFunc;
-        private BiFunction<Outputter, WriterSet, TableCellHtmlWriter> tableCellWriterFunc;
-        private BiFunction<Outputter, WriterSet, ListingHtmlWriter> listingWriterFunc;
-        private BiFunction<Outputter, WriterSet, QuoteHtmlWriter> quoteWriterFunc;
-        private BiFunction<Outputter, WriterSet, ExampleHtmlWriter> exampleWriterFunc;
-        private BiFunction<Outputter, WriterSet, LiteralHtmlWriter> literalWriterFunc;
-        private BiFunction<Outputter, WriterSet, SidebarHtmlWriter> sidebarWriterFunc;
+        private BiFunction<Outputter, WriterState, ParagraphHtmlWriter> paragraphWriterFunc;
+        private BiFunction<Outputter, WriterState, ListHtmlWriter> listWriterFunc;
+        private BiFunction<Outputter, WriterState, ListItemHtmlWriter> listItemWriterFunc;
+        private BiFunction<Outputter, WriterState, DescriptionListHtmlWriter> descriptionListWriterFunc;
+        private BiFunction<Outputter, WriterState, DescriptionListItemHtmlWriter> descriptionListItemWriterFunc;
+        private BiFunction<Outputter, WriterState, TableHtmlWriter> tableWriterFunc;
+        private BiFunction<Outputter, WriterState, TableRowHtmlWriter> tableRowWriterFunc;
+        private BiFunction<Outputter, WriterState, TableCellHtmlWriter> tableCellWriterFunc;
+        private BiFunction<Outputter, WriterState, ListingHtmlWriter> listingWriterFunc;
+        private BiFunction<Outputter, WriterState, QuoteHtmlWriter> quoteWriterFunc;
+        private BiFunction<Outputter, WriterState, ExampleHtmlWriter> exampleWriterFunc;
+        private BiFunction<Outputter, WriterState, LiteralHtmlWriter> literalWriterFunc;
+        private BiFunction<Outputter, WriterState, SidebarHtmlWriter> sidebarWriterFunc;
 
         public void write(Document document, Writer writer) throws IOException {
             Outputter outputter = new Outputter(writer);
 
             WriterSet writers = WriterSet.newInstance();
+            WriterState state = WriterState.newInstance();
+            state.setWriterSet(writers);
 
-            writers.setDocumentWriter(documentWriterFunc.apply(outputter, writers));
+            writers.setDocumentWriter(documentWriterFunc.apply(outputter, state));
 
-            writers.setHeaderWriter(headerWriterFunc.apply(outputter, writers));
-            writers.setRevisionInfoWriter(revisionInfoWriterFunc.apply(outputter, writers));
-            writers.setAuthorsWriter(authorsWriterFunc.apply(outputter, writers));
+            writers.setHeaderWriter(headerWriterFunc.apply(outputter, state));
+            writers.setRevisionInfoWriter(revisionInfoWriterFunc.apply(outputter, state));
+            writers.setAuthorsWriter(authorsWriterFunc.apply(outputter, state));
 
-            writers.setContentWriter(contentWriterFunc.apply(outputter, writers));
-            writers.setPreambleWriter(preambleWriterFunc.apply(outputter, writers));
-            writers.setSectionWriter(sectionWriterFunc.apply(outputter, writers));
+            writers.setContentWriter(contentWriterFunc.apply(outputter, state));
+            writers.setPreambleWriter(preambleWriterFunc.apply(outputter, state));
+            writers.setSectionWriter(sectionWriterFunc.apply(outputter, state));
 
-            writers.setHorizontalRuleWriter(horizontalRuleWriterFunc.apply(outputter, writers));
+            writers.setHorizontalRuleWriter(horizontalRuleWriterFunc.apply(outputter, state));
 
-            writers.setParagraphWriter(paragraphWriterFunc.apply(outputter, writers));
-            writers.setListWriter(listWriterFunc.apply(outputter, writers));
-            writers.setListItemWriter(listItemWriterFunc.apply(outputter, writers));
-            writers.setDescriptionListWriter(descriptionListWriterFunc.apply(outputter, writers));
-            writers.setDescriptionListItemWriter(descriptionListItemWriterFunc.apply(outputter, writers));
-            writers.setTableWriter(tableWriterFunc.apply(outputter, writers));
-            writers.setTableRowWriter(tableRowWriterFunc.apply(outputter, writers));
-            writers.setTableCellWriter(tableCellWriterFunc.apply(outputter, writers));
-            writers.setListingWriter(listingWriterFunc.apply(outputter, writers));
-            writers.setQuoteWriter(quoteWriterFunc.apply(outputter, writers));
-            writers.setExampleWriter(exampleWriterFunc.apply(outputter, writers));
-            writers.setLiteralWriter(literalWriterFunc.apply(outputter, writers));
-            writers.setSidebarWriter(sidebarWriterFunc.apply(outputter, writers));
+            writers.setParagraphWriter(paragraphWriterFunc.apply(outputter, state));
+            writers.setListWriter(listWriterFunc.apply(outputter, state));
+            writers.setListItemWriter(listItemWriterFunc.apply(outputter, state));
+            writers.setDescriptionListWriter(descriptionListWriterFunc.apply(outputter, state));
+            writers.setDescriptionListItemWriter(descriptionListItemWriterFunc.apply(outputter, state));
+            writers.setTableWriter(tableWriterFunc.apply(outputter, state));
+            writers.setTableRowWriter(tableRowWriterFunc.apply(outputter, state));
+            writers.setTableCellWriter(tableCellWriterFunc.apply(outputter, state));
+            writers.setListingWriter(listingWriterFunc.apply(outputter, state));
+            writers.setQuoteWriter(quoteWriterFunc.apply(outputter, state));
+            writers.setExampleWriter(exampleWriterFunc.apply(outputter, state));
+            writers.setLiteralWriter(literalWriterFunc.apply(outputter, state));
+            writers.setSidebarWriter(sidebarWriterFunc.apply(outputter, state));
 
             DocumentModelHtmlWriter docWriter = new DocumentModelHtmlWriter();
             docWriter.writers = writers;
@@ -77,107 +79,107 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             docWriter.write(document, writer);
         }
 
-        public Builder withDocumentWriter(BiFunction<Outputter, WriterSet, DocumentHtmlWriter> func) {
+        public Builder withDocumentWriter(BiFunction<Outputter, WriterState, DocumentHtmlWriter> func) {
             this.documentWriterFunc = func;
             return this;
         }
 
-        public Builder withHeaderWriter(BiFunction<Outputter, WriterSet, HeaderHtmlWriter> func) {
+        public Builder withHeaderWriter(BiFunction<Outputter, WriterState, HeaderHtmlWriter> func) {
             this.headerWriterFunc = func;
             return this;
         }
 
-        public Builder withRevisionInfoWriter(BiFunction<Outputter, WriterSet, RevisionInfoHtmlWriter> func) {
+        public Builder withRevisionInfoWriter(BiFunction<Outputter, WriterState, RevisionInfoHtmlWriter> func) {
             this.revisionInfoWriterFunc = func;
             return this;
         }
 
-        public Builder withAuthorsWriter(BiFunction<Outputter, WriterSet, AuthorsHtmlWriter> func) {
+        public Builder withAuthorsWriter(BiFunction<Outputter, WriterState, AuthorsHtmlWriter> func) {
             this.authorsWriterFunc = func;
             return this;
         }
 
-        public Builder withContentWriter(BiFunction<Outputter, WriterSet, ContentHtmlWriter> func) {
+        public Builder withContentWriter(BiFunction<Outputter, WriterState, ContentHtmlWriter> func) {
             this.contentWriterFunc = func;
             return this;
         }
 
-        public Builder withPreambleWriter(BiFunction<Outputter, WriterSet, PreambleHtmlWriter> func) {
+        public Builder withPreambleWriter(BiFunction<Outputter, WriterState, PreambleHtmlWriter> func) {
             this.preambleWriterFunc = func;
             return this;
         }
 
-        public Builder withSectionWriter(BiFunction<Outputter, WriterSet, SectionHtmlWriter> func) {
+        public Builder withSectionWriter(BiFunction<Outputter, WriterState, SectionHtmlWriter> func) {
             this.sectionWriterFunc = func;
             return this;
         }
 
-        public Builder withHorizontalRuleWriter(BiFunction<Outputter, WriterSet, HorizontalRuleHtmlWriter> func) {
+        public Builder withHorizontalRuleWriter(BiFunction<Outputter, WriterState, HorizontalRuleHtmlWriter> func) {
             this.horizontalRuleWriterFunc = func;
             return this;
         }
 
-        public Builder withParagraphWriter(BiFunction<Outputter, WriterSet, ParagraphHtmlWriter> func) {
+        public Builder withParagraphWriter(BiFunction<Outputter, WriterState, ParagraphHtmlWriter> func) {
             this.paragraphWriterFunc = func;
             return this;
         }
 
-        public Builder withListWriter(BiFunction<Outputter, WriterSet, ListHtmlWriter> func) {
+        public Builder withListWriter(BiFunction<Outputter, WriterState, ListHtmlWriter> func) {
             this.listWriterFunc = func;
             return this;
         }
 
-        public Builder withListItemWriter(BiFunction<Outputter, WriterSet, ListItemHtmlWriter> func) {
+        public Builder withListItemWriter(BiFunction<Outputter, WriterState, ListItemHtmlWriter> func) {
             this.listItemWriterFunc = func;
             return this;
         }
 
-        public Builder withDescriptionListWriter(BiFunction<Outputter, WriterSet, DescriptionListHtmlWriter> func) {
+        public Builder withDescriptionListWriter(BiFunction<Outputter, WriterState, DescriptionListHtmlWriter> func) {
             this.descriptionListWriterFunc = func;
             return this;
         }
 
-        public Builder withDescriptionListItemWriter(BiFunction<Outputter, WriterSet, DescriptionListItemHtmlWriter> func) {
+        public Builder withDescriptionListItemWriter(BiFunction<Outputter, WriterState, DescriptionListItemHtmlWriter> func) {
             this.descriptionListItemWriterFunc = func;
             return this;
         }
 
-        public Builder withTableWriter(BiFunction<Outputter, WriterSet, TableHtmlWriter> func) {
+        public Builder withTableWriter(BiFunction<Outputter, WriterState, TableHtmlWriter> func) {
             this.tableWriterFunc = func;
             return this;
         }
 
-        public Builder withTableRowWriter(BiFunction<Outputter, WriterSet, TableRowHtmlWriter> func) {
+        public Builder withTableRowWriter(BiFunction<Outputter, WriterState, TableRowHtmlWriter> func) {
             this.tableRowWriterFunc = func;
             return this;
         }
 
-        public Builder withTableCellWriter(BiFunction<Outputter, WriterSet, TableCellHtmlWriter> func) {
+        public Builder withTableCellWriter(BiFunction<Outputter, WriterState, TableCellHtmlWriter> func) {
             this.tableCellWriterFunc = func;
             return this;
         }
 
-        public Builder withListingWriter(BiFunction<Outputter, WriterSet, ListingHtmlWriter> func) {
+        public Builder withListingWriter(BiFunction<Outputter, WriterState, ListingHtmlWriter> func) {
             this.listingWriterFunc = func;
             return this;
         }
 
-        public Builder withQuoteWriter(BiFunction<Outputter, WriterSet, QuoteHtmlWriter> func) {
+        public Builder withQuoteWriter(BiFunction<Outputter, WriterState, QuoteHtmlWriter> func) {
             this.quoteWriterFunc = func;
             return this;
         }
 
-        public Builder withExampleWriter(BiFunction<Outputter, WriterSet, ExampleHtmlWriter> func) {
+        public Builder withExampleWriter(BiFunction<Outputter, WriterState, ExampleHtmlWriter> func) {
             this.exampleWriterFunc = func;
             return this;
         }
 
-        public Builder withLiteralWriter(BiFunction<Outputter, WriterSet, LiteralHtmlWriter> func) {
+        public Builder withLiteralWriter(BiFunction<Outputter, WriterState, LiteralHtmlWriter> func) {
             this.literalWriterFunc = func;
             return this;
         }
 
-        public Builder withSidebarWriter(BiFunction<Outputter, WriterSet, SidebarHtmlWriter> func) {
+        public Builder withSidebarWriter(BiFunction<Outputter, WriterState, SidebarHtmlWriter> func) {
             this.sidebarWriterFunc = func;
             return this;
         }
@@ -195,28 +197,28 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
 
     public static Builder diapo() {
         return newBuilder()
-                .withDocumentWriter((outputter, writers) -> new DiapoDocumentHtmlWriter(outputter, writers))
-                .withHeaderWriter((outputter, writers) -> new DiapoHeaderHtmlWriter(outputter, writers))
-                .withRevisionInfoWriter((outputter, writers) -> new DiapoRevisionInfoHtmlWriter(outputter, writers))
-                .withAuthorsWriter((outputter, writers) -> new DiapoAuthorsHtmlWriter(outputter, writers))
-                .withContentWriter((outputter, writers) -> new DiapoContentHtmlWriter(outputter, writers))
-                .withPreambleWriter((outputter, writers) -> new DiapoPreambleHtmlWriter(outputter, writers))
-                .withSectionWriter((outputter, writers) -> new DiapoSectionHtmlWriter(outputter, writers))
-                .withHorizontalRuleWriter((outputter, writers) -> new DiapoHorizontalRuleHtmlWriter(outputter, writers))
-                .withParagraphWriter((outputter, writers) -> new DiapoParagraphHtmlWriter(outputter, writers))
-                .withListWriter((outputter, writers) -> new DiapoListHtmlWriter(outputter, writers))
-                .withListItemWriter((outputter, writers) -> new DiapoListItemHtmlWriter(outputter, writers))
-                .withDescriptionListWriter((outputter, writers) -> new DiapoDescriptionListHtmlWriter(outputter, writers))
-                .withDescriptionListItemWriter((outputter, writers) -> new DiapoDescriptionListItemHtmlWriter(outputter, writers))
-                .withTableWriter((outputter, writers) -> new DiapoTableHtmlWriter(outputter, writers))
-                .withTableRowWriter((outputter, writers) -> new DiapoTableRowHtmlWriter(outputter, writers))
-                .withTableRowWriter((outputter, writers) -> new DiapoTableRowHtmlWriter(outputter, writers))
-                .withTableCellWriter((outputter, writers) -> new DiapoTableCellHtmlWriter(outputter, writers))
-                .withListingWriter((outputter, writers) -> new DiapoListingHtmlWriter(outputter, writers))
-                .withQuoteWriter((outputter, writers) -> new DiapoQuoteHtmlWriter(outputter, writers))
-                .withExampleWriter((outputter, writers) -> new DiapoExampleHtmlWriter(outputter, writers))
-                .withLiteralWriter((outputter, writers) -> new DiapoLiteralHtmlWriter(outputter, writers))
-                .withSidebarWriter((outputter, writers) -> new DiapoSidebarHtmlWriter(outputter, writers));
+                .withDocumentWriter((outputter, state) -> new DiapoDocumentHtmlWriter(outputter, state))
+                .withHeaderWriter((outputter, state) -> new DiapoHeaderHtmlWriter(outputter, state))
+                .withRevisionInfoWriter((outputter, state) -> new DiapoRevisionInfoHtmlWriter(outputter, state))
+                .withAuthorsWriter((outputter, state) -> new DiapoAuthorsHtmlWriter(outputter, state))
+                .withContentWriter((outputter, state) -> new DiapoContentHtmlWriter(outputter, state))
+                .withPreambleWriter((outputter, state) -> new DiapoPreambleHtmlWriter(outputter, state))
+                .withSectionWriter((outputter, state) -> new DiapoSectionHtmlWriter(outputter, state))
+                .withHorizontalRuleWriter((outputter, state) -> new DiapoHorizontalRuleHtmlWriter(outputter, state))
+                .withParagraphWriter((outputter, state) -> new DiapoParagraphHtmlWriter(outputter, state))
+                .withListWriter((outputter, state) -> new DiapoListHtmlWriter(outputter, state))
+                .withListItemWriter((outputter, state) -> new DiapoListItemHtmlWriter(outputter, state))
+                .withDescriptionListWriter((outputter, state) -> new DiapoDescriptionListHtmlWriter(outputter, state))
+                .withDescriptionListItemWriter((outputter, state) -> new DiapoDescriptionListItemHtmlWriter(outputter, state))
+                .withTableWriter((outputter, state) -> new DiapoTableHtmlWriter(outputter, state))
+                .withTableRowWriter((outputter, state) -> new DiapoTableRowHtmlWriter(outputter, state))
+                .withTableRowWriter((outputter, state) -> new DiapoTableRowHtmlWriter(outputter, state))
+                .withTableCellWriter((outputter, state) -> new DiapoTableCellHtmlWriter(outputter, state))
+                .withListingWriter((outputter, state) -> new DiapoListingHtmlWriter(outputter, state))
+                .withQuoteWriter((outputter, state) -> new DiapoQuoteHtmlWriter(outputter, state))
+                .withExampleWriter((outputter, state) -> new DiapoExampleHtmlWriter(outputter, state))
+                .withLiteralWriter((outputter, state) -> new DiapoLiteralHtmlWriter(outputter, state))
+                .withSidebarWriter((outputter, state) -> new DiapoSidebarHtmlWriter(outputter, state));
     }
 
 }

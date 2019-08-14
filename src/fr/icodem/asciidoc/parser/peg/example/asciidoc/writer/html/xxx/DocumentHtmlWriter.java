@@ -3,17 +3,18 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterSet;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 
 import java.io.IOException;
 
 public abstract class DocumentHtmlWriter<DHW extends DocumentHtmlWriter<DHW>> extends ModelHtmlWriter<DHW> {
 
-    public DocumentHtmlWriter(Outputter outputter, WriterSet writers) {
-        super(outputter, writers);
+    public DocumentHtmlWriter(Outputter outputter, WriterState state) {
+        super(outputter, state);
     }
 
     public void write(Document document) throws IOException {
-        writers.setDocument(document);
+        state.setDocument(document);
 
         startDocument();
         writeContent();
@@ -23,8 +24,8 @@ public abstract class DocumentHtmlWriter<DHW extends DocumentHtmlWriter<DHW>> ex
     protected abstract void startDocument() throws IOException;
 
     private void writeContent() throws IOException {
-        if (document.getContent() != null) {
-            writers.getContentWriter().write(document.getContent());
+        if (getDocument().getContent() != null) {
+            getWriters().getContentWriter().write(getDocument().getContent());
         }
     }
 

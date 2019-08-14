@@ -1,6 +1,5 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.*;
 
 public class WriterSet {
@@ -33,30 +32,6 @@ public class WriterSet {
 
     public static WriterSet newInstance() {
         return new WriterSet();
-    }
-
-    public void setDocument(Document document) {
-        documentWriter.setDocument(document);
-        headerWriter.setDocument(document);
-        authorsWriter.setDocument(document);
-        revisionInfoWriter.setDocument(document);
-        contentWriter.setDocument(document);
-        preambleWriter.setDocument(document);
-        sectionWriter.setDocument(document);
-        horizontalRuleWriter.setDocument(document);
-        paragraphWriter.setDocument(document);
-        listWriter.setDocument(document);
-        listItemWriter.setDocument(document);
-        descriptionListWriter.setDocument(document);
-        descriptionListItemWriter.setDocument(document);
-        tableWriter.setDocument(document);
-        tableRowWriter.setDocument(document);
-        tableCellWriter.setDocument(document);
-        listingWriter.setDocument(document);
-        quoteWriter.setDocument(document);
-        exampleWriter.setDocument(document);
-        literalWriter.setDocument(document);
-        sidebarWriter.setDocument(document);
     }
 
     public DocumentHtmlWriter getDocumentWriter() {

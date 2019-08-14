@@ -8,12 +8,12 @@ import java.util.stream.Collectors;
 
 public class SectionBuilder implements BlockContainer {
     private int level;
+    private int position;
     private String title;
     private String ref;
     private AttributeList attList;
 
     private SectionBuilder next;
-    private SectionBuilder previous; // TODO to be removed
     private SectionBuilder parent;
 
     private List<BlockBuilder> blocks;
@@ -30,7 +30,7 @@ public class SectionBuilder implements BlockContainer {
         SectionBuilder builder = new SectionBuilder();
         builder.attList = attList;
         builder.level = level;
-        builder.previous = previous;
+        builder.position = previous.position + 1;
         builder.parent = parent;
         builder.blocks = new ArrayList<>();
         return builder;
@@ -42,7 +42,7 @@ public class SectionBuilder implements BlockContainer {
                                  .map(BlockBuilder::build)
                                  .collect(Collectors.toList());
 
-        Section section = Section.of(attList, level, Title.of(title), blocks);
+        Section section = Section.of(attList, level, position, Title.of(title), blocks);
         return section;
     }
 
@@ -55,33 +55,15 @@ public class SectionBuilder implements BlockContainer {
         return level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
     public void setTitle(String title) {
-        this.title = title;
+        if (title != null) {
+            this.title = title.trim();
+        }
     }
-
-//    public String getRef() {
-//        return ref;
-//    }
 
     public void setRef(String ref) {
         this.ref = ref;
     }
-
-//    public AttributeList getAttList() {
-//        return attList;
-//    }
-
-    //public void setAttList(AttributeList attList) {
-    //    this.attList = attList;
-    //}
 
     public SectionBuilder getNext() {
         return next;
@@ -89,14 +71,6 @@ public class SectionBuilder implements BlockContainer {
 
     public void setNext(SectionBuilder next) {
         this.next = next;
-    }
-
-//    public SectionBuilder getPrevious() {
-//        return previous;
-//    }
-
-    public void setPrevious(SectionBuilder previous) {
-        this.previous = previous;
     }
 
     public SectionBuilder getParent() {
