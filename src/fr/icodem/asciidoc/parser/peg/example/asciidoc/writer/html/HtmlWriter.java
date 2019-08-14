@@ -7,61 +7,6 @@ import java.util.function.Predicate;
 
 public abstract class HtmlWriter<HW extends HtmlWriter<HW>> {
 
-    /*
-    private TextOutputter outputter;
-
-    private StyleAttributeBuilder styleAttributeBuilder;
-
-    protected HtmlBaseRenderer(DocumentWriter writer) {
-        attributeEntries = AttributeEntries.newAttributeEntries();
-        outputter = new TextOutputter(writer);
-        rules = new BlockRules(attributeEntries);
-        rules.withFactory(defaultRulesFactory());
-        styleAttributeBuilder = StyleAttributeBuilder.newIntance();
-    }
-
-    public HW withSourceResolver(SourceResolver resolver) {
-        rules.withSourceResolver(resolver);
-        return (HW)this;
-    }
-
-    @Override
-    public void render(File source) {
-        try {
-            String text =
-                    Files.readAllLines(source.toPath())
-                            .stream()
-                            .collect(Collectors.joining("\n"));
-            attributeEntries.addAttribute(AttributeEntry.of("docdir", source.getParent()));
-            render(text);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    protected AttributeEntry getAttributeEntry(String name) {
-        return attributeEntries.getAttribute(name);
-    }
-
-    protected String getAttributeEntryValue(String name) {
-        return attributeEntries.getAttribute(name).getValue();
-    }
-
-    public boolean isAttributeValueEqualTo(String name, String value) {
-        return attributeEntries.isAttributeValueEqualTo(name, value);
-    }
-
-    public boolean isAttributeEnabled(String name) {
-        return attributeEntries.isAttributeEnabled(name);
-    }
-
-    protected StyleAttributeBuilder styleBuilder() {
-        return styleAttributeBuilder;
-    }
-
-     */
-
     private final static String NL = "\r\n";
     private final static String INDENT = "  ";
     
