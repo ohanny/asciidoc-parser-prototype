@@ -19,7 +19,7 @@ public class DiapoPreambleHtmlWriter extends PreambleHtmlWriter<DiapoPreambleHtm
         indent().append(HEADER.start("class", "caption")).nl()
           .incIndent()
             .includeTitle()
-          .decIndent()
+          //.decIndent()
         ;
     }
 
@@ -33,6 +33,7 @@ public class DiapoPreambleHtmlWriter extends PreambleHtmlWriter<DiapoPreambleHtm
 
     @Override
     protected void endPreamble(Preamble preamble) {
-        indent().append(HEADER.end()).nl();
+        decIndent()
+          .indent().append(HEADER.end()).nl();
     }
 }

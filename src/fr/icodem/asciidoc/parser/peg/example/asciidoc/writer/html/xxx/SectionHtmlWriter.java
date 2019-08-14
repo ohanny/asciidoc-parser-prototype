@@ -14,8 +14,12 @@ public abstract class SectionHtmlWriter <DHW extends SectionHtmlWriter<DHW>> ext
 
     public void write(Section section) throws IOException {
         start(section);
-
+        writeContent(section);
         end(section);
+    }
+
+    private void writeContent(Section section) throws IOException {
+        writeBlocks(section.getBlocks());
     }
 
     protected abstract void start(Section section) throws IOException;

@@ -3,6 +3,8 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.*;
 
 public class WriterSet {
+    private TextHtmlWriter textWriter;
+
     private DocumentHtmlWriter documentWriter;
 
     private HeaderHtmlWriter headerWriter;
@@ -16,6 +18,7 @@ public class WriterSet {
     private HorizontalRuleHtmlWriter horizontalRuleWriter;
 
     private ParagraphHtmlWriter paragraphWriter;
+    private AdmonitionHtmlWriter admonitionWriter;
     private ListHtmlWriter listWriter;
     private ListItemHtmlWriter listItemWriter;
     private DescriptionListHtmlWriter descriptionListWriter;
@@ -32,6 +35,14 @@ public class WriterSet {
 
     public static WriterSet newInstance() {
         return new WriterSet();
+    }
+
+    public TextHtmlWriter getTextWriter() {
+        return textWriter;
+    }
+
+    public void setTextWriter(TextHtmlWriter textWriter) {
+        this.textWriter = textWriter;
     }
 
     public DocumentHtmlWriter getDocumentWriter() {
@@ -104,6 +115,14 @@ public class WriterSet {
 
     public void setParagraphWriter(ParagraphHtmlWriter paragraphWriter) {
         this.paragraphWriter = paragraphWriter;
+    }
+
+    public AdmonitionHtmlWriter getAdmonitionWriter() {
+        return admonitionWriter;
+    }
+
+    public void setAdmonitionWriter(AdmonitionHtmlWriter admonitionHtmlWriter) {
+        this.admonitionWriter = admonitionHtmlWriter;
     }
 
     public ListHtmlWriter getListWriter() {

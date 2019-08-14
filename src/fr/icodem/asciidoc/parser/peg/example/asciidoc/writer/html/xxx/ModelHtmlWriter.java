@@ -41,44 +41,49 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
     }
 
     protected void writeBlocks(List<Block> blocks) throws IOException {
+        if (blocks == null) return;;
         for (Block block : blocks) {
             writeBlock(block);
         }
     }
 
     protected void writeBlock(Block block) throws IOException {
-        WriterSet writers = state.getWriterSet();
         switch (block.getType()) {
             case Paragraph:
-                writers.getParagraphWriter().write((Paragraph) block);
+                Paragraph p = (Paragraph)block;
+                if (p.getAdmonition() == null) {
+                    getParagraphWriter().write((Paragraph) block);
+                } else {
+                    getAdmonitionWriter().write(p);
+                }
                 break;
             case UnorderedList:
             case OrderedList:
-                writers.getListWriter().write((ListBlock) block);
+                getListWriter().write((ListBlock) block);
                 break;
             case DescriptionList:
-                writers.getDescriptionListWriter().write((DescriptionList) block);
+                getDescriptionListWriter().write((DescriptionList) block);
                 break;
             case Table:
-                writers.getTableWriter().write((Table) block);
+                getTableWriter().write((Table) block);
                 break;
             case Quote:
-                writers.getQuoteWriter().write((Quote) block);
+                getQuoteWriter().write((Quote) block);
                 break;
             case Example:
-                writers.getExampleWriter().write((ExampleBlock) block);
+                getExampleWriter().write((ExampleBlock) block);
                 break;
             case Literal:
-                writers.getLiteralWriter().write((LiteralBlock) block);
+                getLiteralWriter().write((LiteralBlock) block);
                 break;
             case Sidebar:
-                writers.getSidebarWriter().write((Sidebar) block);
+                getSidebarWriter().write((Sidebar) block);
                 break;
             case Listing:
-                writers.getListingWriter().write((ListingBlock) block);
+                getListingWriter().write((ListingBlock) block);
                 break;
             case HorizontalRule:
-                writers.getHorizontalRuleWriter().write((HorizontalRule) block);
+                getHorizontalRuleWriter().write((HorizontalRule) block);
                 break;
         }
     }
@@ -111,6 +116,10 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
         return cssClasses;
     }
 
+
+    public TextHtmlWriter getTextWriter() {
+        return state.getWriterSet().getTextWriter();
+    }
 
     public DocumentHtmlWriter getDocumentWriter() {
         return state.getWriterSet().getDocumentWriter();
@@ -146,6 +155,10 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
 
     public ParagraphHtmlWriter getParagraphWriter() {
         return state.getWriterSet().getParagraphWriter();
+    }
+
+    public AdmonitionHtmlWriter getAdmonitionWriter() {
+        return state.getWriterSet().getAdmonitionWriter();
     }
 
     public ListHtmlWriter getListWriter() {

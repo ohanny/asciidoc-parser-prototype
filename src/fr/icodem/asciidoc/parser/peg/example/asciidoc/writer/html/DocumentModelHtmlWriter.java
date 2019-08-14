@@ -14,6 +14,8 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
     private WriterSet writers;
 
     public static class Builder {
+        private BiFunction<Outputter, WriterState, TextHtmlWriter> textWriterFunc;
+
         private BiFunction<Outputter, WriterState, DocumentHtmlWriter> documentWriterFunc;
 
         private BiFunction<Outputter, WriterState, HeaderHtmlWriter> headerWriterFunc;
@@ -27,6 +29,7 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
         private BiFunction<Outputter, WriterState, HorizontalRuleHtmlWriter> horizontalRuleWriterFunc;
 
         private BiFunction<Outputter, WriterState, ParagraphHtmlWriter> paragraphWriterFunc;
+        private BiFunction<Outputter, WriterState, AdmonitionHtmlWriter> admonitionWriterFunc;
         private BiFunction<Outputter, WriterState, ListHtmlWriter> listWriterFunc;
         private BiFunction<Outputter, WriterState, ListItemHtmlWriter> listItemWriterFunc;
         private BiFunction<Outputter, WriterState, DescriptionListHtmlWriter> descriptionListWriterFunc;
@@ -47,6 +50,8 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             WriterState state = WriterState.newInstance();
             state.setWriterSet(writers);
 
+            writers.setTextWriter(textWriterFunc.apply(outputter, state));
+
             writers.setDocumentWriter(documentWriterFunc.apply(outputter, state));
 
             writers.setHeaderWriter(headerWriterFunc.apply(outputter, state));
@@ -60,6 +65,7 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             writers.setHorizontalRuleWriter(horizontalRuleWriterFunc.apply(outputter, state));
 
             writers.setParagraphWriter(paragraphWriterFunc.apply(outputter, state));
+            writers.setAdmonitionWriter(admonitionWriterFunc.apply(outputter, state));
             writers.setListWriter(listWriterFunc.apply(outputter, state));
             writers.setListItemWriter(listItemWriterFunc.apply(outputter, state));
             writers.setDescriptionListWriter(descriptionListWriterFunc.apply(outputter, state));
@@ -77,6 +83,11 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             docWriter.writers = writers;
 
             docWriter.write(document, writer);
+        }
+
+        public Builder withTextWriter(BiFunction<Outputter, WriterState, TextHtmlWriter> func) {
+            this.textWriterFunc = func;
+            return this;
         }
 
         public Builder withDocumentWriter(BiFunction<Outputter, WriterState, DocumentHtmlWriter> func) {
@@ -121,6 +132,11 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
 
         public Builder withParagraphWriter(BiFunction<Outputter, WriterState, ParagraphHtmlWriter> func) {
             this.paragraphWriterFunc = func;
+            return this;
+        }
+
+        public Builder withAdmonitionWriter(BiFunction<Outputter, WriterState, AdmonitionHtmlWriter> func) {
+            this.admonitionWriterFunc = func;
             return this;
         }
 
@@ -197,6 +213,7 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
 
     public static Builder diapo() {
         return newBuilder()
+                .withTextWriter((outputter, state) -> new DiapoTextHtmlWriter(outputter, state))
                 .withDocumentWriter((outputter, state) -> new DiapoDocumentHtmlWriter(outputter, state))
                 .withHeaderWriter((outputter, state) -> new DiapoHeaderHtmlWriter(outputter, state))
                 .withRevisionInfoWriter((outputter, state) -> new DiapoRevisionInfoHtmlWriter(outputter, state))
@@ -206,6 +223,7 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
                 .withSectionWriter((outputter, state) -> new DiapoSectionHtmlWriter(outputter, state))
                 .withHorizontalRuleWriter((outputter, state) -> new DiapoHorizontalRuleHtmlWriter(outputter, state))
                 .withParagraphWriter((outputter, state) -> new DiapoParagraphHtmlWriter(outputter, state))
+                .withAdmonitionWriter((outputter, state) -> new DiapoAdmonitionHtmlWriter(outputter, state))
                 .withListWriter((outputter, state) -> new DiapoListHtmlWriter(outputter, state))
                 .withListItemWriter((outputter, state) -> new DiapoListItemHtmlWriter(outputter, state))
                 .withDescriptionListWriter((outputter, state) -> new DiapoDescriptionListHtmlWriter(outputter, state))

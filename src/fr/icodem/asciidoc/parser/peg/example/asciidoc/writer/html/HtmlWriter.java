@@ -138,4 +138,9 @@ public abstract class HtmlWriter<HW extends HtmlWriter<HW>> {
         System.out.println(message);
         return (HW)this;
     }
+
+    protected StyleAttributeBuilder styleBuilder() {
+        return state.getStyleAttributeBuilder();
+    }
+
 }

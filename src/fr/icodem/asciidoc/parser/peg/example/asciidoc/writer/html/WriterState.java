@@ -5,11 +5,15 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document;
 public class WriterState {
     private WriterSet writerSet;
     private Document document;
+    private StyleAttributeBuilder styleAttributeBuilder;
 
     private int indent;
 
     public static WriterState newInstance() {
-        return new WriterState();
+        WriterState state = new WriterState();
+        state.styleAttributeBuilder = StyleAttributeBuilder.newIntance();
+
+        return state;
     }
 
     public WriterSet getWriterSet() {
@@ -38,5 +42,9 @@ public class WriterState {
 
     public void decIndent() {
         this.indent--;
+    }
+
+    public StyleAttributeBuilder getStyleAttributeBuilder() {
+        return styleAttributeBuilder;
     }
 }
