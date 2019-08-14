@@ -16,6 +16,8 @@ public class WriterSet {
     private SectionHtmlWriter sectionWriter;
 
     private HorizontalRuleHtmlWriter horizontalRuleWriter;
+    private ImageBlockHtmlWriter imageBlockWriter;
+    private VideoBlockHtmlWriter videoBlockWriter;
 
     private ParagraphHtmlWriter paragraphWriter;
     private AdmonitionHtmlWriter admonitionWriter;
@@ -31,6 +33,7 @@ public class WriterSet {
     private ExampleHtmlWriter exampleWriter;
     private LiteralHtmlWriter literalWriter;
     private SidebarHtmlWriter sidebarWriter;
+
 
 
     public static WriterSet newInstance() {
@@ -99,6 +102,22 @@ public class WriterSet {
 
     public void setSectionWriter(SectionHtmlWriter sectionWriter) {
         this.sectionWriter = sectionWriter;
+    }
+
+    public ImageBlockHtmlWriter getImageBlockWriter() {
+        return imageBlockWriter;
+    }
+
+    public void setImageBlockWriter(ImageBlockHtmlWriter imageBlockWriter) {
+        this.imageBlockWriter = imageBlockWriter;
+    }
+
+    public VideoBlockHtmlWriter getVideoBlockWriter() {
+        return videoBlockWriter;
+    }
+
+    public void setVideoBlockWriter(VideoBlockHtmlWriter videoBlockWriter) {
+        this.videoBlockWriter = videoBlockWriter;
     }
 
     public HorizontalRuleHtmlWriter getHorizontalRuleWriter() {

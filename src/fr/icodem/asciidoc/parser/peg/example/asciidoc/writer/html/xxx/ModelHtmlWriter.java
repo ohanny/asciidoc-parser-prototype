@@ -85,6 +85,12 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
             case HorizontalRule:
                 getHorizontalRuleWriter().write((HorizontalRule) block);
                 break;
+            case ImageBlock:
+                getImageBlockWriter().write((ImageBlock) block);
+                break;
+            case Video:
+                getVideoBlockWriter().write((VideoBlock) block);
+                break;
         }
     }
 
@@ -151,6 +157,14 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
 
     public HorizontalRuleHtmlWriter getHorizontalRuleWriter() {
         return state.getWriterSet().getHorizontalRuleWriter();
+    }
+
+    public ImageBlockHtmlWriter getImageBlockWriter() {
+        return state.getWriterSet().getImageBlockWriter();
+    }
+
+    public VideoBlockHtmlWriter getVideoBlockWriter() {
+        return state.getWriterSet().getVideoBlockWriter();
     }
 
     public ParagraphHtmlWriter getParagraphWriter() {

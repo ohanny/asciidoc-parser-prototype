@@ -27,6 +27,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     private AttributeEntryBuilder attributeEntryBuilder;
     private AttributeListBuilder attributeListBuilder;
+    private BlockMacroBuilder blockMacroBuilder;
 
     public static DocumentModelBuilder newDocumentBuilder(AttributeEntries attributeEntries) {
         BuildState state = BuildState.newInstance(attributeEntries);
@@ -59,12 +60,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
                 .parse(reader, listener, null, null);
 
         return documentBuilder==null?null:documentBuilder.build();
-    }
-
-    // block title
-    @Override
-    public void blockTitleValue(char[] chars) {// TODO not yet tested
-        state.setCurrentBlockTitle(chars);
     }
 
     // attribute entries
@@ -135,6 +130,30 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     }
 
 
+    // macro
+    @Override
+    public void enterMacro() {
+        blockMacroBuilder = BlockMacroBuilder.of(attributeListBuilder.consume(), state.getAttributeEntries());
+    }
+
+    @Override
+    public void exitMacro() {
+        attributeListBuilder.consume(); // TODO add attributes to macro
+        if (blockMacroBuilder.isBlock()) {
+            state.pushBlockToContainer(blockMacroBuilder);
+        }
+        blockMacroBuilder = null;
+    }
+
+    @Override
+    public void macroName(String name) {
+        blockMacroBuilder.setName(name);
+    }
+
+    @Override
+    public void macroTarget(String target) {
+        blockMacroBuilder.setTarget(target);
+    }
 
     // text
     @Override
@@ -206,6 +225,12 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
 
     @Override
     public void exitRevisionInfo() {
+    }
+
+    // block title
+    @Override
+    public void blockTitleValue(char[] chars) {// TODO not yet tested
+        state.setCurrentBlockTitle(chars);
     }
 
     // content
