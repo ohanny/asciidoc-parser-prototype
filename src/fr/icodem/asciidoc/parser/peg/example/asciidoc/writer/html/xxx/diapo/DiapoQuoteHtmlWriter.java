@@ -5,7 +5,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.QuoteHtmlWriter;
 
-import java.io.IOException;
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.*;
 
 public class DiapoQuoteHtmlWriter extends QuoteHtmlWriter {
 
@@ -14,7 +14,30 @@ public class DiapoQuoteHtmlWriter extends QuoteHtmlWriter {
     }
 
     @Override
-    public void write(Quote quote) throws IOException {
-
+    protected void startQuote(Quote quote) {
+        indent().append(DIV.start("class", "quote")).nl()
+          .incIndent()
+            .indent().append(BLOCKQUOTE.start())
+        ;
     }
+
+    @Override
+    protected void endQuote(Quote quote) {
+        append(BLOCKQUOTE.end()).nl()
+          .indent().append(DIV.start("class", "attribution")).nl()
+          .incIndent()
+            .indent().append("&#8212; ")
+                .append(quote.getAttribution()).append(BR.tag()).nl()
+                .appendIf(quote.getCitationTitle() != null, () ->
+                  indent().append(CITE.start())
+                          .append(replaceSpecialCharacters(quote.getCitationTitle()))
+                          .append(CITE.end()).nl()
+                )
+              .decIndent()
+              .indent().append(DIV.end()).nl()
+            .decIndent()
+            .indent().append(DIV.end()).nl()
+        ;
+    }
+
 }

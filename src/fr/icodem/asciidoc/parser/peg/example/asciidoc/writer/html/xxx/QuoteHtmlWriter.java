@@ -13,5 +13,19 @@ public abstract class QuoteHtmlWriter extends ModelHtmlWriter<QuoteHtmlWriter> {
         super(outputter, state);
     }
 
-    public abstract void write(Quote quote) throws IOException;
+    public void write(Quote quote) throws IOException {
+        startQuote(quote);
+        writeContent(quote);
+        endQuote(quote);
+    }
+
+
+    protected abstract void startQuote(Quote quote);
+
+    private void writeContent(Quote quote) throws IOException {
+        getTextWriter().write(quote.getText());
+    }
+
+    protected abstract void endQuote(Quote quote);
+
 }
