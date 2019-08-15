@@ -8,6 +8,8 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.Horizontal
 
 import java.io.IOException;
 
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.HR;
+
 public class DiapoHorizontalRuleHtmlWriter extends HorizontalRuleHtmlWriter {
 
     public DiapoHorizontalRuleHtmlWriter(Outputter outputter, WriterState state) {
@@ -16,6 +18,6 @@ public class DiapoHorizontalRuleHtmlWriter extends HorizontalRuleHtmlWriter {
 
     @Override
     public void write(HorizontalRule hr) throws IOException {
-
+        indent().append(HR.tag()).nl();
     }
 }
