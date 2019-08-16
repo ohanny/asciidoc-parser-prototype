@@ -5,7 +5,8 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.LiteralHtmlWriter;
 
-import java.io.IOException;
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.DIV;
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.PRE;
 
 public class DiapoLiteralHtmlWriter extends LiteralHtmlWriter {
 
@@ -14,7 +15,29 @@ public class DiapoLiteralHtmlWriter extends LiteralHtmlWriter {
     }
 
     @Override
-    public void write(LiteralBlock literal) throws IOException {
+    protected void startLiteral(LiteralBlock literal) {
+        indent().append(DIV.start("class", "literalblock")).nl()
+                .incIndent()
+                .appendIf(literal.getTitle() != null,  () -> getBlockTitleWriter().write(literal.getTitle()))
+                .indent().append(DIV.start("class", "content")).nl()
+                .incIndent()
+        ;
 
     }
+
+    @Override
+    protected void writeContent(LiteralBlock literal) {
+        indent().append(PRE.start()).append(() -> getTextWriter().write(literal.getText())).append(PRE.end()).nl();
+    }
+
+    @Override
+    protected void endLiteral(LiteralBlock literal) {
+        decIndent()
+                .indent().append(DIV.end()).nl()
+                .decIndent()
+                .indent().append(DIV.end()).nl()
+        ;
+
+    }
+
 }

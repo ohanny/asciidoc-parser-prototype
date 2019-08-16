@@ -12,5 +12,5 @@ public abstract class TextHtmlWriter extends ModelHtmlWriter<TextHtmlWriter> {
         super(outputter, state);
     }
 
-    public abstract void write(Text text) throws IOException;
+    public abstract void write(Text text);
 }

@@ -12,5 +12,15 @@ public abstract class LiteralHtmlWriter extends ModelHtmlWriter<LiteralHtmlWrite
         super(outputter, state);
     }
 
-    public abstract void write(LiteralBlock literal) throws IOException;
+    public void write(LiteralBlock literal) throws IOException {
+        startLiteral(literal);
+        writeContent(literal);
+        endLiteral(literal);
+    }
+
+    protected abstract void startLiteral(LiteralBlock literal);
+
+    protected abstract void writeContent(LiteralBlock literal) throws IOException;
+
+    protected abstract void endLiteral(LiteralBlock literal);
 }
