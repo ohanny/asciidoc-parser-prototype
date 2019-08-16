@@ -1,9 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Table;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.TableColumn;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.TableRow;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -13,6 +10,7 @@ import java.util.stream.Collectors;
 public class TableBuilder implements BlockBuilder {
 
     private AttributeList attList;
+    private String title;
 
     private int tableLineNumber;
     private int firstLineNumber;
@@ -27,9 +25,10 @@ public class TableBuilder implements BlockBuilder {
     private Deque<TableColumnBuilder> columns;
     private Deque<TableRowBuilder> rows;
 
-    public static TableBuilder newBuilder(AttributeList attList, int tableLineNumber) {
+    public static TableBuilder newBuilder(AttributeList attList, String title, int tableLineNumber) {
         TableBuilder builder = new TableBuilder();
         builder.attList = attList;
+        builder.title = title;
         builder.tableLineNumber = tableLineNumber;
         builder.firstLineNumber = -1;
         builder.currentLineNumber = -1;
@@ -66,7 +65,7 @@ public class TableBuilder implements BlockBuilder {
                 .map(TableColumnBuilder::build)
                 .collect(Collectors.toList());
 
-        return Table.of(attList, columns, header, footer, body);
+        return Table.of(attList, Title.of(title), columns, header, footer, body);
     }
 
     private String getAttributeValue(String name) {

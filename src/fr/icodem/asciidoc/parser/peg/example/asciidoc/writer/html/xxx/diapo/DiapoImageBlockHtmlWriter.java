@@ -27,7 +27,7 @@ public class DiapoImageBlockHtmlWriter extends ImageBlockHtmlWriter {
                 .appendIf(image.getTitle() != null, () ->
                   indent().append(FIGCAPTION.start()).nl()
                     .incIndent()
-                      .append(() -> writeBlockTitle(image.getTitle()))
+                      .append(() -> getBlockTitleWriter().write(image.getTitle()))
                     .decIndent()
                     .indent().append(FIGCAPTION.end()).nl()
                 )
@@ -35,11 +35,6 @@ public class DiapoImageBlockHtmlWriter extends ImageBlockHtmlWriter {
                 .indent().append(FIGURE.end()).nl()
         ;
 
-    }
-
-    protected void writeBlockTitle(Title title) {
-        indent().append(DIV.start("class", "title"))
-          .append(title.getText()).append(DIV.end()).nl();
     }
 
 }

@@ -133,7 +133,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // macro
     @Override
     public void enterMacro() {
-        blockMacroBuilder = BlockMacroBuilder.of(attributeListBuilder.consume(), state.getAttributeEntries());
+        blockMacroBuilder = BlockMacroBuilder.of(state.getAttributeEntries(), attributeListBuilder.consume(), state.consumeBlockTitle());
     }
 
     @Override
@@ -158,7 +158,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // text
     @Override
     public void formattedText(char[] chars) {
-        state.pushText(new String(chars));
+        state.pushText(new String(chars).trim());
     }
 
     // document
@@ -276,11 +276,11 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
         if (attList != null && "quote".equals(attList.getFirstPositionalAttribute())) {
             String attribution = attList.getSecondPositionalAttribute();
             String citationTitle = attList.getThirdPositionalAttribute();
-            QuoteBuilder builder = QuoteBuilder.of(attribution, citationTitle, attList);
+            QuoteBuilder builder = QuoteBuilder.of(attList, state.consumeBlockTitle(), attribution, citationTitle);
             state.pushBlock(builder);
             state.pushTextContainer(builder);
         } else {
-            ParagraphBuilder builder = ParagraphBuilder.of(attList, admonition);
+            ParagraphBuilder builder = ParagraphBuilder.of(attList, state.consumeBlockTitle(), admonition);
             state.pushBlock(builder);
             state.pushTextContainer(builder);
         }
@@ -340,7 +340,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // description list
     @Override
     public void enterDescriptionList() {
-        DescriptionListBuilder builder = DescriptionListBuilder.newBuilder();
+        DescriptionListBuilder builder = DescriptionListBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle());
         state.pushBlock(builder);
         state.pushBlockToContainer(builder);
     }
@@ -397,7 +397,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // literal block
     @Override
     public void enterLiteralBlock() {
-        LiteralBlockBuilder builder = LiteralBlockBuilder.newBuilder();
+        LiteralBlockBuilder builder = LiteralBlockBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle());
         state.pushBlock(builder);
         state.pushTextContainer(builder);
     }
@@ -412,7 +412,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // example block
     @Override
     public void enterExample() {
-        ExampleBlockBuilder builder = ExampleBlockBuilder.newBuilder(attributeListBuilder.consume());
+        ExampleBlockBuilder builder = ExampleBlockBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle());
         state.pushBlock(builder);
         state.pushBlockContainer(builder);
     }
@@ -427,7 +427,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // sidebar
     @Override
     public void enterSidebar() {
-        SidebarBuilder builder = SidebarBuilder.newBuilder(attributeListBuilder.consume());
+        SidebarBuilder builder = SidebarBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle());
         state.pushBlock(builder);
         state.pushBlockContainer(builder);
     }
@@ -442,7 +442,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // listing block
     @Override
     public void enterListingBlock() {
-        ListingBlockBuilder builder = ListingBlockBuilder.newBuilder(attributeListBuilder.consume());
+        ListingBlockBuilder builder = ListingBlockBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle());
         state.pushBlock(builder);
         state.pushTextContainer(builder);
     }
@@ -487,7 +487,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // table
     @Override
     public void enterTable(int lineNumber) {
-        TableBuilder builder = TableBuilder.newBuilder(attributeListBuilder.consume(), lineNumber);
+        TableBuilder builder = TableBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle(), lineNumber);
 
         state.pushBlock(builder);
         state.pushBlockToContainer(builder);
@@ -513,6 +513,6 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     @Override
     public void tableBlock(String text) {
         TableBuilder builder = state.peekBlock();
-        builder.setContent(text);
+        builder.setContent(text == null ? null : text.trim());
     }
 }

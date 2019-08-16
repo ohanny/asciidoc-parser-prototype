@@ -71,7 +71,12 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
                 getQuoteWriter().write((Quote) block);
                 break;
             case Example:
-                getExampleWriter().write((ExampleBlock) block);
+                ExampleBlock example = (ExampleBlock)block;
+                if (example.getAdmonition() == null) {
+                    getExampleWriter().write((ExampleBlock) block);
+                } else {
+                    getAdmonitionWriter().write(example);
+                }
                 break;
             case Literal:
                 getLiteralWriter().write((LiteralBlock) block);
@@ -157,6 +162,10 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
 
     public HorizontalRuleHtmlWriter getHorizontalRuleWriter() {
         return state.getWriterSet().getHorizontalRuleWriter();
+    }
+
+    public BlockTitleHtmlWriter getBlockTitleWriter() {
+        return state.getWriterSet().getBlockTitleWriter();
     }
 
     public ImageBlockHtmlWriter getImageBlockWriter() {

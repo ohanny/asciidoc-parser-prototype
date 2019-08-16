@@ -15,6 +15,7 @@ public class WriterSet {
     private PreambleHtmlWriter preambleWriter;
     private SectionHtmlWriter sectionWriter;
 
+    private BlockTitleHtmlWriter blockTitleWriter;
     private HorizontalRuleHtmlWriter horizontalRuleWriter;
     private ImageBlockHtmlWriter imageBlockWriter;
     private VideoBlockHtmlWriter videoBlockWriter;
@@ -118,6 +119,14 @@ public class WriterSet {
 
     public void setVideoBlockWriter(VideoBlockHtmlWriter videoBlockWriter) {
         this.videoBlockWriter = videoBlockWriter;
+    }
+
+    public BlockTitleHtmlWriter getBlockTitleWriter() {
+        return blockTitleWriter;
+    }
+
+    public void setBlockTitleWriter(BlockTitleHtmlWriter blockTitleWriter) {
+        this.blockTitleWriter = blockTitleWriter;
     }
 
     public HorizontalRuleHtmlWriter getHorizontalRuleWriter() {

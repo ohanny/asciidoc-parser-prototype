@@ -3,19 +3,22 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Block;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ExampleBlock;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Title;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ExampleBlockBuilder implements BlockBuilder, BlockContainer {
-    private AttributeList attributeList;
+    private AttributeList attList;
+    private String title;
     private List<BlockBuilder> blocks;
 
-    public static ExampleBlockBuilder newBuilder(AttributeList attList) {
+    public static ExampleBlockBuilder newBuilder(AttributeList attList, String title) {
         ExampleBlockBuilder builder = new ExampleBlockBuilder();
+        builder.attList = attList;
+        builder.title = title;
         builder.blocks = new ArrayList<>();
-        builder.attributeList = attList;
 
         return builder;
     }
@@ -27,23 +30,23 @@ public class ExampleBlockBuilder implements BlockBuilder, BlockContainer {
                 .map(BlockBuilder::build)
                 .collect(Collectors.toList());
 
-        return ExampleBlock.of(blocks, getAdmonition());
+        return ExampleBlock.of(attList, Title.of(title), blocks, getAdmonition());
     }
 
     private String getAdmonition() {
         String admonition = null;
-        if (attributeList != null) {
-            if (attributeList.hasPositionalAttributes("NOTE")) {
+        if (attList != null) {
+            if (attList.hasPositionalAttributes("NOTE")) {
                 admonition = "note";
-            } else if (attributeList.hasPositionalAttributes("TIP")) {
+            } else if (attList.hasPositionalAttributes("TIP")) {
                 admonition = "tip";
-            } else if (attributeList.hasPositionalAttributes("IMPORTANT")) {
+            } else if (attList.hasPositionalAttributes("IMPORTANT")) {
                 admonition = "important";
-            } else if (attributeList.hasPositionalAttributes("WARNING")) {
+            } else if (attList.hasPositionalAttributes("WARNING")) {
                 admonition = "warning";
-            } else if (attributeList.hasPositionalAttributes("CAUTION")) {
+            } else if (attList.hasPositionalAttributes("CAUTION")) {
                 admonition = "caution";
-            } else if (attributeList.hasPositionalAttributes("WARNING")) {
+            } else if (attList.hasPositionalAttributes("WARNING")) {
                 admonition = "warning";
             }
         }

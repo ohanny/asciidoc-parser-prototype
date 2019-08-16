@@ -1,6 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.diapo;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Block;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Paragraph;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.AdmonitionHtmlWriter;
@@ -46,24 +47,23 @@ public class DiapoAdmonitionHtmlWriter extends AdmonitionHtmlWriter {
                   ).nl()
                 .decIndent()
                 .indent().append(TD.end()).nl()
-                .indent().append(TD.start("class", "content")).nl()
-                .incIndent()
-                  .indent()
+                .indent().append(TD.start("class", "content"))
+                .appendIf(!(block instanceof Paragraph), () -> nl().incIndent())
         ;
 
     }
 
     @Override
     protected void endAdmonition(String admonition, Block block) {
-        nl()
-          .decIndent()
-          .indent().append(TD.end()).nl()
+        appendIf(!(block instanceof Paragraph), () -> decIndent().indent())
+          .append(TD.end()).nl()
           .decIndent()
           .indent().append(TR.end()).nl()
           .decIndent()
           .indent().append(TABLE.end()).nl()
           .decIndent()
-          .indent().append(DIV.end()).nl();
+          .indent().append(DIV.end()).nl()
+        ;
     }
 
 }

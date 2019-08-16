@@ -4,10 +4,11 @@ public class VideoBlock extends Block {
     private String source;
     private String alternateText;
 
-    public static VideoBlock of(AttributeList attList, String source, String alternateText) {
+    public static VideoBlock of(AttributeList attList, Title title, String source, String alternateText) {
         VideoBlock video = new VideoBlock();
         video.type = ElementType.Video;
         video.attributes = attList;
+        video.title = title;
         video.source = source;
         video.alternateText = alternateText;
 

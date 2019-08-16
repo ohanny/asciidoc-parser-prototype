@@ -88,7 +88,7 @@ public class BuildState {
     }
 
     public String consumeBlockTitle() {
-        String title = currentBlockTitle == null?null:new String(currentBlockTitle);
+        String title = currentBlockTitle == null?null:new String(currentBlockTitle).trim();
         currentBlockTitle = null;
 
         return title;

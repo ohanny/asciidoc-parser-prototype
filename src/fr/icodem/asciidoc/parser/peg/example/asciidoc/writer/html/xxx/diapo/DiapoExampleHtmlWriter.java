@@ -5,7 +5,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.ExampleHtmlWriter;
 
-import java.io.IOException;
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.DIV;
 
 public class DiapoExampleHtmlWriter extends ExampleHtmlWriter {
 
@@ -14,7 +14,22 @@ public class DiapoExampleHtmlWriter extends ExampleHtmlWriter {
     }
 
     @Override
-    public void write(ExampleBlock example) throws IOException {
-
+    protected void startExample(ExampleBlock example) {
+        indent().append(DIV.start("class", "exampleblock")).nl()
+          .incIndent()
+            .appendIf(example.getTitle() != null,  () -> getBlockTitleWriter().write(example.getTitle()))
+            .indent().append(DIV.start("class", "content")).nl()
+              .incIndent()
+        ;
     }
+
+    @Override
+    protected void endExample(ExampleBlock example) {
+        decIndent()
+          .indent().append(DIV.end()).nl()
+            .decIndent()
+            .indent().append(DIV.end()).nl()
+        ;
+    }
+
 }

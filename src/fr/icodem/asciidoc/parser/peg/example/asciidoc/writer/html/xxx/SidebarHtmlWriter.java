@@ -12,5 +12,17 @@ public abstract class SidebarHtmlWriter extends ModelHtmlWriter<SidebarHtmlWrite
         super(outputter, state);
     }
 
-    public abstract void write(Sidebar sidebar) throws IOException;
+    public void write(Sidebar sidebar) throws IOException {
+        startSidebar(sidebar);
+        writeContent(sidebar);
+        endSidebar(sidebar);
+    }
+
+    protected abstract void startSidebar(Sidebar sidebar);
+
+    private void writeContent(Sidebar sidebar) throws IOException {
+        writeBlocks(sidebar.getBlocks());
+    }
+
+    protected abstract void endSidebar(Sidebar sidebar);
 }

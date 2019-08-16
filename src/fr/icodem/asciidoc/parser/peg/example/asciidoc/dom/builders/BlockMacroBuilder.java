@@ -3,15 +3,17 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 
 public class BlockMacroBuilder implements BlockBuilder {
-    private AttributeList attributes;
     private AttributeEntries entries;
+    private AttributeList attributes;
+    private String title;
     private String name;
     private String target;
 
-    public static BlockMacroBuilder of(AttributeList attList, AttributeEntries entries) {
+    public static BlockMacroBuilder of(AttributeEntries entries, AttributeList attList, String title) {
         BlockMacroBuilder builder = new BlockMacroBuilder();
-        builder.attributes = attList;
         builder.entries = entries;
+        builder.attributes = attList;
+        builder.title = title;
 
         return builder;
     }
@@ -32,7 +34,7 @@ public class BlockMacroBuilder implements BlockBuilder {
         if (path != null) {
             target = path + "/" + target;
         }
-        return ImageBlock.of(attributes, target, getAlternateText());
+        return ImageBlock.of(attributes, Title.of(title), target, getAlternateText());
     }
 
     private VideoBlock buildVideo() {
@@ -40,7 +42,7 @@ public class BlockMacroBuilder implements BlockBuilder {
         if (path != null) {
             target = path + "/" + target;
         }
-        return VideoBlock.of(attributes, target, getAlternateText());
+        return VideoBlock.of(attributes, Title.of(title), target, getAlternateText());
     }
 
     private String getAlternateText() {

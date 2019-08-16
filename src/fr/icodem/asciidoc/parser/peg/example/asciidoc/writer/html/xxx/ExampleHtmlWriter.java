@@ -13,5 +13,19 @@ public abstract class ExampleHtmlWriter extends ModelHtmlWriter<ExampleHtmlWrite
         super(outputter, state);
     }
 
-    public abstract void write(ExampleBlock example) throws IOException;
+    public void write(ExampleBlock example) throws IOException {
+        startExample(example);
+        writeContent(example);
+        endExample(example);
+    }
+
+
+    protected abstract void startExample(ExampleBlock example);
+
+    private void writeContent(ExampleBlock example) throws IOException {
+        writeBlocks(example.getBlocks());
+    }
+
+    protected abstract void endExample(ExampleBlock example);
+
 }

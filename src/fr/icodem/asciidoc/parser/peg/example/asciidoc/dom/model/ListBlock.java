@@ -6,10 +6,11 @@ public class ListBlock extends Block {
 
     private List<ListItem> items;
 
-    public static ListBlock of(AttributeList attList, ElementType type, List<ListItem> items) {
+    public static ListBlock of(AttributeList attList, Title title, ElementType type, List<ListItem> items) {
         ListBlock list = new ListBlock();
         list.type = type;
         list.attributes = attList;
+        list.title = title;
         list.items = items;
 
         return list;

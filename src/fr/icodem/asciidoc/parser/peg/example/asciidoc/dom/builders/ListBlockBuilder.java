@@ -1,9 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ElementType;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListBlock;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListItem;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +41,7 @@ public class ListBlockBuilder implements BlockBuilder {
                 break;
         }
 
-        return ListBlock.of(attList, type, items);
+        return ListBlock.of(attList, Title.of(title), type, items);
     }
 
 
