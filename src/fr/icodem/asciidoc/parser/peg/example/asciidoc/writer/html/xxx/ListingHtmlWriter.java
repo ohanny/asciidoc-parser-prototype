@@ -19,6 +19,7 @@ public abstract class ListingHtmlWriter extends ModelHtmlWriter<ListingHtmlWrite
     protected abstract void startListing(ListingBlock listing);
 
     private void writeContent(ListingBlock listing) {
+        if (listing.getText() != null) append(listing.getText().getContent());
     }
 
     protected abstract void endListing(ListingBlock listing);

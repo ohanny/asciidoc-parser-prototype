@@ -16,14 +16,14 @@ public class DiapoListingHtmlWriter extends ListingHtmlWriter {
 
     @Override
     protected void startListing(ListingBlock listing) {
+        String classes = getMoreClasses("listingblock", listing.getAttributes());
+        String style = styleBuilder().reset(listing.getAttributes()).addPosition().style();
+
         indent()
-                .append(DIV.start("class", getMoreClasses("listingblock", listing.getAttributes()), "style", styleBuilder().reset(listing.getAttributes()).addPosition().style()))
+                .append(DIV.start("class", classes, "style", style))
                 .nl()
                 .incIndent()
                 .writeBlockTitle(listing)
-//                .appendIf(listing.getTitle() != null, () ->
-//                        writeBlockTitle(listing.getTitle())
-//                )
                 .indent()
                 .append(PRE.start("class", getMoreClasses(getListingPreClass(listing), listing.getAttributes())))
 //                .forEach(listing.getLines(), (line, index) ->
@@ -33,15 +33,23 @@ public class DiapoListingHtmlWriter extends ListingHtmlWriter {
 //                                .append(CODE.end())
 //                                .appendIf(listing.getLines().size() - 1 != index, () -> nl())
 //                )
-                .append(PRE.end())
-                .nl()
         ;
 
     }
 
     protected String getListingPreClass(ListingBlock listing) {
-        /*
-        String preClass = super.getListingPreClass(listing);
+        boolean highlightjs = isAttributeValueEqualTo("source-highlighter", "highlightjs");
+        boolean highlightSelective = isAttributeEnabled("highlight-selective");
+
+        String preClass = null;
+        if (!highlightSelective || listing.isHighlight()) {
+            if (highlightjs && listing.isSource()) {
+                preClass = "highlightjs highlight";
+            } else if (listing.isSource()) {
+                preClass = "highlight";
+            }
+        }
+
         if (preClass == null) preClass = "listingblock";
         else preClass += " listingblock";
 
@@ -50,16 +58,14 @@ public class DiapoListingHtmlWriter extends ListingHtmlWriter {
             else preClass += " nolinenums";
         }
         return preClass;
-
-         */
-        return null;
     }
 
 
     @Override
     protected void endListing(ListingBlock listing) {
-        decIndent()
-          .indent().append(DIV.end()).nl()
+        append(PRE.end()).nl()
+          .decIndent()
+            .indent().append(DIV.end()).nl()
         ;
     }
 

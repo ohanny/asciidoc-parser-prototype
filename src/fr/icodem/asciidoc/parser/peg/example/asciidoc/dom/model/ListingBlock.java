@@ -4,17 +4,46 @@ import java.util.List;
 
 public class ListingBlock extends TextBlock {
 
+    private boolean source;
+    private String language;
+    private boolean linenums;
+    private boolean highlight;
+
     private List<Callout> callouts;
 
     public static ListingBlock of(AttributeList attList, Title title, Text text, List<Callout> callouts) {
-        ListingBlock block = new ListingBlock();
-        block.type = ElementType.Listing;
-        block.attributes = attList;
-        block.title = title;
-        block.text = text;
-        block.callouts = callouts;
+        ListingBlock listing = new ListingBlock();
+        listing.type = ElementType.Listing;
+        listing.attributes = attList;
+        listing.title = title;
+        listing.text = text;
+        listing.callouts = callouts;
 
-        return block;
+        if (attList != null && "source".equals(attList.getFirstPositionalAttribute())) {
+            listing.source = true;
+            listing.language = attList.getSecondPositionalAttribute();
+            listing.language = ((listing.language == null)) ? null : listing.language.toLowerCase();
+            listing.linenums = attList.hasPositionalAttributes("linenums");
+            listing.highlight = attList.hasOption("highlight");
+        }
+
+        return listing;
+    }
+
+    public boolean isSource() {
+        return source;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public boolean isLinenums() {
+        return linenums;
+    }
+
+    public boolean isHighlight() {
+        return highlight;
     }
 
     public List<Callout> getCallouts() {
