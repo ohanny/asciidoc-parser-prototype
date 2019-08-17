@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.RevisionInfo;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.RevisionInfo;
 
 public class RevisionInfoBuilder {
 

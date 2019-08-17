@@ -1,6 +1,10 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Block;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ImageBlock;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.VideoBlock;
 
 public class BlockMacroBuilder implements BlockBuilder {
     private AttributeEntries entries;

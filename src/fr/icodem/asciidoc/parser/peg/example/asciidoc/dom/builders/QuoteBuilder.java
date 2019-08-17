@@ -1,9 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Quote;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Text;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Title;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Quote;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.Text;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 
 public class QuoteBuilder implements BlockBuilder, TextContainer {
     private AttributeList attributeList;

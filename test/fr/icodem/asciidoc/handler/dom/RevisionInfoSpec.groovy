@@ -1,8 +1,7 @@
 package fr.icodem.asciidoc.handler.dom
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.DocumentModelBuilder
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Author
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document
 
 class RevisionInfoSpec extends DomHandlerBaseSpec {
 

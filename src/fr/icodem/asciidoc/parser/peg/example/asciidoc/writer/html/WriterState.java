@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document;
 
 public class WriterState {
     private WriterSet writerSet;

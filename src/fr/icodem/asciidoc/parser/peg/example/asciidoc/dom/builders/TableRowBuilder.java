@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.TableCell;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.TableRow;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TableCell;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TableRow;
 
 import java.util.Deque;
 import java.util.LinkedList;

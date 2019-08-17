@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom;
 import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.AsciidocHandler2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.BlockListener2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.rules2.BlockRules2;
@@ -158,7 +159,7 @@ public class DocumentModelBuilder implements AsciidocHandler2 {
     // text
     @Override
     public void formattedText(char[] chars) {
-        state.pushText(new String(chars).trim());
+        state.pushText(new String(chars));
     }
 
     // document

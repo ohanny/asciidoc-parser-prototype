@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.DocumentModelBuilder;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntries;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document;
 
 import java.io.BufferedReader;
 import java.io.IOException;

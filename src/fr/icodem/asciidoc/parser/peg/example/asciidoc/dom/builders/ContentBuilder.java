@@ -1,8 +1,8 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Content;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Preamble;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Content;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Preamble;
 
 public class ContentBuilder implements BlockBuilder {
 

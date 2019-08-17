@@ -1,9 +1,8 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Content;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Section;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Content;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Section;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterSet;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 
 import java.io.IOException;

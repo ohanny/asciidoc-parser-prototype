@@ -1,9 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Paragraph;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Text;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Title;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Paragraph;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.Text;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 
 public class ParagraphBuilder implements BlockBuilder, TextContainer {
     private String admonition;
@@ -22,7 +22,7 @@ public class ParagraphBuilder implements BlockBuilder, TextContainer {
 
     @Override
     public Paragraph build() {
-        return Paragraph.of(attributeList, Title.of(title), Text.of(text), admonition);
+        return Paragraph.of(attributeList, Title.of(title), Text.of(text.trim()), admonition);
     }
 
     @Override

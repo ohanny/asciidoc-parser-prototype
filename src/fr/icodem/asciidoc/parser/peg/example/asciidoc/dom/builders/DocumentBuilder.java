@@ -1,8 +1,8 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
-
-import java.util.List;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Content;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Header;
 
 public class DocumentBuilder {
     private BuildState state;

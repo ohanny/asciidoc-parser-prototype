@@ -3,7 +3,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.DocumentModelBuilder;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntries;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntry;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.DocumentWriter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.DocumentModelHtmlWriter;
 

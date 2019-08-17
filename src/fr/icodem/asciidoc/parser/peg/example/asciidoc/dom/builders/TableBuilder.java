@@ -1,6 +1,10 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Table;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TableColumn;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TableRow;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 
 import java.util.Deque;
 import java.util.LinkedList;

@@ -1,9 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.DescriptionList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.DescriptionListItem;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Title;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.DescriptionList;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.DescriptionListItem;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 
 import java.util.Deque;
 import java.util.LinkedList;

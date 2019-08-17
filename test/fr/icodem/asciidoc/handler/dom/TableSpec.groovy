@@ -1,10 +1,8 @@
 package fr.icodem.asciidoc.handler.dom
 
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ExampleBlock
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Paragraph
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Table
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Table
 
 class TableSpec extends DomHandlerBaseSpec {
 

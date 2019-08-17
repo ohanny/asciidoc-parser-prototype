@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.handler.dom
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListingBlock
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ListingBlock
 
 class ListingBlockSpec extends DomHandlerBaseSpec {
 

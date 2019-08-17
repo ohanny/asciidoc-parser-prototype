@@ -1,10 +1,8 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Section;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Title;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Section;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SectionListBuilder {

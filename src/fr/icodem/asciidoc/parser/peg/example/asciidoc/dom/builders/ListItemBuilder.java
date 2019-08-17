@@ -1,8 +1,8 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Block;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListItem;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Text;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Block;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ListItem;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,11 @@ public class ListItemBuilder implements BlockBuilder, TextContainer, BlockContai
 
     @Override
     public void setText(String text) {
-        this.text = text;
+        if (text != null) {
+            this.text = text.trim();
+        } else {
+            this.text = null;
+        }
     }
 
     @Override

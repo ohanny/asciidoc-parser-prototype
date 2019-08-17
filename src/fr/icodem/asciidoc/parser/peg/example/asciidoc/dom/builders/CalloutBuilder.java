@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Callout;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Callout;
 
 public class CalloutBuilder implements BlockBuilder, TextContainer {
     private int number;

@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.diapo;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntry;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Content;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Content;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.ContentHtmlWriter;

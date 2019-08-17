@@ -1,8 +1,8 @@
 package fr.icodem.asciidoc.handler.dom
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ElementType
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.DescriptionList
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.DescriptionList
 
 class DescriptionListSpec extends DomHandlerBaseSpec {
 

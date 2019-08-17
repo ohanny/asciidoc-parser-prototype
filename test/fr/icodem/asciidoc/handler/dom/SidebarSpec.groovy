@@ -1,10 +1,9 @@
 package fr.icodem.asciidoc.handler.dom
 
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ExampleBlock
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Paragraph
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Sidebar
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Paragraph
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Sidebar
 
 class SidebarSpec extends DomHandlerBaseSpec {
 
@@ -35,7 +34,7 @@ This is some content
         doc.content.sections[0].blocks[0] instanceof Sidebar
         doc.content.sections[0].blocks[0].blocks != null
         doc.content.sections[0].blocks[0].blocks[0] instanceof Paragraph
-        doc.content.sections[0].blocks[0].blocks[0].text.content == 'This is some content\n'
+        doc.content.sections[0].blocks[0].blocks[0].text.content == 'This is some content'
     }
 
 

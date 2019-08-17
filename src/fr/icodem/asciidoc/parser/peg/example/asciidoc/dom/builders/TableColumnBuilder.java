@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.TableColumn;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TableColumn;
 
 public class TableColumnBuilder implements BlockBuilder {
     private double width;

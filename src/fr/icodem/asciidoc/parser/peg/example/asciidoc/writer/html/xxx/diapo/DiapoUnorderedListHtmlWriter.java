@@ -1,13 +1,10 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.diapo;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListBlock;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ListBlock;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.ListHtmlWriter;
 
-import java.io.IOException;
-
-import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.OL;
 import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.UL;
 
 public class DiapoUnorderedListHtmlWriter extends ListHtmlWriter {

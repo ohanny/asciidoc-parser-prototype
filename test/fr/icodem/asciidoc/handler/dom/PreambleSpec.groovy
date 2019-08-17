@@ -1,9 +1,8 @@
 package fr.icodem.asciidoc.handler.dom
 
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Document
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Paragraph
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Quote
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Paragraph
 
 class PreambleSpec extends DomHandlerBaseSpec {
 

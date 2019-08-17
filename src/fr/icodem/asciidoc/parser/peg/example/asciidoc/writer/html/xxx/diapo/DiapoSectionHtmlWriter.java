@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.diapo;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Section;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Section;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;

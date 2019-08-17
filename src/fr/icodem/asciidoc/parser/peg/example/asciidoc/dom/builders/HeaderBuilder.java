@@ -1,6 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Author;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Header;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.RevisionInfo;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 
 import java.util.List;
 

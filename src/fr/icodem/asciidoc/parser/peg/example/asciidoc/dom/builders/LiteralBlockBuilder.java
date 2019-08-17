@@ -1,9 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.LiteralBlock;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Text;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Title;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.LiteralBlock;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.Text;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 
 public class LiteralBlockBuilder implements BlockBuilder, TextContainer {
 

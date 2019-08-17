@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListingBlock;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ListingBlock;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 

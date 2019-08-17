@@ -1,6 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ListBlock;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ListItem;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 
 import java.util.ArrayList;
 import java.util.List;

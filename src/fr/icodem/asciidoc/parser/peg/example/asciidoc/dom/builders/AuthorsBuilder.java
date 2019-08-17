@@ -1,10 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Author;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Author;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public class AuthorsBuilder {

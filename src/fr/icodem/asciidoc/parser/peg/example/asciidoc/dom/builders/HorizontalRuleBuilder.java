@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.HorizontalRule;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.HorizontalRule;
 
 public class HorizontalRuleBuilder implements BlockBuilder {
 
