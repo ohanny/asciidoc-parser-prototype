@@ -20,7 +20,8 @@ public class DiapoParagraphHtmlWriter extends ParagraphHtmlWriter {
         String classes = getMoreClasses("paragraph", p.getAttributes());
         indent().append(DIV.start("class", classes, "style", style)).nl()
           .incIndent()
-          .indent().append(P.start())
+            .writeBlockTitle(p)
+            .indent().append(P.start())
         ;
     }
 

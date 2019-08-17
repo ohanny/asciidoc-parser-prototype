@@ -10,5 +10,16 @@ public abstract class ListingHtmlWriter extends ModelHtmlWriter<ListingHtmlWrite
         super(outputter, state);
     }
 
-    public abstract void write(ListingBlock listing);
+    public void write(ListingBlock listing) {
+        startListing(listing);
+        writeContent(listing);
+        endListing(listing);
+    }
+
+    protected abstract void startListing(ListingBlock listing);
+
+    private void writeContent(ListingBlock listing) {
+    }
+
+    protected abstract void endListing(ListingBlock listing);
 }

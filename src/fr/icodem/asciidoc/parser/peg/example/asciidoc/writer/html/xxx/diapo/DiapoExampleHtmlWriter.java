@@ -17,7 +17,7 @@ public class DiapoExampleHtmlWriter extends ExampleHtmlWriter {
     protected void startExample(ExampleBlock example) {
         indent().append(DIV.start("class", "exampleblock")).nl()
           .incIndent()
-            .appendIf(example.getTitle() != null,  () -> getBlockTitleWriter().write(example.getTitle()))
+            .writeBlockTitle(example)
             .indent().append(DIV.start("class", "content")).nl()
               .incIndent()
         ;

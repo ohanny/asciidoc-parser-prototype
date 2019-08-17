@@ -20,7 +20,7 @@ public class DiapoSidebarHtmlWriter extends SidebarHtmlWriter {
                     styleBuilder().reset(sidebar.getAttributes()).addPosition().addSize().style())).nl()
           .incIndent()
             .indent().append(DIV.start("class", "content")).incIndent().nl()
-            .appendIf(sidebar.getTitle() != null, () -> getBlockTitleWriter().write(sidebar.getTitle()))
+            .writeBlockTitle(sidebar)
         ;
     }
 

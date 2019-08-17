@@ -17,6 +17,7 @@ public class DiapoQuoteHtmlWriter extends QuoteHtmlWriter {
     protected void startQuote(Quote quote) {
         indent().append(DIV.start("class", "quote")).nl()
           .incIndent()
+            .writeBlockTitle(quote)
             .indent().append(BLOCKQUOTE.start())
         ;
     }

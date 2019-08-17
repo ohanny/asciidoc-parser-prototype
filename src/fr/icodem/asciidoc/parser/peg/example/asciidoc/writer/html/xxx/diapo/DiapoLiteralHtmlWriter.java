@@ -18,7 +18,7 @@ public class DiapoLiteralHtmlWriter extends LiteralHtmlWriter {
     protected void startLiteral(LiteralBlock literal) {
         indent().append(DIV.start("class", "literalblock")).nl()
                 .incIndent()
-                .appendIf(literal.getTitle() != null,  () -> getBlockTitleWriter().write(literal.getTitle()))
+                .writeBlockTitle(literal)
                 .indent().append(DIV.start("class", "content")).nl()
                 .incIndent()
         ;

@@ -101,6 +101,14 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
         }
     }
 
+    public MHW writeBlockTitle(Block block) {
+        if (block.getTitle() != null) {
+            getBlockTitleWriter().write(block.getTitle());
+        }
+
+        return (MHW) this;
+    }
+
     protected String replaceSpecialCharacters(String text) { // TODO temporary
         text = text.replaceAll("&", "&amp;");
         text = text.replaceAll("<", "&lt;");

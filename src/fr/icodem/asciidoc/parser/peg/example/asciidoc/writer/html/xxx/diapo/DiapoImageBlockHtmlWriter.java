@@ -24,7 +24,7 @@ public class DiapoImageBlockHtmlWriter extends ImageBlockHtmlWriter {
                 .appendIf(image.getTitle() != null, () ->
                   indent().append(FIGCAPTION.start()).nl()
                     .incIndent()
-                      .append(() -> getBlockTitleWriter().write(image.getTitle()))
+                      .writeBlockTitle(image)
                     .decIndent()
                     .indent().append(FIGCAPTION.end()).nl()
                 )
