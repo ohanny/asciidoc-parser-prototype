@@ -33,7 +33,8 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
 
         private BiFunction<Outputter, WriterState, ParagraphHtmlWriter> paragraphWriterFunc;
         private BiFunction<Outputter, WriterState, AdmonitionHtmlWriter> admonitionWriterFunc;
-        private BiFunction<Outputter, WriterState, ListHtmlWriter> listWriterFunc;
+        private BiFunction<Outputter, WriterState, ListHtmlWriter> unorderedListWriterFunc;
+        private BiFunction<Outputter, WriterState, ListHtmlWriter> orderedListWriterFunc;
         private BiFunction<Outputter, WriterState, ListItemHtmlWriter> listItemWriterFunc;
         private BiFunction<Outputter, WriterState, DescriptionListHtmlWriter> descriptionListWriterFunc;
         private BiFunction<Outputter, WriterState, DescriptionListItemHtmlWriter> descriptionListItemWriterFunc;
@@ -72,7 +73,8 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
 
             writers.setParagraphWriter(paragraphWriterFunc.apply(outputter, state));
             writers.setAdmonitionWriter(admonitionWriterFunc.apply(outputter, state));
-            writers.setListWriter(listWriterFunc.apply(outputter, state));
+            writers.setUnorderedListWriter(unorderedListWriterFunc.apply(outputter, state));
+            writers.setOrderedListWriter(orderedListWriterFunc.apply(outputter, state));
             writers.setListItemWriter(listItemWriterFunc.apply(outputter, state));
             writers.setDescriptionListWriter(descriptionListWriterFunc.apply(outputter, state));
             writers.setDescriptionListItemWriter(descriptionListItemWriterFunc.apply(outputter, state));
@@ -161,8 +163,13 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             return this;
         }
 
-        public Builder withListWriter(BiFunction<Outputter, WriterState, ListHtmlWriter> func) {
-            this.listWriterFunc = func;
+        public Builder withUnorderedListWriter(BiFunction<Outputter, WriterState, ListHtmlWriter> func) {
+            this.unorderedListWriterFunc = func;
+            return this;
+        }
+
+        public Builder withOrderedListWriter(BiFunction<Outputter, WriterState, ListHtmlWriter> func) {
+            this.orderedListWriterFunc = func;
             return this;
         }
 
@@ -248,7 +255,8 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
                 .withVideoBlockWriter((outputter, state) -> new DiapoVideoBlockHtmlWriter(outputter, state))
                 .withParagraphWriter((outputter, state) -> new DiapoParagraphHtmlWriter(outputter, state))
                 .withAdmonitionWriter((outputter, state) -> new DiapoAdmonitionHtmlWriter(outputter, state))
-                .withListWriter((outputter, state) -> new DiapoListHtmlWriter(outputter, state))
+                .withUnorderedListWriter((outputter, state) -> new DiapoUnorderedListHtmlWriter(outputter, state))
+                .withOrderedListWriter((outputter, state) -> new DiapoOrderedListHtmlWriter(outputter, state))
                 .withListItemWriter((outputter, state) -> new DiapoListItemHtmlWriter(outputter, state))
                 .withDescriptionListWriter((outputter, state) -> new DiapoDescriptionListHtmlWriter(outputter, state))
                 .withDescriptionListItemWriter((outputter, state) -> new DiapoDescriptionListItemHtmlWriter(outputter, state))

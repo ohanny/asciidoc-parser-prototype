@@ -22,7 +22,8 @@ public class WriterSet {
 
     private ParagraphHtmlWriter paragraphWriter;
     private AdmonitionHtmlWriter admonitionWriter;
-    private ListHtmlWriter listWriter;
+    private ListHtmlWriter unorderedListWriter;
+    private ListHtmlWriter orderedListWriter;
     private ListItemHtmlWriter listItemWriter;
     private DescriptionListHtmlWriter descriptionListWriter;
     private DescriptionListItemHtmlWriter descriptionListItemWriter;
@@ -153,12 +154,20 @@ public class WriterSet {
         this.admonitionWriter = admonitionHtmlWriter;
     }
 
-    public ListHtmlWriter getListWriter() {
-        return listWriter;
+    public ListHtmlWriter getUnorderedListWriter() {
+        return unorderedListWriter;
     }
 
-    public void setListWriter(ListHtmlWriter listWriter) {
-        this.listWriter = listWriter;
+    public void setUnorderedListWriter(ListHtmlWriter listWriter) {
+        this.unorderedListWriter = listWriter;
+    }
+
+    public ListHtmlWriter getOrderedListWriter() {
+        return orderedListWriter;
+    }
+
+    public void setOrderedListWriter(ListHtmlWriter orderedListWriter) {
+        this.orderedListWriter = orderedListWriter;
     }
 
     public ListItemHtmlWriter getListItemWriter() {

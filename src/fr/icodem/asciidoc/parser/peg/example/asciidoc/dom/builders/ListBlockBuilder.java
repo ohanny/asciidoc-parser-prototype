@@ -41,13 +41,12 @@ public class ListBlockBuilder implements BlockBuilder {
                 break;
         }
 
-        return ListBlock.of(attList, Title.of(title), type, items);
+        ListBlock list = ListBlock.of(attList, Title.of(title), type, level, items);
+        items.forEach(li -> li.setParent(list));
+
+        return list;
     }
 
-
-//    public static ListBlockBuilder newBuilder() {
-//        return new ListBlockBuilder();
-//    }
 
     public static ListBlockBuilder root(String title) {
         ListBlockBuilder builder = new ListBlockBuilder();
@@ -176,7 +175,7 @@ public class ListBlockBuilder implements BlockBuilder {
         }
 
 
-        ListItemBuilder builder = ListItemBuilder.newBuilder();
+        ListItemBuilder builder = ListItemBuilder.newBuilder(current.items.size());
         current.items.add(builder);
 
         //handler.startListItem(currentList.level, ++currentList.itemCount, currentList.attList);

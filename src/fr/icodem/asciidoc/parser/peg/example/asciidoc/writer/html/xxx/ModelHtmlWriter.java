@@ -40,14 +40,14 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
         return getDocument().getAttributes().isAttributeEnabled(name);
     }
 
-    protected void writeBlocks(List<Block> blocks) throws IOException {
+    protected void writeBlocks(List<Block> blocks) {
         if (blocks == null) return;;
         for (Block block : blocks) {
             writeBlock(block);
         }
     }
 
-    protected void writeBlock(Block block) throws IOException {
+    protected void writeBlock(Block block) {
         switch (block.getType()) {
             case Paragraph:
                 Paragraph p = (Paragraph)block;
@@ -58,8 +58,10 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
                 }
                 break;
             case UnorderedList:
+                getUnorderedListWriter().write((ListBlock) block);
+                break;
             case OrderedList:
-                getListWriter().write((ListBlock) block);
+                getOrderedListWriter().write((ListBlock) block);
                 break;
             case DescriptionList:
                 getDescriptionListWriter().write((DescriptionList) block);
@@ -184,8 +186,12 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
         return state.getWriterSet().getAdmonitionWriter();
     }
 
-    public ListHtmlWriter getListWriter() {
-        return state.getWriterSet().getListWriter();
+    public ListHtmlWriter getUnorderedListWriter() {
+        return state.getWriterSet().getUnorderedListWriter();
+    }
+
+    public ListHtmlWriter getOrderedListWriter() {
+        return state.getWriterSet().getOrderedListWriter();
     }
 
     public ListItemHtmlWriter getListItemWriter() {

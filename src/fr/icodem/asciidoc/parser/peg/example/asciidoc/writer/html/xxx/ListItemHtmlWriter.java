@@ -1,12 +1,8 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ListItem;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.Listing;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterSet;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
-
-import java.io.IOException;
 
 public abstract class ListItemHtmlWriter extends ModelHtmlWriter<ListItemHtmlWriter> {
 
@@ -14,5 +10,29 @@ public abstract class ListItemHtmlWriter extends ModelHtmlWriter<ListItemHtmlWri
         super(outputter, state);
     }
 
-    public abstract void write(ListItem li) throws IOException;
+    public void write(ListItem li) {
+        startListItem(li);
+        writeContent(li);
+        endListItem(li);
+    }
+
+    protected abstract void startListItem(ListItem li);
+
+    private void writeContent(ListItem li) {
+        if (li.getText() != null) {
+            startText(li);
+            getTextWriter().write(li.getText());
+            endText(li);
+        }
+        if (li.getBlocks() != null) {
+            writeBlocks(li.getBlocks());
+        }
+    }
+
+    protected void startText(ListItem li) {}
+
+    protected void endText(ListItem li) {}
+
+
+    protected abstract void endListItem(ListItem li);
 }

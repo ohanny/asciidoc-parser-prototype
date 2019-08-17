@@ -5,8 +5,6 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.VideoBlockHtmlWriter;
 
-import java.io.IOException;
-
 import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.DIV;
 import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.VIDEO;
 
@@ -17,7 +15,7 @@ public class DiapoVideoBlockHtmlWriter extends VideoBlockHtmlWriter {
     }
 
     @Override
-    public void write(VideoBlock video) throws IOException {
+    public void write(VideoBlock video) {
         String classes = getMoreClasses("videoblock", video.getAttributes());
         indent().append(DIV.start("class", classes, "style",
                     styleBuilder().reset(video.getAttributes()).addPosition().style())).nl()

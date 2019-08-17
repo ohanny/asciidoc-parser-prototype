@@ -14,13 +14,13 @@ public abstract class AdmonitionHtmlWriter extends ModelHtmlWriter<AdmonitionHtm
         super(outputter, state);
     }
 
-    public void write(Paragraph p) throws IOException {
+    public void write(Paragraph p) {
         startAdmonition(p.getAdmonition(), p);
         writeContent(p);
         endAdmonition(p.getAdmonition(), p);
     }
 
-    public void write(ExampleBlock example) throws IOException {
+    public void write(ExampleBlock example) {
         startAdmonition(example.getAdmonition(), example);
         writeContent(example);
         endAdmonition(example.getAdmonition(), example);
@@ -28,11 +28,11 @@ public abstract class AdmonitionHtmlWriter extends ModelHtmlWriter<AdmonitionHtm
 
     protected abstract void startAdmonition(String admonition, Block block);
 
-    private void writeContent(Paragraph p) throws IOException {
+    private void writeContent(Paragraph p) {
         getTextWriter().write(p.getText());
     }
 
-    private void writeContent(ExampleBlock example) throws IOException {
+    private void writeContent(ExampleBlock example) {
         writeBlocks(example.getBlocks());
     }
 

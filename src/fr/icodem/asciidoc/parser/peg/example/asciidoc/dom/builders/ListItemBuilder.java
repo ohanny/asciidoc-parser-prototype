@@ -9,12 +9,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ListItemBuilder implements BlockBuilder, TextContainer, BlockContainer {
+    private int position;
     private String text;
 
     private List<BlockBuilder> blocks;
 
-    public static ListItemBuilder newBuilder() {
+    public static ListItemBuilder newBuilder(int position) {
         ListItemBuilder builder = new ListItemBuilder();
+        builder.position = position;
         return builder;
     }
 
@@ -33,7 +35,7 @@ public class ListItemBuilder implements BlockBuilder, TextContainer, BlockContai
                     .collect(Collectors.toList());
         }
 
-        return ListItem.of(Text.of(text), blocks);
+        return ListItem.of(position, Text.of(text), blocks);
     }
 
     @Override

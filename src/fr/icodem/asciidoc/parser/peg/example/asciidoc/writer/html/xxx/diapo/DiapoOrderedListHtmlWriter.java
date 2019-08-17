@@ -7,14 +7,26 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.ListHtmlWr
 
 import java.io.IOException;
 
-public class DiapoListHtmlWriter extends ListHtmlWriter {
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.OL;
 
-    public DiapoListHtmlWriter(Outputter outputter, WriterState state) {
+public class DiapoOrderedListHtmlWriter extends ListHtmlWriter {
+
+    public DiapoOrderedListHtmlWriter(Outputter outputter, WriterState state) {
         super(outputter, state);
     }
 
     @Override
-    public void write(ListBlock list) throws IOException {
-
+    protected void startList(ListBlock list) {
+        indent().append(OL.start()).nl()
+          .incIndent()
+        ;
     }
+
+    @Override
+    protected void endList(ListBlock list) {
+        decIndent()
+          .indent().append(OL.end()).nl()
+        ;
+    }
+
 }

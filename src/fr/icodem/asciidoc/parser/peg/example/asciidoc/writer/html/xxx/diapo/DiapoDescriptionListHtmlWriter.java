@@ -5,8 +5,6 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.DescriptionListHtmlWriter;
 
-import java.io.IOException;
-
 public class DiapoDescriptionListHtmlWriter extends DescriptionListHtmlWriter {
 
     public DiapoDescriptionListHtmlWriter(Outputter outputter, WriterState state) {
@@ -14,7 +12,7 @@ public class DiapoDescriptionListHtmlWriter extends DescriptionListHtmlWriter {
     }
 
     @Override
-    public void write(DescriptionList list) throws IOException {
+    public void write(DescriptionList list) {
 
     }
 }
