@@ -3,6 +3,7 @@ package fr.icodem.asciidoc.handler.dom
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ElementType
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ImageBlock
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Paragraph
 
 class DocumentSpec extends DomHandlerBaseSpec {
@@ -169,8 +170,6 @@ More content
 [.role6]
 image::myimage.png[]
 
-// include::other.adoc[]
-// xx
 '''
 
         when:
@@ -213,7 +212,7 @@ image::myimage.png[]
         doc.content.sections[0].title != null
         doc.content.sections[0].title.text == 'Section 1'
         doc.content.sections[0].blocks != null
-        doc.content.sections[0].blocks.size() == 2
+        doc.content.sections[0].blocks.size() == 3
 
         doc.content.sections[0].blocks[0].attributes != null
         doc.content.sections[0].blocks[0].attributes.hasRole('role2')
@@ -233,10 +232,14 @@ image::myimage.png[]
         doc.content.sections[0].blocks[1].type == ElementType.Paragraph
         doc.content.sections[0].blocks[1].admonition == null
         doc.content.sections[0].blocks[1].text != null
-        doc.content.sections[0].blocks[1].text.content == 'More contentx'
+        doc.content.sections[0].blocks[1].text.content == 'More content'
 
-        // TODO add image assertions
-
+        doc.content.sections[0].blocks[2].attributes != null
+        doc.content.sections[0].blocks[2].attributes.hasRole('role6')
+        doc.content.sections[0].blocks[2] instanceof ImageBlock
+        doc.content.sections[0].blocks[2].type == ElementType.ImageBlock
+        doc.content.sections[0].blocks[2].source == 'images/myimage.png'
+        doc.content.sections[0].blocks[2].alternateText == '/myimage'
     }
 
 }
