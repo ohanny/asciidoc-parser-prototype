@@ -5,7 +5,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.DescriptionListItemHtmlWriter;
 
-import java.io.IOException;
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.*;
 
 public class DiapoDescriptionListItemHtmlWriter extends DescriptionListItemHtmlWriter {
 
@@ -14,7 +14,30 @@ public class DiapoDescriptionListItemHtmlWriter extends DescriptionListItemHtmlW
     }
 
     @Override
-    public void write(DescriptionListItem li) throws IOException {
-
+    protected void startItem(DescriptionListItem item) {
+        indent().append(DT.start("class", "hdlist1"))
+          .append(item.getTitle().getText())
+          .append(DT.end()).nl()
+          .indent().append(DD.start())
+          .appendIf(item.hasBlocks(), () -> nl().incIndent());
+        ;
     }
+
+    @Override
+    protected void startText(DescriptionListItem item) {
+        appendIf(item.hasBlocks(), () -> indent().append(P.start()));
+    }
+
+    @Override
+    protected void endText(DescriptionListItem item) {
+        appendIf(item.hasBlocks(), () -> append(P.end()).nl());
+    }
+
+    @Override
+    protected void endItem(DescriptionListItem item) {
+        appendIf(item.hasBlocks(), () -> decIndent().indent())
+          .append(DD.end()).nl()
+        ;
+    }
+
 }

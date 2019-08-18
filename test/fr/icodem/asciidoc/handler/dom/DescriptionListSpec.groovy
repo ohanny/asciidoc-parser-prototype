@@ -37,10 +37,11 @@ title:: content
         block.items != null
         block.items.size() == 1
 
+        block.items[0].type == ElementType.DescriptionListItem
         block.items[0].title != null
         block.items[0].title.text == 'title'
-        block.items[0].content != null
-        block.items[0].content.content == 'content'
+        block.items[0].text != null
+        block.items[0].text.content == 'content'
 
     }
 

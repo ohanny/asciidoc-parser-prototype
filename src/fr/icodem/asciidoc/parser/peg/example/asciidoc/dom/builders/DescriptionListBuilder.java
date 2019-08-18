@@ -44,7 +44,7 @@ public class DescriptionListBuilder implements BlockBuilder {
     }
 
     public void setItemContent(String content) {
-        this.items.peekLast().setContent(content);
+        this.items.peekLast().setText(content);
     }
 
 }
