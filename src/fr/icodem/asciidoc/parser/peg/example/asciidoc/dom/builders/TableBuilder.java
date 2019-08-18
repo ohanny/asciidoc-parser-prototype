@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Table;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TableColumn;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TableRow;
@@ -195,7 +195,14 @@ public class TableBuilder implements BlockBuilder {
     }
 
     public void tableEnd() {
+        checkFooter();
         initColumns();
+    }
+
+    private void checkFooter() {
+        if (attList != null && attList.hasOption("footer")) {
+            getLastRow().setFooter(true);
+        }
     }
 
 }

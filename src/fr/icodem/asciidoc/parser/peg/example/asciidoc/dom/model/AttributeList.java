@@ -1,9 +1,11 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class AttributeList {
     private String id;
@@ -45,12 +47,6 @@ public class AttributeList {
                 .map(Attribute::getName)
                 .collect(Collectors.toSet());
 
-        // collect options
-        options = attList.stream()
-                .filter(Attribute::isOptionAttribute)
-                .map(Attribute::getName)
-                .collect(Collectors.toSet());
-
         // attribute list to map
         attributes = attList.stream()
                 .filter(Attribute::isNamedAttribute)
@@ -58,6 +54,20 @@ public class AttributeList {
                         Attribute::getName,
                         att -> att,
                         (att1, att2) -> att2)); // merger : last wins
+
+        // collect options
+        options = attList.stream()
+                .filter(Attribute::isOptionAttribute)
+                .map(Attribute::getName)
+                .collect(Collectors.toSet());
+
+        Attribute attOptions = attributes.get("options");
+        if (attOptions != null) {
+            Stream<String> optStream = Arrays.stream(attOptions.getValue().split(","));
+            options = Stream.concat(options.stream(), optStream)
+                            .collect(Collectors.toSet());
+        }
+
     }
 
     public String getFirstPositionalAttribute() {
