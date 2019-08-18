@@ -1,10 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx;
 
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TableCell;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TableRow;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
-
-import java.io.IOException;
 
 public abstract class TableRowHtmlWriter extends ModelHtmlWriter<TableRowHtmlWriter> {
 
@@ -12,5 +11,22 @@ public abstract class TableRowHtmlWriter extends ModelHtmlWriter<TableRowHtmlWri
         super(outputter, state);
     }
 
-    public abstract void write(TableRow row) throws IOException;
+    public void write(TableRow row) {
+        startRow(row);
+        writeCells(row);
+        endRow(row);
+    }
+
+    protected abstract void startRow(TableRow row);
+
+    private void writeCells(TableRow row) {
+        row.getCells().forEach(this::writeCell);
+    }
+
+    protected abstract void endRow(TableRow row);
+
+    protected void writeCell(TableCell cell) {
+        getTableCellWriter().write(cell);
+    }
+
 }

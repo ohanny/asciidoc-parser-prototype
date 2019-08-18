@@ -40,7 +40,7 @@ public class TableRowBuilder implements BlockBuilder {
     }
 
     public void setContent(String content) {
-        getLastCell().setContent(content);
+        getLastCell().setText(content);
     }
 
     public boolean isHeader() {

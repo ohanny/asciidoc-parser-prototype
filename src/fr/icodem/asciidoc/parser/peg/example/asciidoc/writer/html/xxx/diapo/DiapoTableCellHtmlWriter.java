@@ -5,7 +5,8 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.Outputter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.WriterState;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.TableCellHtmlWriter;
 
-import java.io.IOException;
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.P;
+import static fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.HtmlTag.TD;
 
 public class DiapoTableCellHtmlWriter extends TableCellHtmlWriter {
 
@@ -14,7 +15,26 @@ public class DiapoTableCellHtmlWriter extends TableCellHtmlWriter {
     }
 
     @Override
-    public void write(TableCell cell) throws IOException {
-
+    protected void startCell(TableCell cell) {
+        indent().append(TD.start("class", "tableblock halign-left valign-top"))
+          .appendIf(cell.hasBlocks(), () -> nl().incIndent())
+        ;
     }
+
+    @Override
+    protected void startText(TableCell cell) {
+        appendIf(cell.hasBlocks(), () -> indent().append(P.start()));
+    }
+
+    @Override
+    protected void endText(TableCell cell) {
+        appendIf(cell.hasBlocks(), () -> append(P.end()).nl());
+    }
+
+    @Override
+    protected void endCell(TableCell cell) {
+        appendIf(cell.hasBlocks(), () -> decIndent().indent())
+          .append(TD.end()).nl();
+    }
+
 }

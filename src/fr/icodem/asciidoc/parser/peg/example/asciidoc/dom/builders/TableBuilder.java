@@ -69,7 +69,11 @@ public class TableBuilder implements BlockBuilder {
                 .map(TableColumnBuilder::build)
                 .collect(Collectors.toList());
 
-        return Table.of(attList, Title.of(title), columns, header, footer, body);
+        Table table = Table.of(attList, Title.of(title), columns, header, footer, body);
+
+        table.getColumns().forEach(c -> c.setTable(table));
+
+        return table;
     }
 
     private String getAttributeValue(String name) {
