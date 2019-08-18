@@ -15,21 +15,10 @@ public abstract class TableHtmlWriter extends ModelHtmlWriter<TableHtmlWriter> {
     public void write(Table table) {
         startTable(table);
 
-        startColumns(table);
-        writeColumns(table);
-        endColumns(table);
-
-        startHeader(table);
-        writeHeader(table);
-        endHeader(table);
-
-        startBody(table);
-        writeBody(table);
-        endBody(table);
-
-        startFooter(table);
-        writeFooter(table);
-        endFooter(table);
+        includeColumns(table);
+        includeHeader(table);
+        includeBody(table);
+        includeFooter(table);
 
         endTable(table);
     }
@@ -37,6 +26,12 @@ public abstract class TableHtmlWriter extends ModelHtmlWriter<TableHtmlWriter> {
     protected abstract void startTable(Table table);
 
     protected abstract void endTable(Table table);
+
+    private void includeColumns(Table table) {
+        startColumns(table);
+        writeColumns(table);
+        endColumns(table);
+    }
 
     protected abstract void startColumns(Table table);
 
@@ -48,6 +43,14 @@ public abstract class TableHtmlWriter extends ModelHtmlWriter<TableHtmlWriter> {
 
     protected abstract void endColumns(Table table);
 
+    private void includeHeader(Table table) {
+        if (table.getHeader().isEmpty()) return;
+
+        startHeader(table);
+        writeHeader(table);
+        endHeader(table);
+    }
+
     protected abstract void startHeader(Table table);
 
     private void writeHeader(Table table) {
@@ -56,6 +59,14 @@ public abstract class TableHtmlWriter extends ModelHtmlWriter<TableHtmlWriter> {
 
     protected abstract void endHeader(Table table);
 
+    private void includeBody(Table table) {
+        if (table.getBody().isEmpty()) return;
+
+        startBody(table);
+        writeBody(table);
+        endBody(table);
+    }
+
     protected abstract void startBody(Table table);
 
     private void writeBody(Table table) {
@@ -63,6 +74,14 @@ public abstract class TableHtmlWriter extends ModelHtmlWriter<TableHtmlWriter> {
     }
 
     protected abstract void endBody(Table table);
+
+    private void includeFooter(Table table) {
+        if (table.getFooter().isEmpty()) return;
+
+        startFooter(table);
+        writeFooter(table);
+        endFooter(table);
+    }
 
     protected abstract void startFooter(Table table);
 
