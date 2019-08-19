@@ -1,12 +1,13 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.TextListenerDelegate;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener.XRef;
 
 import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedList;
 
+@Deprecated
 public class FormattedText {
     public enum ChunkType {
         Normal, Bold, Italic, Monospace, Subscript, Superscript, Mark
@@ -30,13 +31,13 @@ public class FormattedText {
 
     public static class Chunk {
         protected ChunkType type;
-        protected TextListenerDelegate.MarkContext mark;
+        protected AttributeList mark;
 
         public Chunk(ChunkType type) {
             this.type = type;
         }
 
-        <T extends Chunk> T  normal() {
+        public <T extends Chunk> T  normal() {
             this.type = ChunkType.Normal;
             return (T)this;
         }
@@ -64,11 +65,11 @@ public class FormattedText {
             this.type = type;
         }
 
-        public TextListenerDelegate.MarkContext getMark() {
+        public AttributeList getMark() {
             return mark;
         }
 
-        public void setMark(TextListenerDelegate.MarkContext mark) {
+        public void setMark(AttributeList mark) {
             this.mark = mark;
         }
     }

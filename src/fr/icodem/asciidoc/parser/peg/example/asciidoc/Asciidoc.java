@@ -34,7 +34,7 @@ public class Asciidoc {
             Builder builder = new Builder();
 
             builder.attributeEntries = AttributeEntries.newAttributeEntries();
-            builder.docBuilder = DocumentModelBuilder.newDocumentBuilder(builder.attributeEntries);
+            builder.docBuilder = DocumentModelBuilder.newBuilder(builder.attributeEntries);
 
             return builder;
         }

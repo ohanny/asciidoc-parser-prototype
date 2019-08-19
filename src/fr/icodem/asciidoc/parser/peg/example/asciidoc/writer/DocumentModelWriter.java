@@ -24,7 +24,7 @@ public interface DocumentModelWriter extends DocumentWriter {
 
     default DocumentModelBuilder getDocumentModelBuilder() {
         AttributeEntries attributeEntries = AttributeEntries.newAttributeEntries();
-        return DocumentModelBuilder.newDocumentBuilder(attributeEntries);
+        return DocumentModelBuilder.newBuilder(attributeEntries);
     }
 
     default String getSource(Reader reader) throws IOException {

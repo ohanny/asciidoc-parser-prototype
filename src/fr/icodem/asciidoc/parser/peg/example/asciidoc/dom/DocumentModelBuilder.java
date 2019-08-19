@@ -1,8 +1,12 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom;
 
 import fr.icodem.asciidoc.parser.peg.NodeContext;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.*;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.AttributeEntryBuilder;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.AttributeListBuilder;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntries;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntry;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.BlockHandler2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.BlockListener2;
@@ -18,8 +22,7 @@ import static java.lang.Math.min;
 
 public class DocumentModelBuilder implements BlockHandler2 {
     private BlockRules2 rules;
-
-    private BuildState state;
+    private BlockBuildState state;
 
     // builders
     private DocumentBuilder documentBuilder;
@@ -30,8 +33,8 @@ public class DocumentModelBuilder implements BlockHandler2 {
     private AttributeListBuilder attributeListBuilder;
     private BlockMacroBuilder blockMacroBuilder;
 
-    public static DocumentModelBuilder newDocumentBuilder(AttributeEntries attributeEntries) {
-        BuildState state = BuildState.newInstance(attributeEntries);
+    public static DocumentModelBuilder newBuilder(AttributeEntries attributeEntries) {
+        BlockBuildState state = BlockBuildState.newInstance(attributeEntries);
 
         DocumentModelBuilder builder = new DocumentModelBuilder();
         builder.rules = new BlockRules2(attributeEntries);
@@ -44,13 +47,14 @@ public class DocumentModelBuilder implements BlockHandler2 {
     }
 
     public Document build(String text) {
-        final BlockListener2 listener = new BlockListener2(this, state.getAttributeEntries());
-
-        ParsingResult result = new ParseRunner(rules, rules::document)
-                //.trace()
-                .parse(new StringReader(text), listener, null, null);
-
-        return documentBuilder==null?null:documentBuilder.build();
+//        final BlockListener2 listener = new BlockListener2(this, state.getAttributeEntries());
+//
+//        ParsingResult result = new ParseRunner(rules, rules::document)
+//                //.trace()
+//                .parse(new StringReader(text), listener, null, null);
+//
+//        return documentBuilder==null?null:documentBuilder.build();
+        return build(new StringReader(text));
     }
 
     public Document build(Reader reader) {
@@ -59,6 +63,10 @@ public class DocumentModelBuilder implements BlockHandler2 {
         ParsingResult result = new ParseRunner(rules, rules::document)
                 //.trace()
                 .parse(reader, listener, null, null);
+
+        state.getTextToParseList()
+             .stream()
+             .forEach(c -> c.parseText(state.getAttributeEntries()));
 
         return documentBuilder==null?null:documentBuilder.build();
     }

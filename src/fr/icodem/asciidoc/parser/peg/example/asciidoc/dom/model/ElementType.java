@@ -4,5 +4,6 @@ public enum ElementType {
     Section,
     Paragraph, Quote, UnorderedList, OrderedList, ListItem, DescriptionList, DescriptionListItem, Example, Sidebar,
     Literal, Listing, Table, HorizontalRule,
-    ImageBlock, Video
+    ImageBlock, Video,
+    TextNode, BoldNode, ItalicNode, SuperscriptNode, SubscriptNode, MonospaceNode, MarkNode, XRefNode, InlineListNode
 }

@@ -8,7 +8,7 @@ class DomHandlerBaseSpec extends Specification {
 
     DocumentModelBuilder getBuilder() {
         AttributeEntries attributeEntries = AttributeEntries.newAttributeEntries()
-        DocumentModelBuilder.newDocumentBuilder(attributeEntries)
+        DocumentModelBuilder.newBuilder(attributeEntries)
     }
 
 }
