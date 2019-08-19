@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2;
 
 import fr.icodem.asciidoc.parser.peg.NodeContext;
 
-public interface AsciidocHandler2 {
+public interface BlockHandler2 {
 
     // attribute entries
     default void enterAttributeEntry() {}

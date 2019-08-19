@@ -31,7 +31,7 @@ int a = 10;
         doc.content.sections[0].blocks[0] != null
         doc.content.sections[0].blocks[0] instanceof ListingBlock
         doc.content.sections[0].blocks[0].text != null
-        doc.content.sections[0].blocks[0].text.content == 'int a = 10;\n'
+        doc.content.sections[0].blocks[0].text.source == 'int a = 10;\n'
     }
 
     def "listing block with attribute list"() {
@@ -65,7 +65,7 @@ int a = 10;
         doc.content.sections[0].blocks[0].attributes.firstPositionalAttribute == 'source'
         doc.content.sections[0].blocks[0].attributes.secondPositionalAttribute == 'java'
         doc.content.sections[0].blocks[0].text != null
-        doc.content.sections[0].blocks[0].text.content == 'int a = 10;\n'
+        doc.content.sections[0].blocks[0].text.source == 'int a = 10;\n'
     }
 
     def "listing block with callouts"() {
@@ -101,7 +101,7 @@ int a = 10;
         doc.content.sections[0].blocks[0].attributes.firstPositionalAttribute == 'source'
         doc.content.sections[0].blocks[0].attributes.secondPositionalAttribute == 'java'
         doc.content.sections[0].blocks[0].text != null
-        doc.content.sections[0].blocks[0].text.content == 'int a = 10;\n'
+        doc.content.sections[0].blocks[0].text.source == 'int a = 10;\n'
 
         doc.content.sections[0].blocks[0].callouts != null
         doc.content.sections[0].blocks[0].callouts.size() == 2

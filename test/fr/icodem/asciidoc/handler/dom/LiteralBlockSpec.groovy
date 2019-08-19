@@ -32,7 +32,7 @@ This is some content
         doc.content.sections[0].blocks[0] != null
         doc.content.sections[0].blocks[0] instanceof LiteralBlock
         doc.content.sections[0].blocks[0].text != null
-        doc.content.sections[0].blocks[0].text.content == 'This is some content\n'
+        doc.content.sections[0].blocks[0].text.source == 'This is some content\n'
     }
 
 

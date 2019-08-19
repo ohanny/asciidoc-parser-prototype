@@ -81,7 +81,7 @@ Other content
         doc.content.preamble.blocks[0].type == ElementType.Paragraph
         doc.content.preamble.blocks[0].admonition == null
         doc.content.preamble.blocks[0].text != null
-        doc.content.preamble.blocks[0].text.content == 'Some content'
+        doc.content.preamble.blocks[0].text.source == 'Some content'
 
         doc.content.sections != null
         doc.content.sections.size() == 1
@@ -96,7 +96,7 @@ Other content
         doc.content.sections[0].blocks[0].type == ElementType.Paragraph
         doc.content.sections[0].blocks[0].admonition == null
         doc.content.sections[0].blocks[0].text != null
-        doc.content.sections[0].blocks[0].text.content == 'Other content'
+        doc.content.sections[0].blocks[0].text.source == 'Other content'
 
 
     }
@@ -146,7 +146,7 @@ Other content
         doc.content.sections[0].blocks[0].type == ElementType.Paragraph
         doc.content.sections[0].blocks[0].admonition == null
         doc.content.sections[0].blocks[0].text != null
-        doc.content.sections[0].blocks[0].text.content == 'Other content'
+        doc.content.sections[0].blocks[0].text.source == 'Other content'
     }
 
     def "document with title, attribute entries, preamble, section, paragraph and attribute lists"() {
@@ -199,7 +199,7 @@ image::myimage.png[]
         doc.content.preamble.blocks[0].type == ElementType.Paragraph
         doc.content.preamble.blocks[0].admonition == null
         doc.content.preamble.blocks[0].text != null
-        doc.content.preamble.blocks[0].text.content == 'Some content'
+        doc.content.preamble.blocks[0].text.source == 'Some content'
 
         doc.content.sections != null
         doc.content.sections.size() == 1
@@ -223,7 +223,7 @@ image::myimage.png[]
         doc.content.sections[0].blocks[0].type == ElementType.Paragraph
         doc.content.sections[0].blocks[0].admonition == null
         doc.content.sections[0].blocks[0].text != null
-        doc.content.sections[0].blocks[0].text.content == 'Other content'
+        doc.content.sections[0].blocks[0].text.source == 'Other content'
 
         doc.content.sections[0].blocks[1].attributes != null
         doc.content.sections[0].blocks[1].attributes.hasRole('role4')
@@ -232,7 +232,7 @@ image::myimage.png[]
         doc.content.sections[0].blocks[1].type == ElementType.Paragraph
         doc.content.sections[0].blocks[1].admonition == null
         doc.content.sections[0].blocks[1].text != null
-        doc.content.sections[0].blocks[1].text.content == 'More content'
+        doc.content.sections[0].blocks[1].text.source == 'More content'
 
         doc.content.sections[0].blocks[2].attributes != null
         doc.content.sections[0].blocks[2].attributes.hasRole('role6')

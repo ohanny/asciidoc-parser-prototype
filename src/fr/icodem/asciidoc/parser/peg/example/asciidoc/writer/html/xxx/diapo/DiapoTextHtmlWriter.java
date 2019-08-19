@@ -12,6 +12,6 @@ public class DiapoTextHtmlWriter extends TextHtmlWriter {
 
     @Override
     public void write(Text text) {
-        append(text.getContent());
+        append(text.getSource());
     }
 }

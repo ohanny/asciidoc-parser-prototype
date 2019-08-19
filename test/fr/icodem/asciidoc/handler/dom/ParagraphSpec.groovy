@@ -34,12 +34,12 @@ This is other content
         doc.content.sections[0].blocks[0] != null
         doc.content.sections[0].blocks[0] instanceof Paragraph
         doc.content.sections[0].blocks[0].text != null
-        doc.content.sections[0].blocks[0].text.content == 'This is some content'
+        doc.content.sections[0].blocks[0].text.source == 'This is some content'
         doc.content.sections[0].blocks[0].admonition == null
         doc.content.sections[0].blocks[1] != null
         doc.content.sections[0].blocks[0] instanceof Paragraph
         doc.content.sections[0].blocks[1].text != null
-        doc.content.sections[0].blocks[1].text.content == 'This is other content'
+        doc.content.sections[0].blocks[1].text.source == 'This is other content'
         doc.content.sections[0].blocks[1].admonition == null
 
     }
@@ -72,7 +72,7 @@ This is other content
         doc.content.sections[0].blocks[0] != null
         doc.content.sections[0].blocks[0] instanceof Paragraph
         doc.content.sections[0].blocks[0].text != null
-        doc.content.sections[0].blocks[0].text.content == 'This is some content'
+        doc.content.sections[0].blocks[0].text.source == 'This is some content'
         doc.content.sections[0].blocks[0].admonition == null
 
         doc.content.sections[1].blocks != null
@@ -80,7 +80,7 @@ This is other content
         doc.content.sections[1].blocks[0] != null
         doc.content.sections[0].blocks[0] instanceof Paragraph
         doc.content.sections[1].blocks[0].text != null
-        doc.content.sections[1].blocks[0].text.content == 'This is other content'
+        doc.content.sections[1].blocks[0].text.source == 'This is other content'
         doc.content.sections[1].blocks[0].admonition == null
 
     }
@@ -113,7 +113,7 @@ This is some content
 
         doc.content.sections[0].blocks[0] instanceof Quote == true
         doc.content.sections[0].blocks[0].text != null
-        doc.content.sections[0].blocks[0].text.content == 'This is some content'
+        doc.content.sections[0].blocks[0].text.source == 'This is some content'
         doc.content.sections[0].blocks[0].attribution == 'attribution'
         doc.content.sections[0].blocks[0].citationTitle == 'citation title and information'
 

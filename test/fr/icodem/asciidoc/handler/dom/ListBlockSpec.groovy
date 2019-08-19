@@ -41,11 +41,11 @@ class ListBlockSpec extends DomHandlerBaseSpec {
         block.items != null
         block.items.size() == 3
 
-        block.items[0].text.content == 'One'
+        block.items[0].text.source == 'One'
         block.items[0].type == ElementType.ListItem
-        block.items[1].text.content == 'Two'
+        block.items[1].text.source == 'Two'
         block.items[1].type == ElementType.ListItem
-        block.items[2].text.content == 'Three'
+        block.items[2].text.source == 'Three'
         block.items[2].type == ElementType.ListItem
 
     }
@@ -83,11 +83,11 @@ class ListBlockSpec extends DomHandlerBaseSpec {
         block.items != null
         block.items.size() == 3
 
-        block.items[0].text.content == 'One'
+        block.items[0].text.source == 'One'
         block.items[0].type == ElementType.ListItem
-        block.items[1].text.content == 'Two'
+        block.items[1].text.source == 'Two'
         block.items[1].type == ElementType.ListItem
-        block.items[2].text.content == 'Three'
+        block.items[2].text.source == 'Three'
         block.items[2].type == ElementType.ListItem
 
     }
@@ -127,7 +127,7 @@ class ListBlockSpec extends DomHandlerBaseSpec {
         block.items != null
         block.items.size() == 3
 
-        block.items[0].text.content == 'One'
+        block.items[0].text.source == 'One'
         block.items[0].type == ElementType.ListItem
 
         block.items[0].blocks != null
@@ -137,13 +137,13 @@ class ListBlockSpec extends DomHandlerBaseSpec {
         block.items[0].blocks[0].items != null
         block.items[0].blocks[0].items.size() == 2
         block.items[0].blocks[0].items[0] != null
-        block.items[0].blocks[0].items[0].text.content == 'One A'
+        block.items[0].blocks[0].items[0].text.source == 'One A'
         block.items[0].blocks[0].items[1] != null
-        block.items[0].blocks[0].items[1].text.content == 'One B'
+        block.items[0].blocks[0].items[1].text.source == 'One B'
 
-        block.items[1].text.content == 'Two'
+        block.items[1].text.source == 'Two'
         block.items[1].type == ElementType.ListItem
-        block.items[2].text.content == 'Three'
+        block.items[2].text.source == 'Three'
         block.items[2].type == ElementType.ListItem
 
     }
@@ -186,7 +186,7 @@ Some text
         block.items != null
         block.items.size() == 3
 
-        block.items[0].text.content == 'One'
+        block.items[0].text.source == 'One'
         block.items[0].type == ElementType.ListItem
 
         block.items[0].blocks != null
@@ -196,18 +196,18 @@ Some text
         block.items[0].blocks[0].items != null
         block.items[0].blocks[0].items.size() == 2
         block.items[0].blocks[0].items[0] != null
-        block.items[0].blocks[0].items[0].text.content == 'One A'
+        block.items[0].blocks[0].items[0].text.source == 'One A'
         block.items[0].blocks[0].items[1] != null
-        block.items[0].blocks[0].items[1].text.content == 'One B'
+        block.items[0].blocks[0].items[1].text.source == 'One B'
 
-        block.items[1].text.content == 'Two'
+        block.items[1].text.source == 'Two'
         block.items[1].type == ElementType.ListItem
         block.items[1].blocks != null
         block.items[1].blocks.size() == 1
         block.items[1].blocks[0] instanceof Paragraph
-        block.items[1].blocks[0].text.content == 'Some text'
+        block.items[1].blocks[0].text.source == 'Some text'
 
-        block.items[2].text.content == 'Three'
+        block.items[2].text.source == 'Three'
         block.items[2].type == ElementType.ListItem
 
     }

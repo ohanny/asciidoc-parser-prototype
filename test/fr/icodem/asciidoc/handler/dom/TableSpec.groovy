@@ -54,12 +54,12 @@ class TableSpec extends DomHandlerBaseSpec {
         doc.content.sections[0].blocks[0].body[0].cells[0].rowspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[0].colspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[0].text != null
-        doc.content.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
+        doc.content.sections[0].blocks[0].body[0].cells[0].text.source == 'Cell 1'
         doc.content.sections[0].blocks[0].body[0].cells[1] != null
         doc.content.sections[0].blocks[0].body[0].cells[1].rowspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[1].colspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[1].text != null
-        doc.content.sections[0].blocks[0].body[0].cells[1].text.content == 'Cell 2'
+        doc.content.sections[0].blocks[0].body[0].cells[1].text.source == 'Cell 2'
 
     }
 
@@ -110,12 +110,12 @@ class TableSpec extends DomHandlerBaseSpec {
         doc.content.sections[0].blocks[0].body[0].cells[0].rowspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[0].colspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[0].text != null
-        doc.content.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
+        doc.content.sections[0].blocks[0].body[0].cells[0].text.source == 'Cell 1'
         doc.content.sections[0].blocks[0].body[1].cells[0] != null
         doc.content.sections[0].blocks[0].body[1].cells[0].rowspan == 0
         doc.content.sections[0].blocks[0].body[1].cells[0].colspan == 0
         doc.content.sections[0].blocks[0].body[1].cells[0].text != null
-        doc.content.sections[0].blocks[0].body[1].cells[0].text.content == 'Cell 2'
+        doc.content.sections[0].blocks[0].body[1].cells[0].text.source == 'Cell 2'
 
     }
 
@@ -170,12 +170,12 @@ class TableSpec extends DomHandlerBaseSpec {
         doc.content.sections[0].blocks[0].body[0].cells[0].rowspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[0].colspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[0].text != null
-        doc.content.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
+        doc.content.sections[0].blocks[0].body[0].cells[0].text.source == 'Cell 1'
         doc.content.sections[0].blocks[0].body[0].cells[1] != null
         doc.content.sections[0].blocks[0].body[0].cells[1].rowspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[1].colspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[1].text != null
-        doc.content.sections[0].blocks[0].body[0].cells[1].text.content == 'Cell 2'
+        doc.content.sections[0].blocks[0].body[0].cells[1].text.source == 'Cell 2'
 
         doc.content.sections[0].blocks[0].body[1] != null
         doc.content.sections[0].blocks[0].body[1].cells != null
@@ -184,12 +184,12 @@ class TableSpec extends DomHandlerBaseSpec {
         doc.content.sections[0].blocks[0].body[1].cells[0].rowspan == 0
         doc.content.sections[0].blocks[0].body[1].cells[0].colspan == 0
         doc.content.sections[0].blocks[0].body[1].cells[0].text != null
-        doc.content.sections[0].blocks[0].body[1].cells[0].text.content == 'Cell 3'
+        doc.content.sections[0].blocks[0].body[1].cells[0].text.source == 'Cell 3'
         doc.content.sections[0].blocks[0].body[1].cells[1] != null
         doc.content.sections[0].blocks[0].body[1].cells[1].rowspan == 0
         doc.content.sections[0].blocks[0].body[1].cells[1].colspan == 0
         doc.content.sections[0].blocks[0].body[1].cells[1].text != null
-        doc.content.sections[0].blocks[0].body[1].cells[1].text.content == 'Cell 4'
+        doc.content.sections[0].blocks[0].body[1].cells[1].text.source == 'Cell 4'
 
     }
 
@@ -232,12 +232,12 @@ class TableSpec extends DomHandlerBaseSpec {
         doc.content.sections[0].blocks[0].header[0].cells[0].rowspan == 0
         doc.content.sections[0].blocks[0].header[0].cells[0].colspan == 0
         doc.content.sections[0].blocks[0].header[0].cells[0].text != null
-        doc.content.sections[0].blocks[0].header[0].cells[0].text.content == 'Title 1'
+        doc.content.sections[0].blocks[0].header[0].cells[0].text.source == 'Title 1'
         doc.content.sections[0].blocks[0].header[0].cells[1] != null
         doc.content.sections[0].blocks[0].header[0].cells[1].rowspan == 0
         doc.content.sections[0].blocks[0].header[0].cells[1].colspan == 0
         doc.content.sections[0].blocks[0].header[0].cells[1].text != null
-        doc.content.sections[0].blocks[0].header[0].cells[1].text.content == 'Title 2'
+        doc.content.sections[0].blocks[0].header[0].cells[1].text.source == 'Title 2'
 
         doc.content.sections[0].blocks[0].footer.empty
 
@@ -250,12 +250,12 @@ class TableSpec extends DomHandlerBaseSpec {
         doc.content.sections[0].blocks[0].body[0].cells[0].rowspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[0].colspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[0].text != null
-        doc.content.sections[0].blocks[0].body[0].cells[0].text.content == 'Cell 1'
+        doc.content.sections[0].blocks[0].body[0].cells[0].text.source == 'Cell 1'
         doc.content.sections[0].blocks[0].body[0].cells[1] != null
         doc.content.sections[0].blocks[0].body[0].cells[1].rowspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[1].colspan == 0
         doc.content.sections[0].blocks[0].body[0].cells[1].text != null
-        doc.content.sections[0].blocks[0].body[0].cells[1].text.content == 'Cell 2'
+        doc.content.sections[0].blocks[0].body[0].cells[1].text.source == 'Cell 2'
 
     }
 

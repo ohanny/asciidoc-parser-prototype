@@ -1,16 +1,16 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text;
 
 public class Text {
-    private String content;
+    private String source;
 
-    public static Text of(String content) {
+    public static Text of(String source) {
         Text text = new Text();
-        text.content = content;
+        text.source = source;
 
         return text;
     }
 
-    public String getContent() {
-        return content;
+    public String getSource() {
+        return source;
     }
 }

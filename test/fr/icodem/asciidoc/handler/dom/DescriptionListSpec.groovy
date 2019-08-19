@@ -41,7 +41,7 @@ title:: content
         block.items[0].title != null
         block.items[0].title.text == 'title'
         block.items[0].text != null
-        block.items[0].text.content == 'content'
+        block.items[0].text.source == 'content'
 
     }
 

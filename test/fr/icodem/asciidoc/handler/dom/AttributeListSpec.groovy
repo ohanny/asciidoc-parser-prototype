@@ -31,7 +31,7 @@ This is some content
         doc.content.sections[0].blocks.size() == 1
         doc.content.sections[0].blocks[0] != null
         doc.content.sections[0].blocks[0].text != null
-        doc.content.sections[0].blocks[0].text.content == 'This is some content'
+        doc.content.sections[0].blocks[0].text.source == 'This is some content'
         doc.content.sections[0].blocks[0].admonition == null
 
         doc.content.sections[0].blocks[0].attributes != null

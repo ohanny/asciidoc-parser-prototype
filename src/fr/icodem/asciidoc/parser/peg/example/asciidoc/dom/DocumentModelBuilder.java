@@ -4,7 +4,7 @@ import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.AsciidocHandler2;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.BlockHandler2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.BlockListener2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.rules2.BlockRules2;
 import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
@@ -16,7 +16,7 @@ import java.io.StringReader;
 import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
 import static java.lang.Math.min;
 
-public class DocumentModelBuilder implements AsciidocHandler2 {
+public class DocumentModelBuilder implements BlockHandler2 {
     private BlockRules2 rules;
 
     private BuildState state;

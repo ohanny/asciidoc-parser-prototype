@@ -28,7 +28,7 @@ This is some content
         doc.content.preamble.blocks.size() == 1
         doc.content.preamble.blocks[0] instanceof Paragraph
         doc.content.preamble.blocks[0].text != null
-        doc.content.preamble.blocks[0].text.content == 'This is some content'
+        doc.content.preamble.blocks[0].text.source == 'This is some content'
 
     }
 

@@ -9,10 +9,10 @@ import fr.icodem.asciidoc.parser.peg.listeners.ParseTreeListener;
  */
 public class BlockListener2 implements ParseTreeListener {
 
-    private AsciidocHandler2 handler;
+    private BlockHandler2 handler;
     private AttributeEntries attributeEntries;
 
-    public BlockListener2(AsciidocHandler2 handler, AttributeEntries attributeEntries) {
+    public BlockListener2(BlockHandler2 handler, AttributeEntries attributeEntries) {
         this.handler = handler;
         this.attributeEntries = attributeEntries;
     }
