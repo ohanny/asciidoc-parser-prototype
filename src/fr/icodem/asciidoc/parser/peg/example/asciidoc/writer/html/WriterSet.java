@@ -1,6 +1,6 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.xxx.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.writers.*;
 
 public class WriterSet {
     private TextHtmlWriter textWriter;
