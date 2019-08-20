@@ -1,20 +1,20 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.inline;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.InlineNode;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.XRefNode;
 
-public class XRefBuilder extends InlineNodeBuilder {
+public class XRefNodeBuilder extends InlineNodeBuilder {
     private String label;
     private String value;
     private boolean internal;
 
-    public static XRefBuilder newBuilder() {
-        return new XRefBuilder();
+    public static XRefNodeBuilder newBuilder() {
+        return new XRefNodeBuilder();
     }
 
     @Override
     public InlineNode build() {
-        System.out.println(label + " / " + value + " / " + internal);
-        return null;
+        return XRefNode.of(value, label, internal);
     }
 
     public void setLabel(String label) {

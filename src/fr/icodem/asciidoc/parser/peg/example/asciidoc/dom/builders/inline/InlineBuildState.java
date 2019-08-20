@@ -35,10 +35,6 @@ public class InlineBuildState {
         stack.removeLast();
     }
 
-//    public <T extends InlineNodeBuilder> T popNode() {
-//        return (T) stack.removeLast();
-//    }
-//
     public <T extends InlineNodeBuilder> T peekNode() {
         return (T) stack.peekLast();
     }
