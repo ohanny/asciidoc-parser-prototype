@@ -40,6 +40,7 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
         return getDocument().getAttributes().isAttributeEnabled(name);
     }
 
+    /*
     protected void writeBlocks(List<Block> blocks) {
         if (blocks == null) return;;
         for (Block block : blocks) {
@@ -100,6 +101,8 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
                 break;
         }
     }
+
+     */
 
     public MHW writeBlockTitle(Block block) {
         if (block.getTitle() != null) {
@@ -189,6 +192,14 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
 
 
     // block
+    public BlockHtmlWriter getBlockWriter() {
+        return state.getWriterSet().getBlockWriter();
+    }
+
+    public BlockTitleHtmlWriter getBlockTitleWriter() {
+        return state.getWriterSet().getBlockTitleWriter();
+    }
+
     public DocumentHtmlWriter getDocumentWriter() {
         return state.getWriterSet().getDocumentWriter();
     }
@@ -219,10 +230,6 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
 
     public HorizontalRuleHtmlWriter getHorizontalRuleWriter() {
         return state.getWriterSet().getHorizontalRuleWriter();
-    }
-
-    public BlockTitleHtmlWriter getBlockTitleWriter() {
-        return state.getWriterSet().getBlockTitleWriter();
     }
 
     public ImageBlockHtmlWriter getImageBlockWriter() {

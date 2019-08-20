@@ -25,7 +25,7 @@ public abstract class ListItemHtmlWriter extends ModelHtmlWriter<ListItemHtmlWri
             endText(li);
         }
         if (li.getBlocks() != null) {
-            writeBlocks(li.getBlocks());
+            getBlockWriter().writeBlocks(li.getBlocks());
         }
     }
 

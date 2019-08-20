@@ -19,7 +19,7 @@ public abstract class SectionHtmlWriter <DHW extends SectionHtmlWriter<DHW>> ext
     }
 
     private void writeContent(Section section) throws IOException {
-        writeBlocks(section.getBlocks());
+        getBlockWriter().writeBlocks(section.getBlocks());
     }
 
     protected abstract void start(Section section) throws IOException;

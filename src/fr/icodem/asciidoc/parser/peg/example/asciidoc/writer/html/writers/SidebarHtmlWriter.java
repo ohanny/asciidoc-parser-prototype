@@ -19,7 +19,7 @@ public abstract class SidebarHtmlWriter extends ModelHtmlWriter<SidebarHtmlWrite
     protected abstract void startSidebar(Sidebar sidebar);
 
     private void writeContent(Sidebar sidebar) {
-        writeBlocks(sidebar.getBlocks());
+        getBlockWriter().writeBlocks(sidebar.getBlocks());
     }
 
     protected abstract void endSidebar(Sidebar sidebar);

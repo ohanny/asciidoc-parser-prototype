@@ -31,7 +31,7 @@ public abstract class AdmonitionHtmlWriter extends ModelHtmlWriter<AdmonitionHtm
     }
 
     private void writeContent(ExampleBlock example) {
-        writeBlocks(example.getBlocks());
+        getBlockWriter().writeBlocks(example.getBlocks());
     }
 
     protected abstract void endAdmonition(String admonition, Block block);

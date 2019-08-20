@@ -29,8 +29,10 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
         private BiFunction<Outputter, WriterState, XRefNodeHtmlWriter> xrefWriterFunc;
 
         // block
-        private BiFunction<Outputter, WriterState, DocumentHtmlWriter> documentWriterFunc;
+        private BiFunction<Outputter, WriterState, BlockHtmlWriter> blockWriterFunc;
+        private BiFunction<Outputter, WriterState, BlockTitleHtmlWriter> blockTitleWriterFunc;
 
+        private BiFunction<Outputter, WriterState, DocumentHtmlWriter> documentWriterFunc;
         private BiFunction<Outputter, WriterState, HeaderHtmlWriter> headerWriterFunc;
         private BiFunction<Outputter, WriterState, RevisionInfoHtmlWriter> revisionInfoWriterFunc;
         private BiFunction<Outputter, WriterState, AuthorsHtmlWriter> authorsWriterFunc;
@@ -39,7 +41,6 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
         private BiFunction<Outputter, WriterState, PreambleHtmlWriter> preambleWriterFunc;
         private BiFunction<Outputter, WriterState, SectionHtmlWriter> sectionWriterFunc;
 
-        private BiFunction<Outputter, WriterState, BlockTitleHtmlWriter> blockTitleWriterFunc;
         private BiFunction<Outputter, WriterState, HorizontalRuleHtmlWriter> horizontalRuleWriterFunc;
         private BiFunction<Outputter, WriterState, ImageBlockHtmlWriter> imageBlockWriterFunc;
         private BiFunction<Outputter, WriterState, VideoBlockHtmlWriter> videoBlockWriterFunc;
@@ -67,6 +68,7 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             WriterState state = WriterState.newInstance();
             state.setWriterSet(writers);
 
+            // inline
             writers.setInlineNodeWriter(inlineNodeWriterFunc.apply(outputter, state));
             writers.setInlineListNodeWriter(inlineListWriterFunc.apply(outputter, state));
             writers.setStringWriter(stringWriterFunc.apply(outputter, state));
@@ -80,8 +82,11 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             writers.setMarkNodeWriter(markWriterFunc.apply(outputter, state));
             writers.setxRefNodeWriter(xrefWriterFunc.apply(outputter, state));
 
-            writers.setDocumentWriter(documentWriterFunc.apply(outputter, state));
+            // block
+            writers.setBlockTitleWriter(blockTitleWriterFunc.apply(outputter, state));
+            writers.setBlockWriter(blockWriterFunc.apply(outputter, state));
 
+            writers.setDocumentWriter(documentWriterFunc.apply(outputter, state));
             writers.setHeaderWriter(headerWriterFunc.apply(outputter, state));
             writers.setRevisionInfoWriter(revisionInfoWriterFunc.apply(outputter, state));
             writers.setAuthorsWriter(authorsWriterFunc.apply(outputter, state));
@@ -90,7 +95,6 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             writers.setPreambleWriter(preambleWriterFunc.apply(outputter, state));
             writers.setSectionWriter(sectionWriterFunc.apply(outputter, state));
 
-            writers.setBlockTitleWriter(blockTitleWriterFunc.apply(outputter, state));
             writers.setHorizontalRuleWriter(horizontalRuleWriterFunc.apply(outputter, state));
             writers.setImageBlockWriter(imageBlockWriterFunc.apply(outputter, state));
             writers.setVideoBlockWriter(videoBlockWriterFunc.apply(outputter, state));
@@ -179,6 +183,16 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
         }
 
         // block
+        public Builder withBlockWriter(BiFunction<Outputter, WriterState, BlockHtmlWriter> func) {
+            this.blockWriterFunc = func;
+            return this;
+        }
+
+        public Builder withBlockTitleWriter(BiFunction<Outputter, WriterState, BlockTitleHtmlWriter> func) {
+            this.blockTitleWriterFunc = func;
+            return this;
+        }
+
         public Builder withDocumentWriter(BiFunction<Outputter, WriterState, DocumentHtmlWriter> func) {
             this.documentWriterFunc = func;
             return this;
@@ -211,11 +225,6 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
 
         public Builder withSectionWriter(BiFunction<Outputter, WriterState, SectionHtmlWriter> func) {
             this.sectionWriterFunc = func;
-            return this;
-        }
-
-        public Builder withBlockTitleWriter(BiFunction<Outputter, WriterState, BlockTitleHtmlWriter> func) {
-            this.blockTitleWriterFunc = func;
             return this;
         }
 
@@ -334,6 +343,8 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
                 .withMonospaceNodeWriter((outputter, state) -> new DiapoMonospaceNodeHtmlWriter(outputter, state))
                 .withMarkNodeWriter((outputter, state) -> new DiapoMarkNodeHtmlWriter(outputter, state))
                 .withXRefNodeWriter((outputter, state) -> new DiapoXRefNodeHtmlWriter(outputter, state))
+                .withBlockWriter((outputter, state) -> new BlockHtmlWriter(outputter, state))
+                .withBlockTitleWriter((outputter, state) -> new DiapoBlockTitleHtmlWriter(outputter, state))
                 .withDocumentWriter((outputter, state) -> new DiapoDocumentHtmlWriter(outputter, state))
                 .withHeaderWriter((outputter, state) -> new DiapoHeaderHtmlWriter(outputter, state))
                 .withRevisionInfoWriter((outputter, state) -> new DiapoRevisionInfoHtmlWriter(outputter, state))
@@ -341,7 +352,6 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
                 .withContentWriter((outputter, state) -> new DiapoContentHtmlWriter(outputter, state))
                 .withPreambleWriter((outputter, state) -> new DiapoPreambleHtmlWriter(outputter, state))
                 .withSectionWriter((outputter, state) -> new DiapoSectionHtmlWriter(outputter, state))
-                .withBlockTitleWriter((outputter, state) -> new DiapoBlockTitleHtmlWriter(outputter, state))
                 .withHorizontalRuleWriter((outputter, state) -> new DiapoHorizontalRuleHtmlWriter(outputter, state))
                 .withImageBlockWriter((outputter, state) -> new DiapoImageBlockHtmlWriter(outputter, state))
                 .withVideoBlockWriter((outputter, state) -> new DiapoVideoBlockHtmlWriter(outputter, state))

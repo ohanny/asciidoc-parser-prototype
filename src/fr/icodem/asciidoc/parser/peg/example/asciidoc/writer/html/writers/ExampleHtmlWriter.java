@@ -20,7 +20,7 @@ public abstract class ExampleHtmlWriter extends ModelHtmlWriter<ExampleHtmlWrite
     protected abstract void startExample(ExampleBlock example);
 
     private void writeContent(ExampleBlock example) {
-        writeBlocks(example.getBlocks());
+        getBlockWriter().writeBlocks(example.getBlocks());
     }
 
     protected abstract void endExample(ExampleBlock example);

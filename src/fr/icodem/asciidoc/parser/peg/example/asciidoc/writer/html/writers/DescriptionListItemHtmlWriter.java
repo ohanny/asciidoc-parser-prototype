@@ -25,7 +25,7 @@ public abstract class DescriptionListItemHtmlWriter extends ModelHtmlWriter<Desc
             endText(item);
         }
         if (item.getBlocks() != null) {
-            writeBlocks(item.getBlocks());
+            getBlockWriter().writeBlocks(item.getBlocks());
         }
 
     }

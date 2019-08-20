@@ -19,7 +19,7 @@ public abstract class PreambleHtmlWriter <DHW extends PreambleHtmlWriter<DHW>> e
     }
 
     protected void writePreamble(Preamble preamble) throws IOException {
-        writeBlocks(preamble.getBlocks());
+        getBlockWriter().writeBlocks(preamble.getBlocks());
     }
 
     protected abstract void startPreamble(Preamble preamble) throws IOException;

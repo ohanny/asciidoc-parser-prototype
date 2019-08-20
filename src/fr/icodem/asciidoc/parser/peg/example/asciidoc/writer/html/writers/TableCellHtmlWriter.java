@@ -25,7 +25,7 @@ public abstract class TableCellHtmlWriter extends ModelHtmlWriter<TableCellHtmlW
             endText(cell);
         }
         if (cell.getBlocks() != null) {
-            writeBlocks(cell.getBlocks());
+            getBlockWriter().writeBlocks(cell.getBlocks());
         }
     }
 
