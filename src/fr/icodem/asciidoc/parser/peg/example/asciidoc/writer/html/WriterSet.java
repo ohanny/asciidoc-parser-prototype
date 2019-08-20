@@ -3,8 +3,21 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.writer.html.writers.*;
 
 public class WriterSet {
+    // inline
+    private InlineNodeHtmlWriter inlineNodeWriter;
+    private InlineListNodeHtmlWriter inlineListNodeWriter;
+    private StringHtmlWriter stringWriter;
     private TextHtmlWriter textWriter;
+    private TextNodeHtmlWriter textNodeWriter;
+    private DecoratorNodeHtmlWriter boldNodeWriter;
+    private DecoratorNodeHtmlWriter italicNodeWriter;
+    private DecoratorNodeHtmlWriter superscriptNodeWriter;
+    private DecoratorNodeHtmlWriter subscriptNodeWriter;
+    private DecoratorNodeHtmlWriter monospaceNodeWriter;
+    private DecoratorNodeHtmlWriter markNodeWriter;
+    private XRefNodeHtmlWriter xRefNodeWriter;
 
+    // block
     private DocumentHtmlWriter documentWriter;
 
     private HeaderHtmlWriter headerWriter;
@@ -37,9 +50,33 @@ public class WriterSet {
     private SidebarHtmlWriter sidebarWriter;
 
 
-
     public static WriterSet newInstance() {
         return new WriterSet();
+    }
+
+    // inline
+    public InlineNodeHtmlWriter getInlineNodeWriter() {
+        return inlineNodeWriter;
+    }
+
+    public void setInlineNodeWriter(InlineNodeHtmlWriter inlineNodeWriter) {
+        this.inlineNodeWriter = inlineNodeWriter;
+    }
+
+    public InlineListNodeHtmlWriter getInlineListNodeWriter() {
+        return inlineListNodeWriter;
+    }
+
+    public void setInlineListNodeWriter(InlineListNodeHtmlWriter inlineListNodeWriter) {
+        this.inlineListNodeWriter = inlineListNodeWriter;
+    }
+
+    public StringHtmlWriter getStringWriter() {
+        return stringWriter;
+    }
+
+    public void setStringWriter(StringHtmlWriter stringWriter) {
+        this.stringWriter = stringWriter;
     }
 
     public TextHtmlWriter getTextWriter() {
@@ -50,6 +87,71 @@ public class WriterSet {
         this.textWriter = textWriter;
     }
 
+    public TextNodeHtmlWriter getTextNodeWriter() {
+        return textNodeWriter;
+    }
+
+    public void setTextNodeWriter(TextNodeHtmlWriter textNodeWriter) {
+        this.textNodeWriter = textNodeWriter;
+    }
+
+    public DecoratorNodeHtmlWriter getBoldNodeWriter() {
+        return boldNodeWriter;
+    }
+
+    public void setBoldNodeWriter(DecoratorNodeHtmlWriter boldNodeWriter) {
+        this.boldNodeWriter = boldNodeWriter;
+    }
+
+    public DecoratorNodeHtmlWriter getItalicNodeWriter() {
+        return italicNodeWriter;
+    }
+
+    public void setItalicNodeWriter(DecoratorNodeHtmlWriter italicNodeWriter) {
+        this.italicNodeWriter = italicNodeWriter;
+    }
+
+    public DecoratorNodeHtmlWriter getSuperscriptNodeWriter() {
+        return superscriptNodeWriter;
+    }
+
+    public void setSuperscriptNodeWriter(DecoratorNodeHtmlWriter superscriptNodeWriter) {
+        this.superscriptNodeWriter = superscriptNodeWriter;
+    }
+
+    public DecoratorNodeHtmlWriter getSubscriptNodeWriter() {
+        return subscriptNodeWriter;
+    }
+
+    public void setSubscriptNodeWriter(DecoratorNodeHtmlWriter subscriptNodeWriter) {
+        this.subscriptNodeWriter = subscriptNodeWriter;
+    }
+
+    public DecoratorNodeHtmlWriter getMonospaceNodeWriter() {
+        return monospaceNodeWriter;
+    }
+
+    public void setMonospaceNodeWriter(DecoratorNodeHtmlWriter monospaceNodeWriter) {
+        this.monospaceNodeWriter = monospaceNodeWriter;
+    }
+
+    public DecoratorNodeHtmlWriter getMarkNodeWriter() {
+        return markNodeWriter;
+    }
+
+    public void setMarkNodeWriter(DecoratorNodeHtmlWriter markNodeWriter) {
+        this.markNodeWriter = markNodeWriter;
+    }
+
+    public XRefNodeHtmlWriter getxRefNodeWriter() {
+        return xRefNodeWriter;
+    }
+
+    public void setxRefNodeWriter(XRefNodeHtmlWriter xRefNodeWriter) {
+        this.xRefNodeWriter = xRefNodeWriter;
+    }
+
+    // block
     public DocumentHtmlWriter getDocumentWriter() {
         return documentWriter;
     }

@@ -138,10 +138,57 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
     }
 
 
+    // inline
+    public InlineNodeHtmlWriter getInlineNodeWriter() {
+        return state.getWriterSet().getInlineNodeWriter();
+    }
+
+    public InlineListNodeHtmlWriter getInlineListNodeWriter() {
+        return state.getWriterSet().getInlineListNodeWriter();
+    }
+
+    public StringHtmlWriter getStringWriter() {
+        return state.getWriterSet().getStringWriter();
+    }
+
     public TextHtmlWriter getTextWriter() {
         return state.getWriterSet().getTextWriter();
     }
 
+    public TextNodeHtmlWriter getTextNodeWriter() {
+        return state.getWriterSet().getTextNodeWriter();
+    }
+
+    public DecoratorNodeHtmlWriter getBoldNodeWriter() {
+        return state.getWriterSet().getBoldNodeWriter();
+    }
+
+    public DecoratorNodeHtmlWriter getItalicNodeWriter() {
+        return state.getWriterSet().getItalicNodeWriter();
+    }
+
+    public DecoratorNodeHtmlWriter getSuperscriptNodeWriter() {
+        return state.getWriterSet().getSuperscriptNodeWriter();
+    }
+
+    public DecoratorNodeHtmlWriter getSubscriptNodeWriter() {
+        return state.getWriterSet().getSubscriptNodeWriter();
+    }
+
+    public DecoratorNodeHtmlWriter getMonospaceNodeWriter() {
+        return state.getWriterSet().getMonospaceNodeWriter();
+    }
+
+    public DecoratorNodeHtmlWriter getMarkNodeWriter() {
+        return state.getWriterSet().getMarkNodeWriter();
+    }
+
+    public XRefNodeHtmlWriter getXRefNodeWriter() {
+        return state.getWriterSet().getxRefNodeWriter();
+    }
+
+
+    // block
     public DocumentHtmlWriter getDocumentWriter() {
         return state.getWriterSet().getDocumentWriter();
     }

@@ -14,8 +14,21 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
     private WriterSet writers;
 
     public static class Builder {
+        // inline
+        private BiFunction<Outputter, WriterState, InlineNodeHtmlWriter> inlineNodeWriterFunc;
+        private BiFunction<Outputter, WriterState, InlineListNodeHtmlWriter> inlineListWriterFunc;
+        private BiFunction<Outputter, WriterState, StringHtmlWriter> stringWriterFunc;
         private BiFunction<Outputter, WriterState, TextHtmlWriter> textWriterFunc;
+        private BiFunction<Outputter, WriterState, TextNodeHtmlWriter> textNodeWriterFunc;
+        private BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> boldWriterFunc;
+        private BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> italicWriterFunc;
+        private BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> superscriptWriterFunc;
+        private BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> subscriptWriterFunc;
+        private BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> monospaceWriterFunc;
+        private BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> markWriterFunc;
+        private BiFunction<Outputter, WriterState, XRefNodeHtmlWriter> xrefWriterFunc;
 
+        // block
         private BiFunction<Outputter, WriterState, DocumentHtmlWriter> documentWriterFunc;
 
         private BiFunction<Outputter, WriterState, HeaderHtmlWriter> headerWriterFunc;
@@ -54,7 +67,18 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             WriterState state = WriterState.newInstance();
             state.setWriterSet(writers);
 
+            writers.setInlineNodeWriter(inlineNodeWriterFunc.apply(outputter, state));
+            writers.setInlineListNodeWriter(inlineListWriterFunc.apply(outputter, state));
+            writers.setStringWriter(stringWriterFunc.apply(outputter, state));
             writers.setTextWriter(textWriterFunc.apply(outputter, state));
+            writers.setTextNodeWriter(textNodeWriterFunc.apply(outputter, state));
+            writers.setBoldNodeWriter(boldWriterFunc.apply(outputter, state));
+            writers.setItalicNodeWriter(italicWriterFunc.apply(outputter, state));
+            writers.setSuperscriptNodeWriter(superscriptWriterFunc.apply(outputter, state));
+            writers.setSubscriptNodeWriter(subscriptWriterFunc.apply(outputter, state));
+            writers.setMonospaceNodeWriter(monospaceWriterFunc.apply(outputter, state));
+            writers.setMarkNodeWriter(markWriterFunc.apply(outputter, state));
+            writers.setxRefNodeWriter(xrefWriterFunc.apply(outputter, state));
 
             writers.setDocumentWriter(documentWriterFunc.apply(outputter, state));
 
@@ -93,11 +117,68 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             docWriter.write(document, writer);
         }
 
+        // inline
+        public Builder withInlineNodeWriter(BiFunction<Outputter, WriterState, InlineNodeHtmlWriter> func) {
+            this.inlineNodeWriterFunc = func;
+            return this;
+        }
+
+        public Builder withInlineListNodeWriter(BiFunction<Outputter, WriterState, InlineListNodeHtmlWriter> func) {
+            this.inlineListWriterFunc = func;
+            return this;
+        }
+
+        public Builder withStringWriter(BiFunction<Outputter, WriterState, StringHtmlWriter> func) {
+            this.stringWriterFunc = func;
+            return this;
+        }
+
         public Builder withTextWriter(BiFunction<Outputter, WriterState, TextHtmlWriter> func) {
             this.textWriterFunc = func;
             return this;
         }
 
+        public Builder withTextNodeWriter(BiFunction<Outputter, WriterState, TextNodeHtmlWriter> func) {
+            this.textNodeWriterFunc = func;
+            return this;
+        }
+
+        public Builder withBoldNodeWriter(BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> func) {
+            this.boldWriterFunc = func;
+            return this;
+        }
+
+        public Builder withItalicNodeWriter(BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> func) {
+            this.italicWriterFunc = func;
+            return this;
+        }
+
+        public Builder withSuperscriptNodeWriter(BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> func) {
+            this.superscriptWriterFunc = func;
+            return this;
+        }
+
+        public Builder withSubscriptNodeWriter(BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> func) {
+            this.subscriptWriterFunc = func;
+            return this;
+        }
+
+        public Builder withMonospaceNodeWriter(BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> func) {
+            this.monospaceWriterFunc = func;
+            return this;
+        }
+
+        public Builder withMarkNodeWriter(BiFunction<Outputter, WriterState, DecoratorNodeHtmlWriter> func) {
+            this.markWriterFunc = func;
+            return this;
+        }
+
+        public Builder withXRefNodeWriter(BiFunction<Outputter, WriterState, XRefNodeHtmlWriter> func) {
+            this.xrefWriterFunc = func;
+            return this;
+        }
+
+        // block
         public Builder withDocumentWriter(BiFunction<Outputter, WriterState, DocumentHtmlWriter> func) {
             this.documentWriterFunc = func;
             return this;
@@ -241,7 +322,18 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
 
     public static Builder diapo() {
         return newBuilder()
-                .withTextWriter((outputter, state) -> new DiapoTextHtmlWriter(outputter, state))
+                .withInlineNodeWriter((outputter, state) -> new InlineNodeHtmlWriter(outputter, state))
+                .withInlineListNodeWriter((outputter, state) -> new InlineListNodeHtmlWriter(outputter, state))
+                .withStringWriter((outputter, state) -> new DiapoStringHtmlWriter(outputter, state))
+                .withTextWriter((outputter, state) -> new TextHtmlWriter(outputter, state))
+                .withTextNodeWriter((outputter, state) -> new TextNodeHtmlWriter(outputter, state))
+                .withBoldNodeWriter((outputter, state) -> new DiapoBoldNodeHtmlWriter(outputter, state))
+                .withItalicNodeWriter((outputter, state) -> new DiapoItalicNodeHtmlWriter(outputter, state))
+                .withSuperscriptNodeWriter((outputter, state) -> new DiapoSuperscriptNodeHtmlWriter(outputter, state))
+                .withSubscriptNodeWriter((outputter, state) -> new DiapoSubscriptNodeHtmlWriter(outputter, state))
+                .withMonospaceNodeWriter((outputter, state) -> new DiapoMonospaceNodeHtmlWriter(outputter, state))
+                .withMarkNodeWriter((outputter, state) -> new DiapoMarkNodeHtmlWriter(outputter, state))
+                .withXRefNodeWriter((outputter, state) -> new DiapoXRefNodeHtmlWriter(outputter, state))
                 .withDocumentWriter((outputter, state) -> new DiapoDocumentHtmlWriter(outputter, state))
                 .withHeaderWriter((outputter, state) -> new DiapoHeaderHtmlWriter(outputter, state))
                 .withRevisionInfoWriter((outputter, state) -> new DiapoRevisionInfoHtmlWriter(outputter, state))
