@@ -15,7 +15,7 @@ public class DiapoContentHtmlWriter extends ContentHtmlWriter<DiapoContentHtmlWr
 
     @Override
     protected void startContent(Content content) {
-      append(BODY.start("class", getBodyClass())).nl()
+      append(BODY.start("class", "shower list")).nl()
         .incIndent();
     }
 
@@ -59,22 +59,6 @@ public class DiapoContentHtmlWriter extends ContentHtmlWriter<DiapoContentHtmlWr
 
     protected String getHighlightjsSelector() {
         return "pre.highlight code";
-    }
-
-    protected String getBodyClass() {
-        String bodyClass = getAttributeEntry("doctype").getValue();
-
-        AttributeEntry tocAtt = getAttributeEntry("toc");
-        if (!tocAtt.isDisabled()) {
-            if ("right".equals(tocAtt.getValue())) {
-                bodyClass += " toc2 toc-right";
-            }
-            else if ("left".equals(tocAtt.getValue())) {
-                bodyClass += " toc2 toc-left";
-            }
-        }
-
-        return bodyClass;
     }
 
 }
