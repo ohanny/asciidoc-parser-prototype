@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.inline;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.InlineNode;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.TextNode;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.InlineNode;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.TextNode;
 
 public class TextNodeBuilder extends InlineNodeBuilder {
     private String text;

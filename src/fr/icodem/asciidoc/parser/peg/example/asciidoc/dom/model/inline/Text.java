@@ -1,4 +1,4 @@
-package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text;
+package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline;
 
 public class Text {
     private String source;

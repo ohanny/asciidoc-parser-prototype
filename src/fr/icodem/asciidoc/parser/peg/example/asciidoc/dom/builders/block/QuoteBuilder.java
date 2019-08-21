@@ -3,7 +3,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Quote;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.Text;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 
 public class QuoteBuilder implements BlockBuilder, TextContainer {
     private AttributeList attributeList;

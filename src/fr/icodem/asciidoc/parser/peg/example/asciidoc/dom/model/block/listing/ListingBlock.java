@@ -1,8 +1,11 @@
-package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block;
+package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.listing;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ElementType;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.Text;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Callout;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TextBlock;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 
 import java.util.List;
 
@@ -13,6 +16,7 @@ public class ListingBlock extends TextBlock {
     private boolean linenums;
     private boolean highlight;
 
+    private List<ListingLine> lines;
     private List<Callout> callouts;
 
     public static ListingBlock of(AttributeList attList, Title title, Text text, List<Callout> callouts) {
@@ -52,5 +56,9 @@ public class ListingBlock extends TextBlock {
 
     public List<Callout> getCallouts() {
         return callouts;
+    }
+
+    public List<ListingLine> getLines() {
+        return lines;
     }
 }

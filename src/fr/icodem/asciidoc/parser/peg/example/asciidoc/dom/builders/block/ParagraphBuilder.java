@@ -3,8 +3,8 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Paragraph;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.InlineNode;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.Text;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.InlineNode;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 
 public class ParagraphBuilder implements BlockBuilder, TextContainer {
     private String title;

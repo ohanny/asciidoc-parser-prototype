@@ -3,7 +3,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.LiteralBlock;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.Text;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 
 public class LiteralBlockBuilder implements BlockBuilder, TextContainer {
 

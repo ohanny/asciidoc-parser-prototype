@@ -1,8 +1,8 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.inline;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.InlineListNode;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.InlineNode;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.InlineListNode;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.InlineNode;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -50,6 +50,9 @@ public class WriterSet {
     private LiteralHtmlWriter literalWriter;
     private SidebarHtmlWriter sidebarWriter;
 
+    private CalloutsHtmlWriter calloutsWriter;
+    private CalloutHtmlWriter calloutWriter;
+
 
     public static WriterSet newInstance() {
         return new WriterSet();
@@ -368,5 +371,21 @@ public class WriterSet {
 
     public void setSidebarWriter(SidebarHtmlWriter sidebarWriter) {
         this.sidebarWriter = sidebarWriter;
+    }
+
+    public CalloutsHtmlWriter getCalloutsWriter() {
+        return calloutsWriter;
+    }
+
+    public void setCalloutsWriter(CalloutsHtmlWriter calloutsWriter) {
+        this.calloutsWriter = calloutsWriter;
+    }
+
+    public CalloutHtmlWriter getCalloutWriter() {
+        return calloutWriter;
+    }
+
+    public void setCalloutWriter(CalloutHtmlWriter calloutWriter) {
+        this.calloutWriter = calloutWriter;
     }
 }

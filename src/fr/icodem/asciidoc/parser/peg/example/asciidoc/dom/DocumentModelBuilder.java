@@ -487,6 +487,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
         builder.setCalloutNumber(nb);
     }
 
+
     // horizontal rule
     @Override
     public void horizontalRule() {

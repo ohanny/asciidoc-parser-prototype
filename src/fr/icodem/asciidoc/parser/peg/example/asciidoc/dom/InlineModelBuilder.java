@@ -4,7 +4,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.UrlUtils;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.AttributeListBuilder;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.inline.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntries;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.InlineNode;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.InlineNode;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.InlineHandler2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.InlineListener2;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.rules2.InlineRules2;

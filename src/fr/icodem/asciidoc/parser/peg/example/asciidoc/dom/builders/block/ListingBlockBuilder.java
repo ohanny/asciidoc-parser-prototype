@@ -2,9 +2,9 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Callout;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ListingBlock;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.listing.ListingBlock;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.Text;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 
 import java.util.Deque;
 import java.util.LinkedList;

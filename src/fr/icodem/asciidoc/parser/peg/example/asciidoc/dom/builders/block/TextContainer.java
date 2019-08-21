@@ -2,7 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.InlineModelBuilder;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntries;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.InlineNode;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.InlineNode;
 
 @FunctionalInterface
 public interface TextContainer {

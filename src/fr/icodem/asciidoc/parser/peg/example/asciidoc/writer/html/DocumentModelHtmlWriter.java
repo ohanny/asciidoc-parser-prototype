@@ -61,6 +61,9 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
         private BiFunction<Outputter, WriterState, LiteralHtmlWriter> literalWriterFunc;
         private BiFunction<Outputter, WriterState, SidebarHtmlWriter> sidebarWriterFunc;
 
+        private BiFunction<Outputter, WriterState, CalloutsHtmlWriter> calloutsWriterFunc;
+        private BiFunction<Outputter, WriterState, CalloutHtmlWriter> calloutWriterFunc;
+
         public void write(Document document, Writer writer) throws IOException {
             Outputter outputter = new Outputter(writer);
 
@@ -114,6 +117,9 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             writers.setExampleWriter(exampleWriterFunc.apply(outputter, state));
             writers.setLiteralWriter(literalWriterFunc.apply(outputter, state));
             writers.setSidebarWriter(sidebarWriterFunc.apply(outputter, state));
+
+            writers.setCalloutsWriter(calloutsWriterFunc.apply(outputter, state));
+            writers.setCalloutWriter(calloutWriterFunc.apply(outputter, state));
 
             DocumentModelHtmlWriter docWriter = new DocumentModelHtmlWriter();
             docWriter.writers = writers;
@@ -318,6 +324,16 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
             return this;
         }
 
+        public Builder withCalloutsWriter(BiFunction<Outputter, WriterState, CalloutsHtmlWriter> func) {
+            this.calloutsWriterFunc = func;
+            return this;
+        }
+
+        public Builder withCalloutWriter(BiFunction<Outputter, WriterState, CalloutHtmlWriter> func) {
+            this.calloutWriterFunc = func;
+            return this;
+        }
+
     }
 
     @Override
@@ -370,7 +386,9 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
                 .withQuoteWriter((outputter, state) -> new DiapoQuoteHtmlWriter(outputter, state))
                 .withExampleWriter((outputter, state) -> new DiapoExampleHtmlWriter(outputter, state))
                 .withLiteralWriter((outputter, state) -> new DiapoLiteralHtmlWriter(outputter, state))
-                .withSidebarWriter((outputter, state) -> new DiapoSidebarHtmlWriter(outputter, state));
+                .withSidebarWriter((outputter, state) -> new DiapoSidebarHtmlWriter(outputter, state))
+                .withCalloutsWriter((outputter, state) -> new DiapoCalloutsHtmlWriter(outputter, state))
+                .withCalloutWriter((outputter, state) -> new DiapoCalloutHtmlWriter(outputter, state));
     }
 
 }

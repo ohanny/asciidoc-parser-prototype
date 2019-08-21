@@ -1,7 +1,7 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.inline;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.InlineNode;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.text.XRefNode;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.InlineNode;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.XRefNode;
 
 public class XRefNodeBuilder extends InlineNodeBuilder {
     private String label;

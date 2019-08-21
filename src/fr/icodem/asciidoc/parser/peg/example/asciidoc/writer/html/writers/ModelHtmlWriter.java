@@ -299,4 +299,13 @@ public class ModelHtmlWriter<MHW extends ModelHtmlWriter<MHW>> extends HtmlWrite
     public SidebarHtmlWriter getSidebarWriter() {
         return state.getWriterSet().getSidebarWriter();
     }
+
+    public CalloutsHtmlWriter getCalloutsWriter() {
+        return state.getWriterSet().getCalloutsWriter();
+    }
+
+    public CalloutHtmlWriter getCalloutWriter() {
+        return state.getWriterSet().getCalloutWriter();
+    }
+
 }
