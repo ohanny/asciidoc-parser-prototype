@@ -1,27 +1,44 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block.listing.ListingProcessor;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Callout;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.listing.HighlightParameter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.listing.ListingBlock;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.listing.ListingLine;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.HighlightListener2;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.rules2.HighlightRules2;
+import fr.icodem.asciidoc.parser.peg.runner.ParseRunner;
+import fr.icodem.asciidoc.parser.peg.runner.ParsingResult;
 
+import java.io.StringReader;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static fr.icodem.asciidoc.parser.peg.rules.RulesFactory.defaultRulesFactory;
+
 public class ListingBlockBuilder implements BlockBuilder, TextContainer {
 
+    private BlockBuildState state;
     private AttributeList attributeList;
     private String title;
     private String text;
     private Deque<CalloutBuilder> callouts;
 
-    public static ListingBlockBuilder newBuilder(AttributeList attList, String title) {
+    private ListingProcessor listingProcessor; // TODO to be refactored
+
+    public static ListingBlockBuilder newBuilder(BlockBuildState state, AttributeList attList, String title) {
         ListingBlockBuilder builder = new ListingBlockBuilder();
+        builder.state = state;
         builder.attributeList = attList;
         builder.title = title;
+
+        builder.listingProcessor = ListingProcessor.newInstance();
+
         return builder;
     }
 
@@ -37,7 +54,9 @@ public class ListingBlockBuilder implements BlockBuilder, TextContainer {
                 .map(CalloutBuilder::build)
                 .collect(Collectors.toList());
 
-        return ListingBlock.of(attributeList, Title.of(title), Text.of(text), callouts);
+        List<ListingLine> lines = buildLines(text.toCharArray());
+
+        return ListingBlock.of(attributeList, Title.of(title), Text.of(text), callouts, lines);
     }
 
     public void newCallouts() {
@@ -54,4 +73,29 @@ public class ListingBlockBuilder implements BlockBuilder, TextContainer {
     public void setCalloutNumber(String number) {
         callouts.peekLast().setNumber(Integer.parseInt(number));
     }
+
+    private List<ListingLine> buildLines(char[] chars) {
+        class HighlightParamsHolder {
+            List<HighlightParameter> highlightParams = null;
+
+        }
+        HighlightParamsHolder paramsHolder = new HighlightParamsHolder();
+
+        AttributeList attList = attributeList;
+        if (attList != null) {
+            Attribute attHighlightParams = attList.getAttribute("highlight");
+            if (attHighlightParams != null) {
+                HighlightRules2 rules = new HighlightRules2(state.getAttributeEntries());
+                rules.withFactory(defaultRulesFactory());
+                ParsingResult result = new ParseRunner(rules, rules::highlights)
+                        //.trace()
+                        .parse(new StringReader(attHighlightParams.getValue()), new HighlightListener2(params -> paramsHolder.highlightParams = params), null, null);
+
+            }
+        }
+
+
+        return listingProcessor.process(chars, paramsHolder.highlightParams);
+    }
+
 }

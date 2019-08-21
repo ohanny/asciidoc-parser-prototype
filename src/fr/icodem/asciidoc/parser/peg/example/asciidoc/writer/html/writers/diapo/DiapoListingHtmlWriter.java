@@ -27,13 +27,13 @@ public class DiapoListingHtmlWriter extends ListingHtmlWriter<DiapoListingHtmlWr
                 .writeBlockTitle(listing)
                 .indent()
                 .append(PRE.start("class", getMoreClasses(getListingPreClass(listing), listing.getAttributes())))
-                /*.forEach(listing.getLines(), (line, index) ->
+                .forEach(listing.getLines(), (line, index) ->
                         append(CODE.start("class", getListingCodeClass(listing.getLanguage(), line)))
                                 .forEach(line.getLineChunks(), this::writeListingLineChunk)
                                 .writeListingCallout(line)
                                 .append(CODE.end())
                                 .appendIf(listing.getLines().size() - 1 != index, () -> nl())
-                )*/
+                )
         ;
 
     }

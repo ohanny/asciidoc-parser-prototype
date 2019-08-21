@@ -20,7 +20,7 @@ public abstract class ListingHtmlWriter <DHW extends ListingHtmlWriter<DHW>> ext
     protected abstract void startListing(ListingBlock listing);
 
     private void writeContent(ListingBlock listing) {
-        if (listing.getText() != null) append(listing.getText().getSource());
+        //if (listing.getText() != null) append(listing.getText().getSource());
     }
 
     protected abstract void endListing(ListingBlock listing);

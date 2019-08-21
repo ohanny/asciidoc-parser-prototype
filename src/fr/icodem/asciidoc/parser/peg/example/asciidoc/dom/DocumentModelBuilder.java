@@ -47,13 +47,6 @@ public class DocumentModelBuilder implements BlockHandler2 {
     }
 
     public Document build(String text) {
-//        final BlockListener2 listener = new BlockListener2(this, state.getAttributeEntries());
-//
-//        ParsingResult result = new ParseRunner(rules, rules::document)
-//                //.trace()
-//                .parse(new StringReader(text), listener, null, null);
-//
-//        return documentBuilder==null?null:documentBuilder.build();
         return build(new StringReader(text));
     }
 
@@ -451,7 +444,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // listing block
     @Override
     public void enterListingBlock() {
-        ListingBlockBuilder builder = ListingBlockBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle());
+        ListingBlockBuilder builder = ListingBlockBuilder.newBuilder(state, attributeListBuilder.consume(), state.consumeBlockTitle());
         state.pushBlock(builder);
         state.pushTextContainer(builder);
     }

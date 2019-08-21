@@ -19,13 +19,14 @@ public class ListingBlock extends TextBlock {
     private List<ListingLine> lines;
     private List<Callout> callouts;
 
-    public static ListingBlock of(AttributeList attList, Title title, Text text, List<Callout> callouts) {
+    public static ListingBlock of(AttributeList attList, Title title, Text text, List<Callout> callouts, List<ListingLine> lines) {
         ListingBlock listing = new ListingBlock();
         listing.type = ElementType.Listing;
         listing.attributes = attList;
         listing.title = title;
         listing.text = text;
         listing.callouts = callouts;
+        listing.lines = lines;
 
         if (attList != null && "source".equals(attList.getFirstPositionalAttribute())) {
             listing.source = true;
