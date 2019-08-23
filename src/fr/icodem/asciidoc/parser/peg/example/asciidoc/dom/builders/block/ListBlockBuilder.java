@@ -1,9 +1,9 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.ElementType;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ListBlock;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ListItem;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,7 @@ public class ListBlockBuilder implements BlockBuilder {
     private ListBlockBuilder root;
     private ListBlockBuilder current;
     private AttributeList attList;
-    //private FormattedText title;
-    private String title;
+    private BlockTitleBuilder title;
 
     private List<ListItemBuilder> items;
 
@@ -44,16 +43,16 @@ public class ListBlockBuilder implements BlockBuilder {
                 break;
         }
 
-        ListBlock list = ListBlock.of(attList, Title.of(title), type, level, items);
+        ListBlock list = ListBlock.of(attList, buildTitle(title), type, level, items);
         items.forEach(li -> li.setParent(list));
 
         return list;
     }
 
 
-    public static ListBlockBuilder root(String title) {
+    public static ListBlockBuilder root(BlockBuildState state) {
         ListBlockBuilder builder = new ListBlockBuilder();
-        builder.title = title;
+        builder.title = state.consumeBlockTitle();
         builder.root = builder;
         builder.current = builder;
         builder.items = new ArrayList<>();

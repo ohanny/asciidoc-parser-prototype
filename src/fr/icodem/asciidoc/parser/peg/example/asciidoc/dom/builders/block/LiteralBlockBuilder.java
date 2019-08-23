@@ -2,19 +2,18 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.LiteralBlock;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 
 public class LiteralBlockBuilder implements BlockBuilder, TextContainer {
 
     private AttributeList attList;
-    private String title;
+    private BlockTitleBuilder title;
     private String text;
 
-    public static LiteralBlockBuilder newBuilder(AttributeList attList, String title) {
+    public static LiteralBlockBuilder newBuilder(BlockBuildState state, AttributeList attList) {
         LiteralBlockBuilder literal = new LiteralBlockBuilder();
         literal.attList = attList;
-        literal.title = title;
+        literal.title = state.consumeBlockTitle();
 
         return literal;
     }
@@ -26,6 +25,6 @@ public class LiteralBlockBuilder implements BlockBuilder, TextContainer {
 
     @Override
     public LiteralBlock build() {
-        return LiteralBlock.of(attList, Title.of(title), Text.of(text));
+        return LiteralBlock.of(attList, buildTitle(title), Text.of(text));
     }
 }

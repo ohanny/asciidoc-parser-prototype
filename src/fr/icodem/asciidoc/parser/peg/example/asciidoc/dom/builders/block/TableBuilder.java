@@ -4,7 +4,6 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Table;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TableColumn;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.TableRow;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
 public class TableBuilder implements BlockBuilder {
 
     private AttributeList attList;
-    private String title;
+    private BlockTitleBuilder title;
 
     private int tableLineNumber;
     private int firstLineNumber;
@@ -29,10 +28,10 @@ public class TableBuilder implements BlockBuilder {
     private Deque<TableColumnBuilder> columns;
     private Deque<TableRowBuilder> rows;
 
-    public static TableBuilder newBuilder(AttributeList attList, String title, int tableLineNumber) {
+    public static TableBuilder newBuilder(BlockBuildState state, AttributeList attList, int tableLineNumber) {
         TableBuilder builder = new TableBuilder();
         builder.attList = attList;
-        builder.title = title;
+        builder.title = state.consumeBlockTitle();
         builder.tableLineNumber = tableLineNumber;
         builder.firstLineNumber = -1;
         builder.currentLineNumber = -1;
@@ -69,7 +68,7 @@ public class TableBuilder implements BlockBuilder {
                 .map(TableColumnBuilder::build)
                 .collect(Collectors.toList());
 
-        Table table = Table.of(attList, Title.of(title), columns, header, footer, body);
+        Table table = Table.of(attList, buildTitle(title), columns, header, footer, body);
 
         table.getColumns().forEach(c -> c.setTable(table));
 

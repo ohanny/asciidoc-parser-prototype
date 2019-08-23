@@ -15,7 +15,14 @@ public class DiapoBlockTitleHtmlWriter extends BlockTitleHtmlWriter {
 
     @Override
     public void write(Title title) {
-        indent().append(DIV.start("class", "title"))
-                .append(title.getText()).append(DIV.end()).nl();
+        indent().append(DIV.start("class", "title"));
+
+        if (title.getInline() != null) {
+            getInlineNodeWriter().write(title.getInline());
+        } else {
+            append(title.getText());
+        }
+
+        append(DIV.end()).nl();
     }
 }

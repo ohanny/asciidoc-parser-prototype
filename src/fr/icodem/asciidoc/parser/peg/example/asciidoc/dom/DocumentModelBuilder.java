@@ -135,7 +135,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // macro
     @Override
     public void enterMacro() {
-        blockMacroBuilder = BlockMacroBuilder.of(state.getAttributeEntries(), attributeListBuilder.consume(), state.consumeBlockTitle());
+        blockMacroBuilder = BlockMacroBuilder.of(state, state.getAttributeEntries(), attributeListBuilder.consume());
     }
 
     @Override
@@ -231,8 +231,9 @@ public class DocumentModelBuilder implements BlockHandler2 {
 
     // block title
     @Override
-    public void blockTitleValue(char[] chars) {// TODO not yet tested
-        state.setCurrentBlockTitle(chars);
+    public void blockTitleValue(char[] chars) {
+        BlockTitleBuilder builder = BlockTitleBuilder.newBuilder(new String(chars));
+        state.setCurrentBlockTitle(builder);
     }
 
     // content
@@ -278,11 +279,11 @@ public class DocumentModelBuilder implements BlockHandler2 {
         if (attList != null && "quote".equals(attList.getFirstPositionalAttribute())) {
             String attribution = attList.getSecondPositionalAttribute();
             String citationTitle = attList.getThirdPositionalAttribute();
-            QuoteBuilder builder = QuoteBuilder.of(attList, state.consumeBlockTitle(), attribution, citationTitle);
+            QuoteBuilder builder = QuoteBuilder.of(state, attList, attribution, citationTitle);
             state.pushBlock(builder);
             state.pushTextContainer(builder);
         } else {
-            ParagraphBuilder builder = ParagraphBuilder.of(attList, state.consumeBlockTitle(), admonition);
+            ParagraphBuilder builder = ParagraphBuilder.of(state, attList, admonition);
             state.pushBlock(builder);
             state.pushTextContainer(builder);
         }
@@ -299,7 +300,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // list block
     @Override
     public void enterList() {
-        ListBlockBuilder builder = ListBlockBuilder.root(state.consumeBlockTitle());
+        ListBlockBuilder builder = ListBlockBuilder.root(state);
         state.pushBlock(builder);
     }
 
@@ -342,7 +343,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // description list
     @Override
     public void enterDescriptionList() {
-        DescriptionListBuilder builder = DescriptionListBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle());
+        DescriptionListBuilder builder = DescriptionListBuilder.newBuilder(state, attributeListBuilder.consume());
         state.pushBlock(builder);
         state.pushBlockToContainer(builder);
     }
@@ -400,7 +401,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // literal block
     @Override
     public void enterLiteralBlock() {
-        LiteralBlockBuilder builder = LiteralBlockBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle());
+        LiteralBlockBuilder builder = LiteralBlockBuilder.newBuilder(state, attributeListBuilder.consume());
         state.pushBlock(builder);
         state.pushTextContainer(builder);
     }
@@ -415,7 +416,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // example block
     @Override
     public void enterExample() {
-        ExampleBlockBuilder builder = ExampleBlockBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle());
+        ExampleBlockBuilder builder = ExampleBlockBuilder.newBuilder(state, attributeListBuilder.consume());
         state.pushBlock(builder);
         state.pushBlockContainer(builder);
     }
@@ -430,7 +431,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // sidebar
     @Override
     public void enterSidebar() {
-        SidebarBuilder builder = SidebarBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle());
+        SidebarBuilder builder = SidebarBuilder.newBuilder(state, attributeListBuilder.consume());
         state.pushBlock(builder);
         state.pushBlockContainer(builder);
     }
@@ -445,7 +446,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // listing block
     @Override
     public void enterListingBlock() {
-        ListingBlockBuilder builder = ListingBlockBuilder.newBuilder(state, attributeListBuilder.consume(), state.consumeBlockTitle());
+        ListingBlockBuilder builder = ListingBlockBuilder.newBuilder(state, attributeListBuilder.consume());
         state.pushBlock(builder);
         state.pushTextContainer(builder);
     }
@@ -491,7 +492,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // table
     @Override
     public void enterTable(int lineNumber) {
-        TableBuilder builder = TableBuilder.newBuilder(attributeListBuilder.consume(), state.consumeBlockTitle(), lineNumber);
+        TableBuilder builder = TableBuilder.newBuilder(state, attributeListBuilder.consume(), lineNumber);
 
         state.pushBlock(builder);
         state.pushBlockToContainer(builder);

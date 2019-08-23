@@ -1,23 +1,23 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntries;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Block;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ImageBlock;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.VideoBlock;
 
 public class BlockMacroBuilder implements BlockBuilder {
     private AttributeEntries entries;
     private AttributeList attributes;
-    private String title;
+    private BlockTitleBuilder title;
     private String name;
     private String target;
 
-    public static BlockMacroBuilder of(AttributeEntries entries, AttributeList attList, String title) {
+    public static BlockMacroBuilder of(BlockBuildState state, AttributeEntries entries, AttributeList attList) {
         BlockMacroBuilder builder = new BlockMacroBuilder();
         builder.entries = entries;
         builder.attributes = attList;
-        builder.title = title;
+        builder.title = state.consumeBlockTitle();
 
         return builder;
     }
@@ -38,7 +38,7 @@ public class BlockMacroBuilder implements BlockBuilder {
         if (path != null) {
             target = path + "/" + target;
         }
-        return ImageBlock.of(attributes, Title.of(title), target, getAlternateText());
+        return ImageBlock.of(attributes, buildTitle(title), target, getAlternateText());
     }
 
     private VideoBlock buildVideo() {
@@ -46,7 +46,7 @@ public class BlockMacroBuilder implements BlockBuilder {
         if (path != null) {
             target = path + "/" + target;
         }
-        return VideoBlock.of(attributes, Title.of(title), target, getAlternateText());
+        return VideoBlock.of(attributes, buildTitle(title), target, getAlternateText());
     }
 
     private String getAlternateText() {

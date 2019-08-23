@@ -13,7 +13,7 @@ public class BlockBuildState {
 
     private List<TextContainer> textToParseList;
 
-    private char[] currentBlockTitle;
+    private BlockTitleBuilder currentBlockTitle;
 
     // computed refs : helps avoid duplicates
     private Map<String, Integer> refs;
@@ -84,14 +84,14 @@ public class BlockBuildState {
         return ref;
     }
 
-    public void setCurrentBlockTitle(char[] currentBlockTitle) {
-        this.currentBlockTitle = currentBlockTitle;
+    public void setCurrentBlockTitle(BlockTitleBuilder title) {
+        this.currentBlockTitle = title;
+        textToParseList.add(title);
     }
 
-    public String consumeBlockTitle() {
-        String title = currentBlockTitle == null?null:new String(currentBlockTitle).trim();
+    public BlockTitleBuilder consumeBlockTitle() {
+        BlockTitleBuilder title = currentBlockTitle;
         currentBlockTitle = null;
-
         return title;
     }
 

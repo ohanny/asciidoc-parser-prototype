@@ -1,11 +1,11 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block.listing.ListingProcessor;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.*;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.Attribute;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Callout;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.listing.HighlightParameter;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.listing.ListingBlock;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.listing.ListingLine;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.listener2.HighlightListener2;
@@ -25,17 +25,17 @@ public class ListingBlockBuilder implements BlockBuilder, TextContainer {
 
     private BlockBuildState state;
     private AttributeList attributeList;
-    private String title;
+    private BlockTitleBuilder title;
     private String text;
     private Deque<CalloutBuilder> callouts;
 
     private ListingProcessor listingProcessor; // TODO to be refactored
 
-    public static ListingBlockBuilder newBuilder(BlockBuildState state, AttributeList attList, String title) {
+    public static ListingBlockBuilder newBuilder(BlockBuildState state, AttributeList attList) {
         ListingBlockBuilder builder = new ListingBlockBuilder();
         builder.state = state;
         builder.attributeList = attList;
-        builder.title = title;
+        builder.title = state.consumeBlockTitle();
 
         builder.listingProcessor = ListingProcessor.newInstance();
 
@@ -56,7 +56,7 @@ public class ListingBlockBuilder implements BlockBuilder, TextContainer {
 
         List<ListingLine> lines = buildLines(text.toCharArray());
 
-        return ListingBlock.of(attributeList, Title.of(title), Text.of(text), callouts, lines);
+        return ListingBlock.of(attributeList, buildTitle(title), Text.of(text), callouts, lines);
     }
 
     public void newCallouts() {

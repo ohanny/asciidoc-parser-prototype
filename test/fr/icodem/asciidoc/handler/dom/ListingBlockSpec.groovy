@@ -2,6 +2,8 @@ package fr.icodem.asciidoc.handler.dom
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Document
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.listing.ListingBlock
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.TextNode
 
 class ListingBlockSpec extends DomHandlerBaseSpec {
 
@@ -107,10 +109,14 @@ int a = 10;
         doc.content.sections[0].blocks[0].callouts.size() == 2
         doc.content.sections[0].blocks[0].callouts[0] != null
         doc.content.sections[0].blocks[0].callouts[0].number == 1
-        doc.content.sections[0].blocks[0].callouts[0].text == 'Note 1'
+        doc.content.sections[0].blocks[0].callouts[0].text != null
+        doc.content.sections[0].blocks[0].callouts[0].text.inline instanceof TextNode
+        doc.content.sections[0].blocks[0].callouts[0].text.inline.text == 'Note 1'
         doc.content.sections[0].blocks[0].callouts[1] != null
         doc.content.sections[0].blocks[0].callouts[1].number == 2
-        doc.content.sections[0].blocks[0].callouts[1].text == 'Note 2'
+        doc.content.sections[0].blocks[0].callouts[1].text != null
+        doc.content.sections[0].blocks[0].callouts[1].text.inline instanceof TextNode
+        doc.content.sections[0].blocks[0].callouts[1].text.inline.text == 'Note 2'
 
 
     }

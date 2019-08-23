@@ -3,7 +3,6 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.DescriptionList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.DescriptionListItem;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -13,13 +12,13 @@ import java.util.stream.Collectors;
 public class DescriptionListBuilder implements BlockBuilder {
 
     private AttributeList attributeList;
-    private String title;
+    private BlockTitleBuilder title;
     private Deque<DescriptionListItemBuilder> items;
 
-    public static DescriptionListBuilder newBuilder(AttributeList attList, String title) {
+    public static DescriptionListBuilder newBuilder(BlockBuildState state, AttributeList attList) {
         DescriptionListBuilder builder = new DescriptionListBuilder();
         builder.attributeList = attList;
-        builder.title = title;
+        builder.title = state.consumeBlockTitle();
         builder.items = new LinkedList<>();
 
         return builder;
@@ -32,7 +31,7 @@ public class DescriptionListBuilder implements BlockBuilder {
                 .map(DescriptionListItemBuilder::build)
                 .collect(Collectors.toList());
 
-        return DescriptionList.of(attributeList, Title.of(title), items);
+        return DescriptionList.of(attributeList, buildTitle(title), items);
     }
 
     public DescriptionListItemBuilder newItem() {

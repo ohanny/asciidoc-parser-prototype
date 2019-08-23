@@ -10,7 +10,7 @@ public class InlineNodeHtmlWriter extends ModelHtmlWriter<InlineNodeHtmlWriter> 
         super(outputter, state);
     }
 
-    protected void write(InlineNode node) {
+    public void write(InlineNode node) {
         switch (node.getType()) {
             case InlineListNode:
                 getInlineListNodeWriter().write((InlineListNode) node);

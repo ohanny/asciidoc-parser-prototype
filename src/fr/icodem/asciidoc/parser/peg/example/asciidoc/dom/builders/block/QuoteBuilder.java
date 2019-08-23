@@ -2,20 +2,21 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Quote;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 
 public class QuoteBuilder implements BlockBuilder, TextContainer {
+    private BlockBuildState state;
     private AttributeList attributeList;
-    private String title;
+    private BlockTitleBuilder title;
     private String attribution;
     private String citationTitle;
     private String text;
 
-    public static QuoteBuilder of(AttributeList attList, String title, String attribution, String citationTitle) {
+    public static QuoteBuilder of(BlockBuildState state, AttributeList attList, String attribution, String citationTitle) {
         QuoteBuilder builder = new QuoteBuilder();
+        builder.state = state;
         builder.attributeList = attList;
-        builder.title = title;
+        builder.title = state.consumeBlockTitle();
         builder.attribution = attribution;
         builder.citationTitle = citationTitle;
 
@@ -24,7 +25,7 @@ public class QuoteBuilder implements BlockBuilder, TextContainer {
 
     @Override
     public Quote build() {
-        return Quote.of(attributeList, Title.of(title), Text.of(text), attribution, citationTitle);
+        return Quote.of(attributeList, buildTitle(title), Text.of(text), attribution, citationTitle);
     }
 
     @Override
