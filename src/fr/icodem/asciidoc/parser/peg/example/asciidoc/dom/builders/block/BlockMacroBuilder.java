@@ -13,9 +13,9 @@ public class BlockMacroBuilder implements BlockBuilder {
     private String name;
     private String target;
 
-    public static BlockMacroBuilder of(BlockBuildState state, AttributeEntries entries) {
+    public static BlockMacroBuilder of(BlockBuildState state) {
         BlockMacroBuilder builder = new BlockMacroBuilder();
-        builder.entries = entries;
+        builder.entries = state.getAttributeEntries();
         builder.attributes = state.consumeAttributeList();
         builder.title = state.consumeBlockTitle();
 

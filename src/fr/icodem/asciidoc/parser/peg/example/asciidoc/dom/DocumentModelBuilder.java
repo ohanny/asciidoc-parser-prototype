@@ -2,7 +2,6 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom;
 
 import fr.icodem.asciidoc.parser.peg.NodeContext;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.AttributeEntryBuilder;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.AttributeListBuilder;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block.*;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntries;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntry;
@@ -30,7 +29,6 @@ public class DocumentModelBuilder implements BlockHandler2 {
     private ContentBuilder contentBuilder;
 
     private AttributeEntryBuilder attributeEntryBuilder;
-    //private AttributeListBuilder attributeListBuilder;
     private BlockMacroBuilder blockMacroBuilder;
 
     public static DocumentModelBuilder newBuilder(AttributeEntries attributeEntries) {
@@ -133,7 +131,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // macro
     @Override
     public void enterMacro() {
-        blockMacroBuilder = BlockMacroBuilder.of(state, state.getAttributeEntries());
+        blockMacroBuilder = BlockMacroBuilder.of(state);
     }
 
     @Override
@@ -275,9 +273,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
         AttributeList attList = state.consumeAttributeList();
 
         if (attList != null && "quote".equals(attList.getFirstPositionalAttribute())) {
-            String attribution = attList.getSecondPositionalAttribute();
-            String citationTitle = attList.getThirdPositionalAttribute();
-            QuoteBuilder builder = QuoteBuilder.of(state, attList, attribution, citationTitle);
+            QuoteBuilder builder = QuoteBuilder.of(state, attList);
             state.pushBlock(builder);
             state.pushTextContainer(builder);
         } else {

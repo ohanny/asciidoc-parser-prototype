@@ -11,12 +11,12 @@ public class QuoteBuilder implements BlockBuilder, TextContainer {
     private String citationTitle;
     private String text;
 
-    public static QuoteBuilder of(BlockBuildState state, AttributeList attList, String attribution, String citationTitle) {
+    public static QuoteBuilder of(BlockBuildState state, AttributeList attList) {
         QuoteBuilder builder = new QuoteBuilder();
         builder.attributeList = attList;
         builder.title = state.consumeBlockTitle();
-        builder.attribution = attribution;
-        builder.citationTitle = citationTitle;
+        builder.attribution = attList.getSecondPositionalAttribute();
+        builder.citationTitle = attList.getThirdPositionalAttribute();
 
         return builder;
     }
