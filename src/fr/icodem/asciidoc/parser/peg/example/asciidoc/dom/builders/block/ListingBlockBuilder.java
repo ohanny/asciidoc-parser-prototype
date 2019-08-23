@@ -25,7 +25,7 @@ public class ListingBlockBuilder implements BlockBuilder, TextContainer {
 
     private BlockBuildState state;
     private AttributeList attributeList;
-    private BlockTitleBuilder title;
+    private TitleBuilder title;
     private String text;
     private Deque<CalloutBuilder> callouts;
 

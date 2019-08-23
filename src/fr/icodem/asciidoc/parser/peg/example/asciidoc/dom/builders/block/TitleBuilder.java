@@ -3,12 +3,12 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.InlineNode;
 
-public class BlockTitleBuilder implements TextContainer {
+public class TitleBuilder implements TextContainer {
     private String text;
     private InlineNode inline;
 
-    public static BlockTitleBuilder newBuilder(String text) {
-        BlockTitleBuilder builder = new BlockTitleBuilder();
+    public static TitleBuilder newBuilder(String text) {
+        TitleBuilder builder = new TitleBuilder();
         builder.text = text;
 
         return builder;

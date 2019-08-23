@@ -7,7 +7,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 public class LiteralBlockBuilder implements BlockBuilder, TextContainer {
 
     private AttributeList attList;
-    private BlockTitleBuilder title;
+    private TitleBuilder title;
     private String text;
 
     public static LiteralBlockBuilder newBuilder(BlockBuildState state, AttributeList attList) {

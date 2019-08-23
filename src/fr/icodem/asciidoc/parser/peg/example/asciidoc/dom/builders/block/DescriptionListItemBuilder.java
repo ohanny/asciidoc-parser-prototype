@@ -2,7 +2,6 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Block;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.DescriptionListItem;
-import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.InlineNode;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class DescriptionListItemBuilder implements BlockBuilder, TextContainer, BlockContainer {
 
-    private String title;
+    private TitleBuilder title;
     private String text;
     private InlineNode inline;
     private List<BlockBuilder> blocks;
@@ -31,10 +30,10 @@ public class DescriptionListItemBuilder implements BlockBuilder, TextContainer, 
                     .collect(Collectors.toList());
         }
 
-        return DescriptionListItem.of(Title.of(title), Text.of(text, inline), blocks);
+        return DescriptionListItem.of(buildTitle(title), Text.of(text, inline), blocks);
     }
 
-    public void setTitle(String title) {
+    public void setTitle(TitleBuilder title) {
         this.title = title;
     }
 

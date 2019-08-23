@@ -27,7 +27,6 @@ public abstract class DescriptionListItemHtmlWriter extends ModelHtmlWriter<Desc
         if (item.getBlocks() != null) {
             getBlockWriter().writeBlocks(item.getBlocks());
         }
-
     }
 
     protected abstract void startText(DescriptionListItem item);

@@ -9,7 +9,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.VideoBlock
 public class BlockMacroBuilder implements BlockBuilder {
     private AttributeEntries entries;
     private AttributeList attributes;
-    private BlockTitleBuilder title;
+    private TitleBuilder title;
     private String name;
     private String target;
 

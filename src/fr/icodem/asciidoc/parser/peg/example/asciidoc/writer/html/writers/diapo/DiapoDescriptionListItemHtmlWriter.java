@@ -16,11 +16,19 @@ public class DiapoDescriptionListItemHtmlWriter extends DescriptionListItemHtmlW
     @Override
     protected void startItem(DescriptionListItem item) {
         indent().append(DT.start("class", "hdlist1"))
-          .append(item.getTitle().getText())
+          .append(() -> writeTitle(item))
           .append(DT.end()).nl()
           .indent().append(DD.start())
-          .appendIf(item.hasBlocks(), () -> nl().incIndent());
+          .appendIf(item.hasBlocks(), () -> nl().incIndent())
         ;
+    }
+
+    private void writeTitle(DescriptionListItem item) {
+        if (item.getTitle().getInline() != null) {
+            getInlineNodeWriter().write(item.getTitle().getInline());
+        } else {
+            append(item.getTitle().getText());
+        }
     }
 
     @Override

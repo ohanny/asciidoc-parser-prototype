@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class ExampleBlockBuilder implements BlockBuilder, BlockContainer {
     private AttributeList attList;
-    private BlockTitleBuilder title;
+    private TitleBuilder title;
     private List<BlockBuilder> blocks;
 
     public static ExampleBlockBuilder newBuilder(BlockBuildState state, AttributeList attList) {

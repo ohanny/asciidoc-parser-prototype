@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class SidebarBuilder implements BlockBuilder, BlockContainer {
     private AttributeList attList;
-    private BlockTitleBuilder title;
+    private TitleBuilder title;
     private List<BlockBuilder> blocks;
 
     public static SidebarBuilder newBuilder(BlockBuildState state, AttributeList attList) {

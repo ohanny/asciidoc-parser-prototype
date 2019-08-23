@@ -21,7 +21,7 @@ public class ListBlockBuilder implements BlockBuilder {
     private ListBlockBuilder root;
     private ListBlockBuilder current;
     private AttributeList attList;
-    private BlockTitleBuilder title;
+    private TitleBuilder title;
 
     private List<ListItemBuilder> items;
 

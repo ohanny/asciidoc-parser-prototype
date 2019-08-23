@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class TableBuilder implements BlockBuilder {
 
     private AttributeList attList;
-    private BlockTitleBuilder title;
+    private TitleBuilder title;
 
     private int tableLineNumber;
     private int firstLineNumber;

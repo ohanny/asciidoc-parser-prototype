@@ -232,7 +232,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // block title
     @Override
     public void blockTitleValue(char[] chars) {
-        BlockTitleBuilder builder = BlockTitleBuilder.newBuilder(new String(chars));
+        TitleBuilder builder = TitleBuilder.newBuilder(new String(chars));
         state.setCurrentBlockTitle(builder);
     }
 

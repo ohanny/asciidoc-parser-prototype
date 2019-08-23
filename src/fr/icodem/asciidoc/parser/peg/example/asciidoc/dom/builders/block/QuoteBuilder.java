@@ -7,7 +7,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 public class QuoteBuilder implements BlockBuilder, TextContainer {
     private BlockBuildState state;
     private AttributeList attributeList;
-    private BlockTitleBuilder title;
+    private TitleBuilder title;
     private String attribution;
     private String citationTitle;
     private String text;

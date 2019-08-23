@@ -11,12 +11,14 @@ import java.util.stream.Collectors;
 
 public class DescriptionListBuilder implements BlockBuilder {
 
+    private BlockBuildState state;
     private AttributeList attributeList;
-    private BlockTitleBuilder title;
+    private TitleBuilder title;
     private Deque<DescriptionListItemBuilder> items;
 
     public static DescriptionListBuilder newBuilder(BlockBuildState state, AttributeList attList) {
         DescriptionListBuilder builder = new DescriptionListBuilder();
+        builder.state = state;
         builder.attributeList = attList;
         builder.title = state.consumeBlockTitle();
         builder.items = new LinkedList<>();
@@ -40,7 +42,10 @@ public class DescriptionListBuilder implements BlockBuilder {
     }
 
     public void setItemTitle(String title) {
-        this.items.peekLast().setTitle(title);
+        TitleBuilder builder = TitleBuilder.newBuilder(title);
+        state.pushTextToParse(builder);
+
+        this.items.peekLast().setTitle(builder);
     }
 
     public void setItemContent(String content) {

@@ -6,7 +6,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Title;
 public interface BlockBuilder {
     Block build();
 
-    default Title buildTitle(BlockTitleBuilder builder) {
+    default Title buildTitle(TitleBuilder builder) {
         return builder == null ? null : builder.build();
     }
 }

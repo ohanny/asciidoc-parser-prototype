@@ -6,7 +6,7 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.InlineNod
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 
 public class ParagraphBuilder implements BlockBuilder, TextContainer {
-    private BlockTitleBuilder title;
+    private TitleBuilder title;
     private String admonition;
     private AttributeList attributeList;
     private String text;
