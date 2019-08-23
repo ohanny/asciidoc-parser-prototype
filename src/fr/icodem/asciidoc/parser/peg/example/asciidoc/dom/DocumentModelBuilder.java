@@ -29,7 +29,6 @@ public class DocumentModelBuilder implements BlockHandler2 {
     private ContentBuilder contentBuilder;
 
     private AttributeEntryBuilder attributeEntryBuilder;
-    private BlockMacroBuilder blockMacroBuilder;
 
     public static DocumentModelBuilder newBuilder(AttributeEntries attributeEntries) {
         BlockBuildState state = BlockBuildState.newInstance(attributeEntries);
@@ -131,25 +130,28 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // macro
     @Override
     public void enterMacro() {
-        blockMacroBuilder = BlockMacroBuilder.of(state);
+        state.pushBlock(BlockMacroBuilder.of(state));
     }
 
     @Override
     public void exitMacro() {
         state.consumeAttributeList(); // TODO add attributes to macro
+
+        BlockMacroBuilder blockMacroBuilder = state.peekBlock();
         if (blockMacroBuilder.isBlock()) {
             state.pushBlockToContainer(blockMacroBuilder);
         }
-        blockMacroBuilder = null;
     }
 
     @Override
     public void macroName(String name) {
+        BlockMacroBuilder blockMacroBuilder = state.peekBlock();
         blockMacroBuilder.setName(name);
     }
 
     @Override
     public void macroTarget(String target) {
+        BlockMacroBuilder blockMacroBuilder = state.peekBlock();
         blockMacroBuilder.setTarget(target);
     }
 
