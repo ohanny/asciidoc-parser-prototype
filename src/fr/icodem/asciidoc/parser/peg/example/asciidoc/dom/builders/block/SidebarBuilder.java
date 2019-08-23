@@ -13,9 +13,9 @@ public class SidebarBuilder implements BlockBuilder, BlockContainer {
     private TitleBuilder title;
     private List<BlockBuilder> blocks;
 
-    public static SidebarBuilder newBuilder(BlockBuildState state, AttributeList attList) {
+    public static SidebarBuilder newBuilder(BlockBuildState state) {
         SidebarBuilder builder = new SidebarBuilder();
-        builder.attList = attList;
+        builder.attList = state.consumeAttributeList();
         builder.title = state.consumeBlockTitle();
         builder.blocks = new ArrayList<>();
 

@@ -13,6 +13,7 @@ public class ListBlockBuilder implements BlockBuilder {
 
     public enum Type { Ordered, Unordered }
 
+    private BlockBuildState state;
     private int level;
     private int bullets;
     private int itemCount; // TODO replace with items.size() ?
@@ -52,6 +53,7 @@ public class ListBlockBuilder implements BlockBuilder {
 
     public static ListBlockBuilder root(BlockBuildState state) {
         ListBlockBuilder builder = new ListBlockBuilder();
+        builder.state = state;
         builder.title = state.consumeBlockTitle();
         builder.root = builder;
         builder.current = builder;
@@ -63,6 +65,7 @@ public class ListBlockBuilder implements BlockBuilder {
 
     public static ListBlockBuilder withParent(ListBlockBuilder parent) {
         ListBlockBuilder builder = new ListBlockBuilder();
+        builder.state = parent.state;
         builder.items = new ArrayList<>();
 
         if (parent != null) {
@@ -85,8 +88,8 @@ public class ListBlockBuilder implements BlockBuilder {
         return null;
     }
 
-    public ListItemBuilder newListItem(int times, int dots, AttributeList attList) {
-
+    public ListItemBuilder newListItem(int times, int dots) {
+        AttributeList attList = state.consumeAttributeList();
         if (times  > 0) {
             if (current.isUnordered()) {
                 if (times == current.bullets) {

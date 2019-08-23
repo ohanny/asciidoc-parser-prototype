@@ -30,7 +30,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     private ContentBuilder contentBuilder;
 
     private AttributeEntryBuilder attributeEntryBuilder;
-    private AttributeListBuilder attributeListBuilder;
+    //private AttributeListBuilder attributeListBuilder;
     private BlockMacroBuilder blockMacroBuilder;
 
     public static DocumentModelBuilder newBuilder(AttributeEntries attributeEntries) {
@@ -39,8 +39,6 @@ public class DocumentModelBuilder implements BlockHandler2 {
         DocumentModelBuilder builder = new DocumentModelBuilder();
         builder.rules = new BlockRules2(attributeEntries);
         builder.rules.withFactory(defaultRulesFactory());
-        builder.attributeListBuilder = AttributeListBuilder.newBuilder();
-
         builder.state = state;
 
         return builder;
@@ -98,49 +96,49 @@ public class DocumentModelBuilder implements BlockHandler2 {
 
     @Override
     public void attributeName(String name) {
-        attributeListBuilder.setAttributeName(name);
+        state.getAttributeListBuilder().setAttributeName(name);
     }
 
     @Override
     public void attributeValue(String value) {
-        attributeListBuilder.setAttributeValue(value);
+        state.getAttributeListBuilder().setAttributeValue(value);
     }
 
     @Override
     public void enterIdAttribute() {
-        attributeListBuilder.addIdAttribute();
+        state.getAttributeListBuilder().addIdAttribute();
     }
 
     @Override
     public void enterRoleAttribute() {
-        attributeListBuilder.addRoleAttribute();
+        state.getAttributeListBuilder().addRoleAttribute();
     }
 
     @Override
     public void enterOptionAttribute() {
-        attributeListBuilder.addOptionAttribute();
+        state.getAttributeListBuilder().addOptionAttribute();
     }
 
     @Override
     public void enterPositionalAttribute() {
-        attributeListBuilder.addPositionalAttribute();
+        state.getAttributeListBuilder().addPositionalAttribute();
     }
 
     @Override
     public void enterNamedAttribute() {
-        attributeListBuilder.addNamedAttribute();
+        state.getAttributeListBuilder().addNamedAttribute();
     }
 
 
     // macro
     @Override
     public void enterMacro() {
-        blockMacroBuilder = BlockMacroBuilder.of(state, state.getAttributeEntries(), attributeListBuilder.consume());
+        blockMacroBuilder = BlockMacroBuilder.of(state, state.getAttributeEntries());
     }
 
     @Override
     public void exitMacro() {
-        attributeListBuilder.consume(); // TODO add attributes to macro
+        state.consumeAttributeList(); // TODO add attributes to macro
         if (blockMacroBuilder.isBlock()) {
             state.pushBlockToContainer(blockMacroBuilder);
         }
@@ -262,7 +260,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     @Override
     public void enterSection(NodeContext context) {
         int level = min(context.getIntAttribute("level", -1), 6);
-        contentBuilder.newSection(level, attributeListBuilder.consume());
+        contentBuilder.newSection(level);
     }
 
     @Override
@@ -274,7 +272,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     @Override
     public void enterParagraph(String admonition) {
         admonition = admonition == null?null:admonition.toLowerCase();
-        AttributeList attList = attributeListBuilder.consume();
+        AttributeList attList = state.consumeAttributeList();
 
         if (attList != null && "quote".equals(attList.getFirstPositionalAttribute())) {
             String attribution = attList.getSecondPositionalAttribute();
@@ -316,7 +314,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
         int dots = context.getIntAttribute("dots.count", -1);
 
         ListBlockBuilder parentBuilder = state.peekBlock();
-        ListItemBuilder builder = parentBuilder.newListItem(times, dots, attributeListBuilder.consume());
+        ListItemBuilder builder = parentBuilder.newListItem(times, dots);
 
         state.pushTextContainer(builder);
         state.pushBlockContainer(builder);
@@ -343,7 +341,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // description list
     @Override
     public void enterDescriptionList() {
-        DescriptionListBuilder builder = DescriptionListBuilder.newBuilder(state, attributeListBuilder.consume());
+        DescriptionListBuilder builder = DescriptionListBuilder.newBuilder(state);
         state.pushBlock(builder);
         state.pushBlockToContainer(builder);
     }
@@ -401,7 +399,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // literal block
     @Override
     public void enterLiteralBlock() {
-        LiteralBlockBuilder builder = LiteralBlockBuilder.newBuilder(state, attributeListBuilder.consume());
+        LiteralBlockBuilder builder = LiteralBlockBuilder.newBuilder(state);
         state.pushBlock(builder);
         state.pushTextContainer(builder);
     }
@@ -416,7 +414,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // example block
     @Override
     public void enterExample() {
-        ExampleBlockBuilder builder = ExampleBlockBuilder.newBuilder(state, attributeListBuilder.consume());
+        ExampleBlockBuilder builder = ExampleBlockBuilder.newBuilder(state);
         state.pushBlock(builder);
         state.pushBlockContainer(builder);
     }
@@ -431,7 +429,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // sidebar
     @Override
     public void enterSidebar() {
-        SidebarBuilder builder = SidebarBuilder.newBuilder(state, attributeListBuilder.consume());
+        SidebarBuilder builder = SidebarBuilder.newBuilder(state);
         state.pushBlock(builder);
         state.pushBlockContainer(builder);
     }
@@ -446,7 +444,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // listing block
     @Override
     public void enterListingBlock() {
-        ListingBlockBuilder builder = ListingBlockBuilder.newBuilder(state, attributeListBuilder.consume());
+        ListingBlockBuilder builder = ListingBlockBuilder.newBuilder(state);
         state.pushBlock(builder);
         state.pushTextContainer(builder);
     }
@@ -492,7 +490,7 @@ public class DocumentModelBuilder implements BlockHandler2 {
     // table
     @Override
     public void enterTable(int lineNumber) {
-        TableBuilder builder = TableBuilder.newBuilder(state, attributeListBuilder.consume(), lineNumber);
+        TableBuilder builder = TableBuilder.newBuilder(state, lineNumber);
 
         state.pushBlock(builder);
         state.pushBlockToContainer(builder);

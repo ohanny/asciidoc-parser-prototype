@@ -5,7 +5,6 @@ import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Quote;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 
 public class QuoteBuilder implements BlockBuilder, TextContainer {
-    private BlockBuildState state;
     private AttributeList attributeList;
     private TitleBuilder title;
     private String attribution;
@@ -14,7 +13,6 @@ public class QuoteBuilder implements BlockBuilder, TextContainer {
 
     public static QuoteBuilder of(BlockBuildState state, AttributeList attList, String attribution, String citationTitle) {
         QuoteBuilder builder = new QuoteBuilder();
-        builder.state = state;
         builder.attributeList = attList;
         builder.title = state.consumeBlockTitle();
         builder.attribution = attribution;

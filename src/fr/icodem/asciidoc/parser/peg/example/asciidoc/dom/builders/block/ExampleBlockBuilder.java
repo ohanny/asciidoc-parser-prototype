@@ -13,9 +13,9 @@ public class ExampleBlockBuilder implements BlockBuilder, BlockContainer {
     private TitleBuilder title;
     private List<BlockBuilder> blocks;
 
-    public static ExampleBlockBuilder newBuilder(BlockBuildState state, AttributeList attList) {
+    public static ExampleBlockBuilder newBuilder(BlockBuildState state) {
         ExampleBlockBuilder builder = new ExampleBlockBuilder();
-        builder.attList = attList;
+        builder.attList = state.consumeAttributeList();
         builder.title = state.consumeBlockTitle();
         builder.blocks = new ArrayList<>();
 

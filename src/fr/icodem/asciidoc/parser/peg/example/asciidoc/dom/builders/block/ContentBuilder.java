@@ -37,7 +37,8 @@ public class ContentBuilder implements BlockBuilder {
         state.popBlockContainer();
     }
 
-    public void newSection(int level, AttributeList attList) {
+    public void newSection(int level) {
+        AttributeList attList = state.consumeAttributeList();
         if (firstSection != null) {
             // close parents and get new section parent
             SectionBuilder parent = checkExitSection(level);

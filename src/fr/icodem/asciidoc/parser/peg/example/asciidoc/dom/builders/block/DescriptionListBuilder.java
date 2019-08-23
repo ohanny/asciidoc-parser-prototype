@@ -16,10 +16,10 @@ public class DescriptionListBuilder implements BlockBuilder {
     private TitleBuilder title;
     private Deque<DescriptionListItemBuilder> items;
 
-    public static DescriptionListBuilder newBuilder(BlockBuildState state, AttributeList attList) {
+    public static DescriptionListBuilder newBuilder(BlockBuildState state) {
         DescriptionListBuilder builder = new DescriptionListBuilder();
         builder.state = state;
-        builder.attributeList = attList;
+        builder.attributeList = state.consumeAttributeList();
         builder.title = state.consumeBlockTitle();
         builder.items = new LinkedList<>();
 

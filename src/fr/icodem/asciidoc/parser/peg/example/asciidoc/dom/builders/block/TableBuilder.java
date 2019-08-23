@@ -28,9 +28,9 @@ public class TableBuilder implements BlockBuilder {
     private Deque<TableColumnBuilder> columns;
     private Deque<TableRowBuilder> rows;
 
-    public static TableBuilder newBuilder(BlockBuildState state, AttributeList attList, int tableLineNumber) {
+    public static TableBuilder newBuilder(BlockBuildState state, int tableLineNumber) {
         TableBuilder builder = new TableBuilder();
-        builder.attList = attList;
+        builder.attList = state.consumeAttributeList();
         builder.title = state.consumeBlockTitle();
         builder.tableLineNumber = tableLineNumber;
         builder.firstLineNumber = -1;

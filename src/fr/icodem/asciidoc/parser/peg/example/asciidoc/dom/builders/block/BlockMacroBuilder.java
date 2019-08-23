@@ -13,10 +13,10 @@ public class BlockMacroBuilder implements BlockBuilder {
     private String name;
     private String target;
 
-    public static BlockMacroBuilder of(BlockBuildState state, AttributeEntries entries, AttributeList attList) {
+    public static BlockMacroBuilder of(BlockBuildState state, AttributeEntries entries) {
         BlockMacroBuilder builder = new BlockMacroBuilder();
         builder.entries = entries;
-        builder.attributes = attList;
+        builder.attributes = state.consumeAttributeList();
         builder.title = state.consumeBlockTitle();
 
         return builder;

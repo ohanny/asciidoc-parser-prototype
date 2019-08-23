@@ -10,9 +10,9 @@ public class LiteralBlockBuilder implements BlockBuilder, TextContainer {
     private TitleBuilder title;
     private String text;
 
-    public static LiteralBlockBuilder newBuilder(BlockBuildState state, AttributeList attList) {
+    public static LiteralBlockBuilder newBuilder(BlockBuildState state) {
         LiteralBlockBuilder literal = new LiteralBlockBuilder();
-        literal.attList = attList;
+        literal.attList = state.consumeAttributeList();
         literal.title = state.consumeBlockTitle();
 
         return literal;

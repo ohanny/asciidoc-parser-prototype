@@ -31,10 +31,10 @@ public class ListingBlockBuilder implements BlockBuilder, TextContainer {
 
     private ListingProcessor listingProcessor; // TODO to be refactored
 
-    public static ListingBlockBuilder newBuilder(BlockBuildState state, AttributeList attList) {
+    public static ListingBlockBuilder newBuilder(BlockBuildState state) {
         ListingBlockBuilder builder = new ListingBlockBuilder();
         builder.state = state;
-        builder.attributeList = attList;
+        builder.attributeList = state.consumeAttributeList();
         builder.title = state.consumeBlockTitle();
 
         builder.listingProcessor = ListingProcessor.newInstance();

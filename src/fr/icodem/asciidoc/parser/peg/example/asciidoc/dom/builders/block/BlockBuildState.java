@@ -1,11 +1,14 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.AttributeListBuilder;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeEntries;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.AttributeList;
 
 import java.util.*;
 
 public class BlockBuildState {
     private AttributeEntries attributeEntries;
+    private AttributeListBuilder attributeListBuilder;
 
     private Deque<BlockBuilder> blockBuilders;
     private Deque<TextContainer> textContainers;
@@ -20,6 +23,7 @@ public class BlockBuildState {
 
     public static BlockBuildState newInstance(AttributeEntries attributeEntries) {
         BlockBuildState state = new BlockBuildState();
+        state.attributeListBuilder = AttributeListBuilder.newBuilder();
         state.attributeEntries = attributeEntries;
         state.blockBuilders = new LinkedList<>();
         state.textContainers = new LinkedList<>();
@@ -32,6 +36,14 @@ public class BlockBuildState {
 
     public AttributeEntries getAttributeEntries() {
         return attributeEntries;
+    }
+
+    public AttributeListBuilder getAttributeListBuilder() {
+        return attributeListBuilder;
+    }
+
+    public AttributeList consumeAttributeList() {
+        return attributeListBuilder.consume();
     }
 
     public void pushBlock(BlockBuilder builder) {
