@@ -21,6 +21,7 @@ public abstract class DescriptionListItemHtmlWriter extends ModelHtmlWriter<Desc
     private void writeContent(DescriptionListItem item) {
         if (item.getText() != null) {
             startText(item);
+            System.out.println("DescriptionListItemHtmlWriter : " +  item.getText().getInline());
             getTextWriter().write(item.getText());
             endText(item);
         }

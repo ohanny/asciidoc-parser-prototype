@@ -2,6 +2,7 @@ package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.builders.block;
 
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.Block;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block.ListItem;
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.InlineNode;
 import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 public class ListItemBuilder implements BlockBuilder, TextContainer, BlockContainer {
     private int position;
     private String text;
+    private InlineNode inline;
 
     private List<BlockBuilder> blocks;
 
@@ -30,6 +32,11 @@ public class ListItemBuilder implements BlockBuilder, TextContainer, BlockContai
     }
 
     @Override
+    public String getText() {
+        return text;
+    }
+
+    @Override
     public ListItem build() {
         List<Block> blocks = null;
         if (this.blocks != null) {
@@ -39,12 +46,17 @@ public class ListItemBuilder implements BlockBuilder, TextContainer, BlockContai
                     .collect(Collectors.toList());
         }
 
-        return ListItem.of(position, Text.of(text), blocks);
+        return ListItem.of(position, Text.of(text, inline), blocks);
     }
 
     @Override
     public void addBlock(BlockBuilder builder) {
         if (this.blocks == null) this.blocks = new ArrayList<>();
         this.blocks.add(builder);
+    }
+
+    @Override
+    public void setInline(InlineNode inline) {
+        this.inline = inline;
     }
 }

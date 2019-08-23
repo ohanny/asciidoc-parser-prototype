@@ -355,7 +355,8 @@ public class DocumentModelBuilder implements BlockHandler2 {
     @Override
     public void enterDescriptionListItem() {
         DescriptionListBuilder builder = state.peekBlock();
-        builder.newItem();
+        DescriptionListItemBuilder itemBuilder = builder.newItem();
+        state.getTextToParseList().add(itemBuilder); // TODO to be refactored
     }
 
     @Override

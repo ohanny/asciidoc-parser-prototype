@@ -1,10 +1,12 @@
 package fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.block;
 
+import fr.icodem.asciidoc.parser.peg.example.asciidoc.dom.model.inline.Text;
+
 public class Callout extends Block {
     private int number;
-    private String text;
+    private Text text;
 
-    public static Callout of(int number, String text) {
+    public static Callout of(int number, Text text) {
         Callout callout = new Callout();
         callout.number = number;
         callout.text = text;
@@ -16,7 +18,7 @@ public class Callout extends Block {
         return number;
     }
 
-    public String getText() {
+    public Text getText() {
         return text;
     }
 }

@@ -35,8 +35,9 @@ public class DescriptionListBuilder implements BlockBuilder {
         return DescriptionList.of(attributeList, Title.of(title), items);
     }
 
-    public void newItem() {
+    public DescriptionListItemBuilder newItem() {
         this.items.add(DescriptionListItemBuilder.newBuilder());
+        return items.peekLast();
     }
 
     public void setItemTitle(String title) {

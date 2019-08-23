@@ -339,6 +339,7 @@ public class DocumentModelHtmlWriter implements DocumentModelWriter {
     @Override
     public void write(Document document, Writer writer) throws IOException {
         writers.getDocumentWriter().write(document);
+        writer.flush();
     }
 
     public static Builder newBuilder() {

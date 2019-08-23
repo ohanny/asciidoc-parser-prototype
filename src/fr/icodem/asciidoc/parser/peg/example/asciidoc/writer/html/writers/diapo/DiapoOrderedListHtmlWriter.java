@@ -15,7 +15,7 @@ public class DiapoOrderedListHtmlWriter extends ListHtmlWriter {
 
     @Override
     protected void startList(ListBlock list) {
-        indent().append(OL.start()).nl()
+        indent().append(OL.start("style", styleBuilder().reset(list.getAttributes()).addPosition().addSize().style())).nl()
           .incIndent()
         ;
     }

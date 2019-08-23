@@ -17,7 +17,7 @@ public class DiapoXRefNodeHtmlWriter extends XRefNodeHtmlWriter {
         String href = xref.isInternal()?"#" + xref.getValue():xref.getValue();
 
         append(A.start("href", href))
-                .append(xref.getLabel())
+                .append(xref.getLabel() != null ? xref.getLabel() : xref.getValue())
                 .append(A.end());
 
     }
