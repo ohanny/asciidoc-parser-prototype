@@ -17,63 +17,38 @@ public class DiapoListingHtmlWriter extends ListingHtmlWriter<DiapoListingHtmlWr
 
     @Override
     protected void startListing(ListingBlock listing) {
-        String classes = getMoreClasses("listingblock", listing.getAttributes());
+        String divClasses = getMoreClasses("listingblock", listing.getAttributes());
         String style = styleBuilder().reset(listing.getAttributes()).addPosition().style();
+        String preClasses = getMoreClasses(getListingPreClass(listing), listing.getAttributes());
 
-        indent()
-                .append(DIV.start("class", classes, "style", style))
-                .nl()
-                .incIndent()
-                .writeBlockTitle(listing)
-                .indent()
-                .append(PRE.start("class", getMoreClasses(getListingPreClass(listing), listing.getAttributes())))
+        indent().append(DIV.start("class", divClasses, "style", style)).nl()
+          .incIndent()
+            .writeBlockTitle(listing).indent().append(PRE.start("class", preClasses))
                 .forEach(listing.getLines(), (line, index) ->
-                        append(CODE.start("class", getListingCodeClass(listing.getLanguage(), line)))
-                                .forEach(line.getLineChunks(), this::writeListingLineChunk)
-                                .writeListingCallout(line)
-                                .append(CODE.end())
-                                .appendIf(listing.getLines().size() - 1 != index, () -> nl())
-                )
+                  append(CODE.start("class", getListingCodeClass(listing.getLanguage(), line)))
+                    .forEach(line.getLineChunks(), this::writeListingLineChunk)
+                    .writeListingCallout(line).append(CODE.end())
+                    .appendIf(listing.getLines().size() - 1 != index, () -> nl())
+                ).nl()
+          .append(PRE.end()).nl()
         ;
-
     }
 
     private void writeListingLineChunk(ListingLineChunk chunk) {
-
-
         appendIf(chunk.isMark() && chunk.getMarkLevel() == 0, () ->
-                append(MARK.start())
-                        .writeTextOrChunks(chunk)
-                        .append(MARK.end())
-        )
-                .appendIf(chunk.isMark() && chunk.getMarkLevel() > 0, () ->
-                        append(MARK.start("class", "mark" + chunk.getMarkLevel()))
-                                .writeTextOrChunks(chunk)
-                                .append(MARK.end())
-                )
-                .appendIf(chunk.isStrong() && chunk.getStrongLevel() == 0, () ->
-                        append(STRONG.start())
-                                .writeTextOrChunks(chunk)
-                                .append(STRONG.end())
-                )
-                .appendIf(chunk.isStrong() && chunk.getStrongLevel() > 0, () ->
-                        append(STRONG.start("class", "strong" + chunk.getStrongLevel()))
-                                .writeTextOrChunks(chunk)
-                                .append(STRONG.end())
-                )
-                .appendIf(chunk.isImportant(), () ->
-                        append(MARK.start("class", "important"))
-                                .writeTextOrChunks(chunk)
-                                .append(MARK.end())
-                )
-                .appendIf(chunk.isComment(), () ->
-                        append(SPAN.start("class", "comment"))
-                                .writeTextOrChunks(chunk)
-                                .append(SPAN.end())
-                )
-                .appendIf(chunk.isNotMarked(), () ->
-                        writeTextOrChunks(chunk)
-                );
+            append(MARK.start()).writeTextOrChunks(chunk).append(MARK.end())
+        ).appendIf(chunk.isMark() && chunk.getMarkLevel() > 0, () ->
+            append(MARK.start("class", "mark" + chunk.getMarkLevel())).writeTextOrChunks(chunk).append(MARK.end())
+        ).appendIf(chunk.isStrong() && chunk.getStrongLevel() == 0, () ->
+            append(STRONG.start()).writeTextOrChunks(chunk).append(STRONG.end())
+        ).appendIf(chunk.isStrong() && chunk.getStrongLevel() > 0, () ->
+            append(STRONG.start("class", "strong" + chunk.getStrongLevel())).writeTextOrChunks(chunk).append(STRONG.end())
+        ).appendIf(chunk.isImportant(), () ->
+            append(MARK.start("class", "important")).writeTextOrChunks(chunk).append(MARK.end())
+        ).appendIf(chunk.isComment(), () ->
+            append(SPAN.start("class", "comment")).writeTextOrChunks(chunk).append(SPAN.end())
+        ).appendIf(chunk.isNotMarked(), () -> writeTextOrChunks(chunk))
+        ;
     }
 
     private DiapoListingHtmlWriter writeTextOrChunks(ListingLineChunk chunk) {
@@ -89,18 +64,13 @@ public class DiapoListingHtmlWriter extends ListingHtmlWriter<DiapoListingHtmlWr
 
     protected DiapoListingHtmlWriter writeListingCallout(ListingLine line) {
         if (line.getCallouts() == null) return this;
-        return
-                forEach(line.getCallouts(), c ->
-                        append(I.start("class", "conum", "data-value", Integer.toString(c.getNumber())))
-                                .append(I.end())
-                                .append(B.start())
-                                .append("(")
-                                .append(Integer.toString(c.getNumber()))
-                                .append(")")
-                                .append(B.end())
-                                .append(" ")
-                )
-                ;
+
+        return forEach(line.getCallouts(), c ->
+          append(I.start("class", "conum", "data-value", Integer.toString(c.getNumber())))
+            .append(I.end()).append(B.start()).append("(").append(Integer.toString(c.getNumber()))
+            .append(")").append(B.end()).append(" ")
+          )
+        ;
     }
 
 
@@ -146,8 +116,7 @@ public class DiapoListingHtmlWriter extends ListingHtmlWriter<DiapoListingHtmlWr
 
     @Override
     protected void endListing(ListingBlock listing) {
-        append(PRE.end()).nl()
-          .decIndent()
+          decIndent()
             .indent().append(DIV.end()).nl()
         ;
     }

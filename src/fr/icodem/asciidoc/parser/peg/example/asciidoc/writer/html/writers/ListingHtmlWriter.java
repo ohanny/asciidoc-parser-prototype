@@ -13,8 +13,8 @@ public abstract class ListingHtmlWriter <DHW extends ListingHtmlWriter<DHW>> ext
     public void write(ListingBlock listing) {
         startListing(listing);
         writeContent(listing);
-        endListing(listing);
         writeCallouts(listing);
+        endListing(listing);
     }
 
     protected abstract void startListing(ListingBlock listing);
